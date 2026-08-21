@@ -1,0 +1,9 @@
+assets/images
+node_modules
+package.json
+package-lock.json
+tools
+data
+server.ps1
+.env.local
+*.md
