@@ -108,7 +108,7 @@ for ($i = 0; $i -lt $total; $i++) {
     </div>
 $heroHtml    <div class="c-story">
 $story    </div>
-$galHtml$filmHtml$credHtml    <div class="c-next"><div class="l">Next project</div><a href="$($next.slug).html">$(Esc $next.name) →</a></div>
+$galHtml$filmHtml$credHtml    <div class="c-next"><div class="l">Next project</div><a href="$($next.slug).html"><span class="thumb"><img src="$($next.thumb)" width="800" height="450" loading="lazy" alt=""></span><span class="t">$(Esc $next.name) →</span></a></div>
   </div>
 </main>
 

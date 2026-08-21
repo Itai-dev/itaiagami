@@ -282,13 +282,58 @@ transform:translateY(-75%) rotate(45deg);pointer-events:none}
 .c-film .l{font-size:var(--t-meta);letter-spacing:0;color:var(--dim);margin-bottom:16px}
 .c-film .frame{position:relative;width:100%;aspect-ratio:16/9;background:var(--faint);border-radius:var(--r-media);overflow:hidden}
 .c-film iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.c-market{margin-bottom:clamp(50px,8vw,90px)}
+.c-market .l{font-size:var(--t-meta);letter-spacing:0;color:var(--dim);margin-bottom:16px}
+.c-market .intro{font-family:"Inter",system-ui,sans-serif;font-weight:400;font-size:clamp(1.125rem,1.6vw,1.375rem);line-height:1.5;letter-spacing:0;max-width:58ch;margin-bottom:clamp(24px,3vw,36px)}
+/* Marquee: tiles share one height, so 4:5 and 9:16 creatives sit side by side
+   at their native ratios with no cropping. The track holds two identical runs
+   of tiles and slides by exactly -50%, so the loop is seamless. */
+.c-hero-reel{margin:0 0 clamp(18px,2.4vw,28px)}
+.c-hero-reel .marquee{margin-bottom:0}
+.hero-note{font-size:var(--t-meta);letter-spacing:0;color:var(--dim);line-height:1.6;max-width:68ch;margin-bottom:clamp(50px,8vw,90px)}
+.hero-note a{color:var(--fg);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-strong)}
+.hero-note a:hover{text-decoration-color:var(--fg)}
+.marquee{position:relative;margin-bottom:clamp(26px,3vw,36px);overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+/* Spacing lives on the tile, not as a flex gap: every tile then carries an
+   identical trailing margin, so the two runs are exactly equal in width and
+   -50% lands precisely on the start of the second one. A flex gap would sit
+   only between items (17 gaps for 18 tiles) and the loop would jump. */
+.track{display:flex;width:max-content;animation:ni-marquee 34s linear infinite}
+.marquee:hover .track{animation-play-state:paused}
+.tile{flex:0 0 auto;height:clamp(260px,32vw,400px);margin-right:clamp(12px,1.4vw,20px);border-radius:var(--r-media);overflow:hidden;background:var(--faint)}
+.tile img,.tile video{display:block;height:100%;width:auto;object-fit:cover;transition:transform .5s var(--ease)}
+.tile:hover img,.tile:hover video{transform:scale(1.05)}
+@keyframes ni-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){
+  .track{animation:none}
+  .marquee{overflow-x:auto;-webkit-mask-image:none;mask-image:none}
+}
+.c-sites{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,24px);margin-bottom:clamp(26px,3vw,36px)}
+.c-sites a{display:block}
+.c-sites .shot{overflow:hidden;border-radius:var(--r-media);background:var(--faint);border:1px solid var(--line)}
+/* height:auto is required — the width/height attributes on the img act as a
+   presentational hint, so setting only width:100% pins the height and squashes
+   the shot. */
+.c-sites img{display:block;width:100%;height:auto;transition:transform 1.1s var(--ease)}
+.c-sites a:hover img{transform:scale(1.02)}
+.c-sites .cap{display:flex;align-items:center;gap:8px;font-size:var(--t-meta);letter-spacing:0;color:var(--dim);padding-top:12px;transition:color var(--dur-fast)}
+.c-sites a:hover .cap{color:var(--fg)}
+.c-sites .cap .arw{transition:transform var(--dur-fast) var(--ease)}
+.c-sites a:hover .cap .arw{transform:translateX(4px)}
 .c-credits{border-top:1px solid var(--line);padding-top:26px;margin-bottom:clamp(50px,8vw,90px);max-width:600px}
 .c-credits h3{font-size:var(--t-meta);letter-spacing:0;color:var(--dim);font-weight:500;margin-bottom:14px}
 .c-credits p{font-size:var(--t-meta);line-height:2.1;letter-spacing:0}
 .c-next{border-top:1px solid var(--line);padding-top:32px;padding-bottom:20px}
 .c-next .l{font-size:var(--t-meta);letter-spacing:0;color:var(--dim);margin-bottom:12px}
-.c-next a{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:clamp(1.5rem,2.6vw,2.25rem);line-height:1.2;letter-spacing:-.015em;display:inline-block;transition:transform var(--dur-fast) var(--ease)}
+/* inline-flex so a thumbnail can sit beside the title; pages whose next link is
+   still plain text render identically, the text becoming the only flex item. */
+.c-next a{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:clamp(1.5rem,2.6vw,2.25rem);line-height:1.2;letter-spacing:-.015em;display:inline-flex;align-items:center;gap:clamp(16px,2vw,28px);transition:transform var(--dur-fast) var(--ease)}
 .c-next a:hover{transform:translateX(14px)}
+.c-next .thumb{flex:0 0 auto;width:clamp(88px,11vw,160px);aspect-ratio:16/10;overflow:hidden;border-radius:var(--r-media);background:var(--faint)}
+.c-next .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease)}
+.c-next a:hover .thumb img{transform:scale(1.06)}
 footer.site{padding:clamp(50px,7vw,90px) 0 40px;margin-top:var(--sp-section)}
 footer.site .grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;border-top:1px solid var(--line);padding-top:28px}
 footer.site .grid .col h4{font-size:var(--t-meta);letter-spacing:0;color:var(--dim);margin-bottom:12px;font-weight:500}
@@ -302,6 +347,8 @@ nav.primary{display:none}
 .c-sec{grid-template-columns:1fr;gap:10px}
 .c-gallery{grid-template-columns:1fr}
 .c-gallery figure,.c-gallery figure.half{grid-column:span 1}
+.track{animation-duration:24s}
+.c-sites{grid-template-columns:1fr}
 .swork:nth-child(even){direction:ltr}
 }
 @media(max-width:600px){

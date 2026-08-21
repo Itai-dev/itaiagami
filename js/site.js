@@ -239,3 +239,65 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
     });
   }
 })();
+
+/* Marquee reel.
+   The CSS keyframes are the no-JS fallback. When JS is available it takes the
+   animation over on a rAF loop, because easing between two speeds is the whole
+   point of the hover: swapping animation-duration mid-flight remaps elapsed
+   time and the track visibly jumps. Position is kept modulo half the track, so
+   the second run always covers the seam.
+   Tiles are preload="none" and each video is observed on its own, so only the
+   ones actually on screen ever download. */
+(function(){
+  const marquee=document.querySelector('.marquee');
+  if(!marquee)return;
+  const track=marquee.querySelector('.track');
+  const vids=[...marquee.querySelectorAll('video')];
+  const slow=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasIO='IntersectionObserver' in window;
+
+  if(!slow&&track){
+    track.style.animation='none';                 // hand over from CSS keyframes
+    let x=0,speed=0,target=0,last=0,visible=true,half=0;
+    const measure=()=>{half=track.scrollWidth/2;
+      target=half/(innerWidth<900?24:34);};       // match the CSS timings
+    measure();
+    addEventListener('resize',()=>{measure();},{passive:true});
+    let hovering=false;
+    marquee.addEventListener('mouseenter',()=>{hovering=true;});
+    marquee.addEventListener('mouseleave',()=>{hovering=false;});
+    speed=target;
+    const frame=t=>{
+      const dt=last?Math.min((t-last)/1000,.05):0; last=t;
+      if(visible&&half>0){
+        const want=hovering?target*.22:target;     // ease down, never fully stop
+        speed+=(want-speed)*Math.min(dt*4,1);
+        x=(x+speed*dt)%half;
+        track.style.transform='translateX('+(-x)+'px)';
+      }
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+    if(hasIO){
+      new IntersectionObserver(es=>{es.forEach(e=>{visible=e.isIntersecting;});})
+        .observe(marquee);
+    }
+  }
+
+  if(!vids.length||slow||!hasIO)return;
+  // Play only once playable — calling play() straight after load() lets the
+  // load abort the pending play, and the tile never starts.
+  const play=v=>{
+    if(v.readyState>=3){v.play().catch(()=>{});return;}
+    if(!v.dataset.wired){v.dataset.wired='1';v.addEventListener('canplay',()=>{if(v.dataset.on)v.play().catch(()=>{});},{once:true});}
+    if(v.preload!=='auto'){v.preload='auto';v.load();}
+  };
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      const v=e.target;
+      if(e.isIntersecting){v.dataset.on='1';play(v);}
+      else{delete v.dataset.on;v.pause();}
+    });
+  },{rootMargin:'100px'});
+  vids.forEach(v=>io.observe(v));
+})();
