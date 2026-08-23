@@ -15,14 +15,19 @@
    here so the static files stay small. Paths are ../ relative. */
 (function(){
   if(!document.body || document.body.dataset.chrome!=='sub') return;
-  var inNotes = location.pathname.indexOf('/notes/') > -1;
+  /* which top-level section this sub-page belongs to — drives the nav highlight */
+  var sec = location.pathname.indexOf('/notes/') > -1 ? 'notes'
+          : location.pathname.indexOf('/services/') > -1 ? 'services'
+          : 'work';
+  var on = function(name){ return sec===name ? ' class="active"' : ''; };
   var hdr = ''
   +'<div class="grain" aria-hidden="true"></div>'
   +'<header class="site" id="siteHeader"><div class="hwrap">'
   +'<a href="../index.html" class="brand" aria-label="Itai Agami — home"><span class="dot" aria-hidden="true"></span> Itai&nbsp;Agami</a>'
   +'<nav class="primary" aria-label="Primary">'
-  +'<a href="../work.html"'+(inNotes?'':' class="active"')+'>Work</a>'
-  +'<a href="../notes.html"'+(inNotes?' class="active"':'')+'>Notes</a>'
+  +'<a href="../work.html"'+on('work')+'>Work</a>'
+  +'<a href="../services.html"'+on('services')+'>Services</a>'
+  +'<a href="../notes.html"'+on('notes')+'>Notes</a>'
   +'<a href="../about.html">About</a>'
   +'<a href="../contact.html">Contact</a>'
   +'<button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>'
@@ -31,6 +36,7 @@
   +'</div></header>'
   +'<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">'
   +'<a href="../work.html">Work</a>'
+  +'<a href="../services.html">Services</a>'
   +'<a href="../notes.html">Notes</a>'
   +'<a href="../about.html">About</a>'
   +'<a href="../contact.html">Contact</a>'
@@ -39,7 +45,7 @@
   +'</nav>';
   var ftr = ''
   +'<footer class="site"><div class="wrap"><div class="grid">'
-  +'<div class="col"><h4>Menu</h4><a href="../work.html">Work</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></div>'
+  +'<div class="col"><h4>Menu</h4><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></div>'
   +'<div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a></div>'
   +'<div class="col"><h4>Studio</h4><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div>'
   +'</div><div class="base">'
@@ -48,6 +54,112 @@
   +'</div></div></footer>';
   document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
+})();
+
+/* ---------- first-touch attribution (session only, no cookies) ----------
+   Records how this visit started — campaign parameters, the page they landed
+   on and the external referrer — so an enquiry can say where it came from.
+   First touch wins: later internal navigation never overwrites it. Nothing
+   leaves the browser unless the visitor sends the contact form. */
+const ATTR_KEY = 'ia-attr';
+function readAttribution(){
+  try{ return JSON.parse(sessionStorage.getItem(ATTR_KEY) || 'null'); }catch(e){ return null; }
+}
+(function(){
+  let store;
+  try{ store = sessionStorage; }catch(e){ return; }           /* private mode / blocked */
+  if(readAttribution()) return;
+  const q = new URLSearchParams(location.search);
+  const ref = document.referrer || '';
+  let external = ref;
+  try{ if(ref && new URL(ref).host === location.host) external = ''; }catch(e){}
+  try{
+    store.setItem(ATTR_KEY, JSON.stringify({
+      utm_source:   q.get('utm_source')   || '',
+      utm_medium:   q.get('utm_medium')   || '',
+      utm_campaign: q.get('utm_campaign') || '',
+      landing_page: location.pathname + location.search,
+      referrer:     external
+    }));
+  }catch(e){}
+})();
+
+/* ---------- engagement floor by region ----------
+   These are deliberate minimums per market, not conversions of one number:
+   ₪30,000 converted reads as production money to a US or European buyer, so
+   each market gets a floor that reads as a floor there.
+
+   ₪30,000 is what sits in the HTML, so search engines and AI assistants that
+   do not run JavaScript always read a real figure. Everything below only
+   changes what a human visitor sees.
+
+   TO CHANGE A NUMBER: edit this table and the matching one in api/enquiry.js.
+   The band strings must stay identical in both files or a genuine submission
+   is rejected as invalid — same rule the timeline options already follow. */
+const MARKETS = {
+  ILS: { floor:'₪30,000', bands:['₪30,000 – ₪60,000', '₪60,000 – ₪120,000', '₪120,000+'] },
+  USD: { floor:'$10,000', bands:['$10,000 – $20,000', '$20,000 – $40,000', '$40,000+'] },
+  EUR: { floor:'€10,000', bands:['€10,000 – €20,000', '€20,000 – €40,000', '€40,000+'] },
+  GBP: { floor:'£8,000',  bands:['£8,000 – £16,000',  '£16,000 – £32,000',  '£32,000+'] }
+};
+
+(function(){
+  const floors = document.querySelectorAll('[data-floor]');
+  const bands  = document.querySelectorAll('[data-band]');
+  if(!floors.length && !bands.length) return;
+
+  const BY_COUNTRY = { IL:'ILS', GB:'GBP', US:'USD', CA:'USD' };
+  const EUROPE = ('AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK '
+    + 'SI ES SE IS NO CH LI AD MC SM VA AL BA ME MK RS MD UA').split(' ');
+
+  function currencyFor(cc){
+    if(!cc) return '';
+    if(BY_COUNTRY[cc]) return BY_COUNTRY[cc];
+    if(EUROPE.indexOf(cc) > -1) return 'EUR';
+    return 'USD';                                   /* everywhere else — the international default */
+  }
+
+  /* An instant first guess so the figure is right before the page paints;
+     the IP lookup below is authoritative and corrects it if they disagree. */
+  function guessFromTimeZone(){
+    let tz = '';
+    try{ tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; }catch(e){}
+    if(!tz) return '';
+    if(tz === 'Asia/Jerusalem' || tz === 'Asia/Tel_Aviv') return 'ILS';
+    if(tz === 'Europe/London') return 'GBP';
+    if(tz.indexOf('Europe/') === 0) return 'EUR';
+    if(tz.indexOf('America/') === 0) return 'USD';
+    return '';
+  }
+
+  function apply(cur){
+    const m = MARKETS[cur]; if(!m) return;
+    floors.forEach(el => { el.textContent = m.floor; });
+    /* options carry no value attribute, so setting the text sets the value too */
+    bands.forEach(el => { const i = +el.dataset.band; if(m.bands[i]) el.textContent = m.bands[i]; });
+    document.documentElement.dataset.currency = cur;
+  }
+
+  const KEY = 'ia-cur';
+
+  /* ?cur=USD forces a market — for previewing and for testing the form */
+  const forced = (new URLSearchParams(location.search).get('cur') || '').toUpperCase();
+  if(MARKETS[forced]){ apply(forced); return; }
+
+  let cached = null; try{ cached = sessionStorage.getItem(KEY); }catch(e){}
+  if(MARKETS[cached]){ apply(cached); return; }      /* settled earlier this visit — no flicker */
+
+  apply(guessFromTimeZone());
+
+  fetch('/api/geo', { headers:{ Accept:'application/json' } })
+    .then(r => r.ok ? r.json() : null)
+    .then(d => {
+      if(!d) return;                                 /* endpoint missing (local preview) — leave it */
+      const cur = currencyFor(d.country) || 'USD';   /* reached us, but country unknown */
+      try{ sessionStorage.setItem(KEY, cur); }catch(e){}
+      apply(cur);
+    })
+    .catch(()=>{});                                  /* offline or blocked — the ₪ default stands */
 })();
 
 /* ---------- theme (dark default, light optional, persisted) ---------- */
@@ -126,6 +238,14 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   const btn=form.querySelector('button[type="submit"]');
   const MAIL='<a href="mailto:itaiagami@gmail.com">itaiagami@gmail.com</a>';
 
+  /* carry the visit's origin into the enquiry — see first-touch attribution above */
+  (function(){
+    const a=readAttribution(); if(!a)return;
+    const map={utm_source:'f-utm-source',utm_medium:'f-utm-medium',utm_campaign:'f-utm-campaign',
+               landing_page:'f-landing',referrer:'f-referrer'};
+    for(const k in map){ const el=document.getElementById(map[k]); if(el)el.value=a[k]||''; }
+  })();
+
   /* Composes the finished enquiry as an email the visitor sends themselves.
      Used when the server cannot send — nothing they typed is ever lost. */
   function mailtoHref(d){
@@ -133,8 +253,10 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
       'Name: '+(d.name||''),
       'Email: '+(d.email||''),
       'Organisation: '+(d.org||'—'),
+      'Project type: '+(d.type||'—'),
       'Budget: '+(d.budget||'—'),
       'Timeline: '+(d.timeline||'—'),
+      'Found via: '+(d.source||'—'),
       '','Project:',(d.project||'')
     ].join('\n');
     return 'mailto:itaiagami@gmail.com'

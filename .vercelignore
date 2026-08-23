@@ -7,3 +7,5 @@ data
 server.ps1
 .env.local
 *.md
+
+docs

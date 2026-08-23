@@ -1,4 +1,18 @@
+# All crawlers are welcome. AI search agents are listed explicitly so the
+# permission is unambiguous; training-specific agents are left to the rule above.
 User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
 Allow: /
 
 Sitemap: https://itaiagami.com/sitemap.xml

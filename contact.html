@@ -4,8 +4,28 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Contact - Itai Agami, Independent Creative Director</title>
-<meta name="description" content="Have a brand, launch or experience to shape? Get in touch with Itai Agami, Independent Creative Director in Tel Aviv, for branding, creative campaigns, art direction and interactive experiences." />
+<meta name="description" content="Discuss a brand system, product launch or interactive experience with Itai Agami, Independent Creative Director in Tel Aviv, working worldwide. Most independent engagements begin at ₪30,000." />
 <link rel="canonical" href="https://itaiagami.com/contact.html" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "url": "https://itaiagami.com/contact.html",
+      "name": "Contact — Itai Agami, Independent Creative Director",
+      "mainEntity": { "@type": "Person", "@id": "https://itaiagami.com/#itai", "name": "Itai Agami" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://itaiagami.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Contact", "item": "https://itaiagami.com/contact.html" }
+      ]
+    }
+  ]
+}
+</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <meta name="theme-color" content="#0d0d0d" />
 <meta property="og:type" content="website" />
@@ -24,6 +44,7 @@
     <a href="index.html" class="brand" aria-label="Itai Agami — home"><span class="dot" aria-hidden="true"></span> Itai&nbsp;Agami</a>
     <nav class="primary" aria-label="Primary">
       <a href="work.html">Work</a>
+      <a href="services.html">Services</a>
       <a href="notes.html">Notes</a>
       <a href="about.html">About</a>
       <a href="contact.html" class="active">Contact</a>
@@ -35,6 +56,7 @@
 
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
   <a href="work.html">Work</a>
+  <a href="services.html">Services</a>
   <a href="notes.html">Notes</a>
   <a href="about.html">About</a>
   <a href="contact.html">Contact</a>
@@ -53,8 +75,9 @@
       <!-- 1 — the invitation -->
       <div class="c-intro">
         <h1>Have a brand, launch or experience <em>to shape</em>?</h1>
-        <p>I work with companies, studios and cultural institutions on brand identity, creative campaigns, art direction and interactive experiences.</p>
+        <p>I work with technology companies, media organisations, cultural institutions and ambitious products on brand systems, product launches, campaigns and interactive experiences — leading the work from strategy and central concept through execution.</p>
         <p class="close">Tell me what you are making, what stage it is in and where you need creative leadership. I’ll reply personally.</p>
+        <p class="c-qual">Most independent engagements begin at <strong data-floor>₪30,000</strong>. Larger multidisciplinary productions are scoped with a custom team. If you are not sure where your project sits, say what you know — <a href="services.html">the services pages</a> and the <a href="services.html#faq">common questions</a> cover the usual cases.</p>
       </div>
 
       <!-- 2 — the form -->
@@ -95,11 +118,10 @@
             <div class="sel">
               <select id="f-budget" name="budget">
                 <option value="">Select</option>
-                <option>Under $10k</option>
-                <option>$10k – $25k</option>
-                <option>$25k – $50k</option>
-                <option>$50k+</option>
-                <option>Not defined yet</option>
+                <option data-band="0">₪30,000 – ₪60,000</option>
+                <option data-band="1">₪60,000 – ₪120,000</option>
+                <option data-band="2">₪120,000+</option>
+                <option>Not sure yet</option>
               </select>
             </div>
           </div>
@@ -115,10 +137,31 @@
               </select>
             </div>
           </div>
+          <div class="fld f-full">
+            <label for="f-source">How did you find me?</label>
+            <div class="sel">
+              <select id="f-source" name="source">
+                <option value="">Select</option>
+                <option>ChatGPT</option>
+                <option>Gemini</option>
+                <option>Google Search</option>
+                <option>LinkedIn</option>
+                <option>Referral</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
           <div class="hp" aria-hidden="true">
             <label for="f-website">Leave this field empty</label>
             <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" />
           </div>
+          <!-- Filled by js/site.js from the first page of this session. Empty for
+               anyone who arrived without campaign parameters — which is most people. -->
+          <input type="hidden" name="utm_source" id="f-utm-source" />
+          <input type="hidden" name="utm_medium" id="f-utm-medium" />
+          <input type="hidden" name="utm_campaign" id="f-utm-campaign" />
+          <input type="hidden" name="landing_page" id="f-landing" />
+          <input type="hidden" name="referrer" id="f-referrer" />
           <p class="f-note">Scope, budget or timing not yet defined? Include what you know and leave the rest open.</p>
           <div class="f-actions">
             <button type="submit" class="btn solid">Tell me about the project <span class="arw" aria-hidden="true">→</span></button>
@@ -136,7 +179,7 @@
 <footer class="site">
   <div class="wrap">
     <div class="grid">
-      <div class="col"><h4>Menu</h4><a href="work.html">Work</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+      <div class="col"><h4>Menu</h4><a href="work.html">Work</a><a href="services.html">Services</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
       <div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a></div>
       <div class="col"><h4>Studio</h4><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
     </div>

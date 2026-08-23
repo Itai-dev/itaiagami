@@ -15,9 +15,20 @@ const TO   = process.env.ENQUIRY_TO   || 'itaiagami@gmail.com';
 const FROM = process.env.ENQUIRY_FROM || 'Itai Agami <enquiries@itaiagami.com>';
 
 /* Must match the <option> text in contact.html exactly — including the en
-   dashes — or a genuine submission is rejected as invalid. */
-const BUDGETS   = ['Under $10k','$10k – $25k','$25k – $50k','$50k+','Not defined yet'];
+   dashes — or a genuine submission is rejected as invalid.
+
+   The budget options are rewritten client-side for the visitor's market, so
+   every currency's bands have to be accepted here. This table mirrors MARKETS
+   in js/site.js — change a number in one and change it in the other. */
+const BUDGETS   = [
+  '₪30,000 – ₪60,000', '₪60,000 – ₪120,000', '₪120,000+',
+  '$10,000 – $20,000', '$20,000 – $40,000', '$40,000+',
+  '€10,000 – €20,000', '€20,000 – €40,000', '€40,000+',
+  '£8,000 – £16,000',  '£16,000 – £32,000',  '£32,000+',
+  'Not sure yet'
+];
 const TIMELINES = ['As soon as possible','1–3 months','3–6 months','Not defined yet'];
+const SOURCES   = ['ChatGPT','Gemini','Google Search','LinkedIn','Referral','Other'];
 
 /* Best-effort throttle. Serverless instances are ephemeral and not shared,
    so this stops a burst from one source, not a distributed flood. The
@@ -57,9 +68,21 @@ module.exports = async (req, res) => {
   const name     = clean(body.name, 120);
   const email    = clean(body.email, 200);
   const org      = clean(body.org, 160);
+  const type     = clean(body.type, 80);
   const project  = clean(body.project, 5000);
   const budget   = clean(body.budget, 40);
   const timeline = clean(body.timeline, 40);
+  const source   = clean(body.source, 40);
+
+  /* Attribution — filled by the page, never typed, so it is reported rather
+     than validated. Kept short so a crafted request cannot bloat the email. */
+  const attribution = {
+    'utm_source':   clean(body.utm_source, 120),
+    'utm_medium':   clean(body.utm_medium, 120),
+    'utm_campaign': clean(body.utm_campaign, 160),
+    'Landing page': clean(body.landing_page, 300),
+    'Referrer':     clean(body.referrer, 300)
+  };
 
   if(!name)                          return res.status(400).json({ ok:false, error:'Please add your name.' });
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))
@@ -67,6 +90,7 @@ module.exports = async (req, res) => {
   if(project.length < 10)            return res.status(400).json({ ok:false, error:'Please say a little more about the project.' });
   if(budget   && !BUDGETS.includes(budget))     return res.status(400).json({ ok:false, error:'Invalid budget value.' });
   if(timeline && !TIMELINES.includes(timeline)) return res.status(400).json({ ok:false, error:'Invalid timeline value.' });
+  if(source   && !SOURCES.includes(source))     return res.status(400).json({ ok:false, error:'Invalid source value.' });
 
   /* `fallback:true` tells the page to hand the finished message to the visitor's
      own mail client instead of dropping it — so the form still works before the
@@ -79,8 +103,10 @@ module.exports = async (req, res) => {
 
   const rows = [
     ['Name', name], ['Email', email], ['Organisation', org || '—'],
-    ['Budget', budget || '—'], ['Timeline', timeline || '—']
-  ];
+    ['Project type', type || '—'],
+    ['Budget', budget || '—'], ['Timeline', timeline || '—'],
+    ['Found via', source || '—']
+  ].concat(Object.entries(attribution).filter(([, v]) => v));   /* only what is actually known */
 
   const text = rows.map(([k,v]) => k + ': ' + v).join('\n') + '\n\nProject:\n' + project;
   const html =

@@ -3,7 +3,7 @@ $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add('http://localhost:8472/')
 $listener.Start()
 Write-Output "Serving $root on http://localhost:8472/"
-$mime = @{ '.html'='text/html'; '.css'='text/css'; '.js'='text/javascript'; '.json'='application/json'; '.png'='image/png'; '.jpg'='image/jpeg'; '.jpeg'='image/jpeg'; '.webp'='image/webp'; '.svg'='image/svg+xml' }
+$mime = @{ '.html'='text/html'; '.css'='text/css'; '.js'='text/javascript'; '.json'='application/json'; '.png'='image/png'; '.jpg'='image/jpeg'; '.jpeg'='image/jpeg'; '.webp'='image/webp'; '.svg'='image/svg+xml'; '.mp4'='video/mp4'; '.xml'='application/xml'; '.txt'='text/plain' }
 while ($listener.IsListening) {
   $ctx = $listener.GetContext()
   $path = $ctx.Request.Url.AbsolutePath
