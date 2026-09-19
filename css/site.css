@@ -10,6 +10,7 @@
 /* hero letter accents — the only colours outside the mono palette, used
    solely by the kinetic headline. Change or delete these four freely. */
 --k1:#F25C05;--k2:#2B6BFF;--k3:#C6FF3D;--k4:#FF3DA6;
+--gum-shadow:rgba(0,0,0,.5);
 --grain-opacity:0;
 --r-media:8px;
 --t-hero:clamp(2.125rem,6.6vw,6.25rem);
@@ -30,6 +31,7 @@
 
 :root[data-theme="light"]{
 --k2:#1B46D6;--k3:#6E9C00;--k4:#D4107A;
+--gum-shadow:rgba(0,0,0,.16);
 --bg:#ffffff;
 --fg:#000000;
 --dim:rgba(0,0,0,.64);
@@ -67,8 +69,7 @@ border-bottom:1px solid transparent;transition:border-color var(--dur-fast);
 }
 header.site.scrolled{border-bottom-color:var(--line)}
 header.site .hwrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-x);display:flex;justify-content:space-between;align-items:center}
-.brand{font-family:"Inter",system-ui,sans-serif;font-size:1.15rem;font-weight:500;letter-spacing:-.01em;display:flex;align-items:center;gap:.5em}
-.brand .dot{width:6px;height:6px;border-radius:50%;background:var(--mark);display:inline-block}
+.brand{font-family:"Inter",system-ui,sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:.06em;display:flex;align-items:center}
 nav.primary{display:flex;gap:28px;align-items:center;font-size:var(--t-meta);letter-spacing:0}
 nav.primary a{position:relative;color:var(--dim);transition:color var(--dur-fast)}
 nav.primary a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--fg);transition:width var(--dur-fast) var(--ease)}
@@ -97,10 +98,29 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .obs{opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .obs.in{opacity:1;transform:none}
 .hero{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:calc(100svh - 90px);padding-top:clamp(24px,4vh,48px);padding-bottom:clamp(48px,7vw,88px)}
-/* The copy never moves. */
-.hero-copy{position:relative;text-align:center;max-width:min(100%,1120px)}
+/* The copy never moves, and sits above the gummies. */
+.hero-copy{position:relative;z-index:1;text-align:center;max-width:min(100%,1120px)}
+
+/* ---------- 3D gummies ----------
+   Shaded inline SVG rather than a renderer: a radial or diagonal gradient for
+   the body, a bright blurred-looking highlight for the gloss, and a drop
+   shadow for the lift. Each one floats on its own clock. The layer never
+   takes the pointer, so the headline behind it stays hoverable. */
+.hero-gummies{position:absolute;inset:0;z-index:0;pointer-events:none}
+.gum{
+position:absolute;left:var(--x,auto);right:var(--rx,auto);top:var(--y,auto);bottom:var(--by,auto);
+width:clamp(54px,var(--w),150px);
+filter:drop-shadow(0 20px 26px var(--gum-shadow,rgba(0,0,0,.5)));
+opacity:0;transition:opacity 1.2s var(--ease) var(--d,0s);
+animation:gum-float var(--f,10s) ease-in-out var(--d,0s) infinite alternate;
+}
+.revealed .gum{opacity:1}
+.gum svg{display:block;width:100%;height:auto;transform:rotate(var(--r,0deg))}
+@keyframes gum-float{
+from{transform:translate3d(0,-11px,0) rotate(-3deg)}
+to{transform:translate3d(0,13px,0) rotate(3deg)}
+}
 .hero h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-hero);line-height:1;letter-spacing:-.035em;text-wrap:balance}
-.hero h1 em{font-style:italic}
 
 /* ---------- kinetic headline ----------
    js/hero-letters.js wraps every character in .ltr and every word in .wd,
@@ -132,6 +152,9 @@ transition:transform .09s var(--ease),margin .09s var(--ease),color .09s var(--e
 @media(max-width:900px){
 .hero{min-height:min(58svh,460px)}
 .hero-copy{text-align:left;max-width:none}
+/* the headline runs nearly the full width here, so the two that flank it
+   have nowhere to sit that is not on top of it */
+.gum.mid{display:none}
 }
 
 .reveal-line{overflow:hidden}
@@ -384,11 +407,12 @@ html{scroll-behavior:auto}
 .reveal-line > *,.fade,.obs{transform:none!important;opacity:1!important}
 .hoverimg{display:none!important}
 .hero h1 .ltr{transform:none!important;margin-inline:0!important}
+.gum{animation:none!important}
 }
 
 
 /* OpenAI-style emphasis: weight, not italics */
-.hero h1 em,.pov h2 em,.band h2 em,.contact h2 em{font-style:normal;font-weight:600}
+.pov h2 em,.band h2 em,.contact h2 em{font-style:normal;font-weight:600}
 
 /* ---------- typographic refinements ---------- */
 h2,h3{text-wrap:balance}

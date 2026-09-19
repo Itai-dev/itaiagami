@@ -63,7 +63,7 @@
 
 <header class="site" id="siteHeader">
   <div class="hwrap">
-    <a href="index.html" class="brand" aria-label="Itai Agami — home"><span class="dot" aria-hidden="true"></span> Itai&nbsp;Agami</a>
+    <a href="index.html" class="brand" aria-label="Itai Agami — home">ITAI&nbsp;AGAMI</a>
     <nav class="primary" aria-label="Primary">
       <a href="work.html">Work</a>
       <a href="services.html">Services</a>
@@ -93,8 +93,77 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Introduction">
+    <!-- 3D gummies: shaded inline SVG, floating. Purely decorative, never
+         takes the pointer, so the headline underneath stays hoverable. -->
+    <div class="hero-gummies" aria-hidden="true">
+
+      <span class="gum" style="--x:5%;--y:13%;--w:10vw;--r:-14deg;--f:9s;--d:.15s">
+        <svg viewBox="0 0 100 100"><defs>
+          <radialGradient id="gum-a" cx="34%" cy="27%" r="78%">
+            <stop offset="0" stop-color="#ffc79a"/><stop offset=".38" stop-color="#F25C05"/><stop offset="1" stop-color="#7d2a00"/>
+          </radialGradient></defs>
+          <circle cx="50" cy="50" r="47" fill="url(#gum-a)"/>
+          <ellipse cx="34" cy="27" rx="17" ry="11" transform="rotate(-28 34 27)" fill="#fff" opacity=".6"/>
+          <ellipse cx="62" cy="77" rx="22" ry="8" fill="#fff" opacity=".13"/>
+        </svg>
+      </span>
+
+      <span class="gum" style="--rx:6%;--y:9%;--w:11vw;--r:18deg;--f:11s;--d:.3s">
+        <svg viewBox="0 0 100 100"><defs>
+          <linearGradient id="gum-b" x1=".2" y1="0" x2=".8" y2="1">
+            <stop offset="0" stop-color="#a8c2ff"/><stop offset=".42" stop-color="#2B6BFF"/><stop offset="1" stop-color="#0d2a7d"/>
+          </linearGradient></defs>
+          <circle cx="50" cy="50" r="33" fill="none" stroke="url(#gum-b)" stroke-width="27"/>
+          <circle cx="50" cy="50" r="27" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"
+                  stroke-dasharray="32 300" transform="rotate(-158 50 50)" opacity=".55"/>
+        </svg>
+      </span>
+
+      <span class="gum mid" style="--x:2%;--y:52%;--w:8vw;--r:22deg;--f:8s;--d:.45s">
+        <svg viewBox="0 0 100 100"><defs>
+          <linearGradient id="gum-c" x1=".18" y1="0" x2=".82" y2="1">
+            <stop offset="0" stop-color="#ecffb8"/><stop offset=".4" stop-color="#C6FF3D"/><stop offset="1" stop-color="#5d8500"/>
+          </linearGradient></defs>
+          <rect x="24" y="5" width="52" height="90" rx="26" fill="url(#gum-c)"/>
+          <rect x="34" y="16" width="13" height="36" rx="6.5" fill="#fff" opacity=".6"/>
+        </svg>
+      </span>
+
+      <span class="gum mid" style="--rx:2%;--y:54%;--w:9vw;--r:-10deg;--f:10s;--d:.6s">
+        <svg viewBox="0 0 100 100"><defs>
+          <radialGradient id="gum-d" cx="32%" cy="25%" r="80%">
+            <stop offset="0" stop-color="#ffb8de"/><stop offset=".4" stop-color="#FF3DA6"/><stop offset="1" stop-color="#8a0d50"/>
+          </radialGradient></defs>
+          <path d="M50 4c26 0 46 14 46 40 0 30-18 52-46 52S4 74 4 44C4 18 24 4 50 4z" fill="url(#gum-d)"/>
+          <ellipse cx="35" cy="26" rx="15" ry="10" transform="rotate(-25 35 26)" fill="#fff" opacity=".6"/>
+        </svg>
+      </span>
+
+      <!-- rounded with a matching thick stroke, which is what gives the
+           cube its soft gummy edges rather than a hard corner -->
+      <span class="gum" style="--x:16%;--by:9%;--w:9vw;--r:8deg;--f:12s;--d:.75s">
+        <svg viewBox="0 0 100 100">
+          <path d="M50 16 82 35 50 54 18 35z" fill="#7fa4ff" stroke="#7fa4ff" stroke-width="9" stroke-linejoin="round"/>
+          <path d="M18 35 50 54 50 88 18 69z" fill="#2B6BFF" stroke="#2B6BFF" stroke-width="9" stroke-linejoin="round"/>
+          <path d="M82 35 50 54 50 88 82 69z" fill="#15398f" stroke="#15398f" stroke-width="9" stroke-linejoin="round"/>
+          <path d="M26 33 48 46" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+        </svg>
+      </span>
+
+      <span class="gum" style="--rx:17%;--by:11%;--w:7vw;--r:-20deg;--f:9.5s;--d:.9s">
+        <svg viewBox="0 0 100 100"><defs>
+          <radialGradient id="gum-f" cx="34%" cy="27%" r="78%">
+            <stop offset="0" stop-color="#eaffb8"/><stop offset=".38" stop-color="#C6FF3D"/><stop offset="1" stop-color="#4f7000"/>
+          </radialGradient></defs>
+          <circle cx="50" cy="50" r="47" fill="url(#gum-f)"/>
+          <ellipse cx="34" cy="28" rx="16" ry="10" transform="rotate(-28 34 28)" fill="#fff" opacity=".6"/>
+        </svg>
+      </span>
+
+    </div>
+
     <div class="hero-copy">
-      <h1><span class="reveal-line"><span>Hi, I'm <em>Itai</em>,</span></span> <span class="reveal-line"><span>Creative director</span></span> <span class="reveal-line"><span>based in TLV, Israel</span></span></h1>
+      <h1><span class="reveal-line"><span>Hi, I'm Itai,</span></span> <span class="reveal-line"><span>Creative director</span></span> <span class="reveal-line"><span>based in TLV, Israel</span></span></h1>
     </div>
   </section>
 
