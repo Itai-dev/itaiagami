@@ -104,15 +104,19 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 
 /* ---------- kinetic headline ----------
    js/hero-letters.js wraps every character in .ltr and every word in .wd,
-   then marks the heading .lettered. Each letter answers the cursor on its
-   own: it snaps up to its accent colour and a larger size, and eases back
-   when the pointer leaves. Sweeping the line makes the change run along it.
-   Size is animated with scale, never font-size, so nothing around a letter
-   moves and the line never reflows. A letter whose --c resolves to --fg
+   then sets --s on each letter: how strongly the cursor is on it, 0 to 1.
+   Size and colour read that one number, so the script never touches either
+   directly. Size is scale, never font-size, and each letter's width is
+   locked by the script while the pointer is inside, so a letter swapping to
+   a symbol moves nothing around it. A letter whose --c resolves to --fg
    only changes size. */
 .hero h1 .wd{display:inline-block;white-space:nowrap}
-.hero h1 .ltr{display:inline-block;transform-origin:50% 82%;transition:transform .16s var(--ease),color .16s var(--ease)}
-.hero h1.lettered .ltr:hover{transition-duration:.07s;transform:scale(1.22);color:var(--c,var(--fg))}
+.hero h1 .ltr{
+display:inline-block;text-align:center;transform-origin:50% 82%;
+transform:scale(calc(1 + var(--s,0) * .24));
+color:color-mix(in srgb, var(--c,var(--fg)) calc(var(--s,0) * 100%), var(--fg));
+transition:transform .09s var(--ease),color .09s var(--ease);
+}
 
 @media(max-width:900px){
 .hero{min-height:min(58svh,460px)}
@@ -368,7 +372,7 @@ html{scroll-behavior:auto}
 *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
 .reveal-line > *,.fade,.obs{transform:none!important;opacity:1!important}
 .hoverimg{display:none!important}
-.hero h1.lettered .ltr:hover{transform:none!important}   /* colour still answers, size does not */
+.hero h1 .ltr{transform:none!important}
 }
 
 
