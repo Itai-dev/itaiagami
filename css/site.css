@@ -7,6 +7,9 @@
 --line:rgba(255,255,255,.1);
 --line-strong:rgba(255,255,255,.3);
 --mark:#F25C05;
+/* hero letter accents — the only colours outside the mono palette, used
+   solely by the kinetic headline. Change or delete these four freely. */
+--k1:#F25C05;--k2:#2B6BFF;--k3:#C6FF3D;--k4:#FF3DA6;
 --grain-opacity:0;
 --r-media:8px;
 --t-hero:clamp(2.125rem,6.6vw,6.25rem);
@@ -24,7 +27,9 @@
 --maxw:1440px;
 --maxw-case:var(--maxw);
 }
+
 :root[data-theme="light"]{
+--k2:#1B46D6;--k3:#6E9C00;--k4:#D4107A;
 --bg:#ffffff;
 --fg:#000000;
 --dim:rgba(0,0,0,.64);
@@ -92,61 +97,36 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .obs{opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .obs.in{opacity:1;transform:none}
 .hero{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:calc(100svh - 90px);padding-top:clamp(24px,4vh,48px);padding-bottom:clamp(48px,7vw,88px)}
-/* The copy never moves — only the work does. No pointer events either, so a
-   card sitting behind a word is still hoverable. */
+/* The copy never moves, and never takes the pointer. */
 .hero-copy{position:relative;z-index:2;text-align:center;max-width:min(100%,1120px);pointer-events:none}
 .hero h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-hero);line-height:1;letter-spacing:-.035em;text-wrap:balance}
 .hero h1 em{font-style:italic}
 
-/* ---------- hero work field ----------
-   Six case studies placed around the headline. Each card is three layers:
-   .card       — absolute position from its inline --x/--rx/--y/--by vars,
-                 cursor parallax (transform set by js/hero-orbit.js)
-   .card-drift — the idle float, a CSS animation
-   .card-in    — the entrance spin, the designed tilt (--r) and the hover lift
+/* ---------- kinetic headline ----------
+   js/hero-kinetic.js wraps every character in .ltr and every word in .wd,
+   then marks the heading .lettered. Each letter runs the same loop on its
+   own negative delay, so the wave is already travelling on the first frame.
+   Size is animated with scale, never font-size: the line never reflows.
+   A letter whose --c resolves to --fg only changes size. */
+.hero h1 .wd{display:inline-block;white-space:nowrap}
+.hero h1 .ltr{display:inline-block;transform-origin:50% 82%;will-change:transform}
+.hero h1.lettered .ltr{animation:ltr-pulse 5.2s var(--ease) calc(var(--i,0) * -.16s) infinite}
+@keyframes ltr-pulse{
+0%,100%{transform:scale(1);color:var(--fg)}
+26%{transform:scale(1.17);color:var(--c,var(--fg))}
+58%{transform:scale(.88);color:var(--fg)}
+}
 
-   The entrance uses animation-fill-mode:backwards, not both: the card holds
-   the from-state through its stagger delay, spins into place, and then the
-   animation stops applying. Its end state is the same rotate(--r) the rule
-   already declares, so nothing jumps — and hover is free to take over the
-   moment the spin is done. */
-.hero-field{position:absolute;inset:0;z-index:1;pointer-events:none}
-.card{position:absolute;left:var(--x,auto);right:var(--rx,auto);top:var(--y,auto);bottom:var(--by,auto);width:clamp(120px,var(--w),320px);pointer-events:auto;opacity:0;transition:opacity .8s var(--ease) var(--d,0s),filter .6s var(--ease);will-change:transform}
-.revealed .card{opacity:1}
-.hero-field:hover .card:not(:hover){opacity:.4;filter:saturate(.6)}
-.card:hover{z-index:5}
-.card-drift{display:block;animation:card-float var(--f,10s) ease-in-out var(--d,0s) infinite alternate}
-.card-in{display:block;position:relative;transform:rotate(var(--r,0deg));transition:transform .7s var(--ease);border-radius:var(--r-media)}
-.revealed .card-in{animation:card-spin-in 1.15s var(--ease) var(--d,0s) backwards}
-.card:hover .card-in{transform:rotate(0deg) scale(1.16)}
-.card img{width:100%;height:auto;border-radius:var(--r-media);background:var(--faint);box-shadow:0 30px 60px -20px rgba(0,0,0,.55);transition:box-shadow .7s var(--ease)}
-.card:hover img{box-shadow:0 44px 80px -24px rgba(0,0,0,.7)}
-.card-label{position:absolute;left:50%;top:calc(100% + 10px);transform:translate(-50%,6px);white-space:nowrap;display:inline-flex;align-items:baseline;gap:8px;padding:7px 12px;border-radius:9999px;background:var(--fg);color:var(--bg);font-size:var(--t-micro);letter-spacing:var(--track-micro);opacity:0;transition:opacity .4s var(--ease),transform .5s var(--ease)}
-.card-label b{font-weight:500}
-.card-label small{font-size:inherit;opacity:.6}
-.card-label::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--mark);align-self:center}
-.card:hover .card-label,.card:focus-visible .card-label{opacity:1;transform:translate(-50%,0)}
-.card:focus-visible{outline:none}
-.card:focus-visible .card-in{transform:rotate(0deg) scale(1.16)}
-.card:focus-visible img{outline:2px solid var(--fg);outline-offset:3px}
-@keyframes card-float{from{transform:translateY(-8px)}to{transform:translateY(10px)}}
-@keyframes card-spin-in{from{transform:rotate(calc(var(--r,0deg) - 400deg)) scale(.24)}}
+/* ---------- falling letters ----------
+   Canvas sits behind the copy, so glyphs spill out from under the headline
+   and drop to the floor of the hero. Drawing lives in js/hero-kinetic.js. */
+.hero-fall{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.4s var(--ease)}
+.hero-fall.ready{opacity:1}
+.hero-fall canvas{display:block;width:100%;height:100%}
 
 @media(max-width:900px){
-.hero{min-height:auto;align-items:stretch}
-.hero-copy{max-width:none;text-align:left}
-.hero-field{position:relative;inset:auto;order:2;margin:clamp(36px,6vw,56px) calc(var(--pad-x) * -1) 0;padding:6px var(--pad-x) 28px;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--pad-x);-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.hero-field::-webkit-scrollbar{display:none}
-.card{position:static;flex:0 0 auto;width:min(64vw,300px);scroll-snap-align:start;transform:none!important}
-.hero-field:hover .card:not(:hover){opacity:1;filter:none}
-.card-drift{animation:none}
-.revealed .card-in{animation:none}
-.card-in{transform:none}
-.card:hover .card-in{transform:none}
-.card img{box-shadow:none}
-.card-label{position:static;transform:none;opacity:1;background:none;color:var(--dim);padding:10px 0 0;white-space:normal;display:flex;flex-direction:column;gap:2px;align-items:flex-start}
-.card-label b{color:var(--fg)}
-.card-label::before{display:none}
+.hero{min-height:min(74svh,560px)}
+.hero-copy{text-align:left;max-width:none}
 }
 
 .reveal-line{overflow:hidden}
@@ -386,7 +366,7 @@ nav.primary{display:none}
 .swork:nth-child(even){direction:ltr}
 }
 @media(max-width:600px){
-.hero{padding-top:20px}
+.hero{padding-top:12px}
 .index-list:not(.grid) .prow>a{grid-template-columns:30px 1fr;gap:12px}
 .index-list:not(.grid) .prow .p-cat{display:none}
 .index-list:not(.grid) .prow .p-metaline{display:flex;justify-content:space-between;font-size:var(--t-micro);letter-spacing:0;color:var(--dim);margin-top:6px;grid-column:2}
@@ -398,9 +378,7 @@ html{scroll-behavior:auto}
 *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
 .reveal-line > *,.fade,.obs{transform:none!important;opacity:1!important}
 .hoverimg{display:none!important}
-.card{opacity:1!important}
-.card-drift,.revealed .card-in{animation:none!important}
-.card-in{transform:rotate(var(--r,0deg))!important}
+.hero h1.lettered .ltr{animation:none!important;transform:none!important;color:inherit!important}
 }
 
 
