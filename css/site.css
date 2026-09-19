@@ -104,19 +104,30 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 
 /* ---------- kinetic headline ----------
    js/hero-letters.js wraps every character in .ltr and every word in .wd,
-   then sets --s on each letter: how strongly the cursor is on it, 0 to 1.
-   Size and colour read that one number, so the script never touches either
-   directly. Size is scale, never font-size, and each letter's width is
-   locked by the script while the pointer is inside, so a letter swapping to
-   a symbol moves nothing around it. A letter whose --c resolves to --fg
-   only changes size. */
+   then sets --s on each letter: how strongly the cursor is on it, 0 to 1,
+   and --w: the letter's resting width. Size, colour and spacing all read
+   those two numbers, so the script never touches any of them directly.
+
+   Size is scale, never font-size, so the glyph grows without its box. The
+   box is then widened by exactly what the scale added, half on each side,
+   which is what stops a grown letter from sitting over its neighbours.
+   A symbol wider than the letter it replaced pushes them too, since nothing
+   here pins a letter's width. A letter whose --c resolves to --fg only
+   changes size. */
+/* A line must not rewrap when the push widens it — a word dropping to a new
+   row would double the height of the hero mid-sweep. Each line is written out
+   in the markup, so holding them is exactly what is wanted. */
+.hero h1 .reveal-line > span{white-space:nowrap}
 .hero h1 .wd{display:inline-block;white-space:nowrap}
 .hero h1 .ltr{
-display:inline-block;text-align:center;transform-origin:50% 82%;
+display:inline-block;transform-origin:50% 82%;
 transform:scale(calc(1 + var(--s,0) * .24));
+margin-inline:calc(var(--s,0) * .12 * var(--w,0px));
 color:color-mix(in srgb, var(--c,var(--fg)) calc(var(--s,0) * 100%), var(--fg));
-transition:transform .09s var(--ease),color .09s var(--ease);
+transition:transform .09s var(--ease),margin .09s var(--ease),color .09s var(--ease);
 }
+.hero h1.measuring .ltr{transition:none}
+.hero h1 .wd.probe{position:absolute;top:0;left:0;visibility:hidden;pointer-events:none}
 
 @media(max-width:900px){
 .hero{min-height:min(58svh,460px)}
@@ -372,7 +383,7 @@ html{scroll-behavior:auto}
 *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
 .reveal-line > *,.fade,.obs{transform:none!important;opacity:1!important}
 .hoverimg{display:none!important}
-.hero h1 .ltr{transform:none!important}
+.hero h1 .ltr{transform:none!important;margin-inline:0!important}
 }
 
 

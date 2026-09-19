@@ -3,20 +3,24 @@
    Every character of the headline becomes its own span. The
    cursor then drives a neighbourhood rather than a single
    letter: letters within RADIUS of the one under the pointer
-   swell, take an accent colour and scramble into symbols, all
-   falling off with distance.
+   swell, take an accent colour and become a symbol, all falling
+   off with distance.
 
    Vertically the falloff is one row wide, so a pointer sitting
    in the middle of a line moves that line alone and a pointer
    between two lines moves both, at half strength each.
 
-   Swapping a glyph would normally reflow the line, so every
-   letter's width is locked to its own measurement while the
-   pointer is inside, and released when it leaves.
+   A letter picks its symbol once, when it enters the
+   neighbourhood, and keeps it until it leaves. Nothing churns.
 
-   Size and colour are CSS, driven by the --s this sets on each
-   letter. Nothing runs without a fine pointer, or under
-   prefers-reduced-motion.
+   Nothing overlaps either: a symbol is free to be wider than the
+   letter it replaced, and the scale is paid for with margin, so
+   a growing letter pushes its neighbours aside rather than
+   growing over them.
+
+   Size, colour and that margin are CSS, driven by the --s this
+   sets on each letter. Nothing runs without a fine pointer, or
+   under prefers-reduced-motion.
    ============================================================ */
 (function(){
   const h1 = document.querySelector('.hero h1');
@@ -78,8 +82,7 @@
     rowReach: .95,  /* vertical falloff, in row heights — under 1 keeps a row
                        to itself in its middle and shares at the boundary */
     edge:     90,   /* px past the end of a line before it stops answering */
-    swap:     .18,  /* strength at which a letter becomes a symbol */
-    rollMs:   70    /* how often a scrambled letter picks a new symbol */
+    swap:     .09   /* strength at which a letter becomes a symbol */
   };
 
   /* ASCII plus the Latin-1 marks, so every symbol is one Inter already has */
@@ -88,16 +91,51 @@
 
   const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
   const rows = [];
-  let raf = 0, live = false, px = 0, py = 0, rolled = 0;
+  const SYMW = {};                 /* every symbol's own width, filled by measure() */
+  let raf = 0, live = false, px = 0, py = 0;
 
-  /* Lock every letter to its own width, then note where they all are. Done in
-     one pass on entry: nothing is locked while the pointer is away, so a
-     resize or a font swap is never measured against stale numbers. */
-  function lockAndMeasure(){
+  /* Note every letter's resting width — the margin that keeps a grown letter
+     off its neighbours is a share of it — and where they all sit. Measured on
+     entry, with transitions off so a quick re-entry reads the resting layout
+     and not the tail of the last one.
+
+     The positions are deliberately the resting ones. Letters move once the
+     push starts, and steering by where they have moved to would just make
+     them chase the pointer. */
+  function measure(){
     rows.length = 0;
     const all = Array.from(h1.querySelectorAll('.ltr'));
-    for(const el of all){ el.textContent = el.dataset.ch; el.style.width = ''; }
-    for(const el of all){ el.style.width = el.getBoundingClientRect().width.toFixed(3) + 'px'; }
+    h1.classList.add('measuring');
+    for(const el of all){
+      el.textContent = el.dataset.ch;
+      el.style.removeProperty('--s');
+      el.style.removeProperty('--w');
+      el._s = 0; el._sw = false;
+    }
+
+    /* Every symbol gets measured too, out of flow and in the same pass. A
+       swap can then set the right width without reading the layout back, and
+       the margin is budgeted against the glyph actually on screen rather than
+       the letter it replaced — which is what keeps a wide symbol from sitting
+       over its neighbours. */
+    const probe = document.createElement('span');
+    probe.className = 'wd probe';
+    probe.setAttribute('aria-hidden','true');
+    const cells = SYMS.split('').map(ch => {
+      const c = document.createElement('span');
+      c.className = 'ltr'; c.textContent = ch;
+      probe.appendChild(c); return c;
+    });
+    h1.querySelector('.reveal-line > span').appendChild(probe);
+
+    void h1.offsetWidth;                                   /* one flush for all of it */
+
+    cells.forEach((c, i) => { SYMW[SYMS[i]] = c.getBoundingClientRect().width; });
+    probe.remove();
+    for(const el of all){
+      el._w0 = el.getBoundingClientRect().width;
+      el.style.setProperty('--w', el._w0.toFixed(2) + 'px');
+    }
     for(const line of h1.querySelectorAll('.reveal-line')){
       const ls = Array.from(line.querySelectorAll('.ltr'));
       if(!ls.length) continue;
@@ -109,11 +147,12 @@
         h:  box.height || 1
       });
     }
+    h1.classList.remove('measuring');
   }
 
   function release(){
     for(const el of h1.querySelectorAll('.ltr')){
-      el.style.width = '';
+      el.style.removeProperty('--w');
       el.style.removeProperty('--s');
       el.textContent = el.dataset.ch;
       el._s = 0; el._sw = false;
@@ -126,18 +165,20 @@
     if(el._s === s) return;
     el._s = s;
     el.style.setProperty('--s', s.toFixed(3));
+    /* one symbol per visit: chosen as the letter enters the neighbourhood and
+       kept until it leaves, so the line settles instead of churning. --w moves
+       with it, so the space the letter asks for is the space it now needs. */
     const want = s > CFG.swap;
     if(want !== el._sw){
       el._sw = want;
-      el.textContent = want ? sym() : el.dataset.ch;
+      const ch = want ? sym() : el.dataset.ch;
+      el.textContent = ch;
+      el.style.setProperty('--w', ((want ? SYMW[ch] : el._w0) || el._w0).toFixed(2) + 'px');
     }
   }
 
-  function frame(now){
+  function frame(){
     raf = live ? requestAnimationFrame(frame) : 0;
-
-    const roll = now - rolled > CFG.rollMs;
-    if(roll) rolled = now;
 
     for(const row of rows){
       /* one row wide: dead centre of a line is that line alone, the gap
@@ -158,14 +199,13 @@
         const el = row.ls[i];
         const hw = clamp01(1 - Math.abs(i - near) / (CFG.radius + .5));
         set(el, rw * hw * inside);
-        if(roll && el._sw) el.textContent = sym();
       }
     }
   }
 
   h1.addEventListener('pointerenter', e => {
     px = e.clientX; py = e.clientY;
-    lockAndMeasure();
+    measure();
     live = true;
     if(!raf) raf = requestAnimationFrame(frame);
   });
