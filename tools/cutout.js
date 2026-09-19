@@ -1,0 +1,110 @@
+#!/usr/bin/env node
+/* ============================================================
+   Cut a product shot out of its flat backdrop.
+
+     node tools/cutout.js <in.png> <out.webp> [maxPx] [hueDeg] [bright] [sat] [boxW]
+
+   Written for candy shots that arrive on a white or chequerboard
+   backdrop rather than on real alpha. It floods in from the edges,
+   so a white highlight inside the subject is kept — only backdrop
+   that reaches the border is removed. The mask is then pulled in a
+   pixel and feathered, which is what stops a pale fringe showing
+   when the cutout sits on a dark page.
+
+   hueDeg rotates the subject's hue, which is how one photograph of
+   one gummy bear becomes a bag of flavours. Lighting, gloss and
+   shadow all survive it, since only hue moves. bright and sat are
+   there because hue alone is not enough in places: a red rotated
+   towards yellow lands muddy, because yellow carries more light
+   than red at the same value.
+
+   boxW pads the finished cutout out to a fixed width, centred.
+   Two subjects trimmed to their own edges have their own aspect
+   ratios, so laying them out at one width renders them at two
+   different sizes. Padded to a common box they share an aspect
+   ratio, and one width means one size.
+   ============================================================ */
+const sharp = require('sharp');
+
+const BRIGHT = 222;   /* a backdrop pixel is at least this light   */
+const FLAT   = 16;    /* ...and this close to grey                 */
+
+async function cutout(src, dest, max = 640, hue = 0, bright = 1, sat = 1, boxW = 0){
+  const { data, info } = await sharp(src).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width: w, height: h } = info;
+  const n = w * h;
+
+  const isBack = i => {
+    const r = data[i*4], g = data[i*4+1], b = data[i*4+2];
+    const hi = Math.max(r, g, b), lo = Math.min(r, g, b);
+    return hi >= BRIGHT && (hi - lo) <= FLAT;
+  };
+
+  /* flood in from every border pixel */
+  const back = new Uint8Array(n);
+  const stack = [];
+  for(let x = 0; x < w; x++){ stack.push(x, (h-1)*w + x); }
+  for(let y = 0; y < h; y++){ stack.push(y*w, y*w + w-1); }
+  while(stack.length){
+    const i = stack.pop();
+    if(back[i] || !isBack(i)) continue;
+    back[i] = 1;
+    const x = i % w, y = (i / w) | 0;
+    if(x > 0)   stack.push(i - 1);
+    if(x < w-1) stack.push(i + 1);
+    if(y > 0)   stack.push(i - w);
+    if(y < h-1) stack.push(i + w);
+  }
+
+  /* grow the backdrop by one pixel, eating the antialiased rim with it */
+  const grown = Uint8Array.from(back);
+  for(let y = 0; y < h; y++) for(let x = 0; x < w; x++){
+    const i = y*w + x;
+    if(back[i]) continue;
+    if((x > 0 && back[i-1]) || (x < w-1 && back[i+1]) || (y > 0 && back[i-w]) || (y < h-1 && back[i+w])) grown[i] = 1;
+  }
+
+  /* soften what is left, so the edge is not a staircase */
+  const alpha = new Float32Array(n);
+  for(let i = 0; i < n; i++) alpha[i] = grown[i] ? 0 : 255;
+  const blur = new Float32Array(n);
+  for(let y = 0; y < h; y++) for(let x = 0; x < w; x++){
+    let s = 0, c = 0;
+    for(let dy = -1; dy <= 1; dy++) for(let dx = -1; dx <= 1; dx++){
+      const nx = x+dx, ny = y+dy;
+      if(nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+      s += alpha[ny*w + nx]; c++;
+    }
+    blur[y*w + x] = s / c;
+  }
+  for(let i = 0; i < n; i++) data[i*4 + 3] = Math.round(blur[i]);
+
+  let out = sharp(Buffer.from(data), { raw: { width: w, height: h, channels: 4 } });
+  if(hue || bright !== 1 || sat !== 1)
+    out = sharp(await out.modulate({ hue, brightness: bright, saturation: sat }).png().toBuffer());
+
+  out = out
+    .trim()                                     /* crop to what is left */
+    .resize({ width: max, height: max, fit: 'inside', withoutEnlargement: true });
+
+  if(boxW){
+    const t = await out.png().toBuffer();
+    const { width } = await sharp(t).metadata();
+    const pad = Math.max(0, boxW - width);
+    out = sharp(t).extend({
+      left: Math.floor(pad / 2), right: Math.ceil(pad / 2),
+      background: { r: 0, g: 0, b: 0, alpha: 0 }
+    });
+  }
+
+  await out.webp({ quality: 88, alphaQuality: 92, effort: 6 }).toFile(dest);
+
+  const m = await sharp(dest).metadata();
+  console.log(dest, m.width + 'x' + m.height, 'alpha:', m.hasAlpha,
+    (hue || bright !== 1 || sat !== 1) ? '(hue ' + hue + ' bright ' + bright + ' sat ' + sat + ')' : '');
+}
+
+const [,, src, dest, max, hue, bright, sat, boxW] = process.argv;
+if(!src || !dest){ console.error('usage: node tools/cutout.js <in> <out.webp> [maxPx] [hueDeg] [bright] [sat] [boxW]'); process.exit(1); }
+cutout(src, dest, max ? +max : 640, hue ? +hue : 0, bright ? +bright : 1, sat ? +sat : 1, boxW ? +boxW : 0)
+  .catch(e => { console.error(e.message); process.exit(1); });

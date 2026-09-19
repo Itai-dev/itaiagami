@@ -7,9 +7,13 @@
 --line:rgba(255,255,255,.1);
 --line-strong:rgba(255,255,255,.3);
 --mark:#F25C05;
+/* hero letter accents — the only colours outside the mono palette, used
+   solely by the kinetic headline. Change or delete these four freely. */
+--k1:#F25C05;--k2:#2B6BFF;--k3:#C6FF3D;--k4:#FF3DA6;
+--cy-shadow:rgba(0,0,0,.55);
 --grain-opacity:0;
 --r-media:8px;
---t-hero:clamp(2.25rem,4.5vw,3.5rem);
+--t-hero:clamp(2.125rem,6.6vw,6.25rem);
 --t-display:clamp(2.25rem,4vw,3rem);
 --t-h2:clamp(1.25rem,1.8vw,1.5rem);
 --t-lead:clamp(1.0625rem,1.4vw,1.25rem);
@@ -24,7 +28,10 @@
 --maxw:1440px;
 --maxw-case:var(--maxw);
 }
+
 :root[data-theme="light"]{
+--k2:#1B46D6;--k3:#6E9C00;--k4:#D4107A;
+--cy-shadow:rgba(0,0,0,.2);
 --bg:#ffffff;
 --fg:#000000;
 --dim:rgba(0,0,0,.64);
@@ -62,16 +69,48 @@ border-bottom:1px solid transparent;transition:border-color var(--dur-fast);
 }
 header.site.scrolled{border-bottom-color:var(--line)}
 header.site .hwrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-x);display:flex;justify-content:space-between;align-items:center}
-.brand{font-family:"Inter",system-ui,sans-serif;font-size:1.15rem;font-weight:500;letter-spacing:-.01em;display:flex;align-items:center;gap:.5em}
-.brand .dot{width:6px;height:6px;border-radius:50%;background:var(--mark);display:inline-block}
-nav.primary{display:flex;gap:28px;align-items:center;font-size:var(--t-meta);letter-spacing:0}
-nav.primary a{position:relative;color:var(--dim);transition:color var(--dur-fast)}
-nav.primary a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--fg);transition:width var(--dur-fast) var(--ease)}
-nav.primary a:hover,nav.primary a.active{color:var(--fg)}
-nav.primary a.active::after{width:100%}
+.brand{font-family:"Inter",system-ui,sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:.06em;display:inline-block}
+/* ---------- the menu, in glass ----------
+   Black type needs something pale behind it, so the frame stays light in both
+   themes rather than following --bg. Everything inside it is therefore set
+   against that, not against the page: the links, the accent a letter travels
+   to when it scrambles, and the theme toggle. */
+nav.primary{
+display:flex;gap:2px;align-items:center;font-size:var(--t-meta);letter-spacing:0;
+padding:5px;border-radius:9999px;
+/* .78 rather than something thinner: over a dark page a paler frame put the
+   black type at 3.8:1, under the 4.5 small text wants. Measured on the
+   rendered pixels, not guessed from the declared colours, since what sits
+   behind the glass decides it. */
+background:rgba(255,255,255,.78);
+-webkit-backdrop-filter:saturate(1.7) blur(16px);
+backdrop-filter:saturate(1.7) blur(16px);
+border:1px solid rgba(255,255,255,.6);
+box-shadow:0 8px 24px -12px rgba(0,0,0,.45);
+--k2:#1B46D6;--k3:#6E9C00;--k4:#D4107A;
+}
+nav.primary a{
+position:relative;color:#0d0d0d;--scr-base:rgba(13,13,13,.76);
+padding:7px 13px;border-radius:9999px;
+transition:color var(--dur-fast),background var(--dur-fast);
+}
+nav.primary a:hover{--scr-base:#0d0d0d;background:rgba(13,13,13,.07)}
+nav.primary a.active{--scr-base:#0d0d0d;background:rgba(13,13,13,.11)}
+nav.primary .toggle{margin-left:3px;border-color:rgba(13,13,13,.2);color:#0d0d0d}
+nav.primary .toggle:hover{border-color:#0d0d0d;background:rgba(13,13,13,.06)}
+
+/* the small-screen menu button is the same frame, holding one word */
+.menu-btn{
+background:rgba(255,255,255,.78);
+-webkit-backdrop-filter:saturate(1.7) blur(16px);
+backdrop-filter:saturate(1.7) blur(16px);
+border:1px solid rgba(255,255,255,.6);
+box-shadow:0 8px 24px -12px rgba(0,0,0,.45);
+color:#0d0d0d;border-radius:9999px;padding:9px 16px;
+}
 .toggle{background:none;border:1px solid var(--line);color:var(--fg);font-family:inherit;font-size:var(--t-micro);letter-spacing:0;cursor:pointer;padding:6px 11px;border-radius:9999px;display:inline-flex;align-items:center;gap:6px;transition:border-color var(--dur-fast)}
 .toggle:hover{border-color:var(--fg)}
-.menu-btn{display:none;background:none;border:none;color:var(--fg);cursor:pointer;font-family:inherit;font-size:var(--t-meta);letter-spacing:0;padding:6px 0}
+.menu-btn{display:none;cursor:pointer;font-family:inherit;font-size:var(--t-meta);letter-spacing:0}
 .mobile-menu{position:fixed;inset:0;z-index:8500;background:var(--bg);transform:translateY(-100%);transition:transform var(--dur) var(--ease);display:flex;flex-direction:column;justify-content:center;padding:var(--pad-x);gap:8px}
 .mobile-menu.open{transform:translateY(0)}
 .mobile-menu a{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:clamp(1.75rem,7vw,2.25rem);line-height:1.3;letter-spacing:-.01em;padding:10px 0;border-bottom:1px solid var(--line)}
@@ -91,30 +130,106 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .sec-head .count{font-size:var(--t-meta);color:var(--dim);letter-spacing:0}
 .obs{opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .obs.in{opacity:1;transform:none}
-.hero{position:relative;display:flex;flex-direction:column;justify-content:center;padding-top:clamp(56px,9vh,110px);padding-bottom:clamp(56px,8vw,96px)}
-.hero .eyebrow{margin-bottom:clamp(24px,4vw,44px);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-.hero .eyebrow .name{color:var(--fg);letter-spacing:0}
-.hero h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-hero);line-height:1.15;letter-spacing:-.02em;max-width:26ch;text-wrap:balance}
-.hero h1 em{font-style:italic}
-.hero .sub{margin-top:clamp(22px,3vw,34px);max-width:52ch;font-size:var(--t-lead);line-height:1.45;font-family:"Inter",system-ui,sans-serif;font-weight:400;color:var(--dim)}
+.hero{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:calc(100svh - 90px);padding-top:clamp(24px,4vh,48px);padding-bottom:clamp(48px,7vw,88px)}
+/* The copy never moves, and sits above the gummies. */
+.hero-copy{position:relative;z-index:1;text-align:center;max-width:min(100%,1120px)}
 
-/* ---------- hero "System" layer ----------
-   Sits behind the hero copy, never captures clicks, fades in on first frame.
-   Masked at the edges so it dissolves into the page instead of ending in a
-   rectangle. Drawing lives in js/hero-system.js. */
-.hero > *{position:relative;z-index:1}
-.hero-system{
-position:absolute;top:-2%;right:calc(var(--pad-x) * -0.5);bottom:-6%;left:auto;
-width:min(46%,660px);z-index:0;
-pointer-events:none;opacity:0;
-transition:opacity 1.6s var(--ease);
--webkit-mask-image:radial-gradient(125% 105% at 72% 45%,#000 38%,transparent 76%);
-mask-image:radial-gradient(125% 105% at 72% 45%,#000 38%,transparent 76%);
+/* ---------- candy ----------
+   Cut-out photographs that float on their own, and can be picked up, thrown
+   and knocked into each other (js/hero-candy.js). Four layers so nothing
+   fights over a transform: .cy carries the throw, .cy-b the idle bob, .cy-s
+   the squash and stretch, .cy-i the tilt.
+
+   The layer sits above the copy on purpose. A sweet thrown onto the
+   headline covers a little of it, which is what throwing it there ought to
+   do — the alternative is one that lands under the text and can never be
+   picked up again. At rest they are all clear of it. */
+.hero-candy{position:absolute;inset:0;z-index:2;pointer-events:none}
+.cy{
+position:absolute;left:var(--x,auto);right:var(--rx,auto);top:var(--y,auto);bottom:var(--by,auto);
+/* one size for all of them. The cut-outs are padded to a common box by
+   tools/cutout.js, so one width really is one size — trimmed to their own
+   edges they would each have their own aspect ratio, and one width would
+   render a narrow bear taller than a wide one. */
+width:clamp(58px,7vw,118px);
+transform:translate3d(var(--tx,0px),var(--ty,0px),0);
+opacity:0;transition:opacity 1s var(--ease) var(--d,0s);
+pointer-events:auto;touch-action:none;cursor:grab;
 }
-.hero-system.ready{opacity:1}
-.hero-system canvas{display:block;width:100%;height:100%}
+.revealed .cy{opacity:1}
+.cy.is-held{cursor:grabbing;will-change:transform}
+.cy-b{display:block;animation:cy-float var(--f,10s) ease-in-out var(--d,0s) infinite alternate}
+.cy.is-held .cy-b{animation-play-state:paused}
+/* Squash and stretch happens along the direction of travel, not along the
+   image's own axes — so the layer turns to that angle, scales, and turns back. */
+.cy-s{display:block;transform:rotate(var(--sa,0rad)) scale(var(--sx,1),var(--sy,1)) rotate(calc(-1 * var(--sa,0rad)))}
+.cy-i{display:block;width:100%;height:auto;transform:rotate(var(--r,0deg));
+filter:drop-shadow(0 12px 16px var(--cy-shadow,rgba(0,0,0,.55)));
+-webkit-user-drag:none;user-select:none;}
+.cy-i.flip{transform:rotate(var(--r,0deg)) scaleX(-1)}
+@keyframes cy-float{
+from{transform:translate3d(0,-8px,0) rotate(-3deg)}
+to{transform:translate3d(0,9px,0) rotate(3deg)}
+}
 
-.hero .cta{margin-top:clamp(32px,4vw,48px);display:flex;gap:14px;flex-wrap:wrap}
+/* ---------- scroll cue ---------- */
+.hero-scroll{
+position:absolute;left:50%;bottom:clamp(14px,2.5vw,30px);z-index:3;
+translate:-50% 0;display:grid;place-items:center;
+width:44px;height:52px;color:var(--dim);
+transition:color var(--dur-fast),opacity var(--dur-fast);
+opacity:0;
+}
+.revealed .hero-scroll{opacity:1;transition-delay:1.1s}
+.hero-scroll:hover{color:var(--fg)}
+.hero-scroll svg{width:17px;height:auto;animation:hs-nudge 2.1s var(--ease) infinite}
+@keyframes hs-nudge{
+0%,58%,100%{transform:translateY(-4px);opacity:.55}
+28%{transform:translateY(4px);opacity:1}
+}
+
+.hero h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-hero);line-height:1;letter-spacing:-.035em;text-wrap:balance}
+
+/* ---------- kinetic headline ----------
+   js/hero-letters.js wraps every character in .ltr and every word in .wd,
+   then sets --s on each letter: how strongly the cursor is on it, 0 to 1,
+   and --w: the letter's resting width. Size, colour and spacing all read
+   those two numbers, so the script never touches any of them directly.
+
+   Size is scale, never font-size, so the glyph grows without its box. The
+   box is then widened by exactly what the scale added, half on each side,
+   which is what stops a grown letter from sitting over its neighbours.
+   A symbol wider than the letter it replaced pushes them too, since nothing
+   here pins a letter's width. A letter whose --c resolves to --fg only
+   changes size. */
+/* A line must not rewrap when the push widens it — a word dropping to a new
+   row would double the height of the hero mid-sweep. Each line is written out
+   in the markup, so holding them is exactly what is wanted. */
+.hero h1 .reveal-line > span{white-space:nowrap}
+.scr .wd{display:inline-block;white-space:nowrap}
+.scr .ltr{
+display:inline-block;transform-origin:50% 82%;
+transform:scale(calc(1 + var(--s,0) * .24));
+margin-inline:calc(var(--s,0) * .12 * var(--w,0px));
+color:color-mix(in srgb, var(--c,var(--scr-base,var(--fg))) calc(var(--s,0) * 100%), var(--scr-base,var(--fg)));
+transition:transform .09s var(--ease),margin .09s var(--ease),color .09s var(--ease);
+}
+.scr.measuring .ltr{transition:none}
+.scr .wd.probe{position:absolute;top:0;left:0;visibility:hidden;pointer-events:none}
+
+/* A letter sets its own colour, so it has to be told what the element's
+   resting colour is, or it would come out at full strength the moment it was
+   split. The nav sets its own, up with the glass frame it sits in. */
+.brand,.hero h1{--scr-base:var(--fg)}
+
+@media(max-width:900px){
+.hero{min-height:min(58svh,460px)}
+.hero-copy{text-align:left;max-width:none}
+/* the headline runs nearly the full width here, so the two that flank it
+   have nowhere to sit that is not on top of it */
+.cy.mid{display:none}
+}
+
 .reveal-line{overflow:hidden}
 .reveal-line > *{display:block;transform:translateY(105%);opacity:0;transition:transform 1s var(--ease),opacity 1s var(--ease)}
 .revealed .reveal-line > *{transform:translateY(0);opacity:1}
@@ -352,31 +467,29 @@ nav.primary{display:none}
 .swork:nth-child(even){direction:ltr}
 }
 @media(max-width:600px){
-.hero{min-height:auto;padding-top:20px}
+.hero{padding-top:12px}
 .index-list:not(.grid) .prow>a{grid-template-columns:30px 1fr;gap:12px}
 .index-list:not(.grid) .prow .p-cat{display:none}
 .index-list:not(.grid) .prow .p-metaline{display:flex;justify-content:space-between;font-size:var(--t-micro);letter-spacing:0;color:var(--dim);margin-top:6px;grid-column:2}
 .index-list.grid{grid-template-columns:1fr}
 .hoverimg{display:none}
 }
-@media(max-width:900px){
-.hero-system{display:none}
-}
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}
 *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
 .reveal-line > *,.fade,.obs{transform:none!important;opacity:1!important}
 .hoverimg{display:none!important}
-.hero-system{display:none!important}
+.scr .ltr{transform:none!important;margin-inline:0!important}
+.cy-b,.hero-scroll svg{animation:none!important}
 }
 
 
 /* OpenAI-style emphasis: weight, not italics */
-.hero h1 em,.pov h2 em,.band h2 em,.contact h2 em{font-style:normal;font-weight:600}
+.pov h2 em,.band h2 em,.contact h2 em{font-style:normal;font-weight:600}
 
 /* ---------- typographic refinements ---------- */
 h2,h3{text-wrap:balance}
-.hero .sub,.pov .body p,.cap p,.c-sec .sb,.caps-note{text-wrap:pretty}
+.pov .body p,.cap p,.c-sec .sb,.caps-note{text-wrap:pretty}
 .p-idx,.swork .media .num,.sec-head .count,.c-open .crumb,.cap .n{font-variant-numeric:tabular-nums}
 .toggle,.menu-btn,footer.site .base{letter-spacing:var(--track-micro,0)}
 

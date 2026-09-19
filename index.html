@@ -63,7 +63,7 @@
 
 <header class="site" id="siteHeader">
   <div class="hwrap">
-    <a href="index.html" class="brand" aria-label="Itai Agami — home"><span class="dot" aria-hidden="true"></span> Itai&nbsp;Agami</a>
+    <a href="index.html" class="brand" aria-label="Itai Agami — home">ITAI&nbsp;AGAMI</a>
     <nav class="primary" aria-label="Primary">
       <a href="work.html">Work</a>
       <a href="services.html">Services</a>
@@ -93,20 +93,47 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Introduction">
-    <!-- "System": parts becoming a whole. See js/hero-system.js -->
-    <div class="hero-system" id="heroSystem" aria-hidden="true"></div>
-    <p class="eyebrow fade"><span class="name">Itai Agami</span> <span>Independent Creative Director for Technology, Culture &amp; Media</span> <span>Tel Aviv — Worldwide</span></p>
-    <h1><span class="reveal-line"><span>Brands, campaigns</span></span> <span class="reveal-line"><span>and visual worlds</span></span> <span class="reveal-line"><span>people <em>remember</em>.</span></span></h1>
-    <p class="sub fade d2">I lead complex brand systems, product launches and interactive experiences — from strategy and central concept through multidisciplinary execution.</p>
-    <div class="cta fade d3">
-      <a href="work.html" class="btn solid">View selected work <span class="arw" aria-hidden="true">→</span></a>
-      <a href="services.html" class="btn ghost">How I work with clients</a>
-      <a href="contact.html" class="btn ghost">Discuss a project</a>
+    <!-- Real gummy bears, cut out to alpha, all to one size. They float, and
+         can be picked up, thrown, and knocked into each other: js/hero-candy.js.
+         Decorative, so the layer is aria-hidden and every image has empty alt. -->
+    <div class="hero-candy" id="heroCandy" aria-hidden="true">
+      <span class="cy" style="--x:2%;--y:8%;--r:-13deg;--f:9.5s;--d:.08s">
+        <span class="cy-b"><span class="cy-s"><img class="cy-i" src="/assets/candy/gummy-red.webp" alt="" width="224" height="340" decoding="async" fetchpriority="low"></span></span>
+      </span>
+      <span class="cy" style="--x:24%;--y:1%;--r:19deg;--f:11.5s;--d:.16s">
+        <span class="cy-b"><span class="cy-s"><img class="cy-i flip" src="/assets/candy/gummy-yellow.webp" alt="" width="224" height="340" decoding="async" fetchpriority="low"></span></span>
+      </span>
+      <span class="cy" style="--rx:4%;--y:7%;--r:-8deg;--f:8.8s;--d:.24s">
+        <span class="cy-b"><span class="cy-s"><img class="cy-i" src="/assets/candy/gummy-pink.webp" alt="" width="224" height="340" decoding="async" fetchpriority="low"></span></span>
+      </span>
+      <span class="cy mid" style="--x:0%;--y:41%;--r:22deg;--f:10.5s;--d:.32s">
+        <span class="cy-b"><span class="cy-s"><img class="cy-i flip" src="/assets/candy/gummy-blue.webp" alt="" width="224" height="340" decoding="async" fetchpriority="low"></span></span>
+      </span>
+      <span class="cy mid" style="--rx:0%;--y:46%;--r:-17deg;--f:12s;--d:.40s">
+        <span class="cy-b"><span class="cy-s"><img class="cy-i" src="/assets/candy/gummy-green.webp" alt="" width="224" height="340" decoding="async" fetchpriority="low"></span></span>
+      </span>
+      <span class="cy" style="--x:6%;--by:6%;--r:10deg;--f:9.2s;--d:.48s">
+        <span class="cy-b"><span class="cy-s"><img class="cy-i flip" src="/assets/candy/gummy-orange.webp" alt="" width="224" height="340" decoding="async" fetchpriority="low"></span></span>
+      </span>
+      <span class="cy" style="--rx:7%;--by:4%;--r:-21deg;--f:10.8s;--d:.56s">
+        <span class="cy-b"><span class="cy-s"><img class="cy-i" src="/assets/candy/gummy-red.webp" alt="" width="224" height="340" decoding="async" fetchpriority="low"></span></span>
+      </span>
     </div>
+
+    <div class="hero-copy">
+      <h1><span class="reveal-line"><span>Hi, I'm Itai,</span></span> <span class="reveal-line"><span>Creative director</span></span> <span class="reveal-line"><span>based in TLV, Israel</span></span></h1>
+    </div>
+
+    <a class="hero-scroll" href="#work" aria-label="Scroll to selected work">
+      <svg viewBox="0 0 24 34" aria-hidden="true" focusable="false">
+        <path d="M12 2v28M4 22l8 8 8-8" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
   </section>
 
   <!-- SELECTED WORK -->
-  <section aria-label="Selected work">
+  <section id="work" aria-label="Selected work">
     <div class="sec-head">
       <h2>Selected work</h2>
       <span class="count"><a href="work.html">Full index →</a></span>
@@ -265,6 +292,7 @@
 </footer>
 
 <script src="js/site.js"></script>
-<script src="js/hero-system.js" defer></script>
+<script src="js/scramble.js" defer></script>
+<script src="js/hero-candy.js" defer></script>
 </body>
 </html>
