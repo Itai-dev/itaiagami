@@ -93,7 +93,48 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Introduction">
-    <div class="hero-copy">
+    <!-- Work orbits the headline: six case studies drift around the copy, follow the cursor
+         and lift on hover. Under 900px they become a swipeable strip. See js/hero-orbit.js -->
+    <div class="hero-field" id="heroField" aria-label="Featured work">
+      <a class="card" href="work/simply-vision-pro.html" data-depth="38" style="--x:1%;--y:6%;--w:17vw;--r:-6deg;--d:.35s;--f:9s">
+        <span class="card-drift"><span class="card-in">
+          <img src="/assets/opt/15b0b9d98c42.webp" loading="eager" fetchpriority="high" alt="Simply Piano on Apple Vision Pro — a keyboard in a spatial environment">
+          <span class="card-label"><b>Simply — Vision Pro</b><small>Technology</small></span>
+        </span></span>
+      </a>
+      <a class="card" href="work/channel-13.html" data-depth="56" style="--x:auto;--rx:3%;--y:9%;--w:15vw;--r:5deg;--d:.5s;--f:11s">
+        <span class="card-drift"><span class="card-in">
+          <img src="/assets/opt/77bb87005dfc.webp" loading="eager" alt="Channel 13 — brand identity for a national network">
+          <span class="card-label"><b>Channel 13</b><small>Brand</small></span>
+        </span></span>
+      </a>
+      <a class="card" href="work/tower-of-david.html" data-depth="72" style="--x:-1%;--y:46%;--w:12vw;--r:8deg;--d:.65s;--f:10s">
+        <span class="card-drift"><span class="card-in">
+          <img src="/assets/opt/fc4eeff0b31b.webp" loading="lazy" alt="Tower of David Museum, Jerusalem — illustrated installation">
+          <span class="card-label"><b>Tower of David</b><small>Culture</small></span>
+        </span></span>
+      </a>
+      <a class="card" href="work/museum-of-natural-history.html" data-depth="30" style="--x:auto;--rx:-1%;--y:44%;--w:13.5vw;--r:-7deg;--d:.8s;--f:12s">
+        <span class="card-drift"><span class="card-in">
+          <img src="/assets/opt/4757c755e53d.webp" loading="lazy" alt="Museum of Natural History — interactive exhibition experience">
+          <span class="card-label"><b>Museum of Natural History</b><small>Culture</small></span>
+        </span></span>
+      </a>
+      <a class="card" href="work/amdocs-make-it-amazing.html" data-depth="46" style="--x:2%;--y:auto;--by:8%;--w:18vw;--r:3deg;--d:.95s;--f:13s">
+        <span class="card-drift"><span class="card-in">
+          <img src="/assets/opt/317245433f10.webp" loading="lazy" alt="Amdocs — Make It Amazing brand campaign">
+          <span class="card-label"><b>Amdocs — Make It Amazing</b><small>Technology</small></span>
+        </span></span>
+      </a>
+      <a class="card" href="work/partner-tv.html" data-depth="64" style="--x:auto;--rx:8%;--y:auto;--by:7%;--w:14vw;--r:-4deg;--d:1.1s;--f:8s">
+        <span class="card-drift"><span class="card-in">
+          <img src="/assets/opt/a01fae312ee1.webp" loading="lazy" alt="Partner TV — branding and design system">
+          <span class="card-label"><b>Partner TV</b><small>Brand</small></span>
+        </span></span>
+      </a>
+    </div>
+
+    <div class="hero-copy" data-depth="-12">
       <p class="eyebrow fade"><span class="name">Itai Agami</span> <span>Independent Creative Director for Technology, Culture &amp; Media</span></p>
       <h1><span class="reveal-line"><span>Brands, campaigns</span></span> <span class="reveal-line"><span>and visual worlds</span></span> <span class="reveal-line"><span>people <em>remember</em>.</span></span></h1>
       <p class="sub fade d2">I lead complex brand systems, product launches and interactive experiences — from strategy and central concept through multidisciplinary execution.</p>
@@ -103,37 +144,6 @@
         <a href="services.html" class="cta-link">How I work with clients <span class="arw" aria-hidden="true">→</span></a>
       </div>
       <p class="hero-meta fade d4"><span>Tel Aviv — Worldwide</span><span>Brand · Launch · Experience</span></p>
-    </div>
-
-    <!-- Featured work reel: four case studies, one at a time. See js/hero-work.js -->
-    <div class="hero-work fade d4" id="heroWork" aria-roledescription="carousel" aria-label="Featured work">
-      <div class="hw-stage">
-        <a class="hw-slide is-on" href="work/simply-vision-pro.html" aria-current="true">
-          <span class="hw-img"><img src="/assets/opt/15b0b9d98c42.webp" loading="eager" fetchpriority="high" alt="Simply Piano on Apple Vision Pro — a keyboard in a spatial environment"></span>
-          <span class="hw-cap"><span class="hw-t">Simply — Vision Pro</span><span class="hw-k">Creative direction / Technology</span></span>
-        </a>
-        <a class="hw-slide" href="work/channel-13.html">
-          <span class="hw-img"><img src="/assets/opt/77bb87005dfc.webp" loading="lazy" alt="Channel 13 — brand identity for a national network"></span>
-          <span class="hw-cap"><span class="hw-t">Channel 13</span><span class="hw-k">Brand identity / Media</span></span>
-        </a>
-        <a class="hw-slide" href="work/tower-of-david.html">
-          <span class="hw-img"><img src="/assets/opt/fc4eeff0b31b.webp" loading="lazy" alt="Tower of David Museum, Jerusalem — illustrated installation"></span>
-          <span class="hw-cap"><span class="hw-t">Tower of David</span><span class="hw-k">Installation / Culture</span></span>
-        </a>
-        <a class="hw-slide" href="work/museum-of-natural-history.html">
-          <span class="hw-img"><img src="/assets/opt/4757c755e53d.webp" loading="lazy" alt="Museum of Natural History — interactive exhibition experience"></span>
-          <span class="hw-cap"><span class="hw-t">Museum of Natural History</span><span class="hw-k">Interactive experience / Culture</span></span>
-        </a>
-      </div>
-      <div class="hw-nav">
-        <span class="hw-idx" aria-live="polite"><b>01</b> / 04</span>
-        <span class="hw-dots" role="tablist" aria-label="Choose a project">
-          <button type="button" class="is-on" role="tab" aria-selected="true" aria-label="Simply — Vision Pro"></button>
-          <button type="button" role="tab" aria-selected="false" aria-label="Channel 13"></button>
-          <button type="button" role="tab" aria-selected="false" aria-label="Tower of David"></button>
-          <button type="button" role="tab" aria-selected="false" aria-label="Museum of Natural History"></button>
-        </span>
-      </div>
     </div>
   </section>
 
@@ -297,6 +307,6 @@
 </footer>
 
 <script src="js/site.js"></script>
-<script src="js/hero-work.js" defer></script>
+<script src="js/hero-orbit.js" defer></script>
 </body>
 </html>
