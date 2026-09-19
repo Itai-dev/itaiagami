@@ -2,7 +2,7 @@
 /* ============================================================
    Cut a product shot out of its flat backdrop.
 
-     node tools/cutout.js <in.png> <out.webp> [maxPx]
+     node tools/cutout.js <in.png> <out.webp> [maxPx] [hueDeg] [bright] [sat]
 
    Written for candy shots that arrive on a white or chequerboard
    backdrop rather than on real alpha. It floods in from the edges,
@@ -10,13 +10,20 @@
    that reaches the border is removed. The mask is then pulled in a
    pixel and feathered, which is what stops a pale fringe showing
    when the cutout sits on a dark page.
+
+   hueDeg rotates the subject's hue, which is how one photograph of
+   one gummy bear becomes a bag of flavours. Lighting, gloss and
+   shadow all survive it, since only hue moves. bright and sat are
+   there because hue alone is not enough in places: a red rotated
+   towards yellow lands muddy, because yellow carries more light
+   than red at the same value.
    ============================================================ */
 const sharp = require('sharp');
 
 const BRIGHT = 222;   /* a backdrop pixel is at least this light   */
 const FLAT   = 16;    /* ...and this close to grey                 */
 
-async function cutout(src, dest, max = 640){
+async function cutout(src, dest, max = 640, hue = 0, bright = 1, sat = 1){
   const { data, info } = await sharp(src).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h } = info;
   const n = w * h;
@@ -66,16 +73,22 @@ async function cutout(src, dest, max = 640){
   }
   for(let i = 0; i < n; i++) data[i*4 + 3] = Math.round(blur[i]);
 
-  await sharp(Buffer.from(data), { raw: { width: w, height: h, channels: 4 } })
+  let out = sharp(Buffer.from(data), { raw: { width: w, height: h, channels: 4 } });
+  if(hue || bright !== 1 || sat !== 1)
+    out = sharp(await out.modulate({ hue, brightness: bright, saturation: sat }).png().toBuffer());
+
+  await out
     .trim()                                     /* crop to what is left */
     .resize({ width: max, height: max, fit: 'inside', withoutEnlargement: true })
     .webp({ quality: 88, alphaQuality: 92, effort: 6 })
     .toFile(dest);
 
-  const out = await sharp(dest).metadata();
-  console.log(dest, out.width + 'x' + out.height, 'alpha:', out.hasAlpha);
+  const m = await sharp(dest).metadata();
+  console.log(dest, m.width + 'x' + m.height, 'alpha:', m.hasAlpha,
+    (hue || bright !== 1 || sat !== 1) ? '(hue ' + hue + ' bright ' + bright + ' sat ' + sat + ')' : '');
 }
 
-const [,, src, dest, max] = process.argv;
-if(!src || !dest){ console.error('usage: node tools/cutout.js <in> <out.webp> [maxPx]'); process.exit(1); }
-cutout(src, dest, max ? +max : 640).catch(e => { console.error(e.message); process.exit(1); });
+const [,, src, dest, max, hue, bright, sat] = process.argv;
+if(!src || !dest){ console.error('usage: node tools/cutout.js <in> <out.webp> [maxPx] [hueDeg] [bright] [sat]'); process.exit(1); }
+cutout(src, dest, max ? +max : 640, hue ? +hue : 0, bright ? +bright : 1, sat ? +sat : 1)
+  .catch(e => { console.error(e.message); process.exit(1); });

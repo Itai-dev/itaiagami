@@ -102,23 +102,49 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .hero-copy{position:relative;z-index:1;text-align:center;max-width:min(100%,1120px)}
 
 /* ---------- candy ----------
-   Cut-out photographs, floating. Each sits on its own clock so the drift
-   never lines up, and the layer never takes the pointer, so the headline
-   behind it stays hoverable. Sizes are in vw and clamped, so a sweet is
-   about the same share of the hero at any width. */
-.hero-candy{position:absolute;inset:0;z-index:0;pointer-events:none}
+   Cut-out photographs that float on their own and can be picked up and
+   thrown (js/hero-candy.js). Three layers so nothing fights over a
+   transform: .cy carries the throw, .cy-b the idle bob, .cy-i the tilt.
+
+   The layer sits above the copy on purpose. A sweet thrown onto the
+   headline covers a little of it, which is what throwing it there ought to
+   do — the alternative is one that lands under the text and can never be
+   picked up again. At rest they are all clear of it. */
+.hero-candy{position:absolute;inset:0;z-index:2;pointer-events:none}
 .cy{
 position:absolute;left:var(--x,auto);right:var(--rx,auto);top:var(--y,auto);bottom:var(--by,auto);
-width:clamp(58px,var(--w),170px);
-opacity:0;transition:opacity 1.1s var(--ease) var(--d,0s);
-animation:cy-float var(--f,10s) ease-in-out var(--d,0s) infinite alternate;
+width:clamp(38px,var(--w),96px);
+transform:translate3d(var(--tx,0px),var(--ty,0px),0);
+opacity:0;transition:opacity 1s var(--ease) var(--d,0s);
+pointer-events:auto;touch-action:none;cursor:grab;
 }
 .revealed .cy{opacity:1}
-.cy img{display:block;width:100%;height:auto;transform:rotate(var(--r,0deg));filter:drop-shadow(0 16px 22px var(--cy-shadow,rgba(0,0,0,.55)))}
-.cy img.flip{transform:rotate(var(--r,0deg)) scaleX(-1)}
+.cy.is-held{cursor:grabbing;will-change:transform}
+.cy-b{display:block;animation:cy-float var(--f,10s) ease-in-out var(--d,0s) infinite alternate}
+.cy.is-held .cy-b{animation-play-state:paused}
+.cy-i{display:block;width:100%;height:auto;transform:rotate(var(--r,0deg));
+filter:drop-shadow(0 12px 16px var(--cy-shadow,rgba(0,0,0,.55)));
+-webkit-user-drag:none;user-select:none;}
+.cy-i.flip{transform:rotate(var(--r,0deg)) scaleX(-1)}
 @keyframes cy-float{
-from{transform:translate3d(0,-10px,0) rotate(-3deg)}
-to{transform:translate3d(0,12px,0) rotate(3deg)}
+from{transform:translate3d(0,-8px,0) rotate(-3deg)}
+to{transform:translate3d(0,9px,0) rotate(3deg)}
+}
+
+/* ---------- scroll cue ---------- */
+.hero-scroll{
+position:absolute;left:50%;bottom:clamp(14px,2.5vw,30px);z-index:3;
+translate:-50% 0;display:grid;place-items:center;
+width:44px;height:52px;color:var(--dim);
+transition:color var(--dur-fast),opacity var(--dur-fast);
+opacity:0;
+}
+.revealed .hero-scroll{opacity:1;transition-delay:1.1s}
+.hero-scroll:hover{color:var(--fg)}
+.hero-scroll svg{width:17px;height:auto;animation:hs-nudge 2.1s var(--ease) infinite}
+@keyframes hs-nudge{
+0%,58%,100%{transform:translateY(-4px);opacity:.55}
+28%{transform:translateY(4px);opacity:1}
 }
 
 .hero h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-hero);line-height:1;letter-spacing:-.035em;text-wrap:balance}
@@ -408,7 +434,7 @@ html{scroll-behavior:auto}
 .reveal-line > *,.fade,.obs{transform:none!important;opacity:1!important}
 .hoverimg{display:none!important}
 .hero h1 .ltr{transform:none!important;margin-inline:0!important}
-.cy{animation:none!important}
+.cy-b,.hero-scroll svg{animation:none!important}
 }
 
 

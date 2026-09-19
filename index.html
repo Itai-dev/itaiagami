@@ -93,36 +93,56 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Introduction">
-    <!-- Real candy, cut out to alpha, floating. Decorative only: the layer
-         never takes the pointer, so the headline behind it stays hoverable. -->
-    <div class="hero-candy" aria-hidden="true">
-      <span class="cy" style="--x:1%;--y:13%;--w:10.5vw;--r:-13deg;--f:9s;--d:.15s">
-        <img src="/assets/candy/gummy-red.webp" alt="" width="261" height="420" decoding="async" fetchpriority="low">
+    <!-- Real candy, cut out to alpha. Floats on its own, and can be picked up
+         and thrown: js/hero-candy.js. Decorative, so the whole layer is
+         aria-hidden and every image has an empty alt. -->
+    <div class="hero-candy" id="heroCandy" aria-hidden="true">
+      <span class="cy" style="--x:3%;--y:11%;--w:6vw;--r:-14deg;--f:9s;--d:.10s">
+        <span class="cy-b"><img class="cy-i" src="/assets/candy/gummy-red.webp" alt="" width="211" height="340" decoding="async" fetchpriority="low"></span>
       </span>
-      <span class="cy" style="--rx:5%;--y:10%;--w:15vw;--r:15deg;--f:11s;--d:.3s">
-        <img src="/assets/candy/cookie.webp" alt="" width="420" height="393" decoding="async" fetchpriority="low">
+      <span class="cy" style="--x:19%;--y:4%;--w:4.2vw;--r:21deg;--f:11s;--d:.18s">
+        <span class="cy-b"><img class="cy-i flip" src="/assets/candy/gummy-yellow.webp" alt="" width="211" height="340" decoding="async" fetchpriority="low"></span>
       </span>
-      <span class="cy mid" style="--x:2%;--y:47%;--w:8vw;--r:20deg;--f:8s;--d:.45s">
-        <img src="/assets/candy/cookie.webp" alt="" width="420" height="393" decoding="async" fetchpriority="low">
+      <span class="cy" style="--rx:31%;--y:5%;--w:4.6vw;--r:-9deg;--f:8.5s;--d:.26s">
+        <span class="cy-b"><img class="cy-i" src="/assets/candy/cookie.webp" alt="" width="340" height="318" decoding="async" fetchpriority="low"></span>
       </span>
-      <span class="cy mid" style="--rx:1%;--y:55%;--w:10vw;--r:-9deg;--f:10s;--d:.6s">
-        <img class="flip" src="/assets/candy/gummy-red.webp" alt="" width="261" height="420" decoding="async" fetchpriority="low">
+      <span class="cy" style="--rx:6%;--y:13%;--w:6.4vw;--r:16deg;--f:10.5s;--d:.34s">
+        <span class="cy-b"><img class="cy-i" src="/assets/candy/gummy-blue.webp" alt="" width="190" height="340" decoding="async" fetchpriority="low"></span>
       </span>
-      <span class="cy" style="--x:3%;--by:6%;--w:11vw;--r:7deg;--f:12s;--d:.75s">
-        <img class="flip" src="/assets/candy/gummy-green.webp" alt="" width="235" height="420" decoding="async" fetchpriority="low">
+      <span class="cy mid" style="--x:0%;--y:42%;--w:5vw;--r:24deg;--f:9.5s;--d:.42s">
+        <span class="cy-b"><img class="cy-i flip" src="/assets/candy/gummy-pink.webp" alt="" width="211" height="340" decoding="async" fetchpriority="low"></span>
       </span>
-      <span class="cy" style="--rx:19%;--by:7%;--w:10vw;--r:-22deg;--f:9.5s;--d:.9s">
-        <img class="flip" src="/assets/candy/cookie.webp" alt="" width="420" height="393" decoding="async" fetchpriority="low">
+      <span class="cy mid" style="--rx:0%;--y:48%;--w:5.4vw;--r:-19deg;--f:12s;--d:.50s">
+        <span class="cy-b"><img class="cy-i" src="/assets/candy/gummy-green.webp" alt="" width="190" height="340" decoding="async" fetchpriority="low"></span>
+      </span>
+      <span class="cy" style="--x:5%;--by:9%;--w:6.2vw;--r:8deg;--f:10s;--d:.58s">
+        <span class="cy-b"><img class="cy-i flip" src="/assets/candy/gummy-green.webp" alt="" width="190" height="340" decoding="async" fetchpriority="low"></span>
+      </span>
+      <span class="cy" style="--x:25%;--by:3%;--w:4.4vw;--r:-24deg;--f:8s;--d:.66s">
+        <span class="cy-b"><img class="cy-i" src="/assets/candy/gummy-orange.webp" alt="" width="211" height="340" decoding="async" fetchpriority="low"></span>
+      </span>
+      <span class="cy" style="--rx:26%;--by:6%;--w:5.8vw;--r:13deg;--f:11.5s;--d:.74s">
+        <span class="cy-b"><img class="cy-i flip" src="/assets/candy/gummy-red.webp" alt="" width="211" height="340" decoding="async" fetchpriority="low"></span>
+      </span>
+      <span class="cy" style="--rx:3%;--by:13%;--w:4.8vw;--r:-6deg;--f:9.2s;--d:.82s">
+        <span class="cy-b"><img class="cy-i" src="/assets/candy/cookie.webp" alt="" width="340" height="318" decoding="async" fetchpriority="low"></span>
       </span>
     </div>
 
     <div class="hero-copy">
       <h1><span class="reveal-line"><span>Hi, I'm Itai,</span></span> <span class="reveal-line"><span>Creative director</span></span> <span class="reveal-line"><span>based in TLV, Israel</span></span></h1>
     </div>
+
+    <a class="hero-scroll" href="#work" aria-label="Scroll to selected work">
+      <svg viewBox="0 0 24 34" aria-hidden="true" focusable="false">
+        <path d="M12 2v28M4 22l8 8 8-8" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
   </section>
 
   <!-- SELECTED WORK -->
-  <section aria-label="Selected work">
+  <section id="work" aria-label="Selected work">
     <div class="sec-head">
       <h2>Selected work</h2>
       <span class="count"><a href="work.html">Full index →</a></span>
@@ -282,5 +302,6 @@
 
 <script src="js/site.js"></script>
 <script src="js/hero-letters.js" defer></script>
+<script src="js/hero-candy.js" defer></script>
 </body>
 </html>
