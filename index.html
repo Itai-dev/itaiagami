@@ -93,15 +93,47 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Introduction">
-    <!-- "System": parts becoming a whole. See js/hero-system.js -->
-    <div class="hero-system" id="heroSystem" aria-hidden="true"></div>
-    <p class="eyebrow fade"><span class="name">Itai Agami</span> <span>Independent Creative Director for Technology, Culture &amp; Media</span> <span>Tel Aviv — Worldwide</span></p>
-    <h1><span class="reveal-line"><span>Brands, campaigns</span></span> <span class="reveal-line"><span>and visual worlds</span></span> <span class="reveal-line"><span>people <em>remember</em>.</span></span></h1>
-    <p class="sub fade d2">I lead complex brand systems, product launches and interactive experiences — from strategy and central concept through multidisciplinary execution.</p>
-    <div class="cta fade d3">
-      <a href="work.html" class="btn solid">View selected work <span class="arw" aria-hidden="true">→</span></a>
-      <a href="services.html" class="btn ghost">How I work with clients</a>
-      <a href="contact.html" class="btn ghost">Discuss a project</a>
+    <div class="hero-copy">
+      <p class="eyebrow fade"><span class="name">Itai Agami</span> <span>Independent Creative Director for Technology, Culture &amp; Media</span></p>
+      <h1><span class="reveal-line"><span>Brands, campaigns</span></span> <span class="reveal-line"><span>and visual worlds</span></span> <span class="reveal-line"><span>people <em>remember</em>.</span></span></h1>
+      <p class="sub fade d2">I lead complex brand systems, product launches and interactive experiences — from strategy and central concept through multidisciplinary execution.</p>
+      <div class="cta fade d3">
+        <a href="work.html" class="btn solid">View selected work <span class="arw" aria-hidden="true">→</span></a>
+        <a href="contact.html" class="btn ghost">Discuss a project</a>
+        <a href="services.html" class="cta-link">How I work with clients <span class="arw" aria-hidden="true">→</span></a>
+      </div>
+      <p class="hero-meta fade d4"><span>Tel Aviv — Worldwide</span><span>Brand · Launch · Experience</span></p>
+    </div>
+
+    <!-- Featured work reel: four case studies, one at a time. See js/hero-work.js -->
+    <div class="hero-work fade d4" id="heroWork" aria-roledescription="carousel" aria-label="Featured work">
+      <div class="hw-stage">
+        <a class="hw-slide is-on" href="work/simply-vision-pro.html" aria-current="true">
+          <span class="hw-img"><img src="/assets/opt/15b0b9d98c42.webp" loading="eager" fetchpriority="high" alt="Simply Piano on Apple Vision Pro — a keyboard in a spatial environment"></span>
+          <span class="hw-cap"><span class="hw-t">Simply — Vision Pro</span><span class="hw-k">Creative direction / Technology</span></span>
+        </a>
+        <a class="hw-slide" href="work/channel-13.html">
+          <span class="hw-img"><img src="/assets/opt/77bb87005dfc.webp" loading="lazy" alt="Channel 13 — brand identity for a national network"></span>
+          <span class="hw-cap"><span class="hw-t">Channel 13</span><span class="hw-k">Brand identity / Media</span></span>
+        </a>
+        <a class="hw-slide" href="work/tower-of-david.html">
+          <span class="hw-img"><img src="/assets/opt/fc4eeff0b31b.webp" loading="lazy" alt="Tower of David Museum, Jerusalem — illustrated installation"></span>
+          <span class="hw-cap"><span class="hw-t">Tower of David</span><span class="hw-k">Installation / Culture</span></span>
+        </a>
+        <a class="hw-slide" href="work/museum-of-natural-history.html">
+          <span class="hw-img"><img src="/assets/opt/4757c755e53d.webp" loading="lazy" alt="Museum of Natural History — interactive exhibition experience"></span>
+          <span class="hw-cap"><span class="hw-t">Museum of Natural History</span><span class="hw-k">Interactive experience / Culture</span></span>
+        </a>
+      </div>
+      <div class="hw-nav">
+        <span class="hw-idx" aria-live="polite"><b>01</b> / 04</span>
+        <span class="hw-dots" role="tablist" aria-label="Choose a project">
+          <button type="button" class="is-on" role="tab" aria-selected="true" aria-label="Simply — Vision Pro"></button>
+          <button type="button" role="tab" aria-selected="false" aria-label="Channel 13"></button>
+          <button type="button" role="tab" aria-selected="false" aria-label="Tower of David"></button>
+          <button type="button" role="tab" aria-selected="false" aria-label="Museum of Natural History"></button>
+        </span>
+      </div>
     </div>
   </section>
 
@@ -265,6 +297,6 @@
 </footer>
 
 <script src="js/site.js"></script>
-<script src="js/hero-system.js" defer></script>
+<script src="js/hero-work.js" defer></script>
 </body>
 </html>
