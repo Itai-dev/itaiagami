@@ -33,11 +33,13 @@ function scramble(el, opt){
   const rowsOf = opt.rows ? () => Array.from(el.querySelectorAll(opt.rows)) : () => [el];
   const RADIUS = opt.radius || 4;
 
-  /* Which accent a letter travels to. The --fg entries are letters that only
-     change size, which keeps a swept line from reading as confetti. Change the
-     mix here, or the colours themselves in :root. */
-  const ACCENT = ['var(--fg)','var(--k1)','var(--fg)','var(--k2)','var(--fg)',
-                  'var(--k3)','var(--fg)','var(--k4)','var(--fg)','var(--k1)'];
+  /* Which accent a letter travels to. The --scr-base entries are letters that
+     only change size, which keeps a swept line from reading as confetti — and
+     it has to be the element's own resting colour rather than the page's, or a
+     dark link inside a pale frame would travel to white and land on grey. */
+  const BASE = 'var(--scr-base,var(--fg))';
+  const ACCENT = [BASE,'var(--k1)',BASE,'var(--k2)',BASE,
+                  'var(--k3)',BASE,'var(--k4)',BASE,'var(--k1)'];
 
   /* Per-letter spans make some screen readers spell a heading out, and while
      the pointer is on it the letters are not even the right ones — so the real
