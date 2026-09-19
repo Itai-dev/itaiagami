@@ -2,10 +2,11 @@
    HERO — work orbit
    The cards around the headline follow the cursor with depth:
    each [data-depth] element slides up to that many pixels
-   toward the pointer (negative values move the other way, so
-   the copy leans against the cards). Smoothed per frame, only
-   runs on pointer devices at desktop widths, never under
-   reduced motion. The idle float and hover lift are CSS.
+   toward the pointer. The headline carries no depth on purpose
+   — the copy stays put and only the work moves. Smoothed per
+   frame, only runs on pointer devices at desktop widths, never
+   under reduced motion. The entrance spin, idle float and hover
+   lift are all CSS.
    ============================================================ */
 (function(){
   const hero = document.querySelector('.hero');

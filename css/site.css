@@ -92,36 +92,32 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .obs{opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .obs.in{opacity:1;transform:none}
 .hero{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:calc(100svh - 90px);padding-top:clamp(24px,4vh,48px);padding-bottom:clamp(48px,7vw,88px)}
-.hero-copy{position:relative;z-index:2;text-align:center;max-width:min(100%,1040px);pointer-events:none;will-change:transform}
-.hero-copy a,.hero-copy button{pointer-events:auto}
-.hero .eyebrow{margin-bottom:clamp(22px,3.5vw,40px);display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center}
-.hero .eyebrow .name{color:var(--fg);letter-spacing:0}
+/* The copy never moves — only the work does. No pointer events either, so a
+   card sitting behind a word is still hoverable. */
+.hero-copy{position:relative;z-index:2;text-align:center;max-width:min(100%,1120px);pointer-events:none}
 .hero h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-hero);line-height:1;letter-spacing:-.035em;text-wrap:balance}
 .hero h1 em{font-style:italic}
-.hero .sub{margin:clamp(22px,3vw,36px) auto 0;max-width:44ch;font-size:var(--t-lead);line-height:1.45;font-family:"Inter",system-ui,sans-serif;font-weight:400;color:var(--dim)}
-.hero .cta{margin-top:clamp(28px,4vw,44px);display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center}
-.hero .cta-link{display:inline-flex;align-items:center;gap:8px;font-size:var(--t-meta);font-weight:500;color:var(--dim);padding:11px 4px;transition:color var(--dur-fast)}
-.hero .cta-link:hover{color:var(--fg)}
-.hero .cta-link .arw{transition:transform var(--dur-fast) var(--ease)}
-.hero .cta-link:hover .arw{transform:translateX(4px)}
-.hero-meta{margin-top:clamp(28px,4vw,48px);display:flex;gap:18px;flex-wrap:wrap;justify-content:center;font-size:var(--t-micro);letter-spacing:var(--track-micro);color:var(--dim)}
-.hero-meta span+span::before{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--line-strong);margin-right:18px;vertical-align:middle}
 
 /* ---------- hero work field ----------
    Six case studies placed around the headline. Each card is three layers:
    .card       — absolute position from its inline --x/--rx/--y/--by vars,
                  cursor parallax (transform set by js/hero-orbit.js)
    .card-drift — the idle float, a CSS animation
-   .card-in    — the designed tilt (--r) and the hover lift
-   Cards sit under the copy; the copy lets the pointer through, so a card
-   half-hidden by a word is still hoverable and comes to the front. */
+   .card-in    — the entrance spin, the designed tilt (--r) and the hover lift
+
+   The entrance uses animation-fill-mode:backwards, not both: the card holds
+   the from-state through its stagger delay, spins into place, and then the
+   animation stops applying. Its end state is the same rotate(--r) the rule
+   already declares, so nothing jumps — and hover is free to take over the
+   moment the spin is done. */
 .hero-field{position:absolute;inset:0;z-index:1;pointer-events:none}
-.card{position:absolute;left:var(--x,auto);right:var(--rx,auto);top:var(--y,auto);bottom:var(--by,auto);width:clamp(120px,var(--w),300px);pointer-events:auto;opacity:0;transition:opacity 1.2s var(--ease) var(--d,0s),filter .6s var(--ease);will-change:transform}
+.card{position:absolute;left:var(--x,auto);right:var(--rx,auto);top:var(--y,auto);bottom:var(--by,auto);width:clamp(120px,var(--w),320px);pointer-events:auto;opacity:0;transition:opacity .8s var(--ease) var(--d,0s),filter .6s var(--ease);will-change:transform}
 .revealed .card{opacity:1}
 .hero-field:hover .card:not(:hover){opacity:.4;filter:saturate(.6)}
 .card:hover{z-index:5}
-.card-drift{display:block;animation:card-float var(--f,10s) ease-in-out infinite alternate}
-.card-in{display:block;position:relative;transform:rotate(var(--r,0deg));transition:transform .7s var(--ease);border-radius:var(--r-media);overflow:visible}
+.card-drift{display:block;animation:card-float var(--f,10s) ease-in-out var(--d,0s) infinite alternate}
+.card-in{display:block;position:relative;transform:rotate(var(--r,0deg));transition:transform .7s var(--ease);border-radius:var(--r-media)}
+.revealed .card-in{animation:card-spin-in 1.15s var(--ease) var(--d,0s) backwards}
 .card:hover .card-in{transform:rotate(0deg) scale(1.16)}
 .card img{width:100%;height:auto;border-radius:var(--r-media);background:var(--faint);box-shadow:0 30px 60px -20px rgba(0,0,0,.55);transition:box-shadow .7s var(--ease)}
 .card:hover img{box-shadow:0 44px 80px -24px rgba(0,0,0,.7)}
@@ -134,17 +130,17 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .card:focus-visible .card-in{transform:rotate(0deg) scale(1.16)}
 .card:focus-visible img{outline:2px solid var(--fg);outline-offset:3px}
 @keyframes card-float{from{transform:translateY(-8px)}to{transform:translateY(10px)}}
+@keyframes card-spin-in{from{transform:rotate(calc(var(--r,0deg) - 400deg)) scale(.24)}}
 
 @media(max-width:900px){
 .hero{min-height:auto;align-items:stretch}
 .hero-copy{max-width:none;text-align:left}
-.hero .eyebrow,.hero .cta,.hero-meta{justify-content:flex-start}
-.hero .sub{margin-left:0}
 .hero-field{position:relative;inset:auto;order:2;margin:clamp(36px,6vw,56px) calc(var(--pad-x) * -1) 0;padding:6px var(--pad-x) 28px;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--pad-x);-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .hero-field::-webkit-scrollbar{display:none}
 .card{position:static;flex:0 0 auto;width:min(64vw,300px);scroll-snap-align:start;transform:none!important}
 .hero-field:hover .card:not(:hover){opacity:1;filter:none}
 .card-drift{animation:none}
+.revealed .card-in{animation:none}
 .card-in{transform:none}
 .card:hover .card-in{transform:none}
 .card img{box-shadow:none}
@@ -391,8 +387,6 @@ nav.primary{display:none}
 }
 @media(max-width:600px){
 .hero{padding-top:20px}
-.hero-meta{flex-direction:column;gap:6px}
-.hero-meta span+span::before{display:none}
 .index-list:not(.grid) .prow>a{grid-template-columns:30px 1fr;gap:12px}
 .index-list:not(.grid) .prow .p-cat{display:none}
 .index-list:not(.grid) .prow .p-metaline{display:flex;justify-content:space-between;font-size:var(--t-micro);letter-spacing:0;color:var(--dim);margin-top:6px;grid-column:2}
@@ -405,7 +399,7 @@ html{scroll-behavior:auto}
 .reveal-line > *,.fade,.obs{transform:none!important;opacity:1!important}
 .hoverimg{display:none!important}
 .card{opacity:1!important}
-.card-drift{animation:none!important}
+.card-drift,.revealed .card-in{animation:none!important}
 .card-in{transform:rotate(var(--r,0deg))!important}
 }
 
@@ -415,7 +409,7 @@ html{scroll-behavior:auto}
 
 /* ---------- typographic refinements ---------- */
 h2,h3{text-wrap:balance}
-.hero .sub,.pov .body p,.cap p,.c-sec .sb,.caps-note{text-wrap:pretty}
+.pov .body p,.cap p,.c-sec .sb,.caps-note{text-wrap:pretty}
 .p-idx,.swork .media .num,.sec-head .count,.c-open .crumb,.cap .n{font-variant-numeric:tabular-nums}
 .toggle,.menu-btn,footer.site .base{letter-spacing:var(--track-micro,0)}
 
