@@ -69,7 +69,7 @@ border-bottom:1px solid transparent;transition:border-color var(--dur-fast);
 }
 header.site.scrolled{border-bottom-color:var(--line)}
 header.site .hwrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-x);display:flex;justify-content:space-between;align-items:center}
-.brand{font-family:"Inter",system-ui,sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:.06em;display:flex;align-items:center}
+.brand{font-family:"Inter",system-ui,sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:.06em;display:inline-block}
 nav.primary{display:flex;gap:28px;align-items:center;font-size:var(--t-meta);letter-spacing:0}
 nav.primary a{position:relative;color:var(--dim);transition:color var(--dur-fast)}
 nav.primary a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--fg);transition:width var(--dur-fast) var(--ease)}
@@ -102,9 +102,10 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .hero-copy{position:relative;z-index:1;text-align:center;max-width:min(100%,1120px)}
 
 /* ---------- candy ----------
-   Cut-out photographs that float on their own and can be picked up and
-   thrown (js/hero-candy.js). Three layers so nothing fights over a
-   transform: .cy carries the throw, .cy-b the idle bob, .cy-i the tilt.
+   Cut-out photographs that float on their own, and can be picked up, thrown
+   and knocked into each other (js/hero-candy.js). Four layers so nothing
+   fights over a transform: .cy carries the throw, .cy-b the idle bob, .cy-s
+   the squash and stretch, .cy-i the tilt.
 
    The layer sits above the copy on purpose. A sweet thrown onto the
    headline covers a little of it, which is what throwing it there ought to
@@ -122,6 +123,9 @@ pointer-events:auto;touch-action:none;cursor:grab;
 .cy.is-held{cursor:grabbing;will-change:transform}
 .cy-b{display:block;animation:cy-float var(--f,10s) ease-in-out var(--d,0s) infinite alternate}
 .cy.is-held .cy-b{animation-play-state:paused}
+/* Squash and stretch happens along the direction of travel, not along the
+   image's own axes — so the layer turns to that angle, scales, and turns back. */
+.cy-s{display:block;transform:rotate(var(--sa,0rad)) scale(var(--sx,1),var(--sy,1)) rotate(calc(-1 * var(--sa,0rad)))}
 .cy-i{display:block;width:100%;height:auto;transform:rotate(var(--r,0deg));
 filter:drop-shadow(0 12px 16px var(--cy-shadow,rgba(0,0,0,.55)));
 -webkit-user-drag:none;user-select:none;}
@@ -165,16 +169,23 @@ opacity:0;
    row would double the height of the hero mid-sweep. Each line is written out
    in the markup, so holding them is exactly what is wanted. */
 .hero h1 .reveal-line > span{white-space:nowrap}
-.hero h1 .wd{display:inline-block;white-space:nowrap}
-.hero h1 .ltr{
+.scr .wd{display:inline-block;white-space:nowrap}
+.scr .ltr{
 display:inline-block;transform-origin:50% 82%;
 transform:scale(calc(1 + var(--s,0) * .24));
 margin-inline:calc(var(--s,0) * .12 * var(--w,0px));
-color:color-mix(in srgb, var(--c,var(--fg)) calc(var(--s,0) * 100%), var(--fg));
+color:color-mix(in srgb, var(--c,var(--scr-base,var(--fg))) calc(var(--s,0) * 100%), var(--scr-base,var(--fg)));
 transition:transform .09s var(--ease),margin .09s var(--ease),color .09s var(--ease);
 }
-.hero h1.measuring .ltr{transition:none}
-.hero h1 .wd.probe{position:absolute;top:0;left:0;visibility:hidden;pointer-events:none}
+.scr.measuring .ltr{transition:none}
+.scr .wd.probe{position:absolute;top:0;left:0;visibility:hidden;pointer-events:none}
+
+/* A letter sets its own colour, so it has to be told what the element's
+   resting colour is — a nav link is dim until hovered, and would otherwise
+   come out at full strength the moment it was split. */
+.brand,.hero h1{--scr-base:var(--fg)}
+nav.primary a{--scr-base:var(--dim)}
+nav.primary a:hover,nav.primary a.active{--scr-base:var(--fg)}
 
 @media(max-width:900px){
 .hero{min-height:min(58svh,460px)}
@@ -433,7 +444,7 @@ html{scroll-behavior:auto}
 *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
 .reveal-line > *,.fade,.obs{transform:none!important;opacity:1!important}
 .hoverimg{display:none!important}
-.hero h1 .ltr{transform:none!important;margin-inline:0!important}
+.scr .ltr{transform:none!important;margin-inline:0!important}
 .cy-b,.hero-scroll svg{animation:none!important}
 }
 

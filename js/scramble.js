@@ -1,10 +1,14 @@
 /* ============================================================
-   HERO — kinetic headline
-   Every character of the headline becomes its own span. The
+   SCRAMBLE — type that answers the cursor
+   Every character of a wired element becomes its own span. The
    cursor then drives a neighbourhood rather than a single
    letter: letters within RADIUS of the one under the pointer
    swell, take an accent colour and become a symbol, all falling
    off with distance.
+
+   Wired onto the headline, the wordmark and each nav link. The
+   headline has three rows to tell apart; the rest are one row
+   each, which is the only difference between them.
 
    Vertically the falloff is one row wide, so a pointer sitting
    in the middle of a line moves that line alone and a pointer
@@ -23,10 +27,11 @@
    under prefers-reduced-motion.
    ============================================================ */
 (function(){
-  const h1 = document.querySelector('.hero h1');
-  if(!h1) return;
 
-  /* ---------- 1. split into letters ---------- */
+/* ---------- one wired element ---------- */
+function scramble(el, opt){
+  const rowsOf = opt.rows ? () => Array.from(el.querySelectorAll(opt.rows)) : () => [el];
+  const RADIUS = opt.radius || 4;
 
   /* Which accent a letter travels to. The --fg entries are letters that only
      change size, which keeps a swept line from reading as confetti. Change the
@@ -37,7 +42,11 @@
   /* Per-letter spans make some screen readers spell a heading out, and while
      the pointer is on it the letters are not even the right ones — so the real
      line goes on the element as a label before anything is split. */
-  h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g,' ').trim());
+  /* the link or heading keeps its real text as its accessible name, which
+     matters more here than usual: under the pointer the letters on screen are
+     not the ones it says */
+  if(!el.getAttribute('aria-label'))
+    el.setAttribute('aria-label', el.textContent.replace(/\s+/g,' ').trim());
 
   let n = 0;
   function split(node){
@@ -68,21 +77,23 @@
     }
   }
 
-  h1.querySelectorAll('.reveal-line > span').forEach(split);
-  h1.classList.add('lettered');
+  rowsOf().forEach(r => split(opt.rows ? r.firstElementChild || r : r));
+  el.classList.add('scr');
 
 
   /* ---------- 2. the cursor neighbourhood ---------- */
 
+  /* The split above stands on its own — it is what puts the real line on the
+     element as a label — so it happens either way. Only the reacting stops. */
   if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
   if(!matchMedia('(hover:hover) and (pointer:fine)').matches) return;
 
   const CFG = {
-    radius:   4,    /* letters either side of the one under the pointer */
-    rowReach: .95,  /* vertical falloff, in row heights — under 1 keeps a row
-                       to itself in its middle and shares at the boundary */
-    edge:     90,   /* px past the end of a line before it stops answering */
-    swap:     .09   /* strength at which a letter becomes a symbol */
+    radius:   RADIUS, /* letters either side of the one under the pointer */
+    rowReach: .95,    /* vertical falloff, in row heights — under 1 keeps a row
+                         to itself in its middle and shares at the boundary */
+    edge:     opt.edge || 90,  /* px past the end of a line before it stops */
+    swap:     .09     /* strength at which a letter becomes a symbol */
   };
 
   /* ASCII plus the Latin-1 marks, so every symbol is one Inter already has */
@@ -104,8 +115,8 @@
      them chase the pointer. */
   function measure(){
     rows.length = 0;
-    const all = Array.from(h1.querySelectorAll('.ltr'));
-    h1.classList.add('measuring');
+    const all = Array.from(el.querySelectorAll('.ltr'));
+    el.classList.add('measuring');
     for(const el of all){
       el.textContent = el.dataset.ch;
       el.style.removeProperty('--s');
@@ -126,9 +137,9 @@
       c.className = 'ltr'; c.textContent = ch;
       probe.appendChild(c); return c;
     });
-    h1.querySelector('.reveal-line > span').appendChild(probe);
+    el.appendChild(probe);
 
-    void h1.offsetWidth;                                   /* one flush for all of it */
+    void el.offsetWidth;                                   /* one flush for all of it */
 
     cells.forEach((c, i) => { SYMW[SYMS[i]] = c.getBoundingClientRect().width; });
     probe.remove();
@@ -136,7 +147,7 @@
       el._w0 = el.getBoundingClientRect().width;
       el.style.setProperty('--w', el._w0.toFixed(2) + 'px');
     }
-    for(const line of h1.querySelectorAll('.reveal-line')){
+    for(const line of rowsOf()){
       const ls = Array.from(line.querySelectorAll('.ltr'));
       if(!ls.length) continue;
       const box = line.getBoundingClientRect();
@@ -147,33 +158,33 @@
         h:  box.height || 1
       });
     }
-    h1.classList.remove('measuring');
+    el.classList.remove('measuring');
   }
 
   function release(){
-    for(const el of h1.querySelectorAll('.ltr')){
-      el.style.removeProperty('--w');
-      el.style.removeProperty('--s');
-      el.textContent = el.dataset.ch;
-      el._s = 0; el._sw = false;
+    for(const l of el.querySelectorAll('.ltr')){
+      l.style.removeProperty('--w');
+      l.style.removeProperty('--s');
+      l.textContent = l.dataset.ch;
+      l._s = 0; l._sw = false;
     }
     rows.length = 0;
   }
 
-  function set(el, s){
+  function set(l, s){
     if(s < .02) s = 0;
-    if(el._s === s) return;
-    el._s = s;
-    el.style.setProperty('--s', s.toFixed(3));
+    if(l._s === s) return;
+    l._s = s;
+    l.style.setProperty('--s', s.toFixed(3));
     /* one symbol per visit: chosen as the letter enters the neighbourhood and
        kept until it leaves, so the line settles instead of churning. --w moves
        with it, so the space the letter asks for is the space it now needs. */
     const want = s > CFG.swap;
-    if(want !== el._sw){
-      el._sw = want;
-      const ch = want ? sym() : el.dataset.ch;
-      el.textContent = ch;
-      el.style.setProperty('--w', ((want ? SYMW[ch] : el._w0) || el._w0).toFixed(2) + 'px');
+    if(want !== l._sw){
+      l._sw = want;
+      const ch = want ? sym() : l.dataset.ch;
+      l.textContent = ch;
+      l.style.setProperty('--w', ((want ? SYMW[ch] : l._w0) || l._w0).toFixed(2) + 'px');
     }
   }
 
@@ -184,7 +195,7 @@
       /* one row wide: dead centre of a line is that line alone, the gap
          between two lines is both of them at about half */
       const rw = clamp01(1 - Math.abs(py - row.cy) / (row.h * CFG.rowReach));
-      if(!rw){ for(const el of row.ls) set(el, 0); continue; }
+      if(!rw){ for(const l of row.ls) set(l, 0); continue; }
 
       /* the letter the pointer is nearest, and how far outside the line it is */
       let near = 0, nd = Infinity;
@@ -193,26 +204,39 @@
         if(d < nd){ nd = d; near = i; }
       }
       const inside = clamp01(1 - Math.max(0, nd - 30) / CFG.edge);
-      if(!inside){ for(const el of row.ls) set(el, 0); continue; }
+      if(!inside){ for(const l of row.ls) set(l, 0); continue; }
 
       for(let i = 0; i < row.ls.length; i++){
-        const el = row.ls[i];
         const hw = clamp01(1 - Math.abs(i - near) / (CFG.radius + .5));
-        set(el, rw * hw * inside);
+        set(row.ls[i], rw * hw * inside);
       }
     }
   }
 
-  h1.addEventListener('pointerenter', e => {
+  el.addEventListener('pointerenter', e => {
     px = e.clientX; py = e.clientY;
     measure();
     live = true;
     if(!raf) raf = requestAnimationFrame(frame);
   });
-  h1.addEventListener('pointermove', e => { px = e.clientX; py = e.clientY; }, {passive:true});
-  h1.addEventListener('pointerleave', () => { live = false; release(); });
+  el.addEventListener('pointermove', e => { px = e.clientX; py = e.clientY; }, {passive:true});
+  el.addEventListener('pointerleave', () => { live = false; release(); });
   /* scrolling or resizing under a held pointer would leave the cached
      geometry behind, so stand down and let the next entry re-measure */
   addEventListener('scroll', () => { if(live){ live = false; release(); } }, {passive:true});
   addEventListener('resize', () => { if(live){ live = false; release(); } }, {passive:true});
+}
+
+
+/* ---------- wire it up ---------- */
+const h1 = document.querySelector('.hero h1');
+if(h1) scramble(h1, { rows: '.reveal-line', radius: 4 });
+
+/* The wordmark and the nav answer too, on a tighter radius: a nav item is a
+   short word, and four letters either side would take the whole of it at once
+   however far away the pointer was. */
+const brand = document.querySelector('.brand');
+if(brand) scramble(brand, { radius: 3, edge: 40 });
+
+document.querySelectorAll('nav.primary a').forEach(a => scramble(a, { radius: 3, edge: 30 }));
 })();
