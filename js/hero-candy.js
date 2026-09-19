@@ -27,11 +27,13 @@
 
   const CFG = {
     drag:     .0022,   /* velocity lost per ms — what brings a throw to rest */
-    spinDrag: .0026,
+    spinDrag: .004,
     bounce:   .62,     /* speed kept off a wall */
     hitBounce:.74,     /* speed kept off another bear */
     maxSpeed: 4.2,     /* px/ms, so one hard flick cannot send it into orbit */
-    spinFrom: .55,     /* how much of a throw's speed becomes spin */
+    spinFrom: .11,     /* deg/ms of spin per px/ms of throw */
+    hitSpin:  .045,    /* deg/ms per px/ms of a glancing blow */
+    maxSpin:  .34,     /* deg/ms — about a turn a second, and never more */
     stop:     .012,    /* below this it is considered still */
 
     /* a circle stands in for the bear. Inset, because a bear is not one:
@@ -116,6 +118,7 @@
       const keep = Math.max(0, 1 - CFG.drag * dt);
       s.vx *= keep; s.vy *= keep;
       s.vr *= Math.max(0, 1 - CFG.spinDrag * dt);
+      s.vr = clamp(s.vr, -CFG.maxSpin, CFG.maxSpin);
 
       if(Math.abs(s.vx) < CFG.stop && Math.abs(s.vy) < CFG.stop){ s.vx = 0; s.vy = 0; }
       if(Math.abs(s.vr) < .02) s.vr = 0;
@@ -163,8 +166,15 @@
         if(rv >= 0) continue;
 
         const imp = -(1 + CFG.hitBounce) * rv / sum;
-        if(wa){ A.vx -= imp * wb * nx; A.vy -= imp * wb * ny; A.vr -= rv * 6; }
-        if(wb){ B.vx += imp * wa * nx; B.vy += imp * wa * ny; B.vr += rv * 6; }
+
+        /* Spin comes off the glancing part of the blow, not the head-on part:
+           two bears meeting square should stop, not pirouette. Clamped both
+           per hit and in total, so a scrum cannot wind one up. */
+        const rt = (B.vx - A.vx) * -ny + (B.vy - A.vy) * nx;
+        const twist = clamp(rt * CFG.hitSpin, -CFG.maxSpin, CFG.maxSpin);
+
+        if(wa){ A.vx -= imp * wb * nx; A.vy -= imp * wb * ny; A.vr = clamp(A.vr - twist, -CFG.maxSpin, CFG.maxSpin); }
+        if(wb){ B.vx += imp * wa * nx; B.vy += imp * wa * ny; B.vr = clamp(B.vr + twist, -CFG.maxSpin, CFG.maxSpin); }
 
         const force = Math.abs(rv);
         hit(A, nx, ny, force); hit(B, nx, ny, force);
@@ -249,7 +259,7 @@
       const sp = Math.hypot(vx, vy);
       if(sp > CFG.maxSpeed){ vx = vx / sp * CFG.maxSpeed; vy = vy / sp * CFG.maxSpeed; }
       s.vx = vx; s.vy = vy;
-      s.vr = clamp(vx * CFG.spinFrom * 12, -1.1, 1.1);   /* thrown sideways, it rolls */
+      s.vr = clamp(vx * CFG.spinFrom, -CFG.maxSpin, CFG.maxSpin);   /* thrown sideways, it rolls */
       wake();
     }
 

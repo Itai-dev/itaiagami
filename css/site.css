@@ -114,7 +114,11 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .hero-candy{position:absolute;inset:0;z-index:2;pointer-events:none}
 .cy{
 position:absolute;left:var(--x,auto);right:var(--rx,auto);top:var(--y,auto);bottom:var(--by,auto);
-width:clamp(38px,var(--w),96px);
+/* one size for all of them. The cut-outs are padded to a common box by
+   tools/cutout.js, so one width really is one size — trimmed to their own
+   edges they would each have their own aspect ratio, and one width would
+   render a narrow bear taller than a wide one. */
+width:clamp(40px,4.6vw,74px);
 transform:translate3d(var(--tx,0px),var(--ty,0px),0);
 opacity:0;transition:opacity 1s var(--ease) var(--d,0s);
 pointer-events:auto;touch-action:none;cursor:grab;

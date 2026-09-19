@@ -2,7 +2,7 @@
 /* ============================================================
    Cut a product shot out of its flat backdrop.
 
-     node tools/cutout.js <in.png> <out.webp> [maxPx] [hueDeg] [bright] [sat]
+     node tools/cutout.js <in.png> <out.webp> [maxPx] [hueDeg] [bright] [sat] [boxW]
 
    Written for candy shots that arrive on a white or chequerboard
    backdrop rather than on real alpha. It floods in from the edges,
@@ -17,13 +17,19 @@
    there because hue alone is not enough in places: a red rotated
    towards yellow lands muddy, because yellow carries more light
    than red at the same value.
+
+   boxW pads the finished cutout out to a fixed width, centred.
+   Two subjects trimmed to their own edges have their own aspect
+   ratios, so laying them out at one width renders them at two
+   different sizes. Padded to a common box they share an aspect
+   ratio, and one width means one size.
    ============================================================ */
 const sharp = require('sharp');
 
 const BRIGHT = 222;   /* a backdrop pixel is at least this light   */
 const FLAT   = 16;    /* ...and this close to grey                 */
 
-async function cutout(src, dest, max = 640, hue = 0, bright = 1, sat = 1){
+async function cutout(src, dest, max = 640, hue = 0, bright = 1, sat = 1, boxW = 0){
   const { data, info } = await sharp(src).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h } = info;
   const n = w * h;
@@ -77,18 +83,28 @@ async function cutout(src, dest, max = 640, hue = 0, bright = 1, sat = 1){
   if(hue || bright !== 1 || sat !== 1)
     out = sharp(await out.modulate({ hue, brightness: bright, saturation: sat }).png().toBuffer());
 
-  await out
+  out = out
     .trim()                                     /* crop to what is left */
-    .resize({ width: max, height: max, fit: 'inside', withoutEnlargement: true })
-    .webp({ quality: 88, alphaQuality: 92, effort: 6 })
-    .toFile(dest);
+    .resize({ width: max, height: max, fit: 'inside', withoutEnlargement: true });
+
+  if(boxW){
+    const t = await out.png().toBuffer();
+    const { width } = await sharp(t).metadata();
+    const pad = Math.max(0, boxW - width);
+    out = sharp(t).extend({
+      left: Math.floor(pad / 2), right: Math.ceil(pad / 2),
+      background: { r: 0, g: 0, b: 0, alpha: 0 }
+    });
+  }
+
+  await out.webp({ quality: 88, alphaQuality: 92, effort: 6 }).toFile(dest);
 
   const m = await sharp(dest).metadata();
   console.log(dest, m.width + 'x' + m.height, 'alpha:', m.hasAlpha,
     (hue || bright !== 1 || sat !== 1) ? '(hue ' + hue + ' bright ' + bright + ' sat ' + sat + ')' : '');
 }
 
-const [,, src, dest, max, hue, bright, sat] = process.argv;
-if(!src || !dest){ console.error('usage: node tools/cutout.js <in> <out.webp> [maxPx] [hueDeg] [bright] [sat]'); process.exit(1); }
-cutout(src, dest, max ? +max : 640, hue ? +hue : 0, bright ? +bright : 1, sat ? +sat : 1)
+const [,, src, dest, max, hue, bright, sat, boxW] = process.argv;
+if(!src || !dest){ console.error('usage: node tools/cutout.js <in> <out.webp> [maxPx] [hueDeg] [bright] [sat] [boxW]'); process.exit(1); }
+cutout(src, dest, max ? +max : 640, hue ? +hue : 0, bright ? +bright : 1, sat ? +sat : 1, boxW ? +boxW : 0)
   .catch(e => { console.error(e.message); process.exit(1); });
