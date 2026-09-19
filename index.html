@@ -93,9 +93,28 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Introduction">
-    <!-- Gummy bears, built and lit in WebGL. See src/hero-gummies.js;
-         js/hero-gummies.js only decides whether to fetch the renderer. -->
-    <div class="hero-gummies" id="heroGummies" aria-hidden="true"></div>
+    <!-- Real candy, cut out to alpha, floating. Decorative only: the layer
+         never takes the pointer, so the headline behind it stays hoverable. -->
+    <div class="hero-candy" aria-hidden="true">
+      <span class="cy" style="--x:1%;--y:13%;--w:10.5vw;--r:-13deg;--f:9s;--d:.15s">
+        <img src="/assets/candy/gummy-red.webp" alt="" width="261" height="420" decoding="async" fetchpriority="low">
+      </span>
+      <span class="cy" style="--rx:5%;--y:10%;--w:15vw;--r:15deg;--f:11s;--d:.3s">
+        <img src="/assets/candy/cookie.webp" alt="" width="420" height="393" decoding="async" fetchpriority="low">
+      </span>
+      <span class="cy mid" style="--x:2%;--y:47%;--w:8vw;--r:20deg;--f:8s;--d:.45s">
+        <img src="/assets/candy/cookie.webp" alt="" width="420" height="393" decoding="async" fetchpriority="low">
+      </span>
+      <span class="cy mid" style="--rx:1%;--y:55%;--w:10vw;--r:-9deg;--f:10s;--d:.6s">
+        <img class="flip" src="/assets/candy/gummy-red.webp" alt="" width="261" height="420" decoding="async" fetchpriority="low">
+      </span>
+      <span class="cy" style="--x:3%;--by:6%;--w:11vw;--r:7deg;--f:12s;--d:.75s">
+        <img class="flip" src="/assets/candy/gummy-green.webp" alt="" width="235" height="420" decoding="async" fetchpriority="low">
+      </span>
+      <span class="cy" style="--rx:19%;--by:7%;--w:10vw;--r:-22deg;--f:9.5s;--d:.9s">
+        <img class="flip" src="/assets/candy/cookie.webp" alt="" width="420" height="393" decoding="async" fetchpriority="low">
+      </span>
+    </div>
 
     <div class="hero-copy">
       <h1><span class="reveal-line"><span>Hi, I'm Itai,</span></span> <span class="reveal-line"><span>Creative director</span></span> <span class="reveal-line"><span>based in TLV, Israel</span></span></h1>
@@ -263,6 +282,5 @@
 
 <script src="js/site.js"></script>
 <script src="js/hero-letters.js" defer></script>
-<script src="js/hero-gummies.js" defer></script>
 </body>
 </html>
