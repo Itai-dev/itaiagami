@@ -21,6 +21,9 @@ const FROM = process.env.ENQUIRY_FROM || 'Itai Agami <enquiries@itaiagami.com>';
    every currency's bands have to be accepted here. This table mirrors MARKETS
    in js/site.js — change a number in one and change it in the other. */
 const BUDGETS   = [
+  'Below ₪80,000', '₪80,000 – ₪120,000', '₪120,000 – ₪200,000', '₪200,000+',
+  'Below $10,000', 'Below €10,000', 'Below £8,000',
+  /* Keep legacy bands valid for tabs opened before the deployment. */
   '₪30,000 – ₪60,000', '₪60,000 – ₪120,000', '₪120,000+',
   '$10,000 – $20,000', '$20,000 – $40,000', '$40,000+',
   '€10,000 – €20,000', '€20,000 – €40,000', '€40,000+',

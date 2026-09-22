@@ -50,7 +50,7 @@
   +'<div class="col"><h4>Studio</h4><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div>'
   +'</div><div class="base">'
   +'<span>© 2026 Itai Agami. All rights reserved.</span>'
-  +'<span>Independent Creative Director</span>'
+  +'<span>Creative practice led by Itai Agami</span>'
   +'</div></div></footer>';
   document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
@@ -84,23 +84,19 @@ function readAttribution(){
   }catch(e){}
 })();
 
-/* ---------- engagement floor by region ----------
-   These are deliberate minimums per market, not conversions of one number:
-   ₪30,000 converted reads as production money to a US or European buyer, so
-   each market gets a floor that reads as a floor there.
-
-   ₪30,000 is what sits in the HTML, so search engines and AI assistants that
-   do not run JavaScript always read a real figure. Everything below only
-   changes what a human visitor sees.
+/* ---------- engagement budgets by region ----------
+   Four bands match the contact form, including a smaller-assignment option.
+   ILS uses the approved repositioning range. Other markets retain their
+   existing thresholds; these are market-specific, not currency conversions.
 
    TO CHANGE A NUMBER: edit this table and the matching one in api/enquiry.js.
    The band strings must stay identical in both files or a genuine submission
    is rejected as invalid — same rule the timeline options already follow. */
 const MARKETS = {
-  ILS: { floor:'₪30,000', bands:['₪30,000 – ₪60,000', '₪60,000 – ₪120,000', '₪120,000+'] },
-  USD: { floor:'$10,000', bands:['$10,000 – $20,000', '$20,000 – $40,000', '$40,000+'] },
-  EUR: { floor:'€10,000', bands:['€10,000 – €20,000', '€20,000 – €40,000', '€40,000+'] },
-  GBP: { floor:'£8,000',  bands:['£8,000 – £16,000',  '£16,000 – £32,000',  '£32,000+'] }
+  ILS: { floor:'₪80,000', bands:['Below ₪80,000', '₪80,000 – ₪120,000', '₪120,000 – ₪200,000', '₪200,000+'] },
+  USD: { floor:'$10,000', bands:['Below $10,000', '$10,000 – $20,000', '$20,000 – $40,000', '$40,000+'] },
+  EUR: { floor:'€10,000', bands:['Below €10,000', '€10,000 – €20,000', '€20,000 – €40,000', '€40,000+'] },
+  GBP: { floor:'£8,000',  bands:['Below £8,000', '£8,000 – £16,000', '£16,000 – £32,000', '£32,000+'] }
 };
 
 (function(){
@@ -191,14 +187,42 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   const btn=document.getElementById('menuBtn');
   const menu=document.getElementById('mobileMenu');
   if(!btn||!menu)return;
-  function set(open){
+  const mobile=matchMedia('(max-width:900px)');
+  const background=[...document.querySelectorAll('main,footer.site')];
+  const originalInert=background.map(el=>el.inert);
+  const controls=[btn,...menu.querySelectorAll('a[href],button:not([disabled])')];
+  menu.inert=true;
+  menu.setAttribute('aria-hidden','true');
+  function set(open,restoreFocus=true){
+    if(open&&!mobile.matches)return;
+    /* Move focus out before hiding the menu from assistive technology. */
+    if(!open&&restoreFocus)btn.focus();
+    menu.inert=!open;
+    menu.setAttribute('aria-hidden',String(!open));
     menu.classList.toggle('open',open);
     btn.setAttribute('aria-expanded',String(open));
     btn.textContent=open?'Close':'Menu';
     document.body.classList.toggle('locked',open);
+    document.documentElement.classList.toggle('menu-open',open);
+    background.forEach((el,i)=>{el.inert=open||originalInert[i];});
+    if(open&&controls[1])controls[1].focus();
   }
   btn.addEventListener('click',()=>set(!menu.classList.contains('open')));
   menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
+  document.addEventListener('keydown',event=>{
+    if(!menu.classList.contains('open'))return;
+    if(event.key==='Escape'){event.preventDefault();set(false);return;}
+    if(event.key!=='Tab')return;
+    const first=controls[0],last=controls[controls.length-1];
+    if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+    else if(!controls.includes(document.activeElement)){event.preventDefault();first.focus();}
+  });
+  mobile.addEventListener('change',()=>{
+    if(!mobile.matches&&menu.classList.contains('open'))set(false,false);
+  });
+  /* Back-forward cache must not restore a page with scrolling still locked. */
+  addEventListener('pageshow',()=>{if(menu.classList.contains('open'))set(false,false);});
 })();
 
 /* ---------- hero reveal (home) ---------- */
