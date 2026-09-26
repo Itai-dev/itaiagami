@@ -165,6 +165,14 @@
     e.preventDefault(); open(c);
   },true);
 
+  /* the project named in the HUD opens the same way as its card — the
+     name is just a larger target for the same thing */
+  if(hudName)hudName.addEventListener('click',e=>{
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+    const c=cards.find(x=>x.getAttribute('href')===hudName.getAttribute('href'));
+    if(c){e.preventDefault();open(c);}
+  });
+
   function open(c){
     if(opening)return; opening=true; target=null;
     const img=c.querySelector('img');
@@ -208,6 +216,18 @@
     Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):null)),
     new Promise(r=>setTimeout(r,900))
   ]).then(()=>{ready=true;});
+
+  /* Coming back (browser Back from a case study, when the page was not
+     kept in bfcache) is not a first visit: the entrance was the welcome,
+     replaying it on every return is a wait. The school is simply there. */
+  const navEntry=(performance.getEntriesByType&&performance.getEntriesByType('navigation')[0])||{};
+  if(navEntry.type==='back_forward'){
+    spin=DRIFT; ready=true; startAt=0;
+    fish.forEach(f=>{
+      f.p={x:Math.sin(f.phase)*f.r*R, y:f.y*H, z:Math.cos(f.phase)*f.r*R};
+      f.released=true; f.born=-1;
+    });
+  }
 
   let last=0, tt=0;
   function frame(t){

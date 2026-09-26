@@ -23,7 +23,7 @@
   var hdr = ''
   +'<div class="grain" aria-hidden="true"></div>'
   +'<header class="site" id="siteHeader"><div class="hwrap">'
-  +'<a href="../index.html" class="brand" aria-label="Itai Agami — home"><span class="dot" aria-hidden="true"></span> Itai&nbsp;Agami</a>'
+  +'<a href="/" class="brand" aria-label="Itai Agami — home"><span class="dot" aria-hidden="true"></span> Itai&nbsp;Agami</a>'
   +'<nav class="primary" aria-label="Primary">'
   +'<a href="../work.html"'+on('work')+'>Work</a>'
   +'<a href="../services.html"'+on('services')+'>Services</a>'
@@ -55,6 +55,29 @@
   document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
 })();
+
+/* ---------- cover hand-off from the home page ----------
+   The home page grows a thumbnail into a full-bleed cover named "cover";
+   the case study's hero takes that name so the view transition settles one
+   into the other. Only when arriving FROM home: named on every case page,
+   case → next case would fly the old hero — by then scrolled far off
+   screen — across the page into the new one. */
+addEventListener('pagereveal',e=>{
+  if(!e.viewTransition)return;
+  const hero=document.querySelector('.c-hero'); if(!hero)return;
+  let fromHome=false;
+  try{
+    const u=new URL(navigation.activation.from.url);
+    fromHome=u.origin===location.origin&&(u.pathname==='/'||u.pathname==='/index.html');
+  }catch(_){}
+  if(!fromHome)return;
+  hero.style.viewTransitionName='cover';
+  /* a transition skipped (hidden tab, reduced motion toggled mid-way) must
+     not leave an unhandled rejection in the console */
+  const clear=()=>{hero.style.viewTransitionName='';};
+  e.viewTransition.ready.catch(()=>{});
+  e.viewTransition.finished.then(clear,clear);
+});
 
 /* ---------- first-touch attribution (session only, no cookies) ----------
    Records how this visit started — campaign parameters, the page they landed
@@ -199,6 +222,7 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   }
   btn.addEventListener('click',()=>set(!menu.classList.contains('open')));
   menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open')){set(false);btn.focus();}});
 })();
 
 /* ---------- hero reveal (home) ---------- */

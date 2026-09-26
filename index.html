@@ -62,7 +62,7 @@
 
 <header class="site" id="siteHeader">
   <div class="hwrap">
-    <a href="index.html" class="brand" aria-label="Itai Agami — home"><span class="dot" aria-hidden="true"></span> Itai&nbsp;Agami</a>
+    <a href="/" class="brand" aria-label="Itai Agami — home"><span class="dot" aria-hidden="true"></span> Itai&nbsp;Agami</a>
     <nav class="primary" aria-label="Primary">
       <a href="work.html">Work</a>
       <a href="services.html">Services</a>
@@ -114,7 +114,7 @@
     </div>
   </section>
 
-  <div class="o-hud wrap" aria-live="polite">
+  <div class="o-hud wrap">
     <span id="hudIdx">01 / 17</span>
     <a id="hudName" href="work/simply-vision-pro.html">Simply — Vision Pro</a>
     <span id="hudCat">Technology</span>
@@ -125,5 +125,8 @@
 
 <script src="js/site.js"></script>
 <script src="js/field.js" defer></script>
+<!-- fetch a case study while the pointer rests on it, so the page is there
+     by the time the cover has finished growing -->
+<script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/work/*"},"eagerness":"moderate"}]}</script>
 </body>
 </html>
