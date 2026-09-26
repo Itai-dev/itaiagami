@@ -517,15 +517,15 @@ nav.primary{gap:22px}
 .article-body blockquote{font-size:.875rem}
 .swork .media img,.index-list.grid .p-thumb img,.c-gallery img,.tile img,.tile video,.svc-cases .shot img,.c-next .thumb img{transition-duration:.6s}
 
-/* ---------- home: work ring ---------- */
+/* ---------- home: work field ---------- */
 /* Default is a flat grid of links — what no-JS, crawlers and reduced
-   motion get. js/orbit.js adds .is-3d and places the same links on a
-   cylinder; only then does the page lock to one screen. */
+   motion get. js/field.js adds .is-3d and scatters the same links through
+   depth; only then does the page lock to one screen. */
 .o-main{padding-top:64px}
 /* in the flex column an auto-margined .wrap shrinks to its content */
 .o-main > .wrap{width:100%}
 .o-intro{font-size:var(--t-meta);font-weight:400!important;line-height:1.6;color:var(--dim);
-text-transform:uppercase;letter-spacing:.06em;display:flex;flex-wrap:wrap;gap:6px 18px;padding-top:14px;padding-bottom:14px;max-width:var(--maxw)!important}
+text-transform:uppercase;letter-spacing:.06em;display:flex;flex-wrap:wrap;gap:6px 18px;padding-top:14px;padding-bottom:14px;max-width:var(--maxw)!important;position:relative;z-index:2}
 .o-intro span:first-child{color:var(--fg)}
 .o-ring{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:28px 20px;
 max-width:var(--maxw);margin:0 auto;padding:20px var(--pad-x) 40px}
@@ -533,28 +533,48 @@ max-width:var(--maxw);margin:0 auto;padding:20px var(--pad-x) 40px}
 .o-card img{width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--faint);border:1px solid var(--line)}
 .o-cap{display:flex;gap:10px;padding-top:8px;font-size:var(--t-micro);text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
 .o-card:hover .o-cap,.o-card:focus-visible .o-cap{color:var(--fg)}
-.o-hud{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline;padding-top:14px;padding-bottom:16px;
-border-top:1px solid var(--line);font-size:var(--t-meta);text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
+.o-hud{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline;padding-top:14px;padding-bottom:16px;position:relative;z-index:2;
+background:var(--bg);border-top:1px solid var(--line);font-size:var(--t-meta);text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
 .o-hud #hudName{color:var(--fg)}
 .o-hud #hudName:hover,.o-hud .o-all:hover{text-decoration:underline;text-underline-offset:3px}
 .o-hud .o-hint{margin-left:auto}
 .o-hud .o-all{color:var(--fg)}
-.orbit:not(.is-3d) ~ .o-hud{display:none}
+.field:not(.is-3d) ~ .o-hud{display:none}
 
-body.home:has(.orbit.is-3d){height:100vh;height:100svh;overflow:hidden}
-body.home:has(.orbit.is-3d) .o-main{height:100vh;height:100svh;display:flex;flex-direction:column}
-.orbit.is-3d{flex:1;position:relative;overflow:hidden;perspective:var(--persp,2000px);
+body.home:has(.field.is-3d){height:100vh;height:100svh;overflow:hidden}
+body.home:has(.field.is-3d) .o-main{height:100vh;height:100svh;display:flex;flex-direction:column}
+.field.is-3d{flex:1;position:relative;overflow:hidden;perspective:var(--persp,1000px);
 touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
-.orbit.is-3d.dragging{cursor:grabbing}
+.field.is-3d.dragging{cursor:grabbing}
 .is-3d .o-ring{display:block;position:absolute;inset:0;max-width:none;padding:0;margin:0;
 transform-style:preserve-3d;will-change:transform}
 .is-3d .o-card{position:absolute;left:50%;top:50%;width:var(--cw);
-margin-left:calc(var(--cw) / -2);margin-top:calc(var(--cw) * -.3125);
-backface-visibility:visible;transition:opacity .2s linear}
-.is-3d .o-card img{-webkit-user-drag:none;pointer-events:none;transition:border-color var(--dur-fast)}
-.is-3d .o-card.front img{border-color:var(--fg)}
-.is-3d .o-card:hover img{border-color:var(--fg)}
-.is-3d .o-card.back img{filter:grayscale(1)}
-.is-3d .o-card.back .o-cap{visibility:hidden}
-.is-3d .o-cap{position:absolute;top:100%;left:0;right:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+margin-left:calc(var(--cw) / -2);margin-top:calc(var(--cw) * -.3125)}
+.is-3d .o-card img{-webkit-user-drag:none;pointer-events:none;transition:border-color var(--dur-fast),filter .6s}
+.is-3d .o-card.far img{filter:grayscale(1)}
+.is-3d .o-card.front img,.is-3d .o-card:hover img{border-color:var(--fg);filter:none}
+.is-3d .o-cap{position:absolute;top:100%;left:0;right:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity var(--dur-fast)}
+.is-3d .o-card.front .o-cap,.is-3d .o-card:hover .o-cap,.is-3d .o-card:focus-visible .o-cap{opacity:1}
+
+/* opening a project: the clicked thumbnail, lifted out of the 3D scene,
+   grows to fill the window; everything else steps back */
+.o-cover{position:fixed;z-index:9500;overflow:hidden;background:var(--faint);pointer-events:none;
+view-transition-name:cover;
+transition:left .7s var(--ease),top .7s var(--ease),width .7s var(--ease),height .7s var(--ease)}
+.o-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.o-cover img.hi{opacity:0;transition:opacity .4s linear}
+.o-cover img.hi.on{opacity:1}
+body.opening .field,body.opening .o-hud,body.opening .o-intro,body.opening header.site{opacity:0;transition:opacity .45s var(--ease)}
 @media(max-width:600px){.o-hud .o-hint{display:none}.o-intro span:nth-child(2){display:none}}
+
+/* ---------- page transitions ---------- */
+/* Cross-document view transition: the cover the home page grew settles
+   into the case study's hero. Reduced motion gets plain navigation. */
+@media(prefers-reduced-motion:no-preference){
+@view-transition{navigation:auto}
+.c-hero{view-transition-name:cover}
+::view-transition-group(cover){animation-duration:.65s;animation-timing-function:cubic-bezier(.6,.01,.05,1)}
+/* the two snapshots differ in aspect ratio — crop, never stretch */
+::view-transition-old(cover),::view-transition-new(cover){height:100%;width:100%;object-fit:cover}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.35s}
+}
