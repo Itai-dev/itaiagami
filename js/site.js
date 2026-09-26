@@ -23,7 +23,7 @@
   var hdr = ''
   +'<div class="grain" aria-hidden="true"></div>'
   +'<header class="site" id="siteHeader"><div class="hwrap">'
-  +'<a href="../index.html" class="brand" aria-label="Itai Agami — home"><span class="dot" aria-hidden="true"></span> Itai&nbsp;Agami</a>'
+  +'<a href="../index.html" class="brand" aria-label="Itai Agami — home">Itai&nbsp;Agami</a>'
   +'<nav class="primary" aria-label="Primary">'
   +'<a href="../work.html"'+on('work')+'>Work</a>'
   +'<a href="../services.html"'+on('services')+'>Services</a>'

@@ -63,7 +63,6 @@ border-bottom:1px solid transparent;transition:border-color var(--dur-fast);
 header.site.scrolled{border-bottom-color:var(--line)}
 header.site .hwrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-x);display:flex;justify-content:space-between;align-items:center}
 .brand{font-family:"Inter",system-ui,sans-serif;font-size:1.15rem;font-weight:500;letter-spacing:-.01em;display:flex;align-items:center;gap:.5em}
-.brand .dot{width:6px;height:6px;border-radius:50%;background:var(--mark);display:inline-block}
 nav.primary{display:flex;gap:28px;align-items:center;font-size:var(--t-meta);letter-spacing:0}
 nav.primary a{position:relative;color:var(--dim);transition:color var(--dur-fast)}
 nav.primary a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--fg);transition:width var(--dur-fast) var(--ease)}
