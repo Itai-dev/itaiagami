@@ -423,3 +423,33 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   },{rootMargin:'100px'});
   vids.forEach(v=>io.observe(v));
 })();
+
+/* ---------- click-to-load film ----------
+   .frame[data-vimeo] holds a poster button; the player is only fetched when
+   someone asks for it, then starts with sound and Vimeo's own controls. */
+(function(){
+  const frames=document.querySelectorAll('.frame[data-vimeo]');
+  if(!frames.length)return;
+  let warmed=false;
+  const warm=()=>{
+    if(warmed)return;warmed=true;
+    ['https://player.vimeo.com','https://i.vimeocdn.com','https://f.vimeocdn.com'].forEach(h=>{
+      const l=document.createElement('link');l.rel='preconnect';l.href=h;document.head.appendChild(l);
+    });
+  };
+  frames.forEach(f=>{
+    const btn=f.querySelector('.c-play');
+    if(!btn)return;
+    btn.addEventListener('pointerenter',warm,{once:true});
+    btn.addEventListener('focus',warm,{once:true});
+    btn.addEventListener('click',()=>{
+      const ifr=document.createElement('iframe');
+      ifr.src='https://player.vimeo.com/video/'+f.dataset.vimeo+'?autoplay=1&title=0&byline=0&portrait=0&dnt=1';
+      ifr.title=f.dataset.title||'Film';
+      ifr.allow='autoplay; fullscreen; picture-in-picture';
+      ifr.allowFullscreen=true;
+      btn.replaceWith(ifr);
+      ifr.focus();
+    });
+  });
+})();
