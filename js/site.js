@@ -191,13 +191,21 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   const btn=document.getElementById('menuBtn');
   const menu=document.getElementById('mobileMenu');
   if(!btn||!menu)return;
+  // the open menu covers the header, so it carries its own close button
+  const close=document.createElement('button');
+  close.type='button';close.className='mm-close';close.textContent='Close';
+  close.setAttribute('aria-label','Close menu');
+  menu.prepend(close);
   function set(open){
     menu.classList.toggle('open',open);
     btn.setAttribute('aria-expanded',String(open));
     btn.textContent=open?'Close':'Menu';
     document.body.classList.toggle('locked',open);
+    if(open)close.focus();else if(menu.contains(document.activeElement))btn.focus();
   }
   btn.addEventListener('click',()=>set(!menu.classList.contains('open')));
+  close.addEventListener('click',()=>set(false));
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open'))set(false);});
   menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
 })();
 
