@@ -1,10 +1,18 @@
 /* ============================================================
-   Home — the work as a field of thumbnails you fly through.
+   Home — the work as a school of thumbnails.
 
    The markup is a plain list of links (#field .o-card): that is what
    search engines, screen readers and anyone without JS get, a flat grid.
-   This file only adds .is-3d and scatters those same links through depth,
-   so there is one list of work, not a 3D copy of it.
+   This file only adds .is-3d and sets those same links swimming, so there
+   is one list of work, not a 3D copy of it.
+
+   How the school works: every card has a slot on a loose 3D orbit around
+   the centre of the screen, and the whole orbit turns (θ). Each card
+   swims toward its slot on a spring of its own stiffness, keeps a little
+   distance from its neighbours, and banks into its turn — so when you
+   scroll or drag, the group turns together but not in lockstep, like
+   fish. Nothing is random at runtime: slots are seeded, so the school
+   looks the same on every visit.
 
    CSS 3D rather than WebGL: the cards stay real <a><img> elements —
    focusable, crawlable, sharp at any DPR — and 17 transformed images
@@ -24,60 +32,63 @@
   const hudCat=document.getElementById('hudCat');
   const n=cards.length; if(!n||!world)return;
 
-  /* Reduced motion keeps the flat grid: flying through space is exactly
+  /* Reduced motion keeps the flat grid: a swimming school is exactly
      what that setting asks us not to do. */
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   stage.classList.add('is-3d');
 
-  const P=1000;            // perspective distance, px
-  const D=2600;            // depth of the field; cards live in [-D, NEAR)
-  const NEAR=220;          // past this they have gone behind the viewer
-  const L=D+NEAR;
-  const FOCUS=-420;        // where a card is brought to by keys / focus
-  const mod=(a,m)=>((a%m)+m)%m;
-
-  /* Placement is deterministic, not Math.random: the same card sits in
-     the same place on every visit. Golden-angle spiral keeps neighbours in
-     depth far apart on screen and leaves the centre — the flight path —
-     mostly clear, so a near card never parks over everything else. */
-  const base=cards.map((c,i)=>{
-    const a=i*2.39996+.6;
-    const r=.42+.5*((i*.61803)%1);
-    return {nx:Math.cos(a)*r, ny:Math.sin(a)*r*.8, z:-(i/n)*L};
+  const TAU=Math.PI*2;
+  const P=1200;                          // perspective distance, px
+  /* seeded slots: golden-angle phases spread the school evenly round the
+     orbit; radius, height and speed vary per card so it never reads as a
+     ring */
+  const fish=cards.map((c,i)=>{
+    const h=(i*.61803)%1, g=(i*.41421)%1;
+    return {
+      phase:i*2.39996,
+      r:.55+.45*h,                       // share of the school radius
+      y:(g-.5)*1.5,                      // share of the school height
+      k:.82+.36*((i*.7549)%1),           // own speed round the orbit
+      stiff:10+9*g, damp:5+2*h,          // how tightly it follows its slot
+      wob:TAU*h,                         // phase of its idle bob
+      p:{x:0,y:0,z:0}, v:{x:0,y:0,z:0},  // where it actually is
+      released:false, born:0
+    };
   });
-  let W=0, SX=0, SY=0;
+
+  let W=0, R=0, H=0;
   function layout(){
     const vw=stage.clientWidth, vh=stage.clientHeight;
-    W=Math.round(Math.max(130,Math.min(vw*.19,vh*.34,300)));
-    /* spread is set at mid-depth, so the field fills the frame there and
-       cards drift out past the edges as they come close */
-    const k=(P+D*.35)/P;
-    SX=vw*.5*k; SY=vh*.5*k;
+    W=Math.round(Math.max(120,Math.min(vw*.15,vh*.24,240)));
+    R=Math.min(vw*.36,vh*.7,W*3);        // radius of the school
+    H=Math.min(vh*.26,W*1.2);            // its height
     stage.style.setProperty('--cw',W+'px');
     stage.style.setProperty('--persp',P+'px');
   }
   layout();
   addEventListener('resize',layout,{passive:true});
 
-  let cam=0, vel=0, target=null;          // travel along z
-  let panX=0, panXT=0;                     // horizontal drag
-  let tiltX=0, tiltY=0, tiltXT=0, tiltYT=0;
+  let theta=0, spin=2.6;                 // orbit angle (rad) and its speed; starts
+                                         // fast so the school swirls in on load
+  let tiltX=-10, tiltXT=-10, tiltY=0, tiltYT=0;
   let dragging=false, lastX=0, lastY=0, lastT=0, moved=0, idleAt=0, opening=false;
-  const DRIFT=38;                          // px/sec while nobody touches it
+  let target=null;                       // θ to glide to (keys / focus)
+  const DRIFT=.14;                       // rad/sec while nobody touches it
   const now=()=>performance.now();
-  const touchIdle=()=>{idleAt=now()+3000;};
-  const depth=i=>mod(base[i].z+cam+D,L)-D;
+  const touchIdle=()=>{idleAt=now()+2500;};
+  /* past ~2.5 rad/s the slots outrun the springs and the school collapses
+     into a column instead of turning */
+  const clampSpin=s=>Math.max(-2.5,Math.min(2.5,s));
 
-  /* pointer: vertical drag travels, horizontal drag pans, hover tilts */
+  /* ---------- steering ---------- */
   stage.addEventListener('pointerdown',e=>{
     if(e.button!==0||opening)return;
-    dragging=true; moved=0; lastX=e.clientX; lastY=e.clientY; lastT=now(); vel=0; target=null;
+    dragging=true; moved=0; lastX=e.clientX; lastY=e.clientY; lastT=now(); target=null;
     touchIdle();
   });
   stage.addEventListener('pointermove',e=>{
     const r=stage.getBoundingClientRect();
-    tiltYT=((e.clientX-r.left)/r.width-.5)*7;
-    tiltXT=((e.clientY-r.top)/r.height-.5)*-5;
+    tiltYT=((e.clientX-r.left)/r.width-.5)*10;
     if(!dragging)return;
     const dx=e.clientX-lastX, dy=e.clientY-lastY, t=now(), dt=Math.max(t-lastT,1);
     moved+=Math.abs(dx)+Math.abs(dy);
@@ -86,9 +97,9 @@
     if(moved>6&&!stage.hasPointerCapture(e.pointerId)){
       stage.setPointerCapture(e.pointerId); stage.classList.add('dragging');
     }
-    const dz=-dy*3.2;
-    cam+=dz; vel=dz/dt*1000*.5;
-    panXT=Math.max(-SX*.5,Math.min(SX*.5,panXT-dx*1.4));
+    const d=dx/R*1.1;                    // sideways: turn the school
+    theta+=d; spin=clampSpin(d/dt*1000*.7);
+    tiltXT=Math.max(-40,Math.min(25,tiltXT-dy*.25));   // up/down: it dives or climbs
     lastX=e.clientX; lastY=e.clientY; lastT=t; touchIdle();
   });
   const end=e=>{
@@ -98,35 +109,33 @@
   };
   stage.addEventListener('pointerup',end);
   stage.addEventListener('pointercancel',end);
-  stage.addEventListener('pointerleave',()=>{tiltXT=0;tiltYT=0;});
+  stage.addEventListener('pointerleave',()=>{tiltYT=0;});
 
   /* wheel / trackpad — the home page does not scroll, so the wheel is free */
   stage.addEventListener('wheel',e=>{
     e.preventDefault(); if(opening)return;
-    vel+=-e.deltaY*1.6; panXT=Math.max(-SX*.5,Math.min(SX*.5,panXT+e.deltaX*1.2));
-    target=null; touchIdle();
+    spin=clampSpin(spin+(e.deltaY+e.deltaX)*.004); target=null; touchIdle();
   },{passive:false});
 
-  /* keys: fly to the next card further in / back out */
-  function goTo(i){ target=cam+(FOCUS-depth(i)); vel=0; panXT=base[i].nx*SX*.55; touchIdle(); }
-  function stepTo(dir){
-    let best=-1, bd=Infinity;
-    for(let i=0;i<n;i++){
-      const d=(FOCUS-40*dir)-depth(i);     // how far to travel to bring i to FOCUS
-      const want=dir>0?d>0:d<0;
-      if(want&&Math.abs(d)<bd){bd=Math.abs(d);best=i;}
-    }
-    if(best>-1)goTo(best);
+  /* bring card i round to the front: its slot angle is θ·k + phase, and
+     the front of the orbit is angle 0 (nearest the viewer) */
+  function goTo(i){
+    const f=fish[i];
+    let t=(-f.phase)/f.k;
+    const per=TAU/f.k; t+=Math.round((theta-t)/per)*per;
+    target=t; spin=0; touchIdle();
   }
   addEventListener('keydown',e=>{
     if(opening)return;
-    if(e.key==='ArrowUp'||e.key==='ArrowRight'){stepTo(1);e.preventDefault();}
-    if(e.key==='ArrowDown'||e.key==='ArrowLeft'){stepTo(-1);e.preventDefault();}
+    if(e.key==='ArrowRight'){spin+=1.2;touchIdle();e.preventDefault();}
+    if(e.key==='ArrowLeft'){spin-=1.2;touchIdle();e.preventDefault();}
+    if(e.key==='ArrowUp'){tiltXT=Math.max(-40,tiltXT-8);e.preventDefault();}
+    if(e.key==='ArrowDown'){tiltXT=Math.min(25,tiltXT+8);e.preventDefault();}
   });
   cards.forEach((c,i)=>c.addEventListener('focus',()=>goTo(i)));
 
-  /* the HUD names what you are pointing at; with nothing pointed at, the
-     nearest card in clear view */
+  /* the school calms while you point at one of them — a moving target is
+     how you miss-click */
   let hover=-1;
   cards.forEach((c,i)=>{
     c.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')hover=i;});
@@ -157,7 +166,7 @@
   },true);
 
   function open(c){
-    if(opening)return; opening=true; vel=0; target=null;
+    if(opening)return; opening=true; target=null;
     const img=c.querySelector('img');
     const r=img.getBoundingClientRect();
     const cover=document.createElement('div');
@@ -186,36 +195,79 @@
     document.body.classList.remove('opening'); opening=false; moved=0;
   });
 
-  let last=0;
+  /* ---------- entrance: released one by one from the centre ----------
+     Waits (briefly) for the thumbnails so they arrive as pictures, not as
+     empty boxes. Each card starts as a point at the centre and its spring
+     throws it out to its slot; the fast initial spin makes it a swirl. */
+  /* the clock starts on the first painted frame, not when the images are
+     ready: a tab opened in the background has no frames, and starting the
+     clock then would release every card at once when it is first seen */
+  let startAt=Infinity, ready=false;
+  const imgs=cards.map(c=>c.querySelector('img'));
+  Promise.race([
+    Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):null)),
+    new Promise(r=>setTimeout(r,900))
+  ]).then(()=>{ready=true;});
+
+  let last=0, tt=0;
   function frame(t){
-    const dt=last?Math.min((t-last)/1000,.05):0; last=t;
+    const dt=last?Math.min((t-last)/1000,.04):0; last=t; tt+=dt;
+
     if(!dragging&&!opening){
       if(target!==null){
-        cam+=(target-cam)*Math.min(dt*5,1);
-        if(Math.abs(target-cam)<.5){cam=target;target=null;}
+        theta+=(target-theta)*Math.min(dt*4,1); spin=0;
+        if(Math.abs(target-theta)<.002){theta=target;target=null;}
       }else{
-        cam+=vel*dt; vel*=Math.pow(.05,dt);
-        if(Math.abs(vel)<8&&now()>idleAt&&hover<0){vel=0;cam+=DRIFT*dt;}
+        const calm=hover>-1?0:(now()>idleAt?DRIFT:spin);
+        spin+=(calm-spin)*Math.min(dt*(hover>-1?6:1.2),1);
+        theta+=spin*dt;
       }
+      tiltXT+=(-10-tiltXT)*Math.min(dt*.6,1);          // levels out when let go
     }
-    panX+=(panXT-panX)*Math.min(dt*4,1);
     tiltX+=(tiltXT-tiltX)*Math.min(dt*3,1);
-    tiltY+=(tiltYT-tiltY)*Math.min(dt*3,1);
-    world.style.transform='rotateX('+tiltX.toFixed(2)+'deg) rotateY('+tiltY.toFixed(2)+'deg) translateX('+(-panX).toFixed(1)+'px)';
+    tiltY+=(tiltYT-tiltY)*Math.min(dt*2,1);
+    world.style.transform='translateZ('+(-R*.6).toFixed(1)+'px) rotateX('+tiltX.toFixed(2)+'deg) rotateY('+tiltY.toFixed(2)+'deg)';
 
+    if(ready&&startAt===Infinity)startAt=now();
+    const since=now()-startAt;
     let near=-1, nz=-Infinity;
     for(let i=0;i<n;i++){
-      const z=depth(i), b=base[i];
-      /* fade in out of the far fog, fade out just before passing the viewer */
-      const fin=Math.min(1,(z+D)/500);
-      const fout=Math.min(1,Math.max(0,(NEAR*.4-z)/(NEAR*1.4)));
-      const o=Math.max(0,Math.min(fin,fout));
-      const c=cards[i];
-      c.style.transform='translate3d('+(b.nx*SX).toFixed(1)+'px,'+(b.ny*SY).toFixed(1)+'px,'+z.toFixed(1)+'px)';
-      c.style.opacity=o.toFixed(3);
-      c.style.visibility=o<.02?'hidden':'';
-      c.classList.toggle('far',z<-D*.55);
-      if(o>.9&&z>nz){nz=z;near=i;}
+      const f=fish[i], c=cards[i];
+      if(!f.released){
+        if(since<i*55){c.style.opacity='0';continue;}
+        f.released=true; f.born=tt;
+      }
+      /* the slot this fish is heading for */
+      const a=theta*f.k+f.phase;
+      const tx=Math.sin(a)*f.r*R;
+      const tz=Math.cos(a)*f.r*R;
+      const ty=f.y*H+Math.sin(tt*.9+f.wob)*W*.12;
+      /* spring toward the slot */
+      let ax=(tx-f.p.x)*f.stiff-f.v.x*f.damp;
+      let ay=(ty-f.p.y)*f.stiff-f.v.y*f.damp;
+      let az=(tz-f.p.z)*f.stiff-f.v.z*f.damp;
+      /* keep a little distance from the others */
+      const min=W*1.05;
+      for(let j=0;j<n;j++){
+        if(j===i||!fish[j].released)continue;
+        const q=fish[j].p, dx=f.p.x-q.x, dy=(f.p.y-q.y)*1.2, dz=(f.p.z-q.z)*.6;
+        const d2=dx*dx+dy*dy+dz*dz;
+        if(d2<min*min&&d2>1){const d=Math.sqrt(d2), s=(min-d)/d*14; ax+=dx*s; ay+=dy*s; az+=dz*s*.5;}
+      }
+      f.v.x+=ax*dt; f.v.y+=ay*dt; f.v.z+=az*dt;
+      f.p.x+=f.v.x*dt; f.p.y+=f.v.y*dt; f.p.z+=f.v.z*dt;
+
+      /* bank into the turn: yaw with sideways speed, roll with climb */
+      const yaw=Math.max(-35,Math.min(35,f.v.x*.05));
+      const roll=Math.max(-12,Math.min(12,-f.v.y*.03));
+      const grow=Math.min(1,(tt-f.born)/.5);           // scales up as it leaves the centre
+      const s=.2+.8*(1-Math.pow(1-grow,3));
+      c.style.transform='translate3d('+f.p.x.toFixed(1)+'px,'+f.p.y.toFixed(1)+'px,'+f.p.z.toFixed(1)+'px) rotateY('+yaw.toFixed(1)+'deg) rotateZ('+roll.toFixed(1)+'deg) scale('+s.toFixed(3)+')';
+      /* the far side of the school sinks into the background */
+      const depth=(f.p.z/R+1)/2;                       // 0 back … 1 front
+      c.style.opacity=(grow*(.6+.4*depth)).toFixed(3);
+      c.classList.toggle('far',depth<.35);
+      if(f.p.z>nz){nz=f.p.z;near=i;}
     }
     if(!opening)hud(hover>-1?hover:near);
     requestAnimationFrame(frame);

@@ -519,8 +519,8 @@ nav.primary{gap:22px}
 
 /* ---------- home: work field ---------- */
 /* Default is a flat grid of links — what no-JS, crawlers and reduced
-   motion get. js/field.js adds .is-3d and scatters the same links through
-   depth; only then does the page lock to one screen. */
+   motion get. js/field.js adds .is-3d and sets the same links swimming as a
+   school; only then does the page lock to one screen. */
 .o-main{padding-top:64px}
 /* in the flex column an auto-margined .wrap shrinks to its content */
 .o-main > .wrap{width:100%}
