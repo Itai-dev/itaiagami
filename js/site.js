@@ -461,3 +461,45 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
     });
   });
 })();
+
+/* ---------- motion layer ----------
+   One-time reveals only: headings rise word by word, media wipes open,
+   lists and cards stagger in. Nothing loops, nothing gates input, and the
+   whole layer is skipped for reduced-motion users. Content is never hidden
+   without JS: the hidden states only exist on classes added here. */
+(function(){
+  if(!('IntersectionObserver' in window))return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const root=document.documentElement; root.classList.add('mo');
+
+  // split a heading's text into masked words, keeping inline markup (em, a, strong)
+  let n=0;
+  function split(node){
+    [...node.childNodes].forEach(c=>{
+      if(c.nodeType===3){
+        const parts=c.textContent.split(/(\s+)/); if(parts.every(p=>!p.trim()))return;
+        const f=document.createDocumentFragment();
+        parts.forEach(p=>{
+          if(!p)return;
+          if(!p.trim()){f.appendChild(document.createTextNode(p));return;}
+          const w=document.createElement('span');w.className='w';
+          const i=document.createElement('span');i.textContent=p;i.style.setProperty('--i',n++);
+          w.appendChild(i);f.appendChild(w);
+        });
+        c.replaceWith(f);
+      }else if(c.nodeType===1&&c.tagName!=='BR')split(c);
+    });
+  }
+  const heads=document.querySelectorAll('.sec-head h1,.sec-head h2,.pov h2,.band h2,.c-open h1,.svc-open h1,.article h1,.c-open .oneline,.svc-open .oneline,.article .dek');
+  heads.forEach(h=>{n=0;split(h);h.classList.add('split');});
+
+  // stagger indexes for groups
+  const idx=(sel)=>document.querySelectorAll(sel).forEach(g=>[...g.children].forEach((c,i)=>c.style.setProperty('--i',i)));
+  idx('.c-meta');idx('.caps');idx('.index-list');idx('.svc-cases');idx('.c-sites');idx('.notes-list');
+  document.querySelectorAll('.c-gallery figure,.svc-cases,.c-sites,.index-list,.c-meta,.notes-list,.c-contrib,.c-film--lead,.a-video').forEach(el=>el.classList.add('rv'));
+
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}
+  }),{threshold:0.01});
+  document.querySelectorAll('.split,.rv').forEach(el=>io.observe(el));
+})();

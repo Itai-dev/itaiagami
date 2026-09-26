@@ -562,3 +562,38 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
 @media(prefers-reduced-motion:reduce){
   .swork.obs .media,.swork.obs .media img,.swork.obs .info > *{clip-path:none!important;transform:none!important;opacity:1!important}
 }
+
+/* ---------- motion layer (js/site.js adds .mo on <html>) ---------- */
+:root{--ease-out:cubic-bezier(.23,1,.32,1)}
+/* words rise out of a mask, slightly rotated, and settle */
+.split .w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .04em .14em;margin:0 -.04em -.14em}
+.split .w>span{display:inline-block;transform:translateY(112%) rotate(5deg);transform-origin:0 100%;transition:transform .75s var(--ease-out)}
+.split.in-view .w>span{transform:none;transition-delay:calc(min(var(--i),28) * 32ms)}
+.c-open .oneline.split .w>span,.svc-open .oneline.split .w>span,.article .dek.split .w>span{transform:translateY(100%);transition-duration:.6s}
+.c-open .oneline.split.in-view .w>span,.svc-open .oneline.split.in-view .w>span,.article .dek.split.in-view .w>span{transform:none;transition-delay:calc(160ms + min(var(--i),40) * 12ms)}
+/* hero lines: staggered, a touch of rotation, faster curve */
+.reveal-line > *{transform:translateY(108%) rotate(3deg);transform-origin:0 100%;transition:transform .9s var(--ease-out),opacity .6s ease}
+.revealed .reveal-line:nth-of-type(2) > *{transition-delay:.08s}
+.revealed .reveal-line:nth-of-type(3) > *{transition-delay:.16s}
+/* media wipes open from below and settles from a zoom */
+.mo .c-gallery figure.rv .fm,.mo .c-film--lead.rv .frame,.mo .a-video.rv video{clip-path:inset(100% 0 0 0 round var(--r-media));transition:clip-path .8s cubic-bezier(.7,0,.2,1)}
+.mo .c-gallery figure.rv .fm img,.mo .c-film--lead.rv .c-play img{transform:scale(1.18);transition:transform 1s var(--ease-out)}
+.mo .rv.in-view .fm,.mo .c-film--lead.rv.in-view .frame,.mo .a-video.rv.in-view video{clip-path:inset(0 0 0 0 round var(--r-media))}
+.mo .c-gallery figure.rv.in-view .fm img,.mo .c-film--lead.rv.in-view .c-play img{transform:none}
+.mo .c-gallery figure.rv figcaption,.mo .c-film--lead.rv .note{opacity:0;transform:translateY(10px);transition:opacity .5s ease .35s,transform .6s var(--ease-out) .35s}
+.mo .c-gallery figure.rv.in-view figcaption,.mo .c-film--lead.rv.in-view .note{opacity:1;transform:none}
+/* contribution line draws its rule, then the text follows */
+.mo .c-contrib.rv{border-left-color:transparent;position:relative}
+.mo .c-contrib.rv::before{content:"";position:absolute;left:-2px;top:0;width:2px;height:100%;background:var(--mark);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease-out) .15s}
+.mo .c-contrib.rv.in-view::before{transform:none}
+/* grouped items stagger up */
+.mo .rv.c-meta>*,.mo .rv.index-list>*,.mo .rv.svc-cases>*,.mo .rv.c-sites>*,.mo .rv.notes-list>*,.mo .obs .caps>*{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .6s var(--ease-out)}
+.mo .rv.in-view.c-meta>*,.mo .rv.in-view.index-list>*,.mo .rv.in-view.svc-cases>*,.mo .rv.in-view.c-sites>*,.mo .rv.in-view.notes-list>*,.mo .obs.in .caps>*{opacity:1;transform:none;transition-delay:calc(min(var(--i),16) * 45ms)}
+/* pressed buttons give way, instantly */
+.btn:active,.c-play:active .pb,.mm-close:active,.toggle:active{transform:scale(.97);transition:transform .1s ease-out}
+/* reading progress: a hairline under the header, driven by scroll */
+@supports (animation-timeline: scroll()){
+  header.site::before{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--mark);transform-origin:0 50%;transform:scaleX(0);animation:read-progress linear both;animation-timeline:scroll(root)}
+  @keyframes read-progress{to{transform:scaleX(1)}}
+}
+@media(prefers-reduced-motion:reduce){header.site::before{display:none}}
