@@ -405,7 +405,7 @@ h2,h3{text-wrap:balance}
 @media(max-width:600px){.notes-list a{grid-template-columns:1fr;gap:6px}.notes-list .nd{grid-column:1}}
 
 /* ---------- clients strip (marquee under hero) ---------- */
-.clients-strip{padding:20px 0;overflow:hidden;position:relative}
+.clients-strip{padding:20px 0;margin-top:var(--sp-section);overflow:hidden;position:relative}
 .cs-track{display:flex;align-items:center;gap:44px;width:max-content;animation:cs-scroll 45s linear infinite}
 .clients-strip:hover .cs-track{animation-play-state:paused}
 .cs-track a{font-size:var(--t-meta);font-weight:500;color:var(--dim);white-space:nowrap;display:flex;align-items:center;gap:44px;transition:color var(--dur-fast) var(--ease)}
