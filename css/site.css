@@ -534,3 +534,7 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
 }
 @media(prefers-reduced-motion:reduce){.c-play img,.c-play .pb{transition:none}.c-play:hover img{transform:none}}
 .svc-cases-note{font-size:var(--t-meta);color:var(--dim);line-height:1.6;max-width:64ch;margin-top:18px}
+/* video inside a note - wider than the text column on desktop */
+.a-video{margin:0 0 clamp(36px,5vw,56px)}
+.a-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#000;border-radius:var(--r-media)}
+.a-video figcaption{font-size:var(--t-meta);color:var(--dim);line-height:1.5;padding-top:12px}
