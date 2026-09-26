@@ -578,7 +578,7 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
 /* media wipes open from below and settles from a zoom */
 .mo .c-gallery figure.rv .fm,.mo .c-film--lead.rv .frame,.mo .a-video.rv video{clip-path:inset(100% 0 0 0 round var(--r-media));transition:clip-path .8s cubic-bezier(.7,0,.2,1)}
 .mo .c-gallery figure.rv .fm img,.mo .c-film--lead.rv .c-play img{transform:scale(1.18);transition:transform 1s var(--ease-out)}
-.mo .rv.in-view .fm,.mo .c-film--lead.rv.in-view .frame,.mo .a-video.rv.in-view video{clip-path:inset(0 0 0 0 round var(--r-media))}
+.mo .c-gallery figure.rv.in-view .fm,.mo .c-film--lead.rv.in-view .frame,.mo .a-video.rv.in-view video{clip-path:inset(0 0 0 0 round var(--r-media))}
 .mo .c-gallery figure.rv.in-view .fm img,.mo .c-film--lead.rv.in-view .c-play img{transform:none}
 .mo .c-gallery figure.rv figcaption,.mo .c-film--lead.rv .note{opacity:0;transform:translateY(10px);transition:opacity .5s ease .35s,transform .6s var(--ease-out) .35s}
 .mo .c-gallery figure.rv.in-view figcaption,.mo .c-film--lead.rv.in-view .note{opacity:1;transform:none}
