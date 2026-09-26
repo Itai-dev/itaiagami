@@ -501,5 +501,14 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   const io=new IntersectionObserver(es=>es.forEach(e=>{
     if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}
   }),{threshold:0.01});
-  document.querySelectorAll('.split,.rv').forEach(el=>io.observe(el));
+  const els=[...document.querySelectorAll('.split,.rv')];
+  els.forEach(el=>io.observe(el));
+  // backstop for fast flings and anchor jumps: anything at or above the
+  // viewport's bottom edge is revealed, so nothing is ever left hidden
+  let ticking=false;
+  const sweep=()=>{ticking=false;
+    els.forEach(el=>{if(!el.classList.contains('in-view')&&el.getBoundingClientRect().top<innerHeight){el.classList.add('in-view');io.unobserve(el);}});
+  };
+  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(sweep);}},{passive:true});
+  addEventListener('load',sweep);
 })();
