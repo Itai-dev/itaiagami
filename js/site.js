@@ -23,7 +23,7 @@
   var hdr = ''
   +'<div class="grain" aria-hidden="true"></div>'
   +'<header class="site" id="siteHeader"><div class="hwrap">'
-  +'<a href="../index.html" class="brand" aria-label="Itai Agami — home"><span class="dot" aria-hidden="true"></span> Itai&nbsp;Agami</a>'
+  +'<a href="../index.html" class="brand" aria-label="Itai Agami — home">Itai&nbsp;Agami</a>'
   +'<nav class="primary" aria-label="Primary">'
   +'<a href="../work.html"'+on('work')+'>Work</a>'
   +'<a href="../services.html"'+on('services')+'>Services</a>'
@@ -46,11 +46,11 @@
   var ftr = ''
   +'<footer class="site"><div class="wrap"><div class="grid">'
   +'<div class="col"><h4>Menu</h4><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></div>'
-  +'<div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a></div>'
+  +'<div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>'
   +'<div class="col"><h4>Studio</h4><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div>'
   +'</div><div class="base">'
   +'<span>© 2026 Itai Agami. All rights reserved.</span>'
-  +'<span>Independent Creative Director</span>'
+  +'<span>Creative Director / Art Director</span>'
   +'</div></div></footer>';
   document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
@@ -191,13 +191,21 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   const btn=document.getElementById('menuBtn');
   const menu=document.getElementById('mobileMenu');
   if(!btn||!menu)return;
+  // the open menu covers the header, so it carries its own close button
+  const close=document.createElement('button');
+  close.type='button';close.className='mm-close';close.textContent='Close';
+  close.setAttribute('aria-label','Close menu');
+  menu.prepend(close);
   function set(open){
     menu.classList.toggle('open',open);
     btn.setAttribute('aria-expanded',String(open));
     btn.textContent=open?'Close':'Menu';
     document.body.classList.toggle('locked',open);
+    if(open)close.focus();else if(menu.contains(document.activeElement))btn.focus();
   }
   btn.addEventListener('click',()=>set(!menu.classList.contains('open')));
+  close.addEventListener('click',()=>set(false));
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open'))set(false);});
   menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
 })();
 
@@ -422,4 +430,34 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
     });
   },{rootMargin:'100px'});
   vids.forEach(v=>io.observe(v));
+})();
+
+/* ---------- click-to-load film ----------
+   .frame[data-vimeo] holds a poster button; the player is only fetched when
+   someone asks for it, then starts with sound and Vimeo's own controls. */
+(function(){
+  const frames=document.querySelectorAll('.frame[data-vimeo]');
+  if(!frames.length)return;
+  let warmed=false;
+  const warm=()=>{
+    if(warmed)return;warmed=true;
+    ['https://player.vimeo.com','https://i.vimeocdn.com','https://f.vimeocdn.com'].forEach(h=>{
+      const l=document.createElement('link');l.rel='preconnect';l.href=h;document.head.appendChild(l);
+    });
+  };
+  frames.forEach(f=>{
+    const btn=f.querySelector('.c-play');
+    if(!btn)return;
+    btn.addEventListener('pointerenter',warm,{once:true});
+    btn.addEventListener('focus',warm,{once:true});
+    btn.addEventListener('click',()=>{
+      const ifr=document.createElement('iframe');
+      ifr.src='https://player.vimeo.com/video/'+f.dataset.vimeo+'?autoplay=1&title=0&byline=0&portrait=0&dnt=1';
+      ifr.title=f.dataset.title||'Film';
+      ifr.allow='autoplay; fullscreen; picture-in-picture';
+      ifr.allowFullscreen=true;
+      btn.replaceWith(ifr);
+      ifr.focus();
+    });
+  });
 })();

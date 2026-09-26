@@ -63,7 +63,6 @@ border-bottom:1px solid transparent;transition:border-color var(--dur-fast);
 header.site.scrolled{border-bottom-color:var(--line)}
 header.site .hwrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-x);display:flex;justify-content:space-between;align-items:center}
 .brand{font-family:"Inter",system-ui,sans-serif;font-size:1.15rem;font-weight:500;letter-spacing:-.01em;display:flex;align-items:center;gap:.5em}
-.brand .dot{width:6px;height:6px;border-radius:50%;background:var(--mark);display:inline-block}
 nav.primary{display:flex;gap:28px;align-items:center;font-size:var(--t-meta);letter-spacing:0}
 nav.primary a{position:relative;color:var(--dim);transition:color var(--dur-fast)}
 nav.primary a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--fg);transition:width var(--dur-fast) var(--ease)}
@@ -77,6 +76,9 @@ nav.primary a.active::after{width:100%}
 .mobile-menu a{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:clamp(1.75rem,7vw,2.25rem);line-height:1.3;letter-spacing:-.01em;padding:10px 0;border-bottom:1px solid var(--line)}
 .mobile-menu .mm-foot{margin-top:32px;font-size:var(--t-meta);letter-spacing:0;color:var(--dim);display:flex;flex-direction:column;gap:8px}
 .mobile-menu .toggle{padding:13px 20px}
+.mobile-menu .mm-close{position:absolute;top:14px;right:var(--pad-x);display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--line-strong);border-radius:9999px;color:var(--fg);font-family:inherit;font-size:var(--t-meta);padding:8px 16px;cursor:pointer;touch-action:manipulation}
+.mobile-menu .mm-close::after{content:"\00d7";font-size:1.15em;line-height:1}
+.mobile-menu .mm-close:hover{border-color:var(--fg)}
 .btn{display:inline-flex;align-items:center;gap:10px;font-size:var(--t-meta);font-weight:500;letter-spacing:0;padding:11px 20px;border-radius:9999px;border:1px solid var(--line-strong);color:var(--fg);cursor:pointer;background:none;font-family:inherit;transition:background var(--dur-fast),color var(--dur-fast),border-color var(--dur-fast)}
 .btn .arw{transition:transform var(--dur-fast) var(--ease)}
 .btn:hover .arw{transform:translateX(4px)}
@@ -403,7 +405,7 @@ h2,h3{text-wrap:balance}
 @media(max-width:600px){.notes-list a{grid-template-columns:1fr;gap:6px}.notes-list .nd{grid-column:1}}
 
 /* ---------- clients strip (marquee under hero) ---------- */
-.clients-strip{padding:20px 0;overflow:hidden;position:relative}
+.clients-strip{padding:20px 0;margin-top:var(--sp-section);overflow:hidden;position:relative}
 .cs-track{display:flex;align-items:center;gap:44px;width:max-content;animation:cs-scroll 45s linear infinite}
 .clients-strip:hover .cs-track{animation-play-state:paused}
 .cs-track a{font-size:var(--t-meta);font-weight:500;color:var(--dim);white-space:nowrap;display:flex;align-items:center;gap:44px;transition:color var(--dur-fast) var(--ease)}
@@ -508,3 +510,55 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
 .a-rel{font-size:var(--t-meta);color:var(--dim);margin-top:clamp(30px,4vw,44px)}
 .a-rel a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
 .a-rel a:hover{border-bottom-color:var(--fg)}
+
+/* ---------- lead film (case studies) ----------
+   The film sits directly under the title. Until clicked it is a poster +
+   play button (no third-party player loads); the click swaps in the Vimeo
+   iframe with sound and native controls. Vimeo letterboxes inside the frame,
+   so films of any ratio show uncropped. */
+.c-contrib{font-size:var(--t-body);line-height:1.55;max-width:64ch;margin:clamp(22px,3vw,30px) 0 clamp(16px,2vw,22px);padding-left:14px;border-left:2px solid var(--mark);text-wrap:pretty}
+.c-contrib .l{display:block;font-size:var(--t-micro);color:var(--dim);margin-bottom:4px}
+.c-film--lead{margin-bottom:0}
+.c-film--lead .note{margin:14px 0 0}
+.c-film .frame.dark{background:#000}
+.c-play{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:none;color:#fff;cursor:pointer;font:inherit;display:block;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.c-play img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s var(--ease),filter var(--dur-fast)}
+.c-play.contain img{object-fit:contain}
+.c-play:hover img{transform:scale(1.02);filter:brightness(.9)}
+.c-play .pb{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:12px;padding:14px 22px 14px 18px;border-radius:9999px;background:rgba(13,13,13,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.28);font-size:var(--t-meta);font-weight:500;white-space:nowrap;transition:background var(--dur-fast),transform var(--dur-fast) var(--ease)}
+.c-play .pb svg{width:14px;height:14px;fill:currentColor;flex:none}
+.c-play:hover .pb{background:var(--mark);border-color:var(--mark)}
+.c-play:focus-visible{outline:none}
+.c-play:focus-visible .pb{outline:2px solid #fff;outline-offset:3px;background:var(--mark)}
+.c-film--lead + .c-meta{margin-top:clamp(36px,5vw,56px)}
+@media(max-width:600px){
+  .c-play .pb{padding:12px 18px 12px 15px}
+}
+@media(prefers-reduced-motion:reduce){.c-play img,.c-play .pb{transition:none}.c-play:hover img{transform:none}}
+.svc-cases-note{font-size:var(--t-meta);color:var(--dim);line-height:1.6;max-width:64ch;margin-top:18px}
+/* video inside a note - wider than the text column on desktop */
+.a-video{margin:0 0 clamp(36px,5vw,56px)}
+.a-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#000;border-radius:var(--r-media)}
+.a-video figcaption{font-size:var(--t-meta);color:var(--dim);line-height:1.5;padding-top:12px}
+
+/* ---------- project card entrance (homepage selected work) ----------
+   Replaces the plain fade: the image wipes open from below while the frame
+   tilts in from its own side and the picture settles from a zoom; the text
+   follows line by line. Faster than the default reveal. */
+.swork.obs{opacity:1;transform:none;transition:none}
+.swork.obs .media{clip-path:inset(100% 0 0 0 round var(--r-media));transform:perspective(1400px) translate3d(-48px,56px,0) rotateY(10deg) rotateX(8deg) scale(.94);transform-origin:50% 100%;transition:clip-path .7s cubic-bezier(.7,0,.2,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.swork.obs:nth-child(even) .media{transform:perspective(1400px) translate3d(48px,56px,0) rotateY(-10deg) rotateX(8deg) scale(.94)}
+.swork.obs .media img{transform:scale(1.28);transition:transform .9s cubic-bezier(.16,1,.3,1)}
+.swork.obs .info > *{opacity:0;transform:translateY(22px);transition:opacity .45s ease,transform .55s cubic-bezier(.16,1,.3,1)}
+.swork.obs.in .media{clip-path:inset(0 0 0 0 round var(--r-media));transform:none}
+.swork.obs.in .media img{transform:none}
+.swork.obs.in:hover .media img{transform:scale(1.04);transition-duration:1.1s}
+.swork.obs.in .info > *{opacity:1;transform:none}
+.swork.obs.in .info > :nth-child(1){transition-delay:.18s}
+.swork.obs.in .info > :nth-child(2){transition-delay:.24s}
+.swork.obs.in .info > :nth-child(3){transition-delay:.3s}
+.swork.obs.in .info > :nth-child(4){transition-delay:.36s}
+.swork.obs.in .info > :nth-child(5){transition-delay:.42s}
+@media(prefers-reduced-motion:reduce){
+  .swork.obs .media,.swork.obs .media img,.swork.obs .info > *{clip-path:none!important;transform:none!important;opacity:1!important}
+}
