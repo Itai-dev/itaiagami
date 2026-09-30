@@ -354,7 +354,7 @@ nav.primary{display:none}
 .swork:nth-child(even){direction:ltr}
 }
 @media(max-width:600px){
-.hero{min-height:auto;padding-top:20px}
+.hero{min-height:auto;padding-top:0;padding-bottom:40px}
 .hero .cta{flex-direction:column;align-items:stretch;max-width:340px}
 .hero .cta .btn{justify-content:center}
 .index-list:not(.grid) .prow>a{grid-template-columns:30px 1fr;gap:12px}
@@ -364,7 +364,7 @@ nav.primary{display:none}
 .hoverimg{display:none}
 }
 @media(max-width:900px){
-.hero-system{position:relative;top:auto;right:auto;bottom:auto;width:100%;height:clamp(170px,46vw,230px);justify-content:flex-start;margin:-14px 0 12px -5%}
+.hero-system{position:relative;top:auto;right:auto;bottom:auto;width:100%;height:clamp(120px,34vw,170px);justify-content:flex-start;margin:-36px 0 10px -4%;overflow:visible}
 }
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}

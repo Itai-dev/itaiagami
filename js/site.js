@@ -315,7 +315,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   let size=0,dpr=1;
   const fit=()=>{
     const r=host.getBoundingClientRect();
-    size=Math.round(Math.min(r.width,r.height)*.9); dpr=Math.min(2,devicePixelRatio||1);
+    size=Math.round(Math.min(r.width,r.height)*(r.width>r.height*1.6?1.2:.9)); // short mobile strip: the orb spans ~80% of the canvas, so overdraw dpr=Math.min(2,devicePixelRatio||1);
     c.width=c.height=Math.round(size*dpr); c.style.width=c.style.height=size+'px';
   };
   const next=()=>{prev=cur; idx=(idx+1)%STATES.length; cur=make(STATES[idx]); switchedAt=performance.now();};
