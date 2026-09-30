@@ -292,31 +292,38 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   b.appendChild(bloom);
 });
 
-/* ---------- thinking orb, hero accent (home) ----------
+/* ---------- thinking orb, hero (home, desktop) ----------
    thinking-orbs engine (MIT, Jakub Antalik — https://libraries.dev/orbs),
-   "connecting" state: a small constellation wiring itself. */
+   "connecting" state: a constellation wiring itself. Uses the 64px tuning,
+   drawn at the size of the hero layer. */
 (function(){
-  const host=document.getElementById('heroOrb'), O=window.ThinkingOrbs;
+  const host=document.getElementById('heroSystem'), O=window.ThinkingOrbs;
   if(!host||!O)return;
-  const size=64, dpr=Math.min(2,devicePixelRatio||1);
-  const c=document.createElement('canvas'); c.width=c.height=Math.round(size*dpr);
-  c.style.width=c.style.height=size+'px'; host.appendChild(c);
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  if(!matchMedia('(min-width:901px)').matches)return;
+  const c=document.createElement('canvas'); host.appendChild(c);
   const ctx=c.getContext('2d'); if(!ctx)return;
-  const {mode,speed,opts}=O.resolvePreset('connecting',size), fn=O.MODE_FRAMES[mode];
+  const {mode,speed,opts}=O.resolvePreset('connecting',64), fn=O.MODE_FRAMES[mode];
+  let size=0,dpr=1;
+  const fit=()=>{
+    const r=host.getBoundingClientRect();
+    size=Math.round(Math.min(r.width,r.height)*.9); dpr=Math.min(2,devicePixelRatio||1);
+    c.width=c.height=Math.round(size*dpr); c.style.width=c.style.height=size+'px';
+  };
   const draw=t=>{
+    if(!size)return;
     const dark=document.documentElement.getAttribute('data-theme')!=='light';
     ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,size,size);
     O.paintFrame(ctx,fn(size,t,opts),dark);
   };
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches){
-    draw(.6); new MutationObserver(()=>draw(.6)).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']}); return;
-  }
+  fit(); new ResizeObserver(fit).observe(host);
   let raf=0,run=false,seen=false;
   const loop=()=>{draw(performance.now()/1000*speed); if(run)raf=requestAnimationFrame(loop);};
   const start=()=>{if(!run&&seen&&!document.hidden){run=true;raf=requestAnimationFrame(loop);}};
   const stop=()=>{run=false;cancelAnimationFrame(raf);};
   new IntersectionObserver(([e])=>{seen=e.isIntersecting;seen?start():stop();}).observe(host);
   document.addEventListener('visibilitychange',()=>document.hidden?stop():start());
+  requestAnimationFrame(()=>host.classList.add('ready'));
 })();
 
 /* ---------- hero reveal (home) ---------- */
