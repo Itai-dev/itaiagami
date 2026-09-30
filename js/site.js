@@ -222,6 +222,9 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   });
   menu.prepend(goo);
   hdr.appendChild(menu);
+  // solid page-colour backdrop under the pills; sits just below the header
+  const scrim=document.createElement('div'); scrim.className='mm-scrim'; scrim.setAttribute('aria-hidden','true');
+  document.body.appendChild(scrim);
 
   // one spring per item, bouncy preset: stiffness 320, damping 17
   const K=320,D=17,GAP=14,STAGGER=.04;
@@ -272,6 +275,8 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
     btn.setAttribute('aria-expanded',String(o));
     btn.textContent=o?'Close':'Menu';
     menu.classList.toggle('open',o);
+    scrim.classList.toggle('open',o);
+    document.body.classList.toggle('locked',o);
     if(o){measure();menu.classList.add('shown');}
     cancelAnimationFrame(raf);
     if(reduced){st.forEach(s=>{s.x=o?1:0;s.v=0;});paint();if(!o)menu.classList.remove('shown');}
@@ -292,31 +297,54 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   b.appendChild(bloom);
 });
 
-/* ---------- thinking orb, hero accent (home) ----------
-   thinking-orbs engine (MIT, Jakub Antalik — https://libraries.dev/orbs),
-   "connecting" state: a small constellation wiring itself. */
+/* ---------- thinking orb, hero (home) ----------
+   thinking-orbs engine (MIT, Jakub Antalik — https://libraries.dev/orbs).
+   Cycles through the nine states every few seconds with a crossfade;
+   a tap or click jumps to the next one. Uses the 64px tunings, drawn at
+   the size of the hero layer. */
 (function(){
-  const host=document.getElementById('heroOrb'), O=window.ThinkingOrbs;
+  const host=document.getElementById('heroSystem'), O=window.ThinkingOrbs;
   if(!host||!O)return;
-  const size=64, dpr=Math.min(2,devicePixelRatio||1);
-  const c=document.createElement('canvas'); c.width=c.height=Math.round(size*dpr);
-  c.style.width=c.style.height=size+'px'; host.appendChild(c);
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const STATES=['connecting','searching','weaving','working','shaping','composing','solving','listening','breathing'];
+  const HOLD=4200, FADE=900;
+  const c=document.createElement('canvas'); host.appendChild(c);
   const ctx=c.getContext('2d'); if(!ctx)return;
-  const {mode,speed,opts}=O.resolvePreset('connecting',size), fn=O.MODE_FRAMES[mode];
-  const draw=t=>{
-    const dark=document.documentElement.getAttribute('data-theme')!=='light';
-    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,size,size);
-    O.paintFrame(ctx,fn(size,t,opts),dark);
+  const make=st=>{const r=O.resolvePreset(st,64); return {fn:O.MODE_FRAMES[r.mode],speed:r.speed,opts:r.opts};};
+  let idx=0, cur=make(STATES[0]), prev=null, switchedAt=performance.now();
+  let size=0,dpr=1;
+  const fit=()=>{
+    const r=host.getBoundingClientRect();
+    size=Math.round(Math.min(r.width,r.height)*.9); dpr=Math.min(2,devicePixelRatio||1);
+    c.width=c.height=Math.round(size*dpr); c.style.width=c.style.height=size+'px';
   };
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches){
-    draw(.6); new MutationObserver(()=>draw(.6)).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']}); return;
-  }
+  const next=()=>{prev=cur; idx=(idx+1)%STATES.length; cur=make(STATES[idx]); switchedAt=performance.now();};
+  const layer=(o,t,alpha,scale,dark)=>{
+    if(alpha<=0)return;
+    const h=size/2;
+    ctx.setTransform(dpr*scale,0,0,dpr*scale,dpr*h*(1-scale),dpr*h*(1-scale));
+    ctx.globalAlpha=alpha;
+    O.paintFrame(ctx,o.fn(size,t*o.speed,o.opts),dark);
+  };
+  const draw=now=>{
+    if(!size)return;
+    if(now-switchedAt>HOLD+FADE)next();
+    const k=Math.min(1,(now-switchedAt)/FADE), e=k*k*(3-2*k), t=now/1000;
+    const dark=document.documentElement.getAttribute('data-theme')!=='light';
+    ctx.setTransform(1,0,0,1,0,0); ctx.globalAlpha=1; ctx.clearRect(0,0,c.width,c.height);
+    if(prev&&k<1)layer(prev,t,1-e,1-.08*e,dark);
+    layer(cur,t,prev?e:1,prev?.92+.08*e:1,dark);
+    if(k>=1)prev=null;
+  };
+  c.addEventListener('click',next);
+  fit(); new ResizeObserver(fit).observe(host);
   let raf=0,run=false,seen=false;
-  const loop=()=>{draw(performance.now()/1000*speed); if(run)raf=requestAnimationFrame(loop);};
-  const start=()=>{if(!run&&seen&&!document.hidden){run=true;raf=requestAnimationFrame(loop);}};
+  const loop=now=>{draw(now); if(run)raf=requestAnimationFrame(loop);};
+  const start=()=>{if(!run&&seen&&!document.hidden){run=true;switchedAt=performance.now()-(prev?0:FADE);raf=requestAnimationFrame(loop);}};
   const stop=()=>{run=false;cancelAnimationFrame(raf);};
   new IntersectionObserver(([e])=>{seen=e.isIntersecting;seen?start():stop();}).observe(host);
   document.addEventListener('visibilitychange',()=>document.hidden?stop():start());
+  requestAnimationFrame(()=>host.classList.add('ready'));
 })();
 
 /* ---------- hero reveal (home) ---------- */
