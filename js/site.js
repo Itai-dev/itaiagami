@@ -186,27 +186,137 @@ const MARKETS = {
 const _hdr=document.getElementById('siteHeader');
 if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY>20);},{passive:true});}
 
-/* ---------- mobile menu ---------- */
+/* ---------- mobile menu (gooey) ----------
+   The links spring out of the Menu pill as liquid blobs that merge while they
+   travel — the liquid-gooey idea (MIT, Jakub Antalik — https://libraries.dev/gooey):
+   the blobs live in one SVG-filtered layer (blur + alpha contrast), the labels
+   ride an unfiltered layer on top with the same transforms, so text stays crisp. */
 (function(){
   const btn=document.getElementById('menuBtn');
   const menu=document.getElementById('mobileMenu');
-  if(!btn||!menu)return;
-  // the open menu covers the header, so it carries its own close button
-  const close=document.createElement('button');
-  close.type='button';close.className='mm-close';close.textContent='Close';
-  close.setAttribute('aria-label','Close menu');
-  menu.prepend(close);
-  function set(open){
-    menu.classList.toggle('open',open);
-    btn.setAttribute('aria-expanded',String(open));
-    btn.textContent=open?'Close':'Menu';
-    document.body.classList.toggle('locked',open);
-    if(open)close.focus();else if(menu.contains(document.activeElement))btn.focus();
+  const hdr=document.getElementById('siteHeader');
+  if(!btn||!menu||!hdr)return;
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const NS='http://www.w3.org/2000/svg';
+
+  // goo filter: blur 6, contrast 18 — the library's defaults
+  const svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('width','0');svg.setAttribute('height','0');svg.setAttribute('aria-hidden','true');
+  svg.style.position='absolute';
+  svg.innerHTML='<filter id="mm-goo" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">'
+    +'<feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/>'
+    +'<feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"/></filter>';
+  document.body.appendChild(svg);
+
+  // the menu now drops from the header, so it lives inside it
+  const items=[...menu.querySelectorAll(':scope > a')];
+  const tm=menu.querySelector('#themeToggleM');
+  if(tm){tm.removeAttribute('style');items.push(tm);}
+  const foot=menu.querySelector('.mm-foot'); if(foot)foot.remove();
+  menu.innerHTML='';
+  const goo=document.createElement('div'); goo.className='mm-goo'; goo.setAttribute('aria-hidden','true');
+  const origin=document.createElement('span'); origin.className='mm-blob'; goo.appendChild(origin);
+  const blobs=items.map(el=>{
+    el.classList.add('mm-item'); menu.appendChild(el);
+    const b=document.createElement('span'); b.className='mm-blob'; goo.appendChild(b); return b;
+  });
+  menu.prepend(goo);
+  hdr.appendChild(menu);
+
+  // one spring per item, bouncy preset: stiffness 320, damping 17
+  const K=320,D=17,GAP=14,STAGGER=.04;
+  const st=items.map(()=>({x:0,v:0}));
+  let open=false,t0=0,last=0,raf=0,geo=null;
+
+  function measure(){
+    const h=hdr.getBoundingClientRect(), b=btn.getBoundingClientRect();
+    const right=h.right-b.right, top=b.top-h.top;
+    origin.style.cssText='width:'+b.width+'px;height:'+b.height+'px;right:'+right+'px;top:'+top+'px';
+    let y=b.height+GAP;
+    geo=items.map((el,i)=>{
+      const w=el.offsetWidth, hh=el.offsetHeight;
+      const g={w,h:hh,dy:y+(hh-b.height)/2,s:Math.min(1,b.width/w,b.height/hh)};
+      el.style.right=blobs[i].style.right=right+'px';
+      el.style.top=blobs[i].style.top=(top+(b.height-hh)/2)+'px';
+      blobs[i].style.width=w+'px'; blobs[i].style.height=hh+'px';
+      y+=hh+GAP; return g;
+    });
+    // the filter only renders inside the goo layer's box, so size it to the whole stack
+    goo.style.width=(right+Math.max(b.width,...geo.map(g=>g.w))+24)+'px';
+    goo.style.height=(top+y+24)+'px';
   }
-  btn.addEventListener('click',()=>set(!menu.classList.contains('open')));
-  close.addEventListener('click',()=>set(false));
-  addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open'))set(false);});
+  function paint(){
+    items.forEach((el,i)=>{
+      const p=st[i].x, g=geo[i], s=g.s+(1-g.s)*Math.max(0,Math.min(1,p));
+      const tf='translateY('+(g.dy*p).toFixed(2)+'px) scale('+s.toFixed(3)+')';
+      el.style.transform=blobs[i].style.transform=tf;
+      el.style.opacity=Math.max(0,Math.min(1,(p-.55)/.4)).toFixed(3);
+    });
+  }
+  function tick(now){
+    const t=(now-t0)/1000, dt=Math.min(.032,Math.max(0,(now-last)/1000)); last=now; let busy=false;
+    st.forEach((s,i)=>{
+      const n=open?i:items.length-1-i;
+      if(t<n*STAGGER){busy=true;return;}
+      const target=open?1:0;
+      for(let k=0;k<4;k++){const a=-K*(s.x-target)-D*s.v; s.v+=a*dt/4; s.x+=s.v*dt/4;}
+      if(Math.abs(s.x-target)>.001||Math.abs(s.v)>.01)busy=true; else{s.x=target;s.v=0;}
+    });
+    paint();
+    if(busy)raf=requestAnimationFrame(tick);
+    else if(!open)menu.classList.remove('shown');
+  }
+  function set(o){
+    if(o===open)return;
+    open=o;
+    btn.setAttribute('aria-expanded',String(o));
+    btn.textContent=o?'Close':'Menu';
+    menu.classList.toggle('open',o);
+    if(o){measure();menu.classList.add('shown');}
+    cancelAnimationFrame(raf);
+    if(reduced){st.forEach(s=>{s.x=o?1:0;s.v=0;});paint();if(!o)menu.classList.remove('shown');}
+    else{t0=last=performance.now();raf=requestAnimationFrame(tick);}
+    if(o)items[0].focus({preventScroll:true});else if(menu.contains(document.activeElement))btn.focus();
+  }
+  btn.addEventListener('click',()=>set(!open));
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&open)set(false);});
+  document.addEventListener('click',e=>{if(open&&!menu.contains(e.target)&&!btn.contains(e.target))set(false);});
+  addEventListener('resize',()=>{if(open)set(false);});
   menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
+})();
+
+/* ---------- border beam on primary CTAs (styles in site.css) ---------- */
+document.querySelectorAll('.btn.solid').forEach(b=>{
+  b.setAttribute('data-beam','cta'); b.setAttribute('data-active','');
+  const bloom=document.createElement('span'); bloom.setAttribute('data-beam-bloom',''); bloom.setAttribute('aria-hidden','true');
+  b.appendChild(bloom);
+});
+
+/* ---------- thinking orb, hero accent (home) ----------
+   thinking-orbs engine (MIT, Jakub Antalik — https://libraries.dev/orbs),
+   "connecting" state: a small constellation wiring itself. */
+(function(){
+  const host=document.getElementById('heroOrb'), O=window.ThinkingOrbs;
+  if(!host||!O)return;
+  const size=64, dpr=Math.min(2,devicePixelRatio||1);
+  const c=document.createElement('canvas'); c.width=c.height=Math.round(size*dpr);
+  c.style.width=c.style.height=size+'px'; host.appendChild(c);
+  const ctx=c.getContext('2d'); if(!ctx)return;
+  const {mode,speed,opts}=O.resolvePreset('connecting',size), fn=O.MODE_FRAMES[mode];
+  const draw=t=>{
+    const dark=document.documentElement.getAttribute('data-theme')!=='light';
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,size,size);
+    O.paintFrame(ctx,fn(size,t,opts),dark);
+  };
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){
+    draw(.6); new MutationObserver(()=>draw(.6)).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']}); return;
+  }
+  let raf=0,run=false,seen=false;
+  const loop=()=>{draw(performance.now()/1000*speed); if(run)raf=requestAnimationFrame(loop);};
+  const start=()=>{if(!run&&seen&&!document.hidden){run=true;raf=requestAnimationFrame(loop);}};
+  const stop=()=>{run=false;cancelAnimationFrame(raf);};
+  new IntersectionObserver(([e])=>{seen=e.isIntersecting;seen?start():stop();}).observe(host);
+  document.addEventListener('visibilitychange',()=>document.hidden?stop():start());
 })();
 
 /* ---------- hero reveal (home) ---------- */
