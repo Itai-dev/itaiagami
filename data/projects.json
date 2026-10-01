@@ -447,5 +447,34 @@
     "gallery": [],
     "vimeo": "794136290",
     "credits": []
+  },
+  {
+    "slug": "riddle",
+    "name": "Riddle",
+    "client": "Riddle (fictional brand)",
+    "cat": "Brand",
+    "tags": ["Brand"],
+    "role": "Brand strategy, identity & product design",
+    "disciplines": "Positioning / Identity / Product / Launch",
+    "collab": "",
+    "flagship": false,
+    "oneline": "Simply smart. A brand and product world for a new generation of thinking games — physical puzzles that bridge the table and the screen.",
+    "challenge": "Classic thinking games are quietly becoming a thing of the past. The young audience grew up inside screens and lives at a different pace — and boxed puzzle games, for all their depth, read as something their parents played. The opportunity isn’t to fight the screen. It’s to meet this generation where their curiosity already lives, and give analog thinking games a reason to feel current again.",
+    "idea": "Puzzles you hold in your hands, play on your phone. Riddle is a line of tactile thinking games with a digital layer built in. Every box is a physical puzzle — and a scan brings it to life on the phone, extending the challenge instead of replacing it. The positioning is one promise: simply smart.",
+    "system": "",
+    "result": "",
+    "contribution": "",
+    "thumb": "/assets/opt/riddle-thumb.webp",
+    "hero": "/assets/opt/riddle-hero.webp",
+    "gallery": [
+      {"src": "/assets/opt/riddle-g1.webp", "half": false},
+      {"src": "/assets/opt/riddle-g2.webp", "half": false},
+      {"src": "/assets/opt/riddle-g3.webp", "half": true},
+      {"src": "/assets/opt/riddle-g4.webp", "half": true},
+      {"src": "/assets/opt/riddle-g6.webp", "half": true},
+      {"src": "/assets/opt/riddle-g7.webp", "half": true}
+    ],
+    "vimeo": null,
+    "credits": []
   }
 ]
