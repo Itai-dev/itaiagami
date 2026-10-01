@@ -487,6 +487,7 @@ font-size:clamp(1.0625rem,1.4vw,1.25rem);line-height:1.35;transition:color var(-
    outside it without being cropped by the figure's overflow:hidden */
 .c-gallery figure{overflow:visible;background:none;border-radius:0}
 .c-gallery .fm{overflow:hidden;border-radius:var(--r-media);background:var(--faint);display:block}
+.c-gallery video{display:block;width:100%;height:auto}
 .c-gallery figcaption{font-size:var(--t-meta);color:var(--dim);line-height:1.5;padding:12px 2px 0;max-width:62ch}
 .c-film .note{font-size:var(--t-meta);color:var(--dim);line-height:1.6;max-width:64ch;margin-bottom:16px}
 .about-side .blk ul li a{color:var(--dim);transition:color var(--dur-fast)}
