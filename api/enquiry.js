@@ -77,11 +77,15 @@ module.exports = async (req, res) => {
   /* Attribution — filled by the page, never typed, so it is reported rather
      than validated. Kept short so a crafted request cannot bloat the email. */
   const attribution = {
+    'Source (detected)': clean(body.lead_source, 120),
+    'Landing page': clean(body.landing_page, 300),
+    'Pages viewed': clean(body.pages_viewed, 800),
+    'Referrer':     clean(body.referrer, 300),
     'utm_source':   clean(body.utm_source, 120),
     'utm_medium':   clean(body.utm_medium, 120),
     'utm_campaign': clean(body.utm_campaign, 160),
-    'Landing page': clean(body.landing_page, 300),
-    'Referrer':     clean(body.referrer, 300)
+    'utm_content':  clean(body.utm_content, 160),
+    'utm_term':     clean(body.utm_term, 160)
   };
 
   if(!name)                          return res.status(400).json({ ok:false, error:'Please add your name.' });

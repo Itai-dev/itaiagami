@@ -2,6 +2,16 @@
    ITAI AGAMI — shared behavior (v1.3 multi-page)
    ============================================================ */
 
+/* ---------- ANALYTICS CONFIG — paste your real IDs here ----------
+   Both tools stay switched off until a real ID replaces the placeholder,
+   and even then load only after the visitor accepts analytics.
+   See docs/measurement-setup.md for the full setup checklist. */
+const GA_MEASUREMENT_ID   = 'G-XXXXXXXXXX';   /* GA4 → Admin → Data streams → Web → Measurement ID */
+const CLARITY_PROJECT_ID  = 'XXXXXXXXXX';     /* Clarity → Settings → Overview → Project ID */
+/* true logs every analytics event to the console. Also switchable per browser
+   without a deploy: add ?analytics_debug=1 to any URL (?analytics_debug=0 turns it off). */
+const ANALYTICS_DEBUG     = false;
+
 /* ---------- Vercel Web Analytics (privacy-friendly, no cookies) ---------- */
 (function(){
   window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };
@@ -50,38 +60,325 @@
   +'<div class="col"><h4>Studio</h4><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div>'
   +'</div><div class="base">'
   +'<span>© 2026 Itai Agami. All rights reserved.</span>'
+  +'<span class="legal"><a href="../privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span>'
   +'<span>Creative Director &amp; Designer</span>'
   +'</div></div></footer>';
   document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
 })();
 
-/* ---------- first-touch attribution (session only, no cookies) ----------
+/* ---------- first-touch attribution (no cookies) ----------
    Records how this visit started — campaign parameters, the page they landed
    on and the external referrer — so an enquiry can say where it came from.
    First touch wins: later internal navigation never overwrites it. Nothing
-   leaves the browser unless the visitor sends the contact form. */
-const ATTR_KEY = 'ia-attr';
+   leaves the browser unless the visitor sends the contact form.
+
+   Scope: the tab session (sessionStorage). Only if the visitor accepts
+   analytics is a non-direct first touch also kept for ATTR_DAYS in
+   localStorage, so someone who found the site via ChatGPT and comes back
+   direct a week later to enquire is still credited to ChatGPT. Rejecting
+   analytics deletes that copy. GA4's own attribution is not touched. */
+const ATTR_KEY = 'ia-attr', ATTR_KEEP_KEY = 'ia-attr-keep', PATH_KEY = 'ia-path';
+const ATTR_DAYS = 30;
 function readAttribution(){
   try{ return JSON.parse(sessionStorage.getItem(ATTR_KEY) || 'null'); }catch(e){ return null; }
+}
+function readPagePath(){
+  try{ return JSON.parse(sessionStorage.getItem(PATH_KEY) || '[]'); }catch(e){ return []; }
+}
+/* Readable channel for a utm_source value or a referrer URL. Order matters:
+   gemini.google.com must be caught before google.* */
+function classifySource(utmSource, referrer){
+  const RULES = [
+    [/chatgpt|openai/, 'ChatGPT'],
+    [/perplexity/, 'Perplexity'],
+    [/gemini/, 'Gemini'],
+    [/claude/, 'Claude'],
+    [/copilot/, 'Copilot'],
+    [/(^|\.)google(\.|$)/, 'Google'],
+    [/(^|\.)bing(\.|$)/, 'Bing'],
+    [/linkedin|(^|\.)lnkd\.in$/, 'LinkedIn'],
+    [/instagram|^ig$/, 'Instagram'],
+    [/facebook|^fb$/, 'Facebook'],
+    [/behance/, 'Behance']
+  ];
+  const match = s => { for(const [re, label] of RULES) if(re.test(s)) return label; return ''; };
+  const u = String(utmSource || '').toLowerCase().trim();
+  let host = '';
+  try{ if(referrer) host = new URL(referrer).hostname.replace(/^www\./, ''); }catch(e){}
+  if(u) return match(u) || 'Campaign: ' + utmSource;
+  if(host) return match(host) || 'Referral: ' + host;
+  return 'Direct';
 }
 (function(){
   let store;
   try{ store = sessionStorage; }catch(e){ return; }           /* private mode / blocked */
+  /* pages seen this session, in order — paths only, capped */
+  try{
+    const path = readPagePath(), here = location.pathname;
+    if(path[path.length - 1] !== here){ path.push(here); store.setItem(PATH_KEY, JSON.stringify(path.slice(-25))); }
+  }catch(e){}
   if(readAttribution()) return;
   const q = new URLSearchParams(location.search);
   const ref = document.referrer || '';
   let external = ref;
   try{ if(ref && new URL(ref).host === location.host) external = ''; }catch(e){}
+  let touch = {
+    source:       classifySource(q.get('utm_source'), external),
+    utm_source:   q.get('utm_source')   || '',
+    utm_medium:   q.get('utm_medium')   || '',
+    utm_campaign: q.get('utm_campaign') || '',
+    utm_content:  q.get('utm_content')  || '',
+    utm_term:     q.get('utm_term')     || '',
+    landing_page: location.pathname + location.search,
+    referrer:     external,
+    first_seen:   new Date().toISOString().slice(0, 10)
+  };
+  /* a direct return visit inherits the kept first touch, if still in window */
+  if(touch.source === 'Direct'){
+    try{
+      const kept = JSON.parse(localStorage.getItem(ATTR_KEEP_KEY) || 'null');
+      if(kept && Date.now() - kept.ts < ATTR_DAYS * 864e5) touch = kept.touch;
+    }catch(e){}
+  }
+  try{ store.setItem(ATTR_KEY, JSON.stringify(touch)); }catch(e){}
+})();
+
+/* ---------- consent + analytics (GA4, Microsoft Clarity) ----------
+   Nothing from Google or Microsoft is requested until the visitor presses
+   "Accept analytics". "Reject" means neither script is ever fetched. The
+   choice is kept for CONSENT_DAYS, then asked again, and can be changed any
+   time from "Privacy settings" in the footer.
+
+   Google Consent Mode v2 (basic): consent defaults to denied for everything
+   and only analytics_storage is granted after acceptance. The site runs no
+   ads, so the three ad signals stay denied permanently.
+
+   Events from anywhere in this file go through Analytics.track(name, params).
+   Before a choice is made they are held for this page and sent if the visitor
+   accepts; on reject they are dropped. Form contents are never passed in. */
+const Analytics = (function(){
+  const CONSENT_KEY = 'ia-consent', CONSENT_DAYS = 365;
+  const GA_ON = /^G-[A-Z0-9]{4,}$/.test(GA_MEASUREMENT_ID) && GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX';
+  const CL_ON = /^[a-z0-9]{6,}$/i.test(CLARITY_PROJECT_ID) && CLARITY_PROJECT_ID !== 'XXXXXXXXXX';
+
+  let debug = ANALYTICS_DEBUG;
   try{
-    store.setItem(ATTR_KEY, JSON.stringify({
-      utm_source:   q.get('utm_source')   || '',
-      utm_medium:   q.get('utm_medium')   || '',
-      utm_campaign: q.get('utm_campaign') || '',
-      landing_page: location.pathname + location.search,
-      referrer:     external
-    }));
+    const q = new URLSearchParams(location.search).get('analytics_debug');
+    if(q === '1') localStorage.setItem('ia-debug', '1');
+    if(q === '0') localStorage.removeItem('ia-debug');
+    if(localStorage.getItem('ia-debug') === '1') debug = true;
   }catch(e){}
+  const log = (...a) => { if(debug) console.log('%c[analytics]', 'color:#F25C05;font-weight:600', ...a); };
+
+  function readConsent(){
+    try{
+      const c = JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null');
+      if(c && (c.analytics === 'granted' || c.analytics === 'denied') && Date.now() - c.ts < CONSENT_DAYS * 864e5) return c.analytics;
+    }catch(e){}
+    return null;
+  }
+  function saveConsent(v){
+    try{ localStorage.setItem(CONSENT_KEY, JSON.stringify({ analytics:v, ts:Date.now() })); }catch(e){}
+  }
+
+  /* first touch kept beyond the session only with consent — see attribution above */
+  function keepTouch(){
+    try{
+      const a = readAttribution();
+      if(!a || a.source === 'Direct' || localStorage.getItem(ATTR_KEEP_KEY)) return;
+      localStorage.setItem(ATTR_KEEP_KEY, JSON.stringify({ ts:Date.now(), touch:a }));
+    }catch(e){}
+  }
+  function forgetTouch(){ try{ localStorage.removeItem(ATTR_KEEP_KEY); }catch(e){} }
+
+  let loaded = false;
+  const held = [];
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ window.dataLayer.push(arguments); }
+
+  function load(){
+    if(loaded) return;
+    loaded = true;
+    keepTouch();
+    const a = readAttribution() || {};
+    log('consent: granted', GA_ON ? 'GA4 ' + GA_MEASUREMENT_ID : 'GA4 not configured', '·',
+        CL_ON ? 'Clarity ' + CLARITY_PROJECT_ID : 'Clarity not configured');
+    log('page_view', { page_path:location.pathname, page_title:document.title, lead_source:a.source || '' });
+
+    if(GA_ON){
+      window.gtag = gtag;
+      gtag('consent', 'default', { ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied', analytics_storage:'denied' });
+      gtag('consent', 'update', { analytics_storage:'granted' });
+      gtag('js', new Date());
+      /* page_view is sent by config on every page load — each page is a real document here */
+      gtag('config', GA_MEASUREMENT_ID, Object.assign(
+        { allow_google_signals:false, allow_ad_personalization_signals:false },
+        debug ? { debug_mode:true } : {}));     /* any debug_mode value turns DebugView on, so only set it when wanted */
+      const s = document.createElement('script');
+      s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+      document.head.appendChild(s);
+    }
+    if(CL_ON){
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src='https://www.clarity.ms/tag/'+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, 'clarity', 'script', CLARITY_PROJECT_ID);
+      window.clarity('consentv2', { ad_Storage:'denied', analytics_Storage:'granted' });
+      if(a.source) window.clarity('set', 'lead_source', a.source);
+      if(a.landing_page) window.clarity('set', 'landing_page', a.landing_page.split('?')[0]);
+    }
+    held.splice(0).forEach(([n, p]) => { log(n, p, '— sent after consent'); send(n, p); });
+  }
+
+  function send(name, params){
+    if(GA_ON && window.gtag) window.gtag('event', name, params);
+    if(CL_ON && window.clarity) window.clarity('event', name);
+  }
+
+  function track(name, params){
+    params = params || {};
+    const c = readConsent();
+    if(c === 'denied'){ log(name, params, '— not sent (analytics rejected)'); return; }
+    if(!loaded){ held.push([name, params]); log(name, params, '— held until consent'); return; }
+    log(name, params, GA_ON || CL_ON ? '' : '— no IDs configured, not sent');
+    send(name, params);
+  }
+
+  /* expire the first-party cookies GA4 and Clarity set, on every domain form they could use */
+  function clearCookies(){
+    const host = location.hostname, parts = host.split('.');
+    const domains = ['', host, '.' + host];
+    if(parts.length > 2) domains.push('.' + parts.slice(-2).join('.'));
+    document.cookie.split(';').forEach(c => {
+      const n = c.split('=')[0].trim();
+      if(!/^(_ga|_gid|_gat|_clck|_clsk|CLID)/.test(n)) return;
+      domains.forEach(d => { document.cookie = n + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : ''); });
+    });
+  }
+
+  function choose(v){
+    const was = readConsent();
+    saveConsent(v);
+    hideBanner();
+    if(v === 'granted'){ load(); return; }
+    held.length = 0;
+    forgetTouch();
+    log('consent: denied — GA4 and Clarity will not load');
+    if(was === 'granted' || loaded){
+      /* already running on this page: switch both off, remove their cookies,
+         and reload so no analytics code stays in memory */
+      if(GA_ON){ window['ga-disable-' + GA_MEASUREMENT_ID] = true; gtag('consent', 'update', { analytics_storage:'denied' }); }
+      if(CL_ON && window.clarity) window.clarity('consent', false);
+      clearCookies();
+      if(loaded) location.reload();
+    }
+  }
+
+  /* ---- banner ---- */
+  let banner = null;
+  function hideBanner(){ if(banner){ banner.hidden = true; } }
+  function showBanner(){
+    if(!banner){
+      const priv = location.pathname.split('/').length > 2 ? '../privacy.html' : 'privacy.html';
+      banner = document.createElement('div');
+      banner.className = 'consent';
+      banner.setAttribute('role', 'region');
+      banner.setAttribute('aria-label', 'Analytics preferences');
+      banner.innerHTML = '<p>May I use Google Analytics and Microsoft Clarity to see how this site is found and used? '
+        + 'Nothing loads unless you accept. <a href="' + priv + '">Privacy</a></p>'
+        + '<div class="consent-actions">'
+        + '<button type="button" class="btn" data-consent="denied">Reject</button>'
+        + '<button type="button" class="btn" data-consent="granted">Accept analytics</button>'
+        + '</div>';
+      banner.addEventListener('click', e => {
+        const b = e.target.closest('[data-consent]'); if(b) choose(b.dataset.consent);
+      });
+      document.body.appendChild(banner);
+    }
+    const c = readConsent();
+    banner.querySelectorAll('[data-consent]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.consent === c)));
+    banner.hidden = false;
+  }
+
+  document.addEventListener('click', e => {
+    if(e.target.closest('[data-consent-open]')){ e.preventDefault(); showBanner(); banner.querySelector('[data-consent]').focus(); }
+  });
+
+  const c = readConsent();
+  if(c === 'granted') load();
+  else if(c === 'denied') log('consent: denied — GA4 and Clarity not loaded');
+  else showBanner();
+
+  return { track, debug: () => debug };
+})();
+
+/* ---------- analytics events ----------
+   page_view comes from the GA4 config above. Everything here is a deliberate,
+   low-volume signal on the path to an enquiry — no scroll or hover tracking. */
+(function(){
+  const path = location.pathname;
+
+  /* project_view — every case study lives under /work/ */
+  if(/^\/work\/[^/]+/.test(path)){
+    const h = document.querySelector('.c-open h1');
+    Analytics.track('project_view', {
+      project_name: (h ? h.textContent : document.title.split(' — ')[0]).trim(),
+      page_path: path,
+      page_title: document.title
+    });
+  }
+
+  /* contact_view — once, when the contact section is actually on screen */
+  const contact = document.getElementById('contact');
+  if(contact){
+    const fire = () => { const a = readAttribution() || {};
+      Analytics.track('contact_view', { page_path:path, lead_source:a.source || '' }); };
+    if('IntersectionObserver' in window){
+      const io = new IntersectionObserver(es => { if(es.some(e => e.isIntersecting)){ io.disconnect(); fire(); } });
+      io.observe(contact);
+    }else fire();
+  }
+
+  /* contact_form_start — first interaction only, not every field */
+  const form = document.getElementById('enquiryForm');
+  if(form){
+    let started = false;
+    const start = () => {
+      if(started) return; started = true;
+      Analytics.track('contact_form_start', { form_id:'enquiry', page_path:path });
+    };
+    form.addEventListener('focusin', start);
+    form.addEventListener('input', start);
+  }
+
+  /* external_link_click and portfolio_cta_click — one delegated listener */
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a[href]'); if(!a) return;
+    let url; try{ url = new URL(a.href, location.href); }catch(err){ return; }
+    const text = (a.textContent || '').replace(/\s+/g, ' ').replace(/→/g, '').trim().slice(0, 80);
+    const where = a.closest('header.site') ? 'header' : a.closest('.mobile-menu') ? 'menu'
+                : a.closest('footer.site') ? 'footer' : 'content';
+
+    if(url.protocol === 'mailto:' || url.protocol === 'tel:'){
+      Analytics.track('external_link_click', { link_type: url.protocol === 'mailto:' ? 'email' : 'phone',
+        link_url: url.protocol, link_text:text, link_location:where });
+      return;
+    }
+    if(!/^https?:$/.test(url.protocol)) return;
+    if(url.host !== location.host){
+      const h = url.hostname.replace(/^www\./, '');
+      const type = /linkedin/.test(h) ? 'linkedin' : /instagram/.test(h) ? 'instagram'
+                 : /behance/.test(h) ? 'behance' : /vimeo/.test(h) ? 'vimeo' : 'other';
+      Analytics.track('external_link_click', { link_type:type, link_domain:h,
+        link_url: url.origin + url.pathname, link_text:text, link_location:where });
+      return;
+    }
+    if(/\/contact\.html$/.test(url.pathname) && !/\/contact\.html$/.test(path)){
+      Analytics.track('portfolio_cta_click', { cta_text:text, cta_location:where, page_path:path });
+    }
+  });
 })();
 
 /* ---------- engagement floor by region ----------
@@ -303,13 +600,16 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   const btn=form.querySelector('button[type="submit"]');
   const MAIL='<a href="mailto:itaiagami@gmail.com">itaiagami@gmail.com</a>';
 
-  /* carry the visit's origin into the enquiry — see first-touch attribution above */
-  (function(){
-    const a=readAttribution(); if(!a)return;
-    const map={utm_source:'f-utm-source',utm_medium:'f-utm-medium',utm_campaign:'f-utm-campaign',
-               landing_page:'f-landing',referrer:'f-referrer'};
-    for(const k in map){ const el=document.getElementById(map[k]); if(el)el.value=a[k]||''; }
-  })();
+  /* carry the visit's origin into the enquiry — see first-touch attribution above.
+     Run again on submit so the page list includes everything seen up to then. */
+  function fillAttribution(){
+    const a=readAttribution()||{};
+    const vals={'f-lead-source':a.source,'f-utm-source':a.utm_source,'f-utm-medium':a.utm_medium,
+                'f-utm-campaign':a.utm_campaign,'f-utm-content':a.utm_content,'f-utm-term':a.utm_term,
+                'f-landing':a.landing_page,'f-referrer':a.referrer,'f-pages':readPagePath().join(', ')};
+    for(const id in vals){ const el=document.getElementById(id); if(el)el.value=vals[id]||''; }
+  }
+  fillAttribution();
 
   /* Composes the finished enquiry as an email the visitor sends themselves.
      Used when the server cannot send — nothing they typed is ever lost. */
@@ -322,7 +622,11 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       'Budget: '+(d.budget||'—'),
       'Timeline: '+(d.timeline||'—'),
       'Found via: '+(d.source||'—'),
-      '','Project:',(d.project||'')
+      '','Project:',(d.project||''),
+      '','—','Source: '+(d.lead_source||'—'),
+      'Landing page: '+(d.landing_page||'—'),
+      'Pages viewed: '+(d.pages_viewed||'—'),
+      'UTM campaign: '+(d.utm_campaign||'none')
     ].join('\n');
     return 'mailto:itaiagami@gmail.com'
       +'?subject='+encodeURIComponent('Project enquiry — '+(d.name||''))
@@ -339,6 +643,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   form.addEventListener('submit',async e=>{
     e.preventDefault();
     if(!form.reportValidity())return;                       /* native messages, our styling */
+    fillAttribution();
     const data=Object.fromEntries(new FormData(form).entries());
     const label=btn.innerHTML;
     btn.disabled=true; btn.textContent='Sending…';
@@ -350,6 +655,13 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       });
       j=await r.json().catch(()=>({}));
       if(r.ok&&j.ok){
+        /* the main conversion — attribution and form choices only, never what they typed */
+        Analytics.track('contact_form_submit',{
+          form_id:'enquiry', project_type:data.type||'', budget:data.budget||'', timeline:data.timeline||'',
+          self_reported_source:data.source||'', lead_source:data.lead_source||'',
+          landing_page:(data.landing_page||'').split('?')[0],
+          pages_viewed_count:readPagePath().length
+        });
         form.innerHTML='<p class="f-done">Thank you — this is with me now. '
           +'I read every enquiry myself and will come back to you within two working days.<br><br>'
           +'If it is urgent, '+MAIL+'.</p>';
