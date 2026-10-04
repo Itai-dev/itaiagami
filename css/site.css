@@ -169,14 +169,14 @@ display:flex;align-items:center;justify-content:center;
 .band h2{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;max-width:16ch;margin-bottom:clamp(24px,3vw,36px)}
 .band h2 em{font-style:italic}
 /* the closing band's Hairline figure (Clay, js/site.js): right of the copy on
-   wide screens, under the buttons on narrow ones */
-.band{display:grid;grid-template-columns:minmax(0,1fr) min(40%,440px);column-gap:clamp(24px,4vw,56px)}
-.band > *{grid-column:1}
-.band-fig{grid-column:2;grid-row:1 / span 3;align-self:center;opacity:0;transition:opacity 1.2s var(--ease)}
+   wide screens, under the buttons on narrower ones; the copy's layout is untouched */
+.band{position:relative}
+/* centred on the content box (below the band's top padding), so the copy keeps its own layout */
+.band-fig{position:absolute;right:0;top:calc(50% + clamp(20px,3vw,32px));transform:translateY(-50%);width:min(36%,440px);opacity:0;transition:opacity 1.2s var(--ease)}
 .band-fig.ready{opacity:1}
 .band-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
 :root[data-theme="light"] .band-fig [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
-@media(max-width:900px){.band{display:block}.band-fig{width:min(86vw,340px);margin:28px auto -12px}}
+@media(max-width:1100px){.band-fig{position:static;transform:none;width:min(86vw,340px);margin:28px auto -12px}}
 .index-controls{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:clamp(28px,4vw,44px)}
 .filters{display:flex;gap:8px;flex-wrap:wrap}
 .filters button{background:none;border:1px solid var(--line);color:var(--dim);font-family:inherit;font-size:var(--t-meta);letter-spacing:0;padding:7px 14px;border-radius:9999px;cursor:pointer;transition:color var(--dur-fast),border-color var(--dur-fast),background var(--dur-fast)}
