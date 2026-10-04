@@ -367,6 +367,19 @@ nav.primary{display:none}
 .hero-system{position:relative;top:auto;right:auto;bottom:auto;width:100%;justify-content:center;margin:-40px 0 -4px}
 .hero-system [data-hairline]{max-width:min(100%,460px)}
 }
+@media(max-width:600px){
+/* phones: copy and CTAs first, so they sit above the fold and clear of the
+   consent banner; the figure follows them, large and centred */
+.hero-system{order:3;margin:6px 0 -20px}
+.hero-system [data-hairline]{max-width:min(100%,420px)}
+.hero .sub{margin-top:16px}
+.hero .cta{margin-top:22px;flex-direction:row;flex-wrap:wrap;max-width:none;gap:10px}
+.hero .cta .btn{flex:1 1 auto;padding-left:14px;padding-right:14px}
+}
+@media(max-width:420px){
+.hero .cta{flex-wrap:nowrap;gap:8px}
+.hero .cta .btn{flex:1 1 0;min-width:0;white-space:nowrap;padding-left:8px;padding-right:8px;gap:6px;font-size:var(--t-micro)}
+}
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}
 *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
@@ -1021,7 +1034,11 @@ font-size:var(--t-meta);line-height:1.5;color:var(--fg);display:flex;flex-direct
 .consent-actions .btn{flex:1 1 140px;justify-content:center}
 .consent-actions .btn:hover{border-color:var(--fg)}
 .consent-actions .btn[aria-pressed="true"]{border-color:var(--fg)}
-@media (max-width:600px){.consent{left:12px;right:12px;bottom:12px}}
+@media (max-width:600px){
+.consent{left:12px;right:12px;bottom:12px;padding:12px 14px;gap:10px;font-size:var(--t-micro);line-height:1.4}
+.consent-actions{gap:8px;flex-wrap:nowrap}
+.consent-actions .btn{flex:1 1 0;min-height:0;padding:9px 10px;white-space:nowrap}
+}
 footer.site .base .legal{display:flex;gap:16px}
 footer.site .base .legal a,footer.site .base .legal button{color:inherit;opacity:.8;transition:opacity var(--dur-fast)}
 footer.site .base .legal button{background:none;border:0;padding:0;font:inherit;letter-spacing:inherit;cursor:pointer}
