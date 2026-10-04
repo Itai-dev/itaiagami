@@ -91,7 +91,7 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:clamp(32px,4.5vw,56px)}
 .sec-head h1,.sec-head h2{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-h2);letter-spacing:-.01em;line-height:1.2}
 .sec-head .count{font-size:var(--t-meta);color:var(--dim);letter-spacing:0}
-.obs{opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.obs{opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .obs.in{opacity:1;transform:none}
 .hero{position:relative;display:flex;flex-direction:column;justify-content:center;padding-top:clamp(56px,9vh,110px);padding-bottom:clamp(56px,8vw,96px)}
 .hero .eyebrow{margin-bottom:clamp(24px,4vw,44px);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
