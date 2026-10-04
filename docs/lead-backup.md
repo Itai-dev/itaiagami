@@ -46,6 +46,10 @@ do not apply to the running deployment.
    `https://calendar.app.google/…`).
 3. Paste it into `BOOKING_URL` in `js/contact-config.js` and deploy. Both "Book a call"
    buttons appear by themselves, and the visitor receipt email gains the link.
+4. Keep the schedule selective, so the calendar never looks empty: two or three short
+   windows a week, 1–2 bookings a day, 48 h minimum notice, and a 2–3 week booking
+   window. Add 2–3 required booking-form questions (company, what they are working
+   on, rough budget), so people who skip the site form still leave a mini-brief.
 
 The booking page opens in a new tab rather than as an embed. Google's embedded
 scheduler is cramped on phones, and a new tab is the most reliable option on iPhone.
