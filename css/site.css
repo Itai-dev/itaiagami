@@ -450,6 +450,8 @@ h2,h3{text-wrap:balance}
 .fit-link{display:inline-flex;align-items:center;gap:8px;color:var(--fg);font-weight:500}
 .fit-link .arw{transition:transform var(--dur-fast) var(--ease)}
 .fit-link:hover .arw{transform:translateX(4px)}
+/* the closing band's rule sits midway between this block and the band's heading */
+.fit + .band{margin-top:clamp(40px,6vw,64px)}
 .cap h3 a{transition:opacity var(--dur-fast)}
 .cap h3 a:hover{opacity:.7;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line-strong)}
 .sec-head .count a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
