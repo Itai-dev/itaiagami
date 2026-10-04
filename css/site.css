@@ -457,7 +457,17 @@ transition:background var(--dur-fast)}
 .svc-list .d{grid-column:2;color:var(--dim);line-height:1.6;max-width:56ch;margin-top:8px}
 .svc-list .go{font-size:var(--t-meta);color:var(--dim);white-space:nowrap}
 .svc-list > a:hover .go{color:var(--fg)}
-@media(max-width:700px){.svc-list > a{grid-template-columns:30px 1fr;gap:12px}.svc-list .go{display:none}}
+/* a Hairline figure per service (js/site.js): right of the text on wide
+   screens, under it on phones; it fades in on its first frame */
+.svc-list > a{grid-template-columns:52px 1fr auto clamp(190px,20vw,260px);grid-template-rows:auto 1fr}
+.svc-list .d{align-self:start}
+.svc-fig{grid-column:4;grid-row:1 / span 2;align-self:center;opacity:0;transition:opacity 1.2s var(--ease)}
+.svc-fig.ready{opacity:1}
+.svc-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
+:root[data-theme="light"] .svc-fig [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
+.svc-list > a:hover .svc-fig [data-hairline]{--hairline-plate:var(--faint)}
+@media(max-width:900px){.svc-list > a{grid-template-columns:52px 1fr clamp(160px,30vw,220px)}.svc-list .go{display:none}.svc-fig{grid-column:3}}
+@media(max-width:700px){.svc-list > a{grid-template-columns:30px 1fr;grid-template-rows:auto;gap:12px}.svc-fig{grid-column:2;grid-row:3;justify-self:start;width:min(100%,260px);margin:0 0 -12px -4%}.svc-list .go{display:none}}
 
 .svc-open{padding-top:clamp(30px,5vw,60px);max-width:760px}
 .svc-open h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-display);line-height:1.1;letter-spacing:-.02em;margin-bottom:22px;text-wrap:balance}

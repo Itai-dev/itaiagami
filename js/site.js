@@ -515,16 +515,22 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   b.appendChild(bloom);
 });
 
-/* ---------- Hairline figure, hero (home) ----------
+/* ---------- Hairline figures (home hero, services) ----------
    Hairline engine (@lucasmarkes/hairline, js/vendor/hairline-kernel.js).
-   The figure, js/hairline-cases.js, loads as a module and calls
-   window.hairline() once; this mounts it into the hero layer. It sleeps
-   offscreen and lands at once under reduced motion on its own. */
+   Each figure, js/hairline-<name>.js, loads as a module and calls
+   window.hairline() once; this mounts it into the element marked
+   data-hairline-host="<name>". Figures sleep offscreen and land at once
+   under reduced motion on their own.
+
+   A figure inside a link (the services list) also answers the whole row:
+   moving across the row scrubs the pointer across the figure, leaving the
+   row lets it go. */
 (function(){
-  const host=document.getElementById('heroSystem'), HL=window.HL;
-  if(!host||!HL)return;
+  const HL=window.HL;
+  if(!HL||!document.querySelector('[data-hairline-host]'))return;
   window.hairline=fig=>{
-    if(host.firstChild)return;
+    const host=document.querySelector('[data-hairline-host="'+fig.name+'"]');
+    if(!host||host.firstChild)return;
     HL.inject(document);
     const stage=document.createElement('div');
     stage.setAttribute('data-hairline',fig.name);
@@ -534,6 +540,17 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     const read={get textContent(){return text;},set textContent(v){text=v==null?'':String(v);}};
     fig.mount({stage,svg,read},fig.range[1]);
     requestAnimationFrame(()=>host.classList.add('ready'));
+
+    const row=host.closest('a');
+    if(!row)return;
+    const send=(type,x,y)=>stage.dispatchEvent(new PointerEvent(type,{pointerType:'mouse',pointerId:1,clientX:x,clientY:y}));
+    row.addEventListener('pointermove',e=>{
+      if(e.pointerType!=='mouse'||stage.contains(e.target))return;
+      const r=row.getBoundingClientRect(), s=stage.getBoundingClientRect();
+      const f=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));
+      send('pointermove',s.left+s.width*(.2+.6*f),s.top+s.height*.5);
+    });
+    row.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse')send('pointerleave',0,0); });
   };
 })();
 
