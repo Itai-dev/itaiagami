@@ -649,6 +649,13 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   const btn=form.querySelector('button[type="submit"]');
   const label=btn.innerHTML;
 
+  /* the contact page's Hairline figure (js/hairline-tray.js) writes one line on its
+     card per filled field, and drops the card into its tray once sent */
+  const PROGRESS=['name','email','org','type','project'];
+  const progress=()=>document.dispatchEvent(new CustomEvent('enquiry:progress',{detail:{
+    filled:PROGRESS.filter(n=>{const el=form.elements[n]; return el&&String(el.value||'').trim()!=='';}).length }}));
+  form.addEventListener('input',progress); form.addEventListener('change',progress);
+
   /* "Start a project" — bring the form into view and put the cursor in it */
   document.querySelectorAll('[data-start-project]').forEach(a=>a.addEventListener('click',e=>{
     e.preventDefault();
@@ -701,6 +708,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
         +'<a class="btn solid" data-booking="after_submission">Book a call <span class="arw" aria-hidden="true">↗</span></a></div>':'')
       +'<p class="f-note">If it is urgent, '+MAIL+(TEL?' or '+TEL:'')+'.</p>';
     form.replaceWith(done);
+    document.dispatchEvent(new CustomEvent('enquiry:sent'));
     wireBooking(done);
     done.focus({preventScroll:true});
     const top=done.getBoundingClientRect().top;
