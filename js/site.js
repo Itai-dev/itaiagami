@@ -554,22 +554,6 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   };
 })();
 
-/* ---------- hero word (home) ----------
-   "people remember." cycles its last word in step with the Cases figure:
-   each time a card stands up (on its own or under the pointer), the next
-   word comes in. Screen readers keep the original line via aria-label. */
-(function(){
-  const em=document.querySelector('.hero h1 em'); if(!em)return;
-  const h1=em.closest('h1'); h1.setAttribute('aria-label',h1.textContent.replace(/\s+/g,' ').trim());
-  const WORDS=['remember','love','trust','share','feel','follow','choose'];
-  let i=0;
-  document.addEventListener('cases:card',()=>{
-    i=(i+1)%WORDS.length;
-    em.classList.remove('swap'); void em.offsetWidth;
-    em.textContent=WORDS[i]; em.classList.add('swap');
-  });
-})();
-
 /* ---------- hero reveal (home) ---------- */
 (function(){
   const h=document.querySelector('.hero'); if(!h)return;

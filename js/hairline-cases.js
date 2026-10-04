@@ -158,8 +158,6 @@ function mount({ stage, svg, read }, value) {
       cd.face.classList.toggle("hi", i === a); cd.head.classList.toggle("hi", i === a); cd.punch[cd.n - 1].classList.toggle("m", i !== a);
     });
     read.textContent = auto ? "rest" : caption(a);
-    // let the page keep time with the riffle (the home hero changes its word on each card)
-    if (a >= 0) document.dispatchEvent(new CustomEvent("cases:card", { detail: { card: N - a, auto } }));
     B.wake();
   }
 
