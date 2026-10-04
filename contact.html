@@ -157,13 +157,18 @@
             <label for="f-website">Leave this field empty</label>
             <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" />
           </div>
-          <!-- Filled by js/site.js from the first page of this session. Empty for
-               anyone who arrived without campaign parameters — which is most people. -->
+          <!-- Filled by js/site.js: how this visit started (first touch) and the pages
+               seen before sending. UTM fields are empty for anyone who arrived without
+               campaign parameters — which is most people. -->
+          <input type="hidden" name="lead_source" id="f-lead-source" />
           <input type="hidden" name="utm_source" id="f-utm-source" />
           <input type="hidden" name="utm_medium" id="f-utm-medium" />
           <input type="hidden" name="utm_campaign" id="f-utm-campaign" />
+          <input type="hidden" name="utm_content" id="f-utm-content" />
+          <input type="hidden" name="utm_term" id="f-utm-term" />
           <input type="hidden" name="landing_page" id="f-landing" />
           <input type="hidden" name="referrer" id="f-referrer" />
+          <input type="hidden" name="pages_viewed" id="f-pages" />
           <p class="f-note">Scope, budget or timing not yet defined? Include what you know and leave the rest open.</p>
           <div class="f-actions">
             <button type="submit" class="btn solid">Tell me about the project <span class="arw" aria-hidden="true">→</span></button>
@@ -187,6 +192,7 @@
     </div>
     <div class="base">
       <span>© 2026 Itai Agami. All rights reserved.</span>
+      <span class="legal"><a href="privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span>
       <span>Creative Director &amp; Designer</span>
     </div>
   </div>
