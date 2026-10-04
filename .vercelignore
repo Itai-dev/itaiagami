@@ -9,3 +9,8 @@ server.ps1
 *.md
 
 /docs
+
+# agent skills — repo tooling, not part of the site
+/.agents
+/.claude
+skills-lock.json
