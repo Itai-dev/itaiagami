@@ -575,24 +575,37 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)go();});
 })();
 
-/* ---------- scroll reveals ---------- */
+/* ---------- scroll reveals ----------
+   Reveals start just before a block enters the screen, so content is already
+   arriving as it scrolls in rather than waiting on an empty space. */
 (function(){
   const els=[...document.querySelectorAll('.obs')]; if(!els.length)return;
   function check(){
     els.forEach(el=>{
       if(el.classList.contains('in'))return;
       const r=el.getBoundingClientRect();
-      if(r.top<innerHeight*0.92&&r.bottom>0)el.classList.add('in');
+      if(r.top<innerHeight*1.1&&r.bottom>0)el.classList.add('in');
     });
   }
   const io=new IntersectionObserver(es=>{
     es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
-  },{threshold:0,rootMargin:'0px 0px -8% 0px'});
+  },{threshold:0,rootMargin:'0px 0px 10% 0px'});
   els.forEach(el=>io.observe(el));
   check();
   addEventListener('scroll',check,{passive:true});
   addEventListener('load',check);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
+})();
+
+/* ---------- selected work: fetch images once the page has loaded ----------
+   They stay loading="lazy" so the first paint is not slowed, but as soon as the
+   page is idle they are requested anyway. Safari's lazy-load window is small,
+   so without this the images arrive late on iPhone and pop in while scrolling. */
+(function(){
+  const imgs=[...document.querySelectorAll('.swork img[loading="lazy"]')]; if(!imgs.length)return;
+  const warm=()=>imgs.forEach(img=>{ img.loading='eager'; });
+  const idle=window.requestIdleCallback||(fn=>setTimeout(fn,200));
+  if(document.readyState==='complete') idle(warm); else addEventListener('load',()=>idle(warm),{once:true});
 })();
 
 /* ---------- enquiry form + intro-call booking (contact page) ----------
