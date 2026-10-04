@@ -517,7 +517,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 
 /* ---------- Hairline figure, hero (home) ----------
    Hairline engine (@lucasmarkes/hairline, js/vendor/hairline-kernel.js).
-   The figure, js/hairline-studio.js, loads as a module and calls
+   The figure, js/hairline-projection.js, loads as a module and calls
    window.hairline() once; this mounts it into the hero layer. It sleeps
    offscreen and lands at once under reduced motion on its own. */
 (function(){
