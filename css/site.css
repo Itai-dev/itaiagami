@@ -459,9 +459,10 @@ transition:background var(--dur-fast)}
 .svc-list > a:hover .go{color:var(--fg)}
 /* a Hairline figure per service (js/site.js): right of the text on wide
    screens, under it on phones; it fades in on its first frame */
-.svc-list > a{grid-template-columns:52px 1fr auto clamp(190px,20vw,260px);grid-template-rows:auto 1fr}
+.svc-list > a{grid-template-columns:52px 1fr clamp(190px,20vw,260px) auto;grid-template-rows:auto 1fr}
+.svc-list .go{grid-column:4;grid-row:1}
 .svc-list .d{align-self:start}
-.svc-fig{grid-column:4;grid-row:1 / span 2;align-self:center;opacity:0;transition:opacity 1.2s var(--ease)}
+.svc-fig{grid-column:3;grid-row:1 / span 2;align-self:center;opacity:0;transition:opacity 1.2s var(--ease)}
 .svc-fig.ready{opacity:1}
 .svc-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
 :root[data-theme="light"] .svc-fig [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
