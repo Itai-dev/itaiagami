@@ -470,6 +470,13 @@ transition:background var(--dur-fast)}
 @media(max-width:700px){.svc-list > a{grid-template-columns:30px 1fr;grid-template-rows:auto;gap:12px}.svc-fig{grid-column:2;grid-row:3;justify-self:start;width:min(100%,260px);margin:0 0 -12px -4%}.svc-list .go{display:none}}
 
 .svc-open{padding-top:clamp(30px,5vw,60px);max-width:760px}
+/* service pages: the service's Hairline figure beside the opening (js/site.js) */
+.svc-head{display:grid;grid-template-columns:minmax(0,1fr) clamp(260px,32vw,440px);gap:clamp(24px,4vw,56px);align-items:end}
+.svc-head-fig{opacity:0;transition:opacity 1.2s var(--ease);margin-bottom:-12px}
+.svc-head-fig.ready{opacity:1}
+.svc-head-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
+:root[data-theme="light"] .svc-head-fig [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
+@media(max-width:800px){.svc-head{grid-template-columns:1fr;gap:0}.svc-head-fig{width:min(86vw,360px);margin:8px 0 -16px -4%}}
 .svc-open h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-display);line-height:1.1;letter-spacing:-.02em;margin-bottom:22px;text-wrap:balance}
 .svc-open .oneline{font-size:var(--t-lead);line-height:1.5;color:var(--dim);max-width:54ch;text-wrap:pretty}
 /* wider than .c-story: prose is still capped at 58ch by .sb, but the
