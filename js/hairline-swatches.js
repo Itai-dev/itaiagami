@@ -1,8 +1,9 @@
 /**
  * Swatches: a brand's colour fan deck. Eight blades turn on one rivet, each
  * split into chips. Left alone, the deck fans open, holds, and closes again.
- * The pointer opens it and picks the blade nearest its angle, which slides
- * out and takes the bright edge; the others part, staggered outwards. The
+ * The pointer (hover, or a tap) opens it and picks the blade nearest its
+ * angle: the chosen blade stays where it is and takes the bright edge, and the
+ * others are pulled aside, the nearest furthest, staggered outwards. The
  * slider is the stagger, in ms.
  *
  * The pattern: one of many, on a pivot. Tweens, a stagger by distance, and a
@@ -13,7 +14,7 @@ const {
   tdone, tset, tval, tween, reducedMotion, mk, put, reflect, register, disposer, solid,
 } = HL;
 
-const N = 8, L = 118, W = 20, T = 1.6, A0 = -118, A1 = -12, SHUT = -22, OUT = 12;
+const N = 8, L = 118, W = 20, T = 1.6, A0 = -118, A1 = -12, SHUT = -22, OUT = 12, PART = 9;
 const CYCLE = 5.2, OPEN_AT = 0.4, SHUT_AT = 3.4;
 const rad = (d) => (d * Math.PI) / 180;
 /** A ring turned by a degrees about the pivot and pushed out along its own length by o. */
@@ -29,7 +30,7 @@ function mount({ stage, svg, read }, value) {
 
   const C = Cam(45, 0.5, 2.0);
   const ends = [];
-  for (const a of [A0, A1, SHUT, (A0 + A1) / 2]) ends.push([Math.cos(rad(a)) * (L + OUT), Math.sin(rad(a)) * (L + OUT), 0]);
+  for (const a of [A0 - PART, A1 + PART, SHUT, (A0 + A1) / 2]) ends.push([Math.cos(rad(a)) * (L + OUT), Math.sin(rad(a)) * (L + OUT), 0]);
   fit(C, [[-14, -14, -6], [14, 14, -6], ...ends, [0, 0, N * T + 4]], 200, 160);
   const P = proj(C), front = facing(C);
 
@@ -81,8 +82,10 @@ function mount({ stage, svg, read }, value) {
     act = a;
     blades.forEach((b, i) => {
       const delay = Math.abs(i - from) * stag;
-      tset(b.a, a === -2 ? SHUT : fan(i), now, delay);
-      tset(b.o, i === a ? OUT : 0, now, delay);
+      // the chosen blade holds its place; the rest part to either side of it
+      const side = a >= 0 && i !== a ? Math.sign(i - a) * PART * (1 - Math.min(Math.abs(i - a) - 1, 3) * 0.2) : 0;
+      tset(b.a, a === -2 ? SHUT : fan(i) + side, now, delay);
+      tset(b.o, 0, now, delay);
       b.el.sil.classList.toggle("hi", a >= 0 ? i === a : i === N - 1);
     });
     read.textContent = a >= 0 && !auto ? "chip " + (i2n(a)) : "rest";
@@ -113,7 +116,7 @@ const { pointer } = HL;
 
 hairline({
   name: "swatches",
-  means: "A brand's swatch fan: it fans open and shut on its own, and the blade under the pointer slides out.",
+  means: "A brand's swatch fan: it fans open and shut on its own; the pointer picks a blade and the others part around it.",
   rules: [1, 2, 4, 8],
   range: [0, 40, 90],
   mount,
