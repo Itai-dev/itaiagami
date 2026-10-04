@@ -64,9 +64,9 @@ function mount({ stage, svg, read }, value) {
   cel.sil.classList.add("hi");
 
   let filled = 0, sent = false, over = false, t = 0, drawn = "", inFront = true;
-  const zf = spring(FLOAT), drop = tween(0, 1500);
+  const zf = spring(FLOAT), drop = tween(0, 750);
   // the sent loop, in seconds: lines write in from WRITE, one every LINE; the card drops at DROP, rises at RISE, and it all starts again at LOOP
-  const WRITE = 0.5, LINE = 0.4, DROP = 3.1, RISE = 6.2, LOOP = 7.9;
+  const WRITE = 0.25, LINE = 0.2, DROP = 1.55, RISE = 3.1, LOOP = 3.95;
   let loop = 0, dropped = false;
 
   function draw(now) {
