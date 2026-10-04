@@ -46,10 +46,13 @@
 <main>
   <div class="cwrap">
 
-    <div class="svc-open">
-      <p class="crumb" style="font-size:var(--t-meta);color:var(--dim);margin-bottom:clamp(20px,3vw,32px);display:inline-flex;gap:8px;align-items:center"><a href="../services.html">← Services</a> <span aria-hidden="true">·</span> <span>03 / 04</span></p>
-      <h1>Interactive &amp; Immersive Experiences</h1>
-      <p class="oneline">An exhibition is not a website on a wall. It has to work for a visitor who arrives mid-thought, with children pulling at both hands, and decide within seconds whether to stay.</p>
+    <div class="svc-head">
+      <div class="svc-open">
+        <p class="crumb" style="font-size:var(--t-meta);color:var(--dim);margin-bottom:clamp(20px,3vw,32px);display:inline-flex;gap:8px;align-items:center"><a href="../services.html">← Services</a> <span aria-hidden="true">·</span> <span>03 / 04</span></p>
+        <h1>Interactive &amp; Immersive Experiences</h1>
+        <p class="oneline">An exhibition is not a website on a wall. It has to work for a visitor who arrives mid-thought, with children pulling at both hands, and decide within seconds whether to stay.</p>
+      </div>
+      <div class="svc-head-fig" data-hairline-host="gallery" aria-hidden="true"></div>
     </div>
 
     <div class="svc-body">
@@ -140,11 +143,15 @@
         <a href="../contact.html" class="btn solid">Discuss a project <span class="arw" aria-hidden="true">→</span></a>
         <a href="../services.html" class="btn ghost">All services</a>
       </div>
+      <div class="band-fig" data-hairline-host="clay" aria-hidden="true"></div>
     </div>
 
   </div>
 </main>
 
+<script src="../js/vendor/hairline-kernel.js"></script>
 <script src="../js/site.js"></script>
+<script type="module" src="../js/hairline-clay.js"></script>
+<script type="module" src="../js/hairline-gallery.js"></script>
 </body>
 </html>

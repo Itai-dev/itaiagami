@@ -168,6 +168,15 @@ display:flex;align-items:center;justify-content:center;
 .band{border-top:1px solid var(--line);padding-top:clamp(40px,6vw,64px)}
 .band h2{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;max-width:16ch;margin-bottom:clamp(24px,3vw,36px)}
 .band h2 em{font-style:italic}
+/* the closing band's Hairline figure (Clay, js/site.js): right of the copy on
+   wide screens, under the buttons on narrower ones; the copy's layout is untouched */
+.band{position:relative}
+/* centred on the content box (below the band's top padding), so the copy keeps its own layout */
+.band-fig{position:absolute;right:0;top:calc(50% + clamp(20px,3vw,32px));transform:translateY(-50%);width:min(36%,440px);opacity:0;transition:opacity 1.2s var(--ease)}
+.band-fig.ready{opacity:1}
+.band-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
+:root[data-theme="light"] .band-fig [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
+@media(max-width:1100px){.band-fig{position:static;transform:none;width:min(86vw,340px);margin:28px auto -12px}}
 .index-controls{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:clamp(28px,4vw,44px)}
 .filters{display:flex;gap:8px;flex-wrap:wrap}
 .filters button{background:none;border:1px solid var(--line);color:var(--dim);font-family:inherit;font-size:var(--t-meta);letter-spacing:0;padding:7px 14px;border-radius:9999px;cursor:pointer;transition:color var(--dur-fast),border-color var(--dur-fast),background var(--dur-fast)}
@@ -227,6 +236,14 @@ line-height:1.14;letter-spacing:-.02em;max-width:17ch;text-wrap:balance;margin-b
 .c-intro p{max-width:48ch;color:var(--dim);line-height:1.6;margin-bottom:15px}
 .c-intro p.close{color:var(--fg)}
 @media(max-width:900px){.c-layout{grid-template-columns:1fr}}
+/* the contact page's Hairline figure (Tray, js/site.js): under the intro on wide
+   screens; left out on narrow ones so the form stays close to the top */
+.c-fig{width:min(100%,420px);margin:clamp(20px,3vw,36px) 0 0 -3%;opacity:0;transition:opacity 1.2s var(--ease)}
+.c-fig.ready{opacity:1}
+.c-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
+:root[data-theme="light"] .c-fig [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
+.c-fig.in-success{display:block;width:min(100%,320px);margin:-48px 0 clamp(4px,1vw,12px) -3%}
+@media(max-width:900px){.c-fig:not(.in-success){display:none}}
 
 /* ---------- enquiry form ---------- */
 .enquiry{margin-top:clamp(34px,5vw,56px);display:grid;grid-template-columns:1fr 1fr;gap:26px 34px}
@@ -441,6 +458,8 @@ h2,h3{text-wrap:balance}
 .fit-link{display:inline-flex;align-items:center;gap:8px;color:var(--fg);font-weight:500}
 .fit-link .arw{transition:transform var(--dur-fast) var(--ease)}
 .fit-link:hover .arw{transform:translateX(4px)}
+/* the closing band's rule sits midway between this block and the band's heading */
+.fit + .band{margin-top:clamp(40px,6vw,64px)}
 .cap h3 a{transition:opacity var(--dur-fast)}
 .cap h3 a:hover{opacity:.7;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line-strong)}
 .sec-head .count a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
@@ -457,9 +476,27 @@ transition:background var(--dur-fast)}
 .svc-list .d{grid-column:2;color:var(--dim);line-height:1.6;max-width:56ch;margin-top:8px}
 .svc-list .go{font-size:var(--t-meta);color:var(--dim);white-space:nowrap}
 .svc-list > a:hover .go{color:var(--fg)}
-@media(max-width:700px){.svc-list > a{grid-template-columns:30px 1fr;gap:12px}.svc-list .go{display:none}}
+/* a Hairline figure per service (js/site.js): right of the text on wide
+   screens, under it on phones; it fades in on its first frame */
+.svc-list > a{grid-template-columns:52px 1fr clamp(190px,20vw,260px) auto;grid-template-rows:auto 1fr}
+.svc-list .go{grid-column:4;grid-row:1}
+.svc-list .d{align-self:start}
+.svc-fig{grid-column:3;grid-row:1 / span 2;align-self:center;opacity:0;transition:opacity 1.2s var(--ease)}
+.svc-fig.ready{opacity:1}
+.svc-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
+:root[data-theme="light"] .svc-fig [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
+.svc-list > a:hover .svc-fig [data-hairline]{--hairline-plate:var(--faint)}
+@media(max-width:900px){.svc-list > a{grid-template-columns:52px 1fr clamp(160px,30vw,220px)}.svc-list .go{display:none}.svc-fig{grid-column:3}}
+@media(max-width:700px){.svc-list > a{grid-template-columns:30px 1fr;grid-template-rows:auto;gap:12px}.svc-fig{grid-column:2;grid-row:3;justify-self:start;width:min(100%,260px);margin:0 0 -12px -4%}.svc-list .go{display:none}}
 
 .svc-open{padding-top:clamp(30px,5vw,60px);max-width:760px}
+/* service pages: the service's Hairline figure beside the opening (js/site.js) */
+.svc-head{display:grid;grid-template-columns:minmax(0,1fr) clamp(260px,32vw,440px);gap:clamp(24px,4vw,56px);align-items:end}
+.svc-head-fig{opacity:0;transition:opacity 1.2s var(--ease);margin-bottom:-12px}
+.svc-head-fig.ready{opacity:1}
+.svc-head-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
+:root[data-theme="light"] .svc-head-fig [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
+@media(max-width:800px){.svc-head{grid-template-columns:1fr;gap:0}.svc-head-fig{width:min(86vw,360px);margin:8px 0 -16px -4%}}
 .svc-open h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-display);line-height:1.1;letter-spacing:-.02em;margin-bottom:22px;text-wrap:balance}
 .svc-open .oneline{font-size:var(--t-lead);line-height:1.5;color:var(--dim);max-width:54ch;text-wrap:pretty}
 /* wider than .c-story: prose is still capped at 58ch by .sb, but the

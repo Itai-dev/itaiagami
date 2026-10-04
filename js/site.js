@@ -515,16 +515,22 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   b.appendChild(bloom);
 });
 
-/* ---------- Hairline figure, hero (home) ----------
+/* ---------- Hairline figures (home hero, services) ----------
    Hairline engine (@lucasmarkes/hairline, js/vendor/hairline-kernel.js).
-   The figure, js/hairline-cases.js, loads as a module and calls
-   window.hairline() once; this mounts it into the hero layer. It sleeps
-   offscreen and lands at once under reduced motion on its own. */
+   Each figure, js/hairline-<name>.js, loads as a module and calls
+   window.hairline() once; this mounts it into the element marked
+   data-hairline-host="<name>". Figures sleep offscreen and land at once
+   under reduced motion on their own.
+
+   A figure inside a link (the services list) also answers the whole row:
+   moving across the row scrubs the pointer across the figure, leaving the
+   row lets it go. */
 (function(){
-  const host=document.getElementById('heroSystem'), HL=window.HL;
-  if(!host||!HL)return;
+  const HL=window.HL;
+  if(!HL||!document.querySelector('[data-hairline-host]'))return;
   window.hairline=fig=>{
-    if(host.firstChild)return;
+    const host=document.querySelector('[data-hairline-host="'+fig.name+'"]');
+    if(!host||host.firstChild)return;
     HL.inject(document);
     const stage=document.createElement('div');
     stage.setAttribute('data-hairline',fig.name);
@@ -534,6 +540,17 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     const read={get textContent(){return text;},set textContent(v){text=v==null?'':String(v);}};
     fig.mount({stage,svg,read},fig.range[1]);
     requestAnimationFrame(()=>host.classList.add('ready'));
+
+    const row=host.closest('a');
+    if(!row)return;
+    const send=(type,x,y)=>stage.dispatchEvent(new PointerEvent(type,{pointerType:'mouse',pointerId:1,clientX:x,clientY:y}));
+    row.addEventListener('pointermove',e=>{
+      if(e.pointerType!=='mouse'||stage.contains(e.target))return;
+      const r=row.getBoundingClientRect(), s=stage.getBoundingClientRect();
+      const f=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));
+      send('pointermove',s.left+s.width*(.2+.6*f),s.top+s.height*.5);
+    });
+    row.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse')send('pointerleave',0,0); });
   };
 })();
 
@@ -632,6 +649,13 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   const btn=form.querySelector('button[type="submit"]');
   const label=btn.innerHTML;
 
+  /* the contact page's Hairline figure (js/hairline-tray.js) writes one line on its
+     card per filled field, and drops the card into its tray once sent */
+  const PROGRESS=['name','email','org','type','project'];
+  const progress=()=>document.dispatchEvent(new CustomEvent('enquiry:progress',{detail:{
+    filled:PROGRESS.filter(n=>{const el=form.elements[n]; return el&&String(el.value||'').trim()!=='';}).length }}));
+  form.addEventListener('input',progress); form.addEventListener('change',progress);
+
   /* "Start a project" — bring the form into view and put the cursor in it */
   document.querySelectorAll('[data-start-project]').forEach(a=>a.addEventListener('click',e=>{
     e.preventDefault();
@@ -682,8 +706,13 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       +'<p>I’ll get back to you shortly.</p>'
       +(BOOKING?'<div class="f-book"><p>Want to skip the email back-and-forth? Book a 20 min intro call.</p>'
         +'<a class="btn solid" data-booking="after_submission">Book a call <span class="arw" aria-hidden="true">↗</span></a></div>':'')
-      +'<p class="f-note">If it is urgent, '+MAIL+(TEL?' or '+TEL:'')+'.</p>';
+      ;
     form.replaceWith(done);
+    /* bring the Hairline tray into the confirmation, where the reader is looking
+       (on phones it is otherwise hidden), then drop the card into it */
+    const fig=document.querySelector('.c-fig');
+    if(fig){ done.prepend(fig); fig.classList.add('in-success'); }
+    document.dispatchEvent(new CustomEvent('enquiry:sent'));
     wireBooking(done);
     done.focus({preventScroll:true});
     const top=done.getBoundingClientRect().top;
