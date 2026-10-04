@@ -706,8 +706,12 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       +'<p>I’ll get back to you shortly.</p>'
       +(BOOKING?'<div class="f-book"><p>Want to skip the email back-and-forth? Book a 20 min intro call.</p>'
         +'<a class="btn solid" data-booking="after_submission">Book a call <span class="arw" aria-hidden="true">↗</span></a></div>':'')
-      +'<p class="f-note">If it is urgent, '+MAIL+(TEL?' or '+TEL:'')+'.</p>';
+      ;
     form.replaceWith(done);
+    /* bring the Hairline tray into the confirmation, where the reader is looking
+       (on phones it is otherwise hidden), then drop the card into it */
+    const fig=document.querySelector('.c-fig');
+    if(fig){ done.prepend(fig); fig.classList.add('in-success'); }
     document.dispatchEvent(new CustomEvent('enquiry:sent'));
     wireBooking(done);
     done.focus({preventScroll:true});

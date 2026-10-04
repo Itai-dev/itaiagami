@@ -242,7 +242,8 @@ line-height:1.14;letter-spacing:-.02em;max-width:17ch;text-wrap:balance;margin-b
 .c-fig.ready{opacity:1}
 .c-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
 :root[data-theme="light"] .c-fig [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
-@media(max-width:900px){.c-fig{display:none}}
+.c-fig.in-success{display:block;width:min(100%,320px);margin:-48px 0 clamp(4px,1vw,12px) -3%}
+@media(max-width:900px){.c-fig:not(.in-success){display:none}}
 
 /* ---------- enquiry form ---------- */
 .enquiry{margin-top:clamp(34px,5vw,56px);display:grid;grid-template-columns:1fr 1fr;gap:26px 34px}
