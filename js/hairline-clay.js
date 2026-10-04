@@ -15,7 +15,7 @@ const {
   spring, stepS, reducedMotion, flatDot, mk, place, pointer, put, reflect, register, disposer, solid,
 } = HL;
 
-const K = 16, Z0 = 13, H = 74, RMIN = 6, RMAX = 40, SPIN = 40, CYCLE = 3.4;
+const K = 16, Z0 = 13, H = 74, RMIN = 6, RMAX = 40, SPIN = 70, CYCLE = 1.7;
 // forms as radius at t = 0 (foot) .. 1 (lip), sampled at K + 1 rings
 const FORMS = [
   (t) => 15 + 17 * Math.sin(Math.PI * Math.min(1, t / 0.75)) ** 1.4 - 8 * Math.max(0, t - 0.7) / 0.3 + 6 * Math.max(0, t - 0.88) / 0.12, // vase
