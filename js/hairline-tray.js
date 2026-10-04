@@ -3,8 +3,9 @@
  * few. Left alone, the card floats and turns a little above the tray. The
  * page tells it how far the form is filled in (an "enquiry:progress" event):
  * each field filled writes one line on the card. When the enquiry is sent
- * ("enquiry:sent"), the card drops into the tray and the tray takes the
- * bright edge. The pointer lifts the card towards the reader. The slider is
+ * ("enquiry:sent"), the tray takes the bright edge and the moment loops while
+ * it is on screen: the card rises from the tray, its lines write in one by
+ * one, it hovers, and it drops slowly back in. The pointer lifts the card towards the reader. The slider is
  * that lift, in world units.
  *
  * The pattern: one object answering the page and the pointer. Springs for
@@ -63,11 +64,14 @@ function mount({ stage, svg, read }, value) {
   cel.sil.classList.add("hi");
 
   let filled = 0, sent = false, over = false, t = 0, drawn = "", inFront = true;
-  const zf = spring(FLOAT), drop = tween(0);
+  const zf = spring(FLOAT), drop = tween(0, 1500);
+  // the sent loop, in seconds: lines write in from WRITE, one every LINE; the card drops at DROP, rises at RISE, and it all starts again at LOOP
+  const WRITE = 0.5, LINE = 0.4, DROP = 3.1, RISE = 6.2, LOOP = 7.9;
+  let loop = 0, dropped = false;
 
   function draw(now) {
     const d = tval(drop, now), still = reducedMotion();
-    const bob = sent || still ? 0 : 2 * Math.sin(t * 1.3), yaw = sent ? -6 * d + (1 - d) * -8 : -8 + (still ? 0 : 3 * Math.sin(t * 0.7));
+    const bob = still ? 0 : 2 * Math.sin(t * 1.3) * (1 - d), yaw = -8 * (1 - d) - 6 * d + (still ? 0 : 3 * Math.sin(t * 0.7) * (1 - d));
     const z = (1 - d) * (zf.x + bob) + d * 6.2;
     const key = [z, yaw, filled].map((n) => n.toFixed(2)).join(",");
     if (key === drawn) return;
@@ -89,9 +93,17 @@ function mount({ stage, svg, read }, value) {
 
   const B = register(stage, (dt, now) => {
     t += dt;
+    const still = reducedMotion();
+    if (sent && !still) {
+      loop += dt;
+      if (loop < DROP) filled = Math.max(0, Math.min(LINES, Math.floor((loop - WRITE) / LINE) + 1));
+      if (!dropped && loop >= DROP) { dropped = true; tset(drop, 1, now, 0); }
+      if (dropped && loop >= RISE) { dropped = false; tset(drop, 0, now, 0); }
+      if (loop >= LOOP) { loop = 0; filled = 0; }
+    }
     const m = stepS(zf, dt) || !tdone(drop, now);
     draw(now);
-    return m || (!sent && !reducedMotion());
+    return m || !still;
   });
   bag.add(B.unregister);
 
@@ -100,8 +112,9 @@ function mount({ stage, svg, read }, value) {
   bag.on(document, "enquiry:progress", (e) => { filled = Math.max(0, Math.min(LINES, e.detail?.filled | 0)); say(); B.wake(); });
   bag.on(document, "enquiry:sent", () => {
     if (sent) return;
-    sent = true; filled = LINES;
-    tset(drop, 1, performance.now(), 0);
+    sent = true; loop = 0; dropped = false;
+    // under reduced motion: one still frame, the written card in the tray
+    if (reducedMotion()) { filled = LINES; tset(drop, 1, performance.now(), 0); } else filled = 0;
     cel.sil.classList.remove("hi");
     [rimIn, rimNear, wall].forEach((el) => el.classList.add("hi"));
     say(); B.wake();
