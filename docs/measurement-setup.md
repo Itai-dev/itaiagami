@@ -42,13 +42,15 @@ in **GA4 → Admin → DebugView**. Form contents are never logged or sent.
 | `contact_view` | contact section (`#contact`) scrolls into view | `page_path`, `lead_source` |
 | `contact_form_start` | first focus/input in the form, once per page | `form_id`, `page_path` |
 | `contact_form_submit` | **only** after `/api/enquiry` returns ok — the key event | `project_type`, `budget`, `timeline`, `self_reported_source`, `lead_source`, `landing_page`, `pages_viewed_count` |
+| `contact_form_error` | submission not accepted | `error_type` (validation / rate_limit / server / network / timeout), `http_status` |
+| `book_call_click` (+ `book_call_click_from_contact` / `book_call_click_after_submission`) | a "Book a call" link | `booking_context`, `page_path`, `source`, `referrer` (host only), `utm_source`, `utm_medium`, `utm_campaign`, `landing_page` |
 | `external_link_click` | email, LinkedIn, Instagram, Behance, Vimeo, other off-site links | `link_type`, `link_domain`, `link_url`, `link_text`, `link_location` |
 | `portfolio_cta_click` | any link to `contact.html` from another page | `cta_text`, `cta_location`, `page_path` |
 
 Events fired before the visitor chooses are held for that page and sent only if
 they accept. If the server falls back to the visitor's mail app (Resend not
 configured or down), `contact_form_submit` does **not** fire — that is not a
-confirmed submission.
+confirmed submission. See `docs/lead-backup.md` for the full lead flow.
 
 ## What the enquiry email carries
 

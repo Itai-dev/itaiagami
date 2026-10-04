@@ -5,6 +5,9 @@
   "installCommand": null,
   "outputDirectory": null,
   "trailingSlash": false,
+  "functions": {
+    "api/enquiry.js": { "maxDuration": 30 }
+  },
   "redirects": [
     {
       "source": "/:path*",

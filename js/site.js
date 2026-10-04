@@ -355,7 +355,7 @@ const Analytics = (function(){
 
   /* external_link_click and portfolio_cta_click — one delegated listener */
   document.addEventListener('click', e => {
-    const a = e.target.closest && e.target.closest('a[href]'); if(!a) return;
+    const a = e.target.closest && e.target.closest('a[href]'); if(!a || a.hasAttribute('data-booking')) return;
     let url; try{ url = new URL(a.href, location.href); }catch(err){ return; }
     const text = (a.textContent || '').replace(/\s+/g, ' ').replace(/→/g, '').trim().slice(0, 80);
     const where = a.closest('header.site') ? 'header' : a.closest('.mobile-menu') ? 'menu'
@@ -363,16 +363,18 @@ const Analytics = (function(){
 
     if(url.protocol === 'mailto:' || url.protocol === 'tel:'){
       Analytics.track('external_link_click', { link_type: url.protocol === 'mailto:' ? 'email' : 'phone',
-        link_url: url.protocol, link_text:text, link_location:where });
+        link_url: url.protocol, link_text: url.protocol === 'mailto:' ? 'email' : 'phone', link_location:where });
       return;
     }
     if(!/^https?:$/.test(url.protocol)) return;
     if(url.host !== location.host){
       const h = url.hostname.replace(/^www\./, '');
       const type = /linkedin/.test(h) ? 'linkedin' : /instagram/.test(h) ? 'instagram'
-                 : /behance/.test(h) ? 'behance' : /vimeo/.test(h) ? 'vimeo' : 'other';
+                 : /behance/.test(h) ? 'behance' : /vimeo/.test(h) ? 'vimeo'
+                 : /wa\.me|whatsapp/.test(h) ? 'whatsapp' : 'other';
       Analytics.track('external_link_click', { link_type:type, link_domain:h,
-        link_url: url.origin + url.pathname, link_text:text, link_location:where });
+        link_url: type === 'whatsapp' ? url.origin : url.origin + url.pathname,   /* no phone numbers */
+        link_text: type === 'whatsapp' ? 'WhatsApp' : text, link_location:where });
       return;
     }
     if(/\/contact\.html$/.test(url.pathname) && !/\/contact\.html$/.test(path)){
@@ -593,12 +595,66 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
 })();
 
-/* ---------- enquiry form (contact page) ---------- */
+/* ---------- enquiry form + intro-call booking (contact page) ----------
+   The form is the primary path; booking is the quieter second one. Values
+   come from js/contact-config.js. Nothing here depends on analytics consent:
+   every tracking call is wrapped so it can never stop a submission. */
 (function(){
+  const C=window.CONTACT_CONFIG||{};
+  const EMAIL=C.CONTACT_EMAIL||'itaiagami@gmail.com';
+  const PHONE=String(C.PHONE_NUMBER||'').trim();
+  const DIGITS=PHONE.replace(/\D/g,'');
+  const BOOKING=(typeof C.bookingEnabled==='function'&&C.bookingEnabled())?C.BOOKING_URL:'';
+  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const track=(n,p)=>{ try{ Analytics.track(n,p); }catch(e){} };
+  const MAIL='<a href="mailto:'+esc(EMAIL)+'">'+esc(EMAIL)+'</a>';
+  const TEL=DIGITS?'<a href="tel:+'+DIGITS+'">'+esc(PHONE)+'</a>':'';
+
+  /* attribution for analytics — channel and campaign only, no personal data */
+  function attributionParams(){
+    const a=readAttribution()||{};
+    let ref=''; try{ if(a.referrer) ref=new URL(a.referrer).hostname; }catch(e){}
+    return { source:a.source||'', referrer:ref, utm_source:a.utm_source||'', utm_medium:a.utm_medium||'',
+             utm_campaign:a.utm_campaign||'', landing_page:(a.landing_page||'').split('?')[0] };
+  }
+
+  /* booking links stay hidden until a real BOOKING_URL is configured */
+  function wireBooking(root){
+    root.querySelectorAll('[data-booking]').forEach(a=>{
+      if(!BOOKING){ a.hidden=true; return; }
+      a.href=BOOKING; a.target='_blank'; a.rel='noopener'; a.hidden=false;
+    });
+  }
+  wireBooking(document);
+  document.addEventListener('click',e=>{
+    const a=e.target.closest&&e.target.closest('[data-booking]'); if(!a||!BOOKING)return;
+    const ctx=a.dataset.booking==='after_submission'?'after_submission':'contact';
+    const p=Object.assign({ page_path:location.pathname, booking_context:ctx },attributionParams());
+    track('book_call_click',p);
+    track(ctx==='contact'?'book_call_click_from_contact':'book_call_click_after_submission',p);
+  });
+
+  /* optional direct line — only when a phone number is configured */
+  const direct=document.getElementById('directContact');
+  if(direct&&DIGITS){
+    direct.innerHTML='Prefer to talk directly? Call or WhatsApp me — '+TEL
+      +' · <a href="https://wa.me/'+DIGITS+'" target="_blank" rel="noopener">WhatsApp</a>';
+    direct.hidden=false;
+  }
+
   const form=document.getElementById('enquiryForm'); if(!form)return;
   const status=document.getElementById('formStatus');
   const btn=form.querySelector('button[type="submit"]');
-  const MAIL='<a href="mailto:itaiagami@gmail.com">itaiagami@gmail.com</a>';
+  const label=btn.innerHTML;
+
+  /* "Start a project" — bring the form into view and put the cursor in it */
+  document.querySelectorAll('[data-start-project]').forEach(a=>a.addEventListener('click',e=>{
+    e.preventDefault();
+    const smooth=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+    form.scrollIntoView({behavior:smooth?'smooth':'auto',block:'start'});
+    const first=form.querySelector('input:not([type=hidden]):not([tabindex="-1"])');
+    if(first) setTimeout(()=>first.focus({preventScroll:true}),smooth?450:0);
+  }));
 
   /* carry the visit's origin into the enquiry — see first-touch attribution above.
      Run again on submit so the page list includes everything seen up to then. */
@@ -611,8 +667,8 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   }
   fillAttribution();
 
-  /* Composes the finished enquiry as an email the visitor sends themselves.
-     Used when the server cannot send — nothing they typed is ever lost. */
+  /* The finished enquiry as an email the visitor sends themselves — offered
+     whenever the server could not take it, so nothing they typed is lost. */
   function mailtoHref(d){
     const body=[
       'Name: '+(d.name||''),
@@ -628,53 +684,80 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       'Pages viewed: '+(d.pages_viewed||'—'),
       'UTM campaign: '+(d.utm_campaign||'none')
     ].join('\n');
-    return 'mailto:itaiagami@gmail.com'
-      +'?subject='+encodeURIComponent('Project enquiry — '+(d.name||''))
+    return 'mailto:'+EMAIL
+      +'?subject='+encodeURIComponent('New enquiry - '+(d.name||'')+(d.type?' - '+d.type:''))
       +'&body='+encodeURIComponent(body);
   }
-  function handoff(d){
-    const actions=form.querySelector('.f-actions');
-    actions.innerHTML='<a class="btn solid" href="'+mailtoHref(d)+'">'
-      +'Send from your email app <span class="arw" aria-hidden="true">→</span></a>'
-      +'<p class="f-status">Your answers are ready and addressed — this opens them '
-      +'in your mail app so you can hit send.</p>';
+
+  /* Only reached after the server confirmed it holds the enquiry. */
+  function showSuccess(){
+    const done=document.createElement('div');
+    done.className='f-success'; done.tabIndex=-1;
+    done.innerHTML='<h2>Thanks, I got it.</h2>'
+      +'<p>I’ll get back to you shortly.</p>'
+      +(BOOKING?'<div class="f-book"><p>Want to skip the email back-and-forth? Book a 20 min intro call.</p>'
+        +'<a class="btn solid" data-booking="after_submission">Book a call <span class="arw" aria-hidden="true">↗</span></a></div>':'')
+      +'<p class="f-note">If it is urgent, '+MAIL+(TEL?' or '+TEL:'')+'.</p>';
+    form.replaceWith(done);
+    wireBooking(done);
+    done.focus({preventScroll:true});
+    const top=done.getBoundingClientRect().top;
+    if(top<80||top>innerHeight*.6) done.scrollIntoView({block:'center'});
   }
 
+  /* kind: validation | rate_limit | server | network | timeout */
+  function showError(kind,msg,data,code){
+    status.className='f-status err';
+    if(kind==='validation'||kind==='rate_limit'){
+      status.innerHTML=esc(msg)+(kind==='rate_limit'?' Or email me directly at '+MAIL+'.'
+        :' If it keeps failing, email me directly at '+MAIL+'.');
+      btn.innerHTML=label;
+    }else{
+      status.innerHTML='Something went wrong — your message has not been sent yet. '
+        +'Try again, or <a href="'+mailtoHref(data)+'">send it from your email app</a>. '
+        +'You can also email me directly at '+MAIL+(TEL?', or call / WhatsApp '+TEL:'')+'.';
+      btn.innerHTML='Try again <span class="arw" aria-hidden="true">→</span>';
+    }
+    btn.disabled=false;
+    track('contact_form_error',{ form_id:'enquiry', error_type:kind, http_status:code||0, page_path:location.pathname });
+  }
+
+  let sending=false;
   form.addEventListener('submit',async e=>{
     e.preventDefault();
+    if(sending)return;
     if(!form.reportValidity())return;                       /* native messages, our styling */
     fillAttribution();
     const data=Object.fromEntries(new FormData(form).entries());
-    const label=btn.innerHTML;
-    btn.disabled=true; btn.textContent='Sending…';
+    sending=true; btn.disabled=true; btn.textContent='Sending…'; form.setAttribute('aria-busy','true');
     status.className='f-status'; status.textContent='';
-    let j={};
+
+    const ctl=new AbortController();
+    const timer=setTimeout(()=>ctl.abort(),25000);          /* never leave them on "Sending…" */
+    let r, j={};
     try{
-      const r=await fetch('/api/enquiry',{
-        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)
-      });
+      r=await fetch('/api/enquiry',{ method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(data), signal:ctl.signal });
       j=await r.json().catch(()=>({}));
-      if(r.ok&&j.ok){
-        /* the main conversion — attribution and form choices only, never what they typed */
-        Analytics.track('contact_form_submit',{
-          form_id:'enquiry', project_type:data.type||'', budget:data.budget||'', timeline:data.timeline||'',
-          self_reported_source:data.source||'', lead_source:data.lead_source||'',
-          landing_page:(data.landing_page||'').split('?')[0],
-          pages_viewed_count:readPagePath().length
-        });
-        form.innerHTML='<p class="f-done">Thank you — this is with me now. '
-          +'I read every enquiry myself and will come back to you within two working days.<br><br>'
-          +'If it is urgent, '+MAIL+'.</p>';
-        return;
-      }
-      if(j.fallback||r.status>=500){ handoff(data); return; }
-      throw new Error(j.error||'Something went wrong.');
     }catch(err){
-      if(!j||!j.error){ handoff(data); return; }            /* offline or blocked — still no dead end */
-      status.className='f-status err';
-      status.textContent=err.message+' You can also email itaiagami@gmail.com directly.';
-      btn.disabled=false; btn.innerHTML=label;
+      r=null;
+    }finally{
+      clearTimeout(timer); sending=false; form.removeAttribute('aria-busy');
     }
+
+    if(!r) return showError(ctl.signal.aborted?'timeout':'network','',data,0);
+    if(r.ok&&j.ok===true){
+      /* the main conversion — form choices and attribution only, never what they typed */
+      track('contact_form_submit',Object.assign({
+        form_id:'enquiry', project_type:data.type||'', budget:data.budget||'', timeline:data.timeline||'',
+        self_reported_source:data.source||'', pages_viewed_count:readPagePath().length
+      },attributionParams(),{ lead_source:data.lead_source||'' }));
+      showSuccess();
+      return;
+    }
+    if(r.status===429) return showError('rate_limit',j.error||'Too many messages just now — please try again shortly.',data,429);
+    if(r.status>=400&&r.status<500&&j.error&&!j.fallback) return showError('validation',j.error,data,r.status);
+    showError('server','',data,r.status);
   });
 })();
 
