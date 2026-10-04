@@ -74,15 +74,19 @@
 
       <!-- 1 — the invitation -->
       <div class="c-intro">
-        <h1>Have a brand, launch or experience <em>to shape</em>?</h1>
-        <p>I work with technology companies, media organisations, cultural institutions and ambitious products on brand systems, product launches, campaigns and interactive experiences - developing the concept, contributing to an existing direction, or combining hands-on design and 3D with creative direction through production.</p>
-        <p class="close">Tell me what you are making, what stage it is in and where you need help - direction, hands-on design, or both. I’ll reply personally.</p>
+        <h1>Have a project <em>in mind</em>?</h1>
+        <p class="c-paths">Tell me about the project, or if you prefer, book a quick intro call directly.</p>
+        <div class="c-ctas">
+          <a href="#enquiryForm" class="btn solid" data-start-project>Start a project <span class="arw" aria-hidden="true">→</span></a>
+          <!-- Shown only once BOOKING_URL is set in js/contact-config.js -->
+          <a class="c-book" data-booking="contact" target="_blank" rel="noopener" hidden>Book a 20 min intro call <span class="arw" aria-hidden="true">↗</span></a>
+        </div>
         <p class="c-qual">Most independent engagements begin at <strong data-floor>₪30,000</strong>. Larger multidisciplinary productions are scoped with a custom team. If you are not sure where your project sits, say what you know — <a href="services.html">the services pages</a> and the <a href="services.html#faq">common questions</a> cover the usual cases.</p>
       </div>
 
       <!-- 2 — the form -->
       <div class="c-form">
-        <form class="enquiry" id="enquiryForm" novalidate>
+        <form class="enquiry" id="enquiryForm" action="/api/enquiry" method="post" novalidate>
           <div class="fld f-full">
             <label for="f-name">Your name</label>
             <input id="f-name" name="name" type="text" autocomplete="name" maxlength="120" required />
@@ -175,6 +179,8 @@
             <p class="f-status" id="formStatus" role="status" aria-live="polite"></p>
           </div>
         </form>
+        <!-- Rendered by js/site.js only when PHONE_NUMBER is set in js/contact-config.js -->
+        <p class="c-direct" id="directContact" hidden></p>
       </div>
 
     </div>
@@ -198,6 +204,7 @@
   </div>
 </footer>
 
+<script src="js/contact-config.js"></script>
 <script src="js/site.js"></script>
 </body>
 </html>
