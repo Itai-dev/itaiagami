@@ -100,9 +100,10 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .hero h1 em{font-style:italic}
 .hero .sub{margin-top:clamp(22px,3vw,34px);max-width:52ch;font-size:var(--t-lead);line-height:1.45;font-family:"Inter",system-ui,sans-serif;font-weight:400;color:var(--dim)}
 
-/* ---------- hero orb layer ----------
-   Sits behind the hero copy, never captures clicks, fades in on first frame.
-   A large thinking orb (libraries.dev), drawn by js/site.js. */
+/* ---------- hero figure layer ----------
+   Sits behind the hero copy, fades in on first frame. A Hairline line
+   figure (Layers), mounted by js/site.js; only the figure takes the pointer.
+   Its palette follows the site theme; the plate is the page ground. */
 .hero > *{position:relative;z-index:1}
 .hero-system{
 position:absolute;top:-2%;right:calc(var(--pad-x) * -0.5);bottom:-6%;left:auto;
@@ -112,7 +113,9 @@ transition:opacity 1.6s var(--ease);
 display:flex;align-items:center;justify-content:center;
 }
 .hero-system.ready{opacity:1}
-.hero-system canvas{display:block;pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hero-system [data-hairline]{width:100%;max-width:560px;pointer-events:auto;-webkit-tap-highlight-color:transparent;
+--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
+:root[data-theme="light"] .hero-system [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
 .hero .cta{margin-top:clamp(32px,4vw,48px);display:flex;gap:14px;flex-wrap:wrap}
 .reveal-line{overflow:hidden}
 .reveal-line > *{display:block;transform:translateY(105%);opacity:0;transition:transform 1s var(--ease),opacity 1s var(--ease)}
@@ -361,14 +364,14 @@ nav.primary{display:none}
 .hoverimg{display:none}
 }
 @media(max-width:900px){
-.hero-system{position:relative;top:auto;right:auto;bottom:auto;width:100%;height:clamp(104px,29vw,146px);justify-content:flex-start;margin:-30px 0 12px -3%;overflow:visible}
+.hero-system{position:relative;top:auto;right:auto;bottom:auto;width:100%;justify-content:flex-start;margin:-44px 0 -6px -7%}
+.hero-system [data-hairline]{max-width:min(78vw,320px)}
 }
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}
 *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
 .reveal-line > *,.fade,.obs{transform:none!important;opacity:1!important}
 .hoverimg{display:none!important}
-.hero-system{display:none!important}
 }
 
 

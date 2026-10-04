@@ -9,3 +9,5 @@ server.ps1
 *.md
 
 /docs
+.claude
+skills-lock.json

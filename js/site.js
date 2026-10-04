@@ -515,54 +515,26 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   b.appendChild(bloom);
 });
 
-/* ---------- thinking orb, hero (home) ----------
-   thinking-orbs engine (MIT, Jakub Antalik — https://libraries.dev/orbs).
-   Cycles through the nine states every few seconds with a crossfade;
-   a tap or click jumps to the next one. Uses the 64px tunings, drawn at
-   the size of the hero layer. */
+/* ---------- Hairline figure, hero (home) ----------
+   Hairline engine (@lucasmarkes/hairline, js/vendor/hairline-kernel.js).
+   The figure, js/hairline-layers.js, loads as a module and calls
+   window.hairline() once; this mounts it into the hero layer. It sleeps
+   offscreen and lands at once under reduced motion on its own. */
 (function(){
-  const host=document.getElementById('heroSystem'), O=window.ThinkingOrbs;
-  if(!host||!O)return;
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-  const STATES=['connecting','searching','weaving','working','shaping','composing','solving','listening','breathing'];
-  const HOLD=4200, FADE=900;
-  const c=document.createElement('canvas'); host.appendChild(c);
-  const ctx=c.getContext('2d'); if(!ctx)return;
-  const make=st=>{const r=O.resolvePreset(st,64); return {fn:O.MODE_FRAMES[r.mode],speed:r.speed,opts:r.opts};};
-  let idx=0, cur=make(STATES[0]), prev=null, switchedAt=performance.now();
-  let size=0,dpr=1;
-  const fit=()=>{
-    const r=host.getBoundingClientRect();
-    size=Math.round(Math.min(r.width,r.height)*(r.width>r.height*1.6?1.2:.9)); // short mobile strip: the orb spans ~80% of the canvas, so overdraw dpr=Math.min(2,devicePixelRatio||1);
-    c.width=c.height=Math.round(size*dpr); c.style.width=c.style.height=size+'px';
+  const host=document.getElementById('heroSystem'), HL=window.HL;
+  if(!host||!HL)return;
+  window.hairline=fig=>{
+    if(host.firstChild)return;
+    HL.inject(document);
+    const stage=document.createElement('div');
+    stage.setAttribute('data-hairline',fig.name);
+    host.appendChild(stage);
+    const svg=HL.mk('svg',{viewBox:'0 0 400 320','aria-hidden':'true'},stage);
+    let text='';
+    const read={get textContent(){return text;},set textContent(v){text=v==null?'':String(v);}};
+    fig.mount({stage,svg,read},fig.range[1]);
+    requestAnimationFrame(()=>host.classList.add('ready'));
   };
-  const next=()=>{prev=cur; idx=(idx+1)%STATES.length; cur=make(STATES[idx]); switchedAt=performance.now();};
-  const layer=(o,t,alpha,scale,dark)=>{
-    if(alpha<=0)return;
-    const h=size/2;
-    ctx.setTransform(dpr*scale,0,0,dpr*scale,dpr*h*(1-scale),dpr*h*(1-scale));
-    ctx.globalAlpha=alpha;
-    O.paintFrame(ctx,o.fn(size,t*o.speed,o.opts),dark);
-  };
-  const draw=now=>{
-    if(!size)return;
-    if(now-switchedAt>HOLD+FADE)next();
-    const k=Math.min(1,(now-switchedAt)/FADE), e=k*k*(3-2*k), t=now/1000;
-    const dark=document.documentElement.getAttribute('data-theme')!=='light';
-    ctx.setTransform(1,0,0,1,0,0); ctx.globalAlpha=1; ctx.clearRect(0,0,c.width,c.height);
-    if(prev&&k<1)layer(prev,t,1-e,1-.08*e,dark);
-    layer(cur,t,prev?e:1,prev?.92+.08*e:1,dark);
-    if(k>=1)prev=null;
-  };
-  c.addEventListener('click',next);
-  fit(); new ResizeObserver(fit).observe(host);
-  let raf=0,run=false,seen=false;
-  const loop=now=>{draw(now); if(run)raf=requestAnimationFrame(loop);};
-  const start=()=>{if(!run&&seen&&!document.hidden){run=true;switchedAt=performance.now()-(prev?0:FADE);raf=requestAnimationFrame(loop);}};
-  const stop=()=>{run=false;cancelAnimationFrame(raf);};
-  new IntersectionObserver(([e])=>{seen=e.isIntersecting;seen?start():stop();}).observe(host);
-  document.addEventListener('visibilitychange',()=>document.hidden?stop():start());
-  requestAnimationFrame(()=>host.classList.add('ready'));
 })();
 
 /* ---------- hero reveal (home) ---------- */
