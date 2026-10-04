@@ -6,17 +6,21 @@
  * is punched on its tab in a 4 × 2 grid, and goes to the read-out when the
  * card is pulled. The slider is the stagger, in ms.
  *
+ * Left alone, it riffles through the cards by itself, back to front and back.
+ *
  * The pattern: discrete items. Tweens, a stagger by distance, identity carried
  * by geometry, and a hit test on static bands along the resting top edges, so
  * a card moving out from under the pointer cannot flip the choice.
  */
 const {
   Cam, clamp, facing, fillet, fit, hull, open, poly, proj, rad, ringAt, rrect, run, seg,
-  tdone, tset, tval, tween, disposer, mk, place, pointer, reflect, register,
+  tdone, tset, tval, tween, disposer, mk, place, pointer, reflect, register, reducedMotion,
 } = HL;
 
 const N = 7, W = 84, H = 54, G = 13, TW = 22, TH = 7, TABS = [6, 31, 56], TK = 1.4;
 const REST = -12, BACK = -24, FWD = 20, LIFT = 16;
+// the idle riffle: one card every HOLD seconds, back to front and back again; it waits AWAY seconds after the pointer leaves
+const HOLD = 1.1, AWAY = 1.6;
 const X0 = -5, X1 = W + 5, Y0 = -9, Y1 = (N - 1) * G + 9, WH = 20, WR = 6, WT = 2.4;
 
 /** A run of points ordered left to right on screen. */
@@ -123,17 +127,27 @@ function mount({ stage, svg, read }, value) {
     cd.punch.forEach((el, k) => place(el, q.punch[k]));
   }
 
-  const B = register(stage, (_dt, now) => {
+  let over = false, idle = 0, step = -1, dir = 1;
+  const B = register(stage, (dt, now) => {
     let moving = false;
     cards.forEach((cd, i) => { draw(i, tval(cd.a, now), tval(cd.z, now)); if (!tdone(cd.a, now) || !tdone(cd.z, now)) moving = true; });
-    return moving;
+    // ambient: with nobody pointing, riffle through the cards on its own, only while visible
+    if (over || reducedMotion()) return moving;
+    idle += dt;
+    if (idle >= HOLD) {
+      idle = 0;
+      if (step + dir < 0 || step + dir >= N) dir = -dir;
+      step += dir;
+      setActive(step, true);
+    }
+    return true;
   });
   bag.add(B.unregister);
 
   let act = -1;
   const caption = (a) => (a < 0 ? "rest" : String(N - a).padStart(2, "0"));
   /** Pulls card a (-1 puts them all back). The stagger spreads out from the card pulled, or the one let go. */
-  function setActive(a) {
+  function setActive(a, auto = false) {
     if (a === act) return;
     const now = performance.now(), from = a >= 0 ? a : act;
     act = a;
@@ -143,11 +157,14 @@ function mount({ stage, svg, read }, value) {
       tset(cd.a, th, now, delay); tset(cd.z, a === i ? LIFT : 0, now, delay);
       cd.face.classList.toggle("hi", i === a); cd.head.classList.toggle("hi", i === a); cd.punch[cd.n - 1].classList.toggle("m", i !== a);
     });
-    read.textContent = caption(a);
+    read.textContent = auto ? "rest" : caption(a);
     B.wake();
   }
 
-  bag.add(pointer(stage, { move: (p) => setActive(hit(p)), leave: () => setActive(-1) }));
+  bag.add(pointer(stage, {
+    move: (p) => { over = true; setActive(hit(p)); },
+    leave: () => { over = false; idle = -AWAY; step = act; setActive(-1); },
+  }));
   bag.add(() => svg.replaceChildren());
 
   return {
