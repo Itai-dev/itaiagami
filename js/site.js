@@ -7,7 +7,7 @@
    and even then load only after the visitor accepts analytics.
    See docs/measurement-setup.md for the full setup checklist. */
 const GA_MEASUREMENT_ID   = 'G-NTJQ076FLS';   /* GA4 → Admin → Data streams → Web → Measurement ID */
-const CLARITY_PROJECT_ID  = 'XXXXXXXXXX';     /* Clarity → Settings → Overview → Project ID */
+const CLARITY_PROJECT_ID  = 'ysfwugh67l';     /* Clarity → Settings → Overview → Project ID */
 /* true logs every analytics event to the console. Also switchable per browser
    without a deploy: add ?analytics_debug=1 to any URL (?analytics_debug=0 turns it off). */
 const ANALYTICS_DEBUG     = false;
