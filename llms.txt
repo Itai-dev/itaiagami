@@ -1,10 +1,10 @@
 # Itai Agami
 
-> Itai Agami is an independent Creative Director based in Tel Aviv, Israel, working with brands and teams internationally (remotely, and on site where needed; English and Hebrew). He leads creative direction for companies launching or changing something — positioning, the central creative idea, brand identity, launch campaigns, websites and digital experiences, motion, film, 3D, AI-assisted production and interactive experiences — and brings in the specialists each project needs while remaining the senior creative lead. Independent engagements typically begin at ₪30,000 in Israel, $10,000 in the US and Canada, €10,000 in Europe and £8,000 in the UK.
+> Itai Agami is an independent Creative Director based in Tel Aviv, Israel, working with brands and teams internationally (remotely, and on site where needed; English and Hebrew). He leads creative direction for companies launching or changing something, covering positioning, the central creative idea, brand identity, launch campaigns, websites and digital experiences, motion, film, 3D, AI-assisted production and interactive experiences, and brings in the specialists each project needs while remaining the senior creative lead. Independent engagements typically begin at ₪30,000 in Israel, $10,000 in the US and Canada, €10,000 in Europe and £8,000 in the UK.
 
 ## Who hires him
 
-Founders, CMOs, heads of brand and marketing, and product leaders — at startups, technology companies, consumer brands, media organisations and cultural institutions — when they are launching a product, app, service, brand, campaign or development, entering a new market, or need ongoing creative leadership without a full-time Creative Director.
+Founders, CMOs, heads of brand and marketing, and product leaders at startups, technology companies, consumer brands, media organisations and cultural institutions, when they are launching a product, app, service, brand, campaign or development, entering a new market, or need ongoing creative leadership without a full-time Creative Director.
 
 ## Background
 
@@ -15,9 +15,9 @@ Clients usually arrive with a launch or a business problem rather than a design 
 ## Services
 
 - [Brand Strategy & Identity Systems](https://itaiagami.com/services/brand-strategy-identity-systems.html): positioning, the central idea, visual language and brand systems.
-- [Creative Direction for Product & Brand Launches](https://itaiagami.com/services/creative-direction-product-launches.html): product, app and brand launches — the idea a launch rests on, carried through identity, campaign, film, website and production.
+- [Creative Direction for Product & Brand Launches](https://itaiagami.com/services/creative-direction-product-launches.html): product, app and brand launches: the idea a launch rests on, carried through identity, campaign, film, website and production.
 - [Interactive & Immersive Experiences](https://itaiagami.com/services/interactive-immersive-experiences.html): interactive installations, museum exhibitions, projection mapping and branded digital experiences.
-- [Fractional Creative Direction & Creative Systems](https://itaiagami.com/services/fractional-creative-direction.html): a fractional creative director — ongoing creative leadership and creative systems (including AI-assisted workflows) for teams without a Creative Director.
+- [Fractional Creative Direction & Creative Systems](https://itaiagami.com/services/fractional-creative-direction.html): a fractional creative director offering ongoing creative leadership and creative systems (including AI-assisted workflows) for teams without a Creative Director.
 - [Services overview and FAQ](https://itaiagami.com/services.html)
 
 ## Selected work
@@ -26,7 +26,7 @@ Clients usually arrive with a launch or a business problem rather than a design 
 - [Museum of Natural History](https://itaiagami.com/work/museum-of-natural-history.html): art direction and experience design; led the multidisciplinary team from concept to installed exhibit.
 - [Partner TV](https://itaiagami.com/work/partner-tv.html): art direction of a channel-ID system across three channels, with Studio Adam Fineberg.
 - [SkyMax](https://itaiagami.com/work/sky-max.html): art direction and concept art for a national commercial for MAX.
-- [Simply — Vision Pro](https://itaiagami.com/work/simply-vision-pro.html): creative direction and 3D for the launch visualization of Simply Piano on Apple Vision Pro (the visualization, not the wider product launch).
+- [Simply Vision Pro](https://itaiagami.com/work/simply-vision-pro.html): creative direction and 3D for the launch visualization of Simply Piano on Apple Vision Pro (the visualization, not the wider product launch).
 - [Tower of David](https://itaiagami.com/work/tower-of-david.html): art direction and illustration language for interactive exhibitions in Jerusalem.
 - [Mako 12+](https://itaiagami.com/work/mako-12.html): the campaign that launched the 12+ streaming service.
 - [Natural Intelligence](https://itaiagami.com/work/natural-intelligence.html): in-house Creative Art Director, 2025–2026; creative systems and an AI-assisted adaptation workflow.
