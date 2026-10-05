@@ -45,6 +45,7 @@ const ANALYTICS_DEBUG     = false;
   +'<a href="../contact.html">Contact</a>'
   +'<button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>'
   +'</nav>'
+  +'<a class="btn solid nav-cta" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>'
   +'<button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>'
   +'</div></header>'
   +'<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">'
@@ -464,7 +465,9 @@ const MARKETS = {
     .catch(()=>{});                                  /* offline or blocked — the ₪ default stands */
 })();
 
-/* ---------- theme (dark default, light optional, persisted) ---------- */
+/* ---------- theme (paper default, dark optional, persisted) ----------
+   Pages ship <html data-theme="light"> so the paper ground paints first;
+   a saved 'dark' choice removes it. */
 (function(){
   const root=document.documentElement;
   let saved=null; try{saved=localStorage.getItem('theme')}catch(e){}
@@ -472,7 +475,7 @@ const MARKETS = {
     if(t==='light')root.setAttribute('data-theme','light');else root.removeAttribute('data-theme');
     document.querySelectorAll('.tlm').forEach(el=>el.textContent=(t==='light')?'Dark':'Light');
   }
-  apply(saved==='light'?'light':'dark');
+  apply(saved==='dark'?'dark':'light');
   function toggle(){
     const next=root.getAttribute('data-theme')==='light'?'dark':'light';
     apply(next); try{localStorage.setItem('theme',next)}catch(e){}
@@ -660,9 +663,29 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     filled:PROGRESS.filter(n=>{const el=form.elements[n]; return el&&String(el.value||'').trim()!=='';}).length }}));
   form.addEventListener('input',progress); form.addEventListener('change',progress);
 
+  /* contact tabs: "Book a call" (default) and "Send a brief" (the form) */
+  const tabs=[...document.querySelectorAll('.c-tabs [role="tab"]')];
+  function selectTab(id,focus){
+    tabs.forEach(t=>{
+      const on=t.id===id;
+      t.setAttribute('aria-selected',on); t.tabIndex=on?0:-1;
+      const panel=document.getElementById(t.getAttribute('aria-controls')); if(panel) panel.hidden=!on;
+      if(on&&focus) t.focus();
+    });
+  }
+  tabs.forEach((t,i)=>{
+    t.addEventListener('click',()=>selectTab(t.id));
+    t.addEventListener('keydown',e=>{
+      if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft') return;
+      const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length]; selectTab(n.id,true);
+    });
+  });
+  /* arriving with #brief (e.g. "Send a brief" links) opens the form */
+  if(tabs.length&&(location.hash==='#brief'||location.hash==='#enquiryForm')) selectTab('tab-brief');
+
   /* "Start a project" — bring the form into view and put the cursor in it */
   document.querySelectorAll('[data-start-project]').forEach(a=>a.addEventListener('click',e=>{
-    e.preventDefault();
+    e.preventDefault(); if(tabs.length) selectTab('tab-brief');
     const smooth=!matchMedia('(prefers-reduced-motion: reduce)').matches;
     form.scrollIntoView({behavior:smooth?'smooth':'auto',block:'start'});
     const first=form.querySelector('input:not([type=hidden]):not([tabindex="-1"])');
@@ -981,4 +1004,35 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   };
   addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(sweep);}},{passive:true});
   addEventListener('load',sweep);
+})();
+
+/* ---------- scrubbed statement ----------
+   [data-scrub] paragraphs light up word by word as they cross the viewport.
+   Plain text only; skipped entirely for reduced motion. */
+(function(){
+  const els=[...document.querySelectorAll('[data-scrub]')];
+  if(!els.length||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const words=[];
+  els.forEach(el=>{
+    const parts=el.textContent.trim().split(/\s+/);
+    el.setAttribute('aria-label',el.textContent.trim());
+    el.innerHTML=parts.map(w=>'<span class="sw" aria-hidden="true">'+w.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</span>').join(' ');
+    el.classList.add('scrubbing');
+    words.push([...el.querySelectorAll('.sw')]);
+  });
+  let ticking=false;
+  function paint(){
+    ticking=false;
+    const vh=innerHeight;
+    els.forEach((el,i)=>{
+      const r=el.getBoundingClientRect();
+      /* 0 when the block's top reaches 85% of the viewport, 1 when its bottom reaches 45% */
+      const p=Math.min(1,Math.max(0,(vh*.85-r.top)/((vh*.85-vh*.45)+r.height)));
+      const lit=Math.round(p*words[i].length);
+      words[i].forEach((w,j)=>w.classList.toggle('lit',j<lit));
+    });
+  }
+  addEventListener('scroll',()=>{ if(!ticking){ticking=true;requestAnimationFrame(paint);} },{passive:true});
+  addEventListener('resize',paint);
+  paint();
 })();
