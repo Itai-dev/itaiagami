@@ -1179,13 +1179,14 @@ nav.primary a{color:var(--fg)}
 
 /* hero: narrow lead column left, headline right */
 @media(min-width:901px){
-  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.15fr);grid-template-rows:auto auto 1fr;
-    grid-template-areas:"lead title" "cta title" "fig title";column-gap:clamp(32px,4vw,64px);align-content:center}
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.15fr);grid-template-rows:auto 1fr auto;
+    grid-template-areas:"lead title" "cta title" ". fig";column-gap:clamp(32px,4vw,64px);align-content:center}
   .hero h1{grid-area:title;align-self:start;margin:0}
   .hero .sub{grid-area:lead;margin-top:.5em;max-width:34ch;color:var(--fg);font-weight:500;font-size:clamp(1.0625rem,1.35vw,1.25rem);line-height:1.38;letter-spacing:-.01em}
-  .hero .cta{grid-area:cta;margin-top:26px;flex-direction:column;align-items:flex-start;gap:10px}
-  .hero-system{grid-area:fig;position:relative;inset:auto;width:100%;max-width:360px;margin-top:clamp(28px,4vh,56px);align-self:end;justify-content:flex-start}
-  .hero-system [data-hairline]{max-width:360px}
+  .hero .cta{grid-area:cta;align-self:start;margin-top:26px;flex-direction:column;align-items:flex-start;gap:10px}
+  /* the drawing's frame keeps headroom for lifted pieces; pull it up under the headline */
+  .hero-system{grid-area:fig;position:relative;inset:auto;width:100%;max-width:580px;margin-top:clamp(-150px,-9vw,-60px);margin-bottom:clamp(-40px,-2vw,-16px);align-self:start;justify-self:end;justify-content:flex-end}
+  .hero-system [data-hairline]{max-width:580px}
 }
 
 .hero .sub{color:var(--fg)}
