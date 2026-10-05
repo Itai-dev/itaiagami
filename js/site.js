@@ -61,7 +61,7 @@ const ANALYTICS_DEBUG     = false;
   +'</div><div class="base">'
   +'<span>© 2026 Itai Agami. All rights reserved.</span>'
   +'<span class="legal"><a href="../privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span>'
-  +'<span>Creative Director &amp; Designer</span>'
+  +'<span>Independent Creative Director</span>'
   +'</div></div></footer>';
   document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
@@ -630,10 +630,11 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   wireBooking(document);
   document.addEventListener('click',e=>{
     const a=e.target.closest&&e.target.closest('[data-booking]'); if(!a||!BOOKING)return;
-    const ctx=a.dataset.booking==='after_submission'?'after_submission':'contact';
+    /* context = where the link sits: contact, after_submission, or the page's own label (home, services…) */
+    const ctx=a.dataset.booking||'contact';
     const p=Object.assign({ page_path:location.pathname, booking_context:ctx },attributionParams());
     track('book_call_click',p);
-    track(ctx==='contact'?'book_call_click_from_contact':'book_call_click_after_submission',p);
+    if(ctx==='contact'||ctx==='after_submission') track(ctx==='contact'?'book_call_click_from_contact':'book_call_click_after_submission',p);
   });
 
   /* optional direct line — only when a phone number is configured */

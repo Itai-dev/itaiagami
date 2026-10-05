@@ -394,8 +394,8 @@ nav.primary{display:none}
 .hero .cta .btn{flex:1 1 auto;padding-left:14px;padding-right:14px}
 }
 @media(max-width:420px){
-.hero .cta{flex-wrap:nowrap;gap:8px}
-.hero .cta .btn{flex:1 1 0;min-width:0;white-space:nowrap;padding-left:8px;padding-right:8px;gap:6px;font-size:var(--t-micro)}
+.hero .cta{flex-wrap:wrap;gap:8px}
+.hero .cta .btn{flex:1 1 100%;min-width:0;white-space:nowrap;padding-left:8px;padding-right:8px;gap:6px;font-size:var(--t-micro)}
 }
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}
@@ -1093,6 +1093,8 @@ border-bottom:1px solid var(--line-strong);transition:border-color var(--dur-fas
 .c-book .arw,.f-success .arw{transition:transform var(--dur-fast) var(--ease)}
 .c-book:hover .arw,.f-success .btn:hover .arw{transform:translate(2px,-2px)}
 .c-book[hidden],.c-direct[hidden]{display:none}
+/* intro-call buttons outside the contact page stay hidden until BOOKING_URL is set */
+.btn[data-booking][hidden]{display:none}
 #enquiryForm{scroll-margin-top:110px}
 .enquiry .f-status a{color:inherit;border-bottom:1px solid currentColor}
 .f-success{margin-top:clamp(34px,5vw,56px);max-width:52ch;outline:none;scroll-margin-top:110px}

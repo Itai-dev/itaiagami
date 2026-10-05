@@ -70,3 +70,41 @@ and a CTA.
 
 See `docs/measurement-setup.md`. The short version: confirm the `www` redirect in
 the Vercel dashboard, and verify + submit the sitemap in Google Search Console.
+
+---
+
+# Launch positioning & conversion pass (October 2026)
+
+Goal: read as a senior independent Creative Director who owns a launch or a
+business problem, not as an archive or a designer for hire. No redesign; nothing
+invented.
+
+- **Home hero** — "Creative direction for brands launching something new."
+  "Brands, campaigns and visual worlds people remember" kept as the first line
+  of the supporting copy. Eyebrow (existing `.hero .eyebrow` style) names the
+  practice. CTAs: Start a project + Book a 20-minute intro call.
+- **Home proposition** — the old point-of-view block moved above the work and
+  rewritten: projects arrive as a problem, not a brief; four things he defines
+  (message, central idea, brand behaviour, rollout + team).
+- **Selected work** reordered by ownership: Channel 13, Museum of Natural
+  History, Partner TV, SkyMax, Simply — Vision Pro, Tower of David, Amdocs.
+  Natural Intelligence left the homepage; stays in Work, reframed around creative
+  systems and AI workflow. Work index and all case-page crumbs / next links
+  follow the same logic. `data/projects.json` reordered, with `engagement` and
+  `homeRank` fields.
+- **Accountability** — Practice note, About, Services: one senior creative
+  owner; team assembled per project; no fictional "we".
+- **Outcomes** — nine case studies now carry scope evidence (touchpoints,
+  channels, team, deployment) drawn only from what the pages already stated.
+- **CTAs** — "Start a project" + "Book a 20-minute intro call" on home, about,
+  services hub and all four service pages (booking links reuse
+  `js/contact-config.js`; hidden if no URL). Contact form project types now
+  lead with "Brand or product launch".
+- **Title** — "Creative Director & Designer" → "Creative Director" /
+  "Independent Creative Director" in titles, schema and footers.
+- **SEO** — new homepage title/description/OG; `ProfessionalService` with
+  `OfferCatalog` and `priceRange`; Person schema updated; `ItemList` on Work;
+  two new FAQ entries (+ FAQPage schema); descriptive case-page titles;
+  `og:site_name` everywhere; `llms.txt`; Claude and Perplexity search agents
+  listed in `robots.txt`; sitemap lastmod refreshed.
+- **Future flagships** — `docs/flagship-case-template.md`.
