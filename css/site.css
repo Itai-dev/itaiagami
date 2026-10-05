@@ -1125,6 +1125,7 @@ border-bottom:1px solid var(--line-strong);transition:border-color var(--dur-fas
   --t-display:clamp(2.25rem,4.6vw,4rem);
   --t-h2:clamp(1.25rem,1.8vw,1.5rem);
   --r-btn:6px;
+  --r-media:0;
   --grain-opacity:.035;
 }
 :root[data-theme="light"]{
