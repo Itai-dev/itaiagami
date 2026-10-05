@@ -25,6 +25,9 @@ const ANALYTICS_DEBUG     = false;
    here so the static files stay small. Paths are ../ relative. */
 (function(){
   if(!document.body || document.body.dataset.chrome!=='sub') return;
+  /* the chrome is now written into each page's HTML so crawlers that don't run JS see the
+     site navigation; this injection only remains as a fallback for pages without it */
+  if(document.getElementById('siteHeader')) return;
   /* which top-level section this sub-page belongs to — drives the nav highlight */
   var sec = location.pathname.indexOf('/notes/') > -1 ? 'notes'
           : location.pathname.indexOf('/services/') > -1 ? 'services'

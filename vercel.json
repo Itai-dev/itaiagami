@@ -6,15 +6,71 @@
   "outputDirectory": null,
   "trailingSlash": false,
   "functions": {
-    "api/enquiry.js": { "maxDuration": 30 }
+    "api/enquiry.js": {
+      "maxDuration": 30
+    }
   },
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.itaiagami.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.itaiagami.com"
+        }
+      ],
       "destination": "https://itaiagami.com/:path*",
       "permanent": true
     },
-    { "source": "/index.html", "destination": "/", "permanent": true }
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/work",
+      "destination": "/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/services",
+      "destination": "/services.html",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact.html",
+      "permanent": true
+    },
+    {
+      "source": "/notes",
+      "destination": "/notes.html",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html",
+      "permanent": true
+    },
+    {
+      "source": "/work/:slug([a-z0-9-]+)",
+      "destination": "/work/:slug.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/:slug([a-z0-9-]+)",
+      "destination": "/services/:slug.html",
+      "permanent": true
+    },
+    {
+      "source": "/notes/:slug([a-z0-9-]+)",
+      "destination": "/notes/:slug.html",
+      "permanent": true
+    }
   ]
 }
