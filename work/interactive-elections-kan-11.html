@@ -3,16 +3,23 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Interactive Elections — Kan 11 — Itai Agami</title>
+<title>Kan 11 Elections — Live Broadcast Interface | Itai Agami</title>
 <meta name="description" content="Election night as a live interface — results, polls and coalition maths readable at a glance." />
 <link rel="canonical" href="https://itaiagami.com/work/interactive-elections-kan-11.html" />
 <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
 <meta property="og:type" content="article" />
-<meta property="og:title" content="Interactive Elections — Kan 11 — Itai Agami" />
+<meta property="og:title" content="Kan 11 Elections — Live Broadcast Interface | Itai Agami" />
 <meta property="og:description" content="Election night as a live interface — results, polls and coalition maths readable at a glance." />
 <meta property="og:url" content="https://itaiagami.com/work/interactive-elections-kan-11.html" />
-<meta property="og:image" content="https://itaiagami.com/assets/opt/elections-hero.webp" />
+<meta property="og:site_name" content="Itai Agami" />
+<meta property="og:image" content="https://itaiagami.com/assets/og/elections-hero.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;display=swap" />
 <link rel="stylesheet" href="../css/site.css" />
 <script type="application/ld+json">
 {
@@ -43,10 +50,13 @@
 </script>
 </head>
 <body data-chrome="sub">
+<div class="grain" aria-hidden="true"></div>
+<header class="site" id="siteHeader"><div class="hwrap"><a href="../index.html" class="brand" aria-label="Itai Agami — home">Itai&nbsp;Agami</a><nav class="primary" aria-label="Primary"><a href="../work.html" class="active">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button></nav><button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button></div></header>
+<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile"><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button><span>Tel Aviv, IL — Worldwide</span></div></nav>
 <main>
   <div class="cwrap">
     <div class="c-open">
-      <p class="crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>14 / 18</span></p>
+      <p class="crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>07 / 18</span></p>
       <h1>Interactive Elections — Kan 11</h1>
       <p class="oneline">Election night as a live interface — results, polls and coalition maths readable at a glance.</p>
     </div>
@@ -58,11 +68,11 @@
     </div>
     <div class="c-hero"><img src="/assets/opt/elections-hero.webp" alt="The Kan 11 election-night title — the Knesset drawn in light above a field of blue particles, titled Elections 2022 in Hebrew." loading="eager" fetchpriority="high"></div>
     <div class="c-story">
-      <div class="c-sec"><div class="st">The challenge</div><div class="sb">Election night gives a broadcast no second takes. Exit polls, real counts, seat projections and coalition blocs all arrive at once, keep changing for hours, and have to stay legible to a viewer who has just switched the television on.</div></div>
-      <div class="c-sec"><div class="st">The idea</div><div class="sb">Treat the whole broadcast as one interface rather than a run of separate slides. Every screen shares the same geometry, glow and hierarchy, so the audience learns to read the system once and then follows the numbers instead of the graphics.</div></div>
-      <div class="c-sec"><div class="st">The system</div><div class="sb">A touch-driven screen set for the 25th Knesset election: title sequence, exit polls, real results against the counted-ballot percentage, per-party seat counts carrying candidate portraits, regional breakdowns mapped over territory, and live windows to reporters in the field.</div></div>
-      <div class="c-sec"><div class="st">The outcome</div><div class="sb small">Produced for Kan 11 coverage of Israel’s 25th Knesset election, November 2022.</div></div>
-      <div class="c-sec"><div class="st">Role &amp; contribution</div><div class="sb small">I art-directed and designed the screen set — the shared geometry and hierarchy that make every screen part of one interface, the exit-poll and real-result screens, the regional maps, and the live and social windows that open inside them.</div></div>
+      <div class="c-sec"><h2 class="st">The challenge</h2><div class="sb">Election night gives a broadcast no second takes. Exit polls, real counts, seat projections and coalition blocs all arrive at once, keep changing for hours, and have to stay legible to a viewer who has just switched the television on.</div></div>
+      <div class="c-sec"><h2 class="st">The idea</h2><div class="sb">Treat the whole broadcast as one interface rather than a run of separate slides. Every screen shares the same geometry, glow and hierarchy, so the audience learns to read the system once and then follows the numbers instead of the graphics.</div></div>
+      <div class="c-sec"><h2 class="st">The system</h2><div class="sb">A touch-driven screen set for the 25th Knesset election: title sequence, exit polls, real results against the counted-ballot percentage, per-party seat counts carrying candidate portraits, regional breakdowns mapped over territory, and live windows to reporters in the field.</div></div>
+      <div class="c-sec"><h2 class="st">The outcome</h2><div class="sb small">Produced for Kan 11’s coverage of Israel’s 25th Knesset election, November 2022 — one touch-driven screen set spanning title sequence, exit polls, real results, seat counts, regional maps and live field windows.</div></div>
+      <div class="c-sec"><h2 class="st">Role &amp; contribution</h2><div class="sb small">I art-directed and designed the screen set — the shared geometry and hierarchy that make every screen part of one interface, the exit-poll and real-result screens, the regional maps, and the live and social windows that open inside them.</div></div>
     </div>
     <div class="c-gallery">
       <figure><div class="fm"><img src="/assets/opt/elections-g1.webp" loading="lazy" alt="The real-results screen — a party-by-party bar list for Tel Aviv over a glowing map of the region."></div><figcaption>Regional results are mapped over territory, so a viewer can see where a number comes from.</figcaption></figure>
@@ -72,9 +82,11 @@
     </div>
     <div class="c-film"><div class="l">Film</div><p class="note">A recording of the election-night screen set in use — exit polls, real results, regional breakdowns and live windows moving through one interface.</p><div class="frame"><iframe src="https://player.vimeo.com/video/797380111?title=0&byline=0&portrait=0&dnt=1" title="Interactive Elections — Kan 11 — film" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>
     <div class="c-service"><span class="l">Related service</span> <a href="../services/interactive-immersive-experiences.html">Interactive &amp; Immersive Experiences <span class="arw" aria-hidden="true">→</span></a></div>
-    <div class="c-next"><div class="l">Next project</div><a href="ten-facts-kan-11.html"><span class="thumb"><img src="/assets/opt/tenfacts-thumb.webp" width="800" height="450" loading="lazy" alt=""></span><span class="t">10 Facts — Kan 11 →</span></a></div>
+    <div class="c-next"><div class="l">Next project</div><a href="mako-12.html"><span class="thumb"><img src="/assets/opt/65b583e6f02a.webp" width="800" height="450" loading="lazy" alt=""></span><span class="t">Mako 12+ →</span></a></div>
   </div>
 </main>
+
+<footer class="site"><div class="wrap"><div class="grid"><div class="col"><h4>Menu</h4><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></div><div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div><div class="col"><h4>Studio</h4><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div></div><div class="base"><span>© 2026 Itai Agami. All rights reserved.</span><span class="legal"><a href="../privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span><span>Independent Creative Director</span></div></div></footer>
 
 <script src="../js/site.js"></script>
 </body>

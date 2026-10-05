@@ -95,3 +95,14 @@ Ordered by how much each would improve the commercial signal.
 - **Vimeo and Behance profiles.** Only LinkedIn is currently linked, so only LinkedIn is in `sameAs`. If public Vimeo / Behance profiles exist, add them to the footer and to the `sameAs` array in `index.html` and `about.html` — this is one of the cheaper ways to help an AI assistant confirm the site describes a real, verifiable person.
 - **Collaborators reading "—"** on five case studies. Where a project genuinely was solo, saying so ("Independent") reads better than a dash; where it was not, the credits should be filled in.
 - **Amdocs `Role` reads "Visual Concept Development"**, which undersells relative to the other entries. If the actual remit was broader, the label should say so.
+
+---
+
+## Added October 2026 (launch positioning pass)
+
+- **Inch Models** — once live and approved: the business problem at the start, the positioning decision, what launched (site, brand touchpoints), any adoption or business signal the client is happy to publish, and a quote. See `docs/flagship-case-template.md`.
+- **Any independent, client-direct project** — even a smaller one. The homepage currently has no case where the client hired Itai directly; one would do more for the positioning than any copy change.
+- **Testimonials** from founders / heads of marketing, named with role.
+- **Simply — Vision Pro**: engagement context (direct, via agency or studio) and collaborators.
+- **Engagement type** for Kan 11 (both), Tidhar, SodaStream and Simply — direct, agency or studio. Left blank in `data/projects.json`.
+- **Partner TV / SkyMax**: years, and whether SkyMax ran beyond TV (digital, OOH).

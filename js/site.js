@@ -25,6 +25,9 @@ const ANALYTICS_DEBUG     = false;
    here so the static files stay small. Paths are ../ relative. */
 (function(){
   if(!document.body || document.body.dataset.chrome!=='sub') return;
+  /* the chrome is now written into each page's HTML so crawlers that don't run JS see the
+     site navigation; this injection only remains as a fallback for pages without it */
+  if(document.getElementById('siteHeader')) return;
   /* which top-level section this sub-page belongs to — drives the nav highlight */
   var sec = location.pathname.indexOf('/notes/') > -1 ? 'notes'
           : location.pathname.indexOf('/services/') > -1 ? 'services'
@@ -61,7 +64,7 @@ const ANALYTICS_DEBUG     = false;
   +'</div><div class="base">'
   +'<span>© 2026 Itai Agami. All rights reserved.</span>'
   +'<span class="legal"><a href="../privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span>'
-  +'<span>Creative Director &amp; Designer</span>'
+  +'<span>Independent Creative Director</span>'
   +'</div></div></footer>';
   document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
@@ -630,10 +633,11 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   wireBooking(document);
   document.addEventListener('click',e=>{
     const a=e.target.closest&&e.target.closest('[data-booking]'); if(!a||!BOOKING)return;
-    const ctx=a.dataset.booking==='after_submission'?'after_submission':'contact';
+    /* context = where the link sits: contact, after_submission, or the page's own label (home, services…) */
+    const ctx=a.dataset.booking||'contact';
     const p=Object.assign({ page_path:location.pathname, booking_context:ctx },attributionParams());
     track('book_call_click',p);
-    track(ctx==='contact'?'book_call_click_from_contact':'book_call_click_after_submission',p);
+    if(ctx==='contact'||ctx==='after_submission') track(ctx==='contact'?'book_call_click_from_contact':'book_call_click_after_submission',p);
   });
 
   /* optional direct line — only when a phone number is configured */
