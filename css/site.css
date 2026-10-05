@@ -371,7 +371,7 @@ nav.primary{display:none}
 .swork:nth-child(even){direction:ltr}
 }
 @media(max-width:600px){
-.hero{min-height:auto;padding-top:0;padding-bottom:40px}
+.hero{min-height:auto;padding-top:0;padding-bottom:0}
 .hero .cta{flex-direction:column;align-items:stretch;max-width:340px}
 .hero .cta .btn{justify-content:center}
 .index-list:not(.grid) .prow>a{grid-template-columns:30px 1fr;gap:12px}
@@ -387,7 +387,7 @@ nav.primary{display:none}
 @media(max-width:600px){
 /* phones: copy and CTAs first, so they sit above the fold and clear of the
    consent banner; the figure follows them, large and centred */
-.hero-system{order:3;margin:6px 0 -20px}
+.hero-system{order:3;margin:6px 0 -28px}
 .hero-system [data-hairline]{max-width:min(100%,420px)}
 .hero .sub{margin-top:16px}
 .hero .cta{margin-top:22px;flex-direction:row;flex-wrap:wrap;max-width:none;gap:10px}
