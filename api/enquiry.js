@@ -78,7 +78,7 @@ module.exports = async (req, res) => {
   if(clean(body.website, 200)) return res.status(200).json({ ok:true });
 
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if(throttled(ip)) return res.status(429).json({ ok:false, error:'Too many messages just now — please try again shortly.' });
+  if(throttled(ip)) return res.status(429).json({ ok:false, error:'Too many messages just now. Please try again shortly.' });
 
   const name     = clean(body.name, 120);
   const email    = clean(body.email, 200);
@@ -241,5 +241,5 @@ async function confirm(l){
     + '<p>Thanks for reaching out. I received your enquiry and will get back to you shortly.</p>'
     + (booking ? '<p>If you prefer, you can also <a href="' + esc(booking) + '" style="color:#111">book a short intro call here</a>.</p>' : '')
     + '<p>Itai</p></div>';
-  await sendMail({ to:[l.email], reply_to: TO, subject:'Thanks — I received your enquiry', text, html }, 5000);
+  await sendMail({ to:[l.email], reply_to: TO, subject:'Thanks, I received your enquiry', text, html }, 5000);
 }

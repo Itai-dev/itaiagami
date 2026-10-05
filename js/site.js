@@ -36,7 +36,7 @@ const ANALYTICS_DEBUG     = false;
   var hdr = ''
   +'<div class="grain" aria-hidden="true"></div>'
   +'<header class="site" id="siteHeader"><div class="hwrap">'
-  +'<a href="../index.html" class="brand" aria-label="Itai Agami — home">Itai&nbsp;Agami</a>'
+  +'<a href="../index.html" class="brand" aria-label="Itai Agami, home">Itai&nbsp;Agami</a>'
   +'<nav class="primary" aria-label="Primary">'
   +'<a href="../work.html"'+on('work')+'>Work</a>'
   +'<a href="../services.html"'+on('services')+'>Services</a>'
@@ -54,7 +54,7 @@ const ANALYTICS_DEBUG     = false;
   +'<a href="../about.html">About</a>'
   +'<a href="../contact.html">Contact</a>'
   +'<div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button>'
-  +'<span>Tel Aviv, IL — Worldwide</span></div>'
+  +'<span>Tel Aviv, IL · Worldwide</span></div>'
   +'</nav>';
   var ftr = ''
   +'<footer class="site"><div class="wrap"><div class="grid">'
@@ -327,7 +327,7 @@ const Analytics = (function(){
   if(/^\/work\/[^/]+/.test(path)){
     const h = document.querySelector('.c-open h1');
     Analytics.track('project_view', {
-      project_name: (h ? h.textContent : document.title.split(' — ')[0]).trim(),
+      project_name: (h ? h.textContent : document.title.split(/ [|:] /)[0]).trim(),
       page_path: path,
       page_title: document.title
     });
@@ -643,7 +643,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   /* optional direct line — only when a phone number is configured */
   const direct=document.getElementById('directContact');
   if(direct&&DIGITS){
-    direct.innerHTML='Prefer to talk directly? Call or WhatsApp me — '+TEL
+    direct.innerHTML='Prefer to talk directly? Call or WhatsApp me: '+TEL
       +' · <a href="https://wa.me/'+DIGITS+'" target="_blank" rel="noopener">WhatsApp</a>';
     direct.hidden=false;
   }
@@ -686,15 +686,15 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     const body=[
       'Name: '+(d.name||''),
       'Email: '+(d.email||''),
-      'Organisation: '+(d.org||'—'),
-      'Project type: '+(d.type||'—'),
-      'Budget: '+(d.budget||'—'),
-      'Timeline: '+(d.timeline||'—'),
-      'Found via: '+(d.source||'—'),
+      'Organisation: '+(d.org||'-'),
+      'Project type: '+(d.type||'-'),
+      'Budget: '+(d.budget||'-'),
+      'Timeline: '+(d.timeline||'-'),
+      'Found via: '+(d.source||'-'),
       '','Project:',(d.project||''),
-      '','—','Source: '+(d.lead_source||'—'),
-      'Landing page: '+(d.landing_page||'—'),
-      'Pages viewed: '+(d.pages_viewed||'—'),
+      '','--','Source: '+(d.lead_source||'-'),
+      'Landing page: '+(d.landing_page||'-'),
+      'Pages viewed: '+(d.pages_viewed||'-'),
       'UTM campaign: '+(d.utm_campaign||'none')
     ].join('\n');
     return 'mailto:'+EMAIL
@@ -731,7 +731,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
         :' If it keeps failing, email me directly at '+MAIL+'.');
       btn.innerHTML=label;
     }else{
-      status.innerHTML='Something went wrong — your message has not been sent yet. '
+      status.innerHTML='Something went wrong, and your message has not been sent yet. '
         +'Try again, or <a href="'+mailtoHref(data)+'">send it from your email app</a>. '
         +'You can also email me directly at '+MAIL+(TEL?', or call / WhatsApp '+TEL:'')+'.';
       btn.innerHTML='Try again <span class="arw" aria-hidden="true">→</span>';
@@ -773,7 +773,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       showSuccess();
       return;
     }
-    if(r.status===429) return showError('rate_limit',j.error||'Too many messages just now — please try again shortly.',data,429);
+    if(r.status===429) return showError('rate_limit',j.error||'Too many messages just now. Please try again shortly.',data,429);
     if(r.status>=400&&r.status<500&&j.error&&!j.fallback) return showError('validation',j.error,data,r.status);
     showError('server','',data,r.status);
   });
