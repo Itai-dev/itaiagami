@@ -1207,6 +1207,3 @@ nav.primary a{color:var(--fg)}
 .svc-open .crumb{font-family:var(--mono);font-size:.75rem!important;letter-spacing:.04em;text-transform:uppercase}
 .filters button,.views button{border-radius:var(--r-btn)}
 
-/* emphasised words in headlines: Bagel Fat One */
-.hero h1 em,.pov h2 em,.band h2 em,.c-page h1 em,.svc-open h1 em,.c-open h1 em,.article-head h1 em,h1 em,h2 em{
-  font-family:"Bagel Fat One",var(--display);font-style:normal;font-weight:400;letter-spacing:-.01em}
