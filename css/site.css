@@ -1179,13 +1179,14 @@ nav.primary a{color:var(--fg)}
 
 /* hero: narrow lead column left, headline right */
 @media(min-width:901px){
-  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.15fr);grid-template-rows:auto 1fr auto;
-    grid-template-areas:"lead title" "cta title" "fig title";column-gap:clamp(32px,4vw,64px);align-content:center}
-  .hero h1{grid-area:title;align-self:start;margin:0}
-  .hero .sub{grid-area:lead;margin-top:.5em;max-width:34ch;color:var(--fg);font-weight:500;font-size:clamp(1.0625rem,1.35vw,1.25rem);line-height:1.38;letter-spacing:-.01em}
-  .hero .cta{grid-area:cta;align-self:start;margin-top:26px;flex-direction:column;align-items:flex-start;gap:10px}
-  .hero-system{grid-area:fig;position:relative;inset:auto;width:100%;max-width:360px;margin-top:clamp(28px,4vh,56px);align-self:end;justify-content:flex-start}
-  .hero-system [data-hairline]{max-width:360px}
+  /* copy stacked on the left (headline, subheading, buttons), the figure on the right */
+  .hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);grid-template-rows:auto auto auto;
+    grid-template-areas:"title fig" "lead fig" "cta fig";column-gap:clamp(32px,4vw,72px);align-content:center}
+  .hero h1{grid-area:title;align-self:end;margin:0;font-size:clamp(2.6rem,5.4vw,5.5rem)}
+  .hero .sub{grid-area:lead;margin-top:clamp(20px,2.4vw,32px);max-width:42ch;color:var(--fg);font-weight:500;font-size:clamp(1.0625rem,1.35vw,1.25rem);line-height:1.38;letter-spacing:-.01em}
+  .hero .cta{grid-area:cta;align-self:start;margin-top:clamp(24px,3vw,36px);flex-direction:row;align-items:center;gap:12px}
+  .hero-system{grid-area:fig;position:relative;inset:auto;width:100%;max-width:560px;align-self:center;justify-self:end;justify-content:center}
+  .hero-system [data-hairline]{max-width:560px}
 }
 
 .hero .sub{color:var(--fg)}
