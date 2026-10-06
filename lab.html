@@ -80,43 +80,108 @@
 <main>
 <div class="wrap">
 
-  <section aria-label="Lab">
-    <div class="sec-head"><h1>Lab</h1><span class="count">Self-initiated experiments</span></div>
-    <p class="lab-intro">Things I make outside client work, to test an idea, a tool or a way of moving. Some are finished, most are sketches.</p>
+  <section aria-label="Lab" class="lab">
+    <div class="sec-head"><h1>Lab</h1><span class="count">Self-initiated · 09 pieces</span></div>
+    <p class="lab-intro">Things I make outside client work, to test an idea, a tool or a way of moving. Everything here is live: move over a piece to play with it, click to open it.</p>
 
     <!--
-      A new entry: copy one <article class="lab-item">. The media is either
-        a looping video:  <video data-lab-video muted loop playsinline preload="none" poster="/assets/opt/NAME.webp"><source src="/assets/opt/NAME.mp4" type="video/mp4"></video>
-        a Vimeo loop:     <div class="frame" data-vimeo="ID" data-title="Title"></div>
-        or a live figure: <div class="lab-fig" data-hairline-host="NAME"></div> plus its <script type="module" src="js/hairline-NAME.js">
-      Newest first. Keep the line to one sentence, and say what was tested.
+      A new piece: copy one <article class="lab-tile">. Size with t-xl (2×2), t-wide (2×1) or t-tall (1×2); plain is 1×1.
+      The media is a looping video (<video data-lab-video muted loop playsinline preload="none" poster=…>),
+      or a live figure (<div class="lab-fig" data-hairline-host="NAME">) plus its <script type="module" src="js/hairline-NAME.js">.
+      Newest first. One sentence: what was tested.
     -->
     <div class="lab-grid">
-
-      <article class="lab-item">
-        <div class="lab-media lab-live"><div class="lab-fig" data-hairline-host="chess" aria-hidden="true"></div><span class="lab-hint">Move over the board</span></div>
-        <div class="lab-meta"><span>Interactive</span><span>Oct 2026</span></div>
-        <h2 class="lab-title">A chess set that plays itself</h2>
-        <p class="lab-line">A short game on a line-drawn board, on a loop. Move the pointer over it and the pieces near your hand lift off their squares.</p>
-        <p class="lab-tools">Claude Code · Hairline</p>
+      <article class="lab-tile t-xl" tabindex="0" role="button" aria-expanded="false" aria-label="Open: A chess set that plays itself">
+        <div class="lab-media lab-live"><div class="lab-fig" data-hairline-host="chess" aria-hidden="true"></div></div>
+        <div class="lab-cap"><span class="lab-n">01</span><span class="lab-t">A chess set that plays itself</span><span class="lab-k">Interactive</span></div>
+        <div class="lab-info">
+          <div class="lab-meta"><span>Interactive</span><span>Oct 2026</span></div>
+          <h2 class="lab-title">A chess set that plays itself</h2>
+          <p class="lab-line">A short game on a line-drawn board, on a loop. Move over it and the pieces near your hand lift off their squares, the nearest highest.</p>
+          <p class="lab-tools">Claude Code · Hairline</p>
+        </div>
       </article>
-
-      <article class="lab-item">
-        <div class="lab-media lab-live"><div class="lab-fig" data-hairline-host="tray" aria-hidden="true"></div><span class="lab-hint">Move over the tray</span></div>
-        <div class="lab-meta"><span>Interactive</span><span>Oct 2026</span></div>
-        <h2 class="lab-title">Line figures for this site</h2>
-        <p class="lab-line">The small isometric figures across this site, one per service and page, each answering the pointer. This one is the enquiry tray from the contact page.</p>
-        <p class="lab-tools">Claude Code · Hairline</p>
+      <article class="lab-tile t-wide" tabindex="0" role="button" aria-expanded="false" aria-label="Open: A motion showreel, drawn in code">
+        <div class="lab-media"><video data-lab-video muted loop playsinline preload="none" poster="/assets/opt/claude-showreel-2026-poster.webp" aria-hidden="true"><source src="/assets/opt/claude-showreel-2026.mp4" type="video/mp4"></video></div>
+        <div class="lab-cap"><span class="lab-n">02</span><span class="lab-t">A motion showreel, drawn in code</span><span class="lab-k">Motion · AI</span></div>
+        <div class="lab-info">
+          <div class="lab-meta"><span>Motion · AI</span><span>Sep 2026</span></div>
+          <h2 class="lab-title">A motion showreel, drawn in code</h2>
+          <p class="lab-line">I asked Claude for a 15-second motion graphics showreel, as if it were applying for a motion design job.</p>
+          <p class="lab-tools">Claude</p>
+          <a class="lab-more" href="notes/claude-motion-design-showreel.html">Read the note →</a>
+        </div>
       </article>
-
-      <article class="lab-item">
-        <a class="lab-media" href="notes/claude-motion-design-showreel.html" aria-label="Claude’s new motion design ability, the note"><video data-lab-video muted loop playsinline preload="none" poster="/assets/opt/claude-showreel-2026-poster.webp" aria-hidden="true"><source src="/assets/opt/claude-showreel-2026.mp4" type="video/mp4"></video></a>
-        <div class="lab-meta"><span>Motion · AI</span><span>Sep 2026</span></div>
-        <h2 class="lab-title"><a href="notes/claude-motion-design-showreel.html">A motion showreel, drawn in code</a></h2>
-        <p class="lab-line">I asked Claude for a 15-second motion graphics showreel, as if it were applying for a motion design job. <a class="lab-more" href="notes/claude-motion-design-showreel.html">Read the note →</a></p>
-        <p class="lab-tools">Claude</p>
+      <article class="lab-tile t-tall" tabindex="0" role="button" aria-expanded="false" aria-label="Open: Clay">
+        <div class="lab-media lab-live"><div class="lab-fig" data-hairline-host="clay" aria-hidden="true"></div></div>
+        <div class="lab-cap"><span class="lab-n">03</span><span class="lab-t">Clay</span><span class="lab-k">Interactive</span></div>
+        <div class="lab-info">
+          <div class="lab-meta"><span>Interactive</span><span>Oct 2026</span></div>
+          <h2 class="lab-title">Clay</h2>
+          <p class="lab-line">Clay on a potter’s wheel. It turns and finds new forms on its own; the pointer, as the hands, shapes the wall.</p>
+          <p class="lab-tools">Claude Code · Hairline</p>
+        </div>
       </article>
-
+      <article class="lab-tile t-tall" tabindex="0" role="button" aria-expanded="false" aria-label="Open: Case tray">
+        <div class="lab-media lab-live"><div class="lab-fig" data-hairline-host="cases" aria-hidden="true"></div></div>
+        <div class="lab-cap"><span class="lab-n">04</span><span class="lab-t">Case tray</span><span class="lab-k">Interactive</span></div>
+        <div class="lab-info">
+          <div class="lab-meta"><span>Interactive</span><span>Oct 2026</span></div>
+          <h2 class="lab-title">Case tray</h2>
+          <p class="lab-line">Seven case cards in a tray. The one under the pointer stands up and its neighbours lean away in turn.</p>
+          <p class="lab-tools">Claude Code · Hairline</p>
+        </div>
+      </article>
+      <article class="lab-tile t-wide" tabindex="0" role="button" aria-expanded="false" aria-label="Open: Enquiry tray">
+        <div class="lab-media lab-live"><div class="lab-fig" data-hairline-host="tray" aria-hidden="true"></div></div>
+        <div class="lab-cap"><span class="lab-n">05</span><span class="lab-t">Enquiry tray</span><span class="lab-k">Interactive</span></div>
+        <div class="lab-info">
+          <div class="lab-meta"><span>Interactive</span><span>Oct 2026</span></div>
+          <h2 class="lab-title">Enquiry tray</h2>
+          <p class="lab-line">An index card over an in-tray. On the contact page, each field you fill writes a line on it, and sending drops it in.</p>
+          <p class="lab-tools">Claude Code · Hairline</p>
+        </div>
+      </article>
+      <article class="lab-tile t-wide" tabindex="0" role="button" aria-expanded="false" aria-label="Open: Domino run">
+        <div class="lab-media lab-live"><div class="lab-fig" data-hairline-host="dominoes" aria-hidden="true"></div></div>
+        <div class="lab-cap"><span class="lab-n">06</span><span class="lab-t">Domino run</span><span class="lab-k">Interactive</span></div>
+        <div class="lab-info">
+          <div class="lab-meta"><span>Interactive</span><span>Oct 2026</span></div>
+          <h2 class="lab-title">Domino run</h2>
+          <p class="lab-line">A launch as a domino run. It topples and resets on its own, and the pointer pushes the run from any tile.</p>
+          <p class="lab-tools">Claude Code · Hairline</p>
+        </div>
+      </article>
+      <article class="lab-tile t-tall" tabindex="0" role="button" aria-expanded="false" aria-label="Open: Swatch fan">
+        <div class="lab-media lab-live"><div class="lab-fig" data-hairline-host="swatches" aria-hidden="true"></div></div>
+        <div class="lab-cap"><span class="lab-n">07</span><span class="lab-t">Swatch fan</span><span class="lab-k">Interactive</span></div>
+        <div class="lab-info">
+          <div class="lab-meta"><span>Interactive</span><span>Oct 2026</span></div>
+          <h2 class="lab-title">Swatch fan</h2>
+          <p class="lab-line">A brand’s swatch fan opens and shuts on its own. The pointer picks a blade and the others part around it.</p>
+          <p class="lab-tools">Claude Code · Hairline</p>
+        </div>
+      </article>
+      <article class="lab-tile t-wide" tabindex="0" role="button" aria-expanded="false" aria-label="Open: Exhibition room">
+        <div class="lab-media lab-live"><div class="lab-fig" data-hairline-host="gallery" aria-hidden="true"></div></div>
+        <div class="lab-cap"><span class="lab-n">08</span><span class="lab-t">Exhibition room</span><span class="lab-k">Interactive</span></div>
+        <div class="lab-info">
+          <div class="lab-meta"><span>Interactive</span><span>Oct 2026</span></div>
+          <h2 class="lab-title">Exhibition room</h2>
+          <p class="lab-line">A visitor walks the room on their own, and the plinths near them, or the pointer, rise to meet them.</p>
+          <p class="lab-tools">Claude Code · Hairline</p>
+        </div>
+      </article>
+      <article class="lab-tile t-tall" tabindex="0" role="button" aria-expanded="false" aria-label="Open: Card catalogue">
+        <div class="lab-media lab-live"><div class="lab-fig" data-hairline-host="catalogue" aria-hidden="true"></div></div>
+        <div class="lab-cap"><span class="lab-n">09</span><span class="lab-t">Card catalogue</span><span class="lab-k">Interactive</span></div>
+        <div class="lab-info">
+          <div class="lab-meta"><span>Interactive</span><span>Oct 2026</span></div>
+          <h2 class="lab-title">Card catalogue</h2>
+          <p class="lab-line">An index runs through the cabinet on its own, and the drawers near it, or the pointer, slide out.</p>
+          <p class="lab-tools">Claude Code · Hairline</p>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -141,7 +206,14 @@
 <script src="js/contact-config.js"></script>
 <script src="js/vendor/hairline-kernel.js"></script>
 <script src="js/site.js"></script>
+<script src="js/lab.js"></script>
 <script type="module" src="js/hairline-chess.js"></script>
+<script type="module" src="js/hairline-clay.js"></script>
+<script type="module" src="js/hairline-cases.js"></script>
 <script type="module" src="js/hairline-tray.js"></script>
+<script type="module" src="js/hairline-dominoes.js"></script>
+<script type="module" src="js/hairline-swatches.js"></script>
+<script type="module" src="js/hairline-gallery.js"></script>
+<script type="module" src="js/hairline-catalogue.js"></script>
 </body>
 </html>
