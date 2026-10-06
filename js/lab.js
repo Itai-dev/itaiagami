@@ -62,7 +62,8 @@
   addEventListener('resize',()=>{ if(open&&open.classList.contains('shown'))place(open,target()); });
 
   /* jump cuts: a hard cut to the next frame every ~140–260ms (an uneven beat
-     reads as edited, not as a slideshow), only while on screen, never under
+     reads as edited, not as a slideshow); a frame with data-hold (the
+     original, first) stays that many ms. Only while on screen, never under
      reduced motion. Frames still loading are skipped. */
   document.querySelectorAll('[data-lab-cuts]').forEach(box=>{
     const frames=[...box.querySelectorAll('img')]; if(frames.length<2||reduce)return;
@@ -72,10 +73,10 @@
       let j=i;
       do{ j=(j+1)%frames.length; }while(j!==i&&!(frames[j].complete&&frames[j].naturalWidth));
       if(j!==i){frames[i].classList.remove('on');frames[j].classList.add('on');i=j;}
-      t=setTimeout(step,140+Math.random()*120);
+      t=setTimeout(step,+frames[i].dataset.hold||140+Math.random()*120);
     };
     new IntersectionObserver(es=>es.forEach(e=>{
-      if(e.isIntersecting&&!live){live=true;step();}
+      if(e.isIntersecting&&!live){live=true;t=setTimeout(step,+frames[i].dataset.hold||200);}
       else if(!e.isIntersecting&&live){live=false;clearTimeout(t);}
     })).observe(box);
   });
