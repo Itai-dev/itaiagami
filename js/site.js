@@ -41,6 +41,7 @@ const ANALYTICS_DEBUG     = false;
   +'<a href="../work.html"'+on('work')+'>Work</a>'
   +'<a href="../services.html"'+on('services')+'>Services</a>'
   +'<a href="../notes.html"'+on('notes')+'>Notes</a>'
+  +'<a href="../lab.html"'+on('lab')+'>Lab</a>'
   +'<a href="../about.html">About</a>'
   +'<a href="../contact.html">Contact</a>'
   +'<button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>'
@@ -52,6 +53,7 @@ const ANALYTICS_DEBUG     = false;
   +'<a href="../work.html">Work</a>'
   +'<a href="../services.html">Services</a>'
   +'<a href="../notes.html">Notes</a>'
+  +'<a href="../lab.html">Lab</a>'
   +'<a href="../about.html">About</a>'
   +'<a href="../contact.html">Contact</a>'
   +'<div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button>'
@@ -59,7 +61,7 @@ const ANALYTICS_DEBUG     = false;
   +'</nav>';
   var ftr = ''
   +'<footer class="site"><div class="wrap"><div class="grid">'
-  +'<div class="col"><h4>Menu</h4><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></div>'
+  +'<div class="col"><h4>Menu</h4><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../lab.html">Lab</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></div>'
   +'<div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>'
   +'<div class="col"><h4>Studio</h4><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div>'
   +'</div><div class="base">'
@@ -559,6 +561,20 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     });
     row.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse')send('pointerleave',0,0); });
   };
+})();
+
+/* ---------- lab loops ---------- */
+/* Muted loops play only while on screen, and not at all under reduced motion
+   (the poster stays). preload="none" keeps them off the network until then. */
+(function(){
+  const vids=document.querySelectorAll('video[data-lab-video]');
+  if(!vids.length||matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    const v=e.target;
+    if(e.isIntersecting){v.muted=true;const p=v.play();if(p&&p.catch)p.catch(()=>{});}
+    else v.pause();
+  }),{rootMargin:'120px 0px'});
+  vids.forEach(v=>io.observe(v));
 })();
 
 /* ---------- hero reveal (home) ---------- */

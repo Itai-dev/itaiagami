@@ -53,6 +53,11 @@
       "permanent": true
     },
     {
+      "source": "/lab",
+      "destination": "/lab.html",
+      "permanent": true
+    },
+    {
       "source": "/privacy",
       "destination": "/privacy.html",
       "permanent": true
