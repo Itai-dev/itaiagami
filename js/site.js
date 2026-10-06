@@ -528,7 +528,8 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
    data-hairline-host="<name>". Figures sleep offscreen and land at once
    under reduced motion on their own.
 
-   A figure inside a link (the services list) also answers the whole row:
+   A figure inside a link (the services list) or a [data-hairline-row]
+   (the home services grid) also answers the whole row:
    moving across the row scrubs the pointer across the figure, leaving the
    row lets it go. */
 (function(){
@@ -547,7 +548,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     fig.mount({stage,svg,read},fig.range[1]);
     requestAnimationFrame(()=>host.classList.add('ready'));
 
-    const row=host.closest('a');
+    const row=host.closest('a,[data-hairline-row]');
     if(!row)return;
     const send=(type,x,y)=>stage.dispatchEvent(new PointerEvent(type,{pointerType:'mouse',pointerId:1,clientX:x,clientY:y}));
     row.addEventListener('pointermove',e=>{
