@@ -37,3 +37,4 @@ Clients usually arrive with a launch or a business problem rather than a design 
 - [About](https://itaiagami.com/about.html)
 - [Start a project](https://itaiagami.com/contact.html)
 - [Notes](https://itaiagami.com/notes.html)
+- [Lab](https://itaiagami.com/lab.html): self-initiated experiments (motion, interactive figures, AI-built pieces), separate from client work
