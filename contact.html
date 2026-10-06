@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,7 +27,7 @@
 }
 </script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-<meta name="theme-color" content="#0d0d0d" />
+<meta name="theme-color" content="#e8e8e3" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Start a Project with Itai Agami, Independent Creative Director" />
 <meta property="og:description" content="Launching or changing something? Tell Itai Agami what it is, who it is for and what is still undecided, or book a 20-minute intro call. Working internationally; engagements from $10,000 / ₪30,000." />
@@ -40,7 +40,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="css/site.css" />
 </head>
 <body>
@@ -57,6 +57,7 @@
       <a href="contact.html" class="active">Contact</a>
       <button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>
     </nav>
+    <a class="btn solid nav-cta" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
   </div>
 </header>
@@ -82,18 +83,24 @@
       <!-- 1 — the invitation -->
       <div class="c-intro">
         <h1>Launching or changing <em>something</em>?</h1>
-        <p class="c-paths">Tell me what is launching, who it is for and what is still undecided. Or book a short intro call directly.</p>
-        <div class="c-ctas">
-          <a href="#enquiryForm" class="btn solid" data-start-project>Start a project <span class="arw" aria-hidden="true">→</span></a>
-          <!-- Shown only once BOOKING_URL is set in js/contact-config.js -->
-          <a class="c-book" data-booking="contact" target="_blank" rel="noopener" hidden>Book a 20-minute intro call <span class="arw" aria-hidden="true">↗</span></a>
-        </div>
+        <p class="c-paths">Pick a time for a 20-minute intro call. We talk through what is launching, who it is for and what is still undecided. Prefer to write first? Send a brief instead.</p>
         <p class="c-qual">Most independent engagements begin at <strong data-floor>₪30,000</strong>. Larger multidisciplinary productions are scoped with a custom team. I work with clients internationally, remotely across time zones, and on site where it helps. If you are not sure where your project sits, say what you know. <a href="services.html">The services pages</a> and the <a href="services.html#faq">common questions</a> cover the usual cases.</p>
         <div class="c-fig" data-hairline-host="tray" aria-hidden="true"></div>
       </div>
 
-      <!-- 2 — the form -->
+      <!-- 2 — book a call (default) or send a brief -->
       <div class="c-form">
+        <div class="c-tabs" role="tablist" aria-label="How to get in touch">
+          <button type="button" role="tab" id="tab-call" aria-controls="panel-call" aria-selected="true">Book a call</button>
+          <button type="button" role="tab" id="tab-brief" aria-controls="panel-brief" aria-selected="false" tabindex="-1">Send a brief</button>
+        </div>
+        <div class="c-panel" id="panel-call" role="tabpanel" aria-labelledby="tab-call">
+          <div class="c-cal">
+            <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3bYwrvw_MjttEYUre5hr2ZM3mY01ugJrljyWaM5u6vosSYTjzCyrnmt8rraXGODIz3hMC0QhUg?gv=true" title="Book a 20-minute intro call with Itai Agami" loading="lazy"></iframe>
+          </div>
+          <p class="c-cal-alt">Calendar not loading? <a href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="contact" target="_blank" rel="noopener">Open the booking page <span class="arw" aria-hidden="true">↗</span></a></p>
+        </div>
+        <div class="c-panel" id="panel-brief" role="tabpanel" aria-labelledby="tab-brief" hidden>
         <form class="enquiry" id="enquiryForm" action="/api/enquiry" method="post" novalidate>
           <div class="fld f-full">
             <label for="f-name">Your name</label>
@@ -190,6 +197,7 @@
         </form>
         <!-- Rendered by js/site.js only when PHONE_NUMBER is set in js/contact-config.js -->
         <p class="c-direct" id="directContact" hidden></p>
+        </div>
       </div>
 
     </div>

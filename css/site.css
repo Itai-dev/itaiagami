@@ -670,7 +670,7 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
 
 :root[data-theme="light"] [data-beam="cta"] {
   position: relative;
-  border-radius: 9999px;
+  border-radius: var(--r-btn, 9999px);
   overflow: hidden;
 }
 
@@ -691,9 +691,9 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 9998px;
+  border-radius: calc(var(--r-btn, 9999px) - 1px);
   padding: 1px;
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round var(--r-btn, 9999px));
   background: conic-gradient(
         from var(--beam-angle-cta-dark),
         transparent 0%, transparent 54%,
@@ -749,7 +749,7 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 9999px;
+  border-radius: var(--r-btn, 9999px);
   background: radial-gradient(ellipse 63px 36px at 33% -7.4%, rgba(255, 50, 100, 0.45), transparent),
     radial-gradient(ellipse 54px 32px at 12% -5%, rgba(40, 140, 255, 0.45), transparent),
     radial-gradient(ellipse 36px 63px at 2.1% 68.3%, rgba(50, 200, 80, 0.45), transparent),
@@ -787,7 +787,7 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
   pointer-events: none;
   z-index: 1;
   opacity: calc(var(--beam-opacity-cta-dark) * 0.42 * var(--beam-inner-opacity, 1) * var(--beam-strength, 1));
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round var(--r-btn, 9999px));
   animation: beam-hue-shift-cta-dark 12s ease-in-out infinite;
 }
 
@@ -795,8 +795,8 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
   display: none;
   position: absolute;
   inset: 0;
-  border-radius: 9998px;
-  clip-path: inset(0 round 9999px);
+  border-radius: calc(var(--r-btn, 9999px) - 1px);
+  clip-path: inset(0 round var(--r-btn, 9999px));
   background: conic-gradient(
         from var(--beam-angle-cta-dark),
         transparent 0%, transparent 58%,
@@ -869,7 +869,7 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
 
 :root:not([data-theme="light"]) [data-beam="cta"] {
   position: relative;
-  border-radius: 9999px;
+  border-radius: var(--r-btn, 9999px);
   overflow: hidden;
 }
 
@@ -890,9 +890,9 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 9998px;
+  border-radius: calc(var(--r-btn, 9999px) - 1px);
   padding: 1px;
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round var(--r-btn, 9999px));
   background: conic-gradient(
         from var(--beam-angle-cta-light),
         transparent 0%, transparent 54%,
@@ -948,7 +948,7 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 9999px;
+  border-radius: var(--r-btn, 9999px);
   background: radial-gradient(ellipse 63px 36px at 33% -7.4%, rgba(255, 50, 100, 0.45), transparent),
     radial-gradient(ellipse 54px 32px at 12% -5%, rgba(40, 140, 255, 0.45), transparent),
     radial-gradient(ellipse 36px 63px at 2.1% 68.3%, rgba(50, 200, 80, 0.45), transparent),
@@ -986,7 +986,7 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
   pointer-events: none;
   z-index: 1;
   opacity: calc(var(--beam-opacity-cta-light) * 0.26 * var(--beam-inner-opacity, 1) * var(--beam-strength, 1));
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round var(--r-btn, 9999px));
   animation: beam-hue-shift-cta-light 12s ease-in-out infinite;
 }
 
@@ -994,8 +994,8 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
   display: none;
   position: absolute;
   inset: 0;
-  border-radius: 9998px;
-  clip-path: inset(0 round 9999px);
+  border-radius: calc(var(--r-btn, 9999px) - 1px);
+  clip-path: inset(0 round var(--r-btn, 9999px));
   background: conic-gradient(
         from var(--beam-angle-cta-light),
         transparent 0%, transparent 58%,
@@ -1110,3 +1110,101 @@ border-bottom:1px solid var(--line-strong);transition:border-color var(--dur-fas
 /* Work index — one-line summary under the heading */
 .work-intro{max-width:62ch;margin:clamp(18px,2.4vw,26px) 0 clamp(20px,2.6vw,30px);font-size:var(--t-meta);line-height:1.6;color:var(--dim)}
 .work-intro a{color:var(--fg);white-space:nowrap}
+
+/* ==========================================================================
+   EDITORIAL DIRECTION (paper & ink)
+   Warm paper ground with grain, near-black ink, one heavy tight display face
+   (Inter Tight) over Inter body copy, mono micro-labels (IBM Plex Mono),
+   an asymmetric hero and squared buttons. Everything below overrides the
+   rules above; delete this block to return to the previous look.
+   ========================================================================== */
+:root{
+  --display:"Inter Tight","Inter",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --t-hero:clamp(2.6rem,6.8vw,6.5rem);
+  --t-display:clamp(2.25rem,4.6vw,4rem);
+  --t-h2:clamp(1.25rem,1.8vw,1.5rem);
+  --r-btn:6px;
+  --r-media:0;
+  --grain-opacity:.035;
+}
+:root[data-theme="light"]{
+  --bg:#e8e8e3;
+  --fg:#0a0a08;
+  --dim:rgba(10,10,8,.62);
+  --faint:#dcdcd5;
+  --line:rgba(10,10,8,.12);
+  --line-strong:rgba(10,10,8,.32);
+  --grain-opacity:.09;
+}
+:root[data-theme="light"] .hero-system [data-hairline],
+:root[data-theme="light"] .band-fig [data-hairline],
+:root[data-theme="light"] .c-fig [data-hairline],
+:root[data-theme="light"] .svc-fig [data-hairline],
+:root[data-theme="light"] .svc-head-fig [data-hairline]{--hairline-plate:var(--bg);--hairline-hi:#0a0a08;--hairline-edge:#8d8d86;--hairline-mid:#b9b9b2;--hairline-lo:#d6d6cf}
+
+/* display type: heavy, tight */
+.hero h1,.pov h2,.band h2,.c-page h1,.c-open h1,.svc-open h1,.sec-head h1,.sec-head h2,
+.swork .info h3,.cap h3,.mobile-menu a,.brand,.article-head h1{font-family:var(--display)}
+.hero h1{font-weight:700;font-size:var(--t-hero);line-height:.98;letter-spacing:-.045em;max-width:none;text-wrap:balance}
+.hero h1 em,.pov h2 em,.band h2 em{font-style:normal}
+.pov h2,.band h2,.c-page h1{font-weight:700;line-height:1.02;letter-spacing:-.04em}
+.c-open h1,.svc-open h1{font-weight:700;letter-spacing:-.04em;line-height:1.02}
+.sec-head h1,.sec-head h2{font-weight:600;letter-spacing:-.02em}
+.swork .info h3,.cap h3{font-weight:600;letter-spacing:-.025em}
+.brand{font-weight:700;letter-spacing:-.03em}
+
+/* section markers: a small dot before each section title */
+.sec-head h1::before,.sec-head h2::before{content:"";display:inline-block;width:.42em;height:.42em;border-radius:50%;background:currentColor;opacity:.35;margin-right:.55em;vertical-align:.14em}
+
+/* mono micro-labels */
+.swork .info .kmeta,.swork .media .num,.cap .n,.sec-head .count,.c-meta .m .l,.c-sec .st,.svc-sec .st,
+.c-open .crumb,.prow .p-idx,.prow .p-cat,.p-metaline,footer.site .grid .col h4,.c-contrib .l,.c-film .l,
+.c-next .l,.c-service .l,.c-credits h3,.svc-cases-note{
+  font-family:var(--mono);font-size:.75rem;font-weight:400;letter-spacing:.04em;text-transform:uppercase}
+.sec-head .count a{text-transform:uppercase}
+
+/* buttons: squared, ink */
+.btn{border-radius:var(--r-btn);font-weight:500;padding:12px 18px}
+.btn .arw{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:4px;background:color-mix(in srgb,currentColor 14%,transparent);font-size:.8em;margin-right:-6px}
+.btn.ghost{border-color:var(--line-strong)}
+
+/* header: nav centred-left, booking button right */
+header.site .hwrap{gap:24px}
+nav.primary{margin-left:auto}
+nav.primary a{color:var(--fg)}
+.nav-cta{padding:8px 12px 8px 14px;font-size:var(--t-micro)}
+.nav-cta[hidden]{display:none}
+@media(max-width:900px){.nav-cta{margin-left:auto}}
+
+/* hero: narrow lead column left, headline right */
+@media(min-width:901px){
+  /* copy stacked on the left (headline, subheading, buttons), the figure on the right */
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:auto auto auto;
+    grid-template-areas:"title fig" "lead fig" "cta fig";column-gap:clamp(32px,4vw,72px);align-content:center}
+  .hero h1{grid-area:title;align-self:end;margin:0;font-size:clamp(2.6rem,5.4vw,5.5rem)}
+  .hero .sub{grid-area:lead;margin-top:clamp(20px,2.4vw,32px);max-width:42ch;color:var(--fg);font-weight:500;font-size:clamp(1.0625rem,1.35vw,1.25rem);line-height:1.38;letter-spacing:-.01em}
+  .hero .cta{grid-area:cta;align-self:start;margin-top:clamp(24px,3vw,36px);flex-direction:row;align-items:center;gap:12px}
+  .hero-system{grid-area:fig;position:relative;inset:auto;width:100%;max-width:none;align-self:center;justify-self:end;justify-content:center}
+  .hero-system [data-hairline]{width:130%;max-width:none;margin:-8% -15% -8% 0}
+}
+
+.hero .sub{color:var(--fg)}
+
+/* "Most projects arrive as a problem": statement that lights up as you read */
+.pov .body{max-width:30ch;font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,2.6vw,2.25rem);line-height:1.18;letter-spacing:-.03em}
+[data-scrub].scrubbing .sw{opacity:.22;transition:opacity .35s linear}
+[data-scrub].scrubbing .sw.lit{opacity:1}
+
+/* contact: book a call / send a brief */
+.c-tabs{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:calc(var(--r-btn) + 4px);margin-bottom:18px}
+.c-tabs [role="tab"]{font:inherit;font-size:var(--t-meta);font-weight:500;color:var(--dim);background:none;border:0;border-radius:var(--r-btn);padding:9px 16px;cursor:pointer}
+.c-tabs [role="tab"][aria-selected="true"]{background:var(--fg);color:var(--bg)}
+.c-cal{border:1px solid var(--line);border-radius:var(--r-media);overflow:hidden;background:#fff}
+.c-cal iframe{display:block;width:100%;height:min(760px,calc(100svh - 160px));min-height:560px;border:0}
+.c-cal-alt{margin-top:12px;font-size:var(--t-micro);color:var(--dim)}
+.c-cal-alt a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
+.prow .p-name{font-family:var(--display);font-weight:600;letter-spacing:-.03em}
+.svc-open .crumb{font-family:var(--mono);font-size:.75rem!important;letter-spacing:.04em;text-transform:uppercase}
+.filters button,.views button{border-radius:var(--r-btn)}
+
