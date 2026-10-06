@@ -1184,8 +1184,8 @@ nav.primary a{color:var(--fg)}
   .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:auto auto auto;
     grid-template-areas:"title fig" "lead fig" "cta fig";column-gap:clamp(32px,4vw,72px);align-content:center;
     /* fills the first screen; the next section arrives on scroll */
-    min-height:calc(100svh - 90px);padding-top:clamp(32px,5vh,64px);padding-bottom:clamp(32px,5vh,64px)}
-  .hero h1{grid-area:title;align-self:end;margin:0;font-size:clamp(2.6rem,5.4vw,5.5rem)}
+    min-height:calc(100svh - 90px);padding-top:clamp(16px,2vh,32px);padding-bottom:clamp(72px,12vh,140px)}
+  .hero h1{grid-area:title;align-self:end;margin:0;font-size:clamp(2.6rem,4.9vw,5.25rem)}
   .hero .sub{grid-area:lead;margin-top:clamp(20px,2.4vw,32px);max-width:42ch;color:var(--fg);font-weight:500;font-size:clamp(1.0625rem,1.35vw,1.25rem);line-height:1.38;letter-spacing:-.01em}
   .hero .cta{grid-area:cta;align-self:start;margin-top:clamp(24px,3vw,36px);flex-direction:row;align-items:center;gap:12px}
   .hero-system{grid-area:fig;position:relative;inset:auto;width:100%;max-width:none;align-self:center;justify-self:end;justify-content:center}
@@ -1216,6 +1216,11 @@ nav.primary a{color:var(--fg)}
 .index-list:not(.grid) .prow>a:hover,.notes-list a:hover,.svc-list > a:hover{background:var(--hover,var(--faint))}
 .svc-list > a:hover .svc-fig [data-hairline]{--hairline-plate:var(--hover,var(--faint))}
 :root[data-theme="light"] .btn.ghost:hover{background:var(--hover)}
+/* the headline keeps "Creative direction" on one line at every width */
+.hero h1 .reveal-line > *{white-space:nowrap}
+@media(max-width:600px){.hero h1{font-size:min(2.6rem,10.2vw)}}
+/* "what I lead": the statement sits centred between the hero and the 01–04 list */
+.pov .caps{margin-top:var(--sp-section)!important}
 /* selected work: a white panel rises behind the hovered project */
 :root[data-theme="light"] .swork{position:relative;isolation:isolate}
 :root[data-theme="light"] .swork::before{content:"";position:absolute;inset:calc(-1 * clamp(12px,1.6vw,24px));background:var(--hover);opacity:0;z-index:-1;pointer-events:none;transition:opacity var(--dur-fast,.25s) ease}
