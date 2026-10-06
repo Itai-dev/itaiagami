@@ -1233,3 +1233,6 @@ nav.primary a{color:var(--fg)}
 :root[data-theme="light"] :is(.filters button,.views button,.toggle,.c-tabs [role="tab"]):not([aria-pressed="true"],[aria-selected="true"]):hover{background:var(--hover)}
 :root[data-theme="light"] .swork::before{content:"";position:absolute;inset:calc(-1 * clamp(12px,1.6vw,24px));background:var(--hover);border-radius:var(--r-btn);opacity:0;z-index:-1;pointer-events:none;transition:opacity var(--dur-fast,.25s) ease}
 :root[data-theme="light"] .swork:hover::before{opacity:1}
+
+/* emphasis in headlines: Instrument Serif italic against the bold sans */
+:root :is(h1,h2) em{font-family:"Instrument Serif",Georgia,"Times New Roman",serif;font-style:italic;font-weight:400;letter-spacing:-.01em;font-size:1.08em;line-height:.9}
