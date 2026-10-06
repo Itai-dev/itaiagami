@@ -1262,7 +1262,7 @@ nav.primary a{color:var(--fg)}
 .lab-tile:hover .lab-fig [data-hairline],.lab-tile:focus-visible .lab-fig [data-hairline]{--hairline-plate:var(--hover,var(--faint))}
 .lab-cap{position:absolute;left:14px;right:14px;top:12px;display:flex;gap:10px;align-items:baseline;font-family:var(--mono,ui-monospace,monospace);font-size:var(--t-micro,.72rem);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);pointer-events:none}
 .lab-cap .lab-t{color:var(--fg);opacity:0;transform:translateY(4px);transition:opacity var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease)}
-.lab-cap .lab-k{margin-left:auto}
+.lab-cap .lab-k{margin-left:auto;white-space:nowrap}
 .lab-tile:hover .lab-t,.lab-tile:focus-visible .lab-t{opacity:1;transform:none}
 .lab-tile:has(video) .lab-cap{color:rgba(255,255,255,.75);mix-blend-mode:difference}
 .lab-info{display:none}
@@ -1291,3 +1291,10 @@ nav.primary a{color:var(--fg)}
 .lab-line{color:var(--dim);line-height:1.6;text-wrap:pretty}
 .lab-tools{margin-top:14px;font-size:var(--t-meta);color:var(--dim)}
 .lab-more{display:inline-block;margin-top:18px;font-weight:500}
+/* jump cuts: stacked frames, one shown at a time, swapped hard by js/lab.js */
+.lab-cuts-wrap{background:#cfcfcf}
+.lab-tile .lab-cuts-wrap~.lab-cap{color:rgba(10,10,8,.6)}
+.lab-cuts{position:relative;height:100%;aspect-ratio:480/920;max-width:100%}
+.lab-cuts img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;visibility:hidden}
+.lab-cuts img.on{visibility:visible}
+.lab-tile.open .lab-cuts{height:92%}
