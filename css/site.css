@@ -1133,6 +1133,7 @@ border-bottom:1px solid var(--line-strong);transition:border-color var(--dur-fas
   --fg:#0a0a08;
   --dim:rgba(10,10,8,.62);
   --faint:#dcdcd5;
+  --hover:#fbfbf9;
   --line:rgba(10,10,8,.12);
   --line-strong:rgba(10,10,8,.32);
   --grain-opacity:.09;
@@ -1181,7 +1182,9 @@ nav.primary a{color:var(--fg)}
 @media(min-width:901px){
   /* copy stacked on the left (headline, subheading, buttons), the figure on the right */
   .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:auto auto auto;
-    grid-template-areas:"title fig" "lead fig" "cta fig";column-gap:clamp(32px,4vw,72px);align-content:center}
+    grid-template-areas:"title fig" "lead fig" "cta fig";column-gap:clamp(32px,4vw,72px);align-content:center;
+    /* no stretch to the viewport: the gap to the next section matches the section rhythm below */
+    min-height:0;padding-top:clamp(56px,9vh,112px);padding-bottom:0}
   .hero h1{grid-area:title;align-self:end;margin:0;font-size:clamp(2.6rem,5.4vw,5.5rem)}
   .hero .sub{grid-area:lead;margin-top:clamp(20px,2.4vw,32px);max-width:42ch;color:var(--fg);font-weight:500;font-size:clamp(1.0625rem,1.35vw,1.25rem);line-height:1.38;letter-spacing:-.01em}
   .hero .cta{grid-area:cta;align-self:start;margin-top:clamp(24px,3vw,36px);flex-direction:row;align-items:center;gap:12px}
@@ -1208,3 +1211,8 @@ nav.primary a{color:var(--fg)}
 .svc-open .crumb{font-family:var(--mono);font-size:.75rem!important;letter-spacing:.04em;text-transform:uppercase}
 .filters button,.views button{border-radius:var(--r-btn)}
 
+
+/* paper theme: hovered rows and cards lift to white */
+.index-list:not(.grid) .prow>a:hover,.notes-list a:hover,.svc-list > a:hover{background:var(--hover,var(--faint))}
+.svc-list > a:hover .svc-fig [data-hairline]{--hairline-plate:var(--hover,var(--faint))}
+:root[data-theme="light"] .btn.ghost:hover{background:var(--hover)}
