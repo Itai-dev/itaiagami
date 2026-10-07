@@ -25,6 +25,8 @@
 let CONTACT = { BOOKING_URL:'', bookingEnabled: () => false };
 try{ CONTACT = require('../js/contact-config.js'); }catch(e){ console.error('enquiry: contact-config not found', e.message); }
 
+const { sendError } = require('./_lib/errors.js');
+
 const TO   = process.env.ENQUIRY_TO   || 'itaiagami@gmail.com';
 const FROM = process.env.ENQUIRY_FROM || 'Itai Agami <enquiries@itaiagami.com>';
 
@@ -63,14 +65,17 @@ const clean = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
 const esc = s => String(s).replace(/[&<>"']/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-module.exports = async (req, res) => {
+const handler = async (req, res) => {
   if(req.method !== 'POST'){
     res.setHeader('Allow','POST');
-    return res.status(405).json({ ok:false, error:'Method not allowed.' });
+    return sendError(res, 405, 'method_not_allowed', 'Method not allowed.', 'Send the enquiry as POST with a JSON body.');
   }
 
   let body = req.body;
-  if(typeof body === 'string'){ try{ body = JSON.parse(body || '{}'); }catch{ body = {}; } }
+  if(typeof body === 'string'){
+    try{ body = JSON.parse(body || '{}'); }
+    catch{ return sendError(res, 400, 'invalid_json', 'The request body is not valid JSON.', 'Send Content-Type: application/json and a JSON object.'); }
+  }
   body = body || {};
 
   /* honeypot — a real person never sees this field, so anything in it is a bot.
@@ -78,7 +83,10 @@ module.exports = async (req, res) => {
   if(clean(body.website, 200)) return res.status(200).json({ ok:true });
 
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if(throttled(ip)) return res.status(429).json({ ok:false, error:'Too many messages just now. Please try again shortly.' });
+  if(throttled(ip)){
+    res.setHeader('Retry-After', String(WINDOW / 1000));
+    return sendError(res, 429, 'rate_limited', 'Too many messages just now. Please try again shortly.', 'Wait ten minutes before sending another enquiry, or email itaiagami@gmail.com.');
+  }
 
   const name     = clean(body.name, 120);
   const email    = clean(body.email, 200);
@@ -90,13 +98,14 @@ module.exports = async (req, res) => {
   const source   = clean(body.source, 40);
 
 
-  if(!name)                          return res.status(400).json({ ok:false, error:'Please add your name.' });
+  const invalid = (code, message, hint) => sendError(res, 400, code, message, hint);
+  if(!name)                          return invalid('missing_name', 'Please add your name.', 'Set "name" to the sender\'s name (up to 120 characters).');
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))
-                                     return res.status(400).json({ ok:false, error:'That email address does not look right.' });
-  if(project.length < 10)            return res.status(400).json({ ok:false, error:'Please say a little more about the project.' });
-  if(budget   && !BUDGETS.includes(budget))     return res.status(400).json({ ok:false, error:'Invalid budget value.' });
-  if(timeline && !TIMELINES.includes(timeline)) return res.status(400).json({ ok:false, error:'Invalid timeline value.' });
-  if(source   && !SOURCES.includes(source))     return res.status(400).json({ ok:false, error:'Invalid source value.' });
+                                     return invalid('invalid_email', 'That email address does not look right.', 'Set "email" to a full address such as name@company.com.');
+  if(project.length < 10)            return invalid('project_too_short', 'Please say a little more about the project.', 'Set "project" to at least 10 characters describing what is launching, for whom, and what is undecided.');
+  if(budget   && !BUDGETS.includes(budget))     return invalid('invalid_budget', 'Invalid budget value.', 'Use one of: ' + BUDGETS.join(' | ') + ', or omit "budget".');
+  if(timeline && !TIMELINES.includes(timeline)) return invalid('invalid_timeline', 'Invalid timeline value.', 'Use one of: ' + TIMELINES.join(' | ') + ', or omit "timeline".');
+  if(source   && !SOURCES.includes(source))     return invalid('invalid_source', 'Invalid source value.', 'Use one of: ' + SOURCES.join(' | ') + ', or omit "source".');
 
   /* Attribution — filled by the page, never typed, so it is reported rather
      than validated. Kept short so a crafted request cannot bloat the email. */
@@ -126,7 +135,7 @@ module.exports = async (req, res) => {
        Vercel runtime logs (short retention), and tell the page to keep the
        visitor's answers on screen and offer retry / email. */
     console.error('enquiry: NOT DELIVERED — lead follows', JSON.stringify(lead));
-    return res.status(502).json({ ok:false, fallback:true, error:'Could not send just now.' });
+    return sendError(res, 502, 'delivery_failed', 'Could not send just now.', 'Retry in a few minutes, or email itaiagami@gmail.com directly.', { fallback:true });
   }
   countHit(ip);
   if(!emailed) console.error('enquiry: email failed but lead is stored in the backup sheet', lead.timestamp);
@@ -137,6 +146,12 @@ module.exports = async (req, res) => {
 
   return res.status(200).json({ ok:true });
 };
+
+module.exports = handler;
+/* exported for tests: the accepted option values, mirrored in /openapi.json */
+module.exports.BUDGETS = BUDGETS;
+module.exports.TIMELINES = TIMELINES;
+module.exports.SOURCES = SOURCES;
 
 /* ---------- helpers ---------- */
 
