@@ -167,6 +167,11 @@ function blocks(node, ctx, out){
   }
   if(/^h[1-6]$/.test(tag)){ const t = inl(); if(t) out.push('#'.repeat(+tag[1]) + ' ' + t); return out; }
   if(tag === 'hr'){ out.push('---'); return out; }
+  if(tag === 'pre'){
+    const code = textOf(node).replace(/^\n/, '').replace(/\s+$/, '');
+    if(code) out.push('```\n' + code + '\n```');
+    return out;
+  }
   if(tag === 'summary'){ const t = inl(); if(t) out.push('### ' + t); return out; }
   if(tag === 'blockquote'){
     const inner = [];

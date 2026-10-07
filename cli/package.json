@@ -1,0 +1,31 @@
+{
+  "name": "itaiagami",
+  "version": "1.0.0",
+  "description": "Command-line client for the Itai Agami API: services, case studies, pages as Markdown and project enquiries from Itai Agami, independent Creative Director.",
+  "type": "module",
+  "bin": {
+    "itaiagami": "itaiagami.mjs"
+  },
+  "files": [
+    "itaiagami.mjs",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "itai agami",
+    "creative director",
+    "cli",
+    "api",
+    "agents"
+  ],
+  "homepage": "https://itaiagami.com/developers.html",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Itai-dev/itaiagami.git",
+    "directory": "cli"
+  },
+  "author": "Itai Agami <itaiagami@gmail.com> (https://itaiagami.com)",
+  "license": "MIT"
+}

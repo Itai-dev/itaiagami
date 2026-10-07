@@ -74,6 +74,7 @@ test('public API over HTTP, with JSON errors', async () => {
   assert.equal((await one.json()).slug, 'channel-13');
 
   assert.equal((await get('/api/services')).status, 200);
+  assert.equal((await get('/api/v1/services')).status, 200);
 
   for(const [p, status, code] of [['/api/projects/nope', 404, 'project_not_found'], ['/api/does-not-exist', 404, 'endpoint_not_found']]){
     const r = await get(p, 'text/markdown');
@@ -87,4 +88,29 @@ test('public API over HTTP, with JSON errors', async () => {
   const j = await bad.json();
   assert.equal(j.code, 'invalid_email');
   assert.ok(j.hint);
+});
+
+test('developer portal and CLI file are served', async () => {
+  const r = await get('/developers', 'text/html');
+  assert.equal(r.status, 200);
+  assert.ok(r.url.endsWith('/developers.html'));
+  assert.match(await r.text(), /Itai Agami API/);
+  const md = await (await get('/developers', 'text/markdown')).text();
+  assert.match(md, /```\n# services and starting prices\ncurl https:\/\/itaiagami\.com\/api\/v1\/services\n/);
+  assert.match(md, /\| `GET \/api\/v1\/services` \| `listServices` \|/);
+  const js = await get('/cli/itaiagami.mjs', 'text/markdown');
+  assert.equal(js.status, 200);
+  assert.match(js.headers.get('content-type'), /^text\/javascript/);
+});
+
+test('versioned API over HTTP with version and rate-limit headers', async () => {
+  const r = await get('/api/v1/projects?category=Brand');
+  assert.equal(r.status, 200);
+  assert.equal(r.headers.get('api-version'), '1');
+  assert.match(r.headers.get('ratelimit'), /^"read";r=\d+;t=\d+$/);
+  assert.equal(r.headers.get('ratelimit-policy'), '"read";q=60;w=60');
+  assert.ok((await r.json()).projects.every(p => p.category === 'Brand'));
+  const v2 = await get('/api/v2/services');
+  assert.equal(v2.status, 404);
+  assert.equal((await v2.json()).code, 'unsupported_api_version');
 });

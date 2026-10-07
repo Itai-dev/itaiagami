@@ -4,7 +4,7 @@
     "title": "Itai Agami API",
     "version": "1.0.0",
     "summary": "Public data about Itai Agami's creative direction services and case studies, plus project enquiries.",
-    "description": "The public API of itaiagami.com, the site of Itai Agami, an independent Creative Director based in Tel Aviv and working internationally.\n\nUse it when a person is looking for a creative director for a brand identity, a product or brand launch, an interactive or museum experience, or fractional creative leadership: list the services and starting prices, read case studies for relevant precedent, and send a project enquiry on the person's behalf.\n\nNo authentication. All responses are JSON. Every error has the same shape (the Error schema): a human-readable `error`, a stable machine-readable `code`, a `hint` saying how to fix the request, the HTTP `status` and a `docs` link.\n\nEvery HTML page on the site is also available as Markdown at the same URL: send `Accept: text/markdown`. A site summary for language models, with when-to-use guidance, is at https://itaiagami.com/llms.txt.",
+    "description": "The public API of itaiagami.com, the site of Itai Agami, an independent Creative Director based in Tel Aviv and working internationally.\n\nUse it when a person is looking for a creative director for a brand identity, a product or brand launch, an interactive or museum experience, or fractional creative leadership: list the services and starting prices, read case studies for relevant precedent, and send a project enquiry on the person's behalf.\n\nNo authentication. All responses are JSON. Every error has the same shape (the Error schema): a human-readable `error`, a stable machine-readable `code`, a `hint` saying how to fix the request, the HTTP `status` and a `docs` link.\n\nEvery HTML page on the site is also available as Markdown at the same URL: send `Accept: text/markdown`. A site summary for language models, with when-to-use guidance, is at https://itaiagami.com/llms.txt. The developer portal, with a quickstart, the CLI and a sandbox mode, is at https://itaiagami.com/developers.html.\n\n## Versioning\n\nThe version is in the URL path: `/api/v1/...`. Every response carries an `API-Version` header naming the major version that answered it. Within v1, changes are additive only (new endpoints, new optional parameters, new response fields), so ignore fields you do not recognise. A breaking change ships as `/api/v2/...` alongside v1. The unversioned paths (`/api/services`, `/api/projects`, `/api/enquiry`, `/api/geo`) are aliases of the current version and are what the website itself calls; integrations should use `/api/v1`. Requests to a version that does not exist get a 404 with code `unsupported_api_version`.\n\n## Deprecation\n\nNothing is deprecated today. When a version or endpoint is deprecated, its responses will carry a `Deprecation` header (RFC 9745) with the date it was deprecated, a `Sunset` header (RFC 8594) with the date it stops working, and a `Link: <https://itaiagami.com/developers.html#versioning>; rel=\"deprecation\"` header. The sunset date will be at least 6 months after the deprecation date, and the change will be listed on the developer portal and in this document.\n\n## Rate limits\n\nResponses carry the IETF RateLimit header fields (draft-ietf-httpapi-ratelimit-headers): `RateLimit-Policy` describes the quota and `RateLimit` reports what is left (`r`) and the seconds until the window resets (`t`). The same values are also sent as `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset` (seconds). Policy \"read\": 60 requests per 60 seconds per client on GET /services and /projects. Policy \"enquiry\": 5 accepted enquiries per 10 minutes per client. Over the limit the API answers 429 with code `rate_limited` and a `Retry-After` header in seconds.",
     "contact": {
       "name": "Itai Agami",
       "email": "itaiagami@gmail.com",
@@ -19,8 +19,8 @@
   ],
   "security": [],
   "externalDocs": {
-    "description": "Agent guide (llms.txt)",
-    "url": "https://itaiagami.com/llms.txt"
+    "description": "Itai Agami developer portal",
+    "url": "https://itaiagami.com/developers.html"
   },
   "tags": [
     {
@@ -41,9 +41,10 @@
     }
   ],
   "paths": {
-    "/api/services": {
+    "/api/v1/services": {
       "get": {
         "operationId": "listServices",
+        "x-rateLimitPolicy": "read",
         "tags": [
           "Services"
         ],
@@ -58,6 +59,26 @@
                   "$ref": "#/components/schemas/ServiceCatalog"
                 }
               }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "405": {
@@ -68,14 +89,53 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded (code: rate_limited). Policy \"read\": 60 per 60 seconds. Wait Retry-After seconds.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              }
             }
           }
         }
       }
     },
-    "/api/projects": {
+    "/api/v1/projects": {
       "get": {
         "operationId": "listProjects",
+        "x-rateLimitPolicy": "read",
         "tags": [
           "Projects"
         ],
@@ -106,6 +166,26 @@
                   "$ref": "#/components/schemas/ProjectList"
                 }
               }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "400": {
@@ -115,6 +195,26 @@
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 }
+              }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -126,14 +226,53 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded (code: rate_limited). Policy \"read\": 60 per 60 seconds. Wait Retry-After seconds.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              }
             }
           }
         }
       }
     },
-    "/api/projects/{slug}": {
+    "/api/v1/projects/{slug}": {
       "get": {
         "operationId": "getProject",
+        "x-rateLimitPolicy": "read",
         "tags": [
           "Projects"
         ],
@@ -163,6 +302,26 @@
                   "$ref": "#/components/schemas/Project"
                 }
               }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "404": {
@@ -172,6 +331,26 @@
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 }
+              }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -183,19 +362,70 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded (code: rate_limited). Policy \"read\": 60 per 60 seconds. Wait Retry-After seconds.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              }
             }
           }
         }
       }
     },
-    "/api/enquiry": {
+    "/api/v1/enquiry": {
       "post": {
         "operationId": "submitEnquiry",
+        "x-rateLimitPolicy": "enquiry",
         "tags": [
           "Contact"
         ],
         "summary": "Send a project enquiry",
-        "description": "Sends a project enquiry to Itai Agami by email, the same as the form on https://itaiagami.com/contact.html. Only send an enquiry the person has asked you to send, with their real name and email address: Itai replies to that address, and it also receives a short confirmation email. At most 5 accepted enquiries per sender per 10 minutes.",
+        "description": "Sends a project enquiry to Itai Agami by email, the same as the form on https://itaiagami.com/contact.html. Only send an enquiry the person has asked you to send, with their real name and email address: Itai replies to that address, and it also receives a short confirmation email. At most 5 accepted enquiries per sender per 10 minutes.\n\nSandbox: set `\"dry_run\": true` in the body (or `?dry_run=1`) to run every validation and get the same errors without sending anything or counting against the rate limit.",
+        "parameters": [
+          {
+            "name": "dry_run",
+            "in": "query",
+            "required": false,
+            "description": "Sandbox mode: validate only, send nothing. Same as \"dry_run\": true in the body.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -208,12 +438,32 @@
         },
         "responses": {
           "200": {
-            "description": "Enquiry received.",
+            "description": "Enquiry received, or validated without sending in dry-run mode.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EnquiryAccepted"
                 }
+              }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -225,6 +475,26 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "405": {
@@ -235,23 +505,43 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              }
             }
           },
           "429": {
-            "description": "Too many enquiries from this sender (code: rate_limited).",
-            "headers": {
-              "Retry-After": {
-                "description": "Seconds to wait before retrying.",
-                "schema": {
-                  "type": "integer"
-                }
-              }
-            },
+            "description": "Rate limit exceeded (code: rate_limited). Policy \"enquiry\": 5 per 600 seconds. Wait Retry-After seconds.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 }
+              }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
               }
             }
           },
@@ -263,12 +553,32 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              },
+              "RateLimit": {
+                "$ref": "#/components/headers/RateLimit"
+              },
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimit-Policy"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           }
         }
       }
     },
-    "/api/geo": {
+    "/api/v1/geo": {
       "get": {
         "operationId": "getVisitorCountry",
         "tags": [
@@ -297,6 +607,11 @@
                   }
                 }
               }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
+              }
             }
           },
           "405": {
@@ -306,6 +621,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 }
+              }
+            },
+            "headers": {
+              "API-Version": {
+                "$ref": "#/components/headers/API-Version"
               }
             }
           }
@@ -686,6 +1006,11 @@
             "type": "string",
             "maxLength": 120,
             "description": "Optional attribution, for example the name of the agent or app sending the enquiry."
+          },
+          "dry_run": {
+            "type": "boolean",
+            "default": false,
+            "description": "Sandbox mode: validate only, send nothing, and do not count against the rate limit."
           }
         }
       },
@@ -698,7 +1023,60 @@
           "ok": {
             "type": "boolean",
             "const": true
+          },
+          "dryRun": {
+            "type": "boolean",
+            "description": "Present and true when the request was a dry run and nothing was sent."
+          },
+          "message": {
+            "type": "string",
+            "description": "Present on dry runs."
           }
+        }
+      }
+    },
+    "headers": {
+      "API-Version": {
+        "description": "The major API version that answered.",
+        "schema": {
+          "type": "string",
+          "const": "1"
+        }
+      },
+      "RateLimit": {
+        "description": "Remaining quota (r) and seconds until the window resets (t), as a Structured Field list item, for example \"read\";r=57;t=41 (draft-ietf-httpapi-ratelimit-headers).",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "RateLimit-Policy": {
+        "description": "The quota (q) per window in seconds (w), for example \"read\";q=60;w=60.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "X-RateLimit-Limit": {
+        "description": "Requests allowed per window.",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "X-RateLimit-Remaining": {
+        "description": "Requests left in the current window.",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "X-RateLimit-Reset": {
+        "description": "Seconds until the window resets.",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "Retry-After": {
+        "description": "Seconds to wait before retrying.",
+        "schema": {
+          "type": "integer"
         }
       }
     }
