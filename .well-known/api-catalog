@@ -1,11 +1,12 @@
 {
   "linkset": [
     {
-      "anchor": "https://itaiagami.com/api",
+      "anchor": "https://itaiagami.com/api/v1",
       "service-desc": [
         { "href": "https://itaiagami.com/openapi.json", "type": "application/vnd.oai.openapi+json" }
       ],
       "service-doc": [
+        { "href": "https://itaiagami.com/developers.html", "type": "text/html" },
         { "href": "https://itaiagami.com/llms.txt", "type": "text/plain" }
       ]
     }

@@ -25,7 +25,7 @@
 let CONTACT = { BOOKING_URL:'', bookingEnabled: () => false };
 try{ CONTACT = require('../js/contact-config.js'); }catch(e){ console.error('enquiry: contact-config not found', e.message); }
 
-const { sendError } = require('./_lib/errors.js');
+const { sendError, setApiHeaders } = require('./_lib/errors.js');
 
 const TO   = process.env.ENQUIRY_TO   || 'itaiagami@gmail.com';
 const FROM = process.env.ENQUIRY_FROM || 'Itai Agami <enquiries@itaiagami.com>';
@@ -46,26 +46,24 @@ const BUDGETS   = [
 const TIMELINES = ['As soon as possible','1–3 months','3–6 months','Not defined yet'];
 const SOURCES   = ['ChatGPT','Gemini','Google Search','LinkedIn','Referral','Other'];
 
-/* Best-effort throttle. Serverless instances are ephemeral and not shared,
-   so this stops a burst from one source, not a distributed flood. The
-   honeypot below does the heavier lifting against bots.
+/* Best-effort throttle (api/_lib/ratelimit.js, policy "enquiry"). Serverless
+   instances are ephemeral and not shared, so this stops a burst from one
+   source, not a distributed flood. The honeypot below does the heavier
+   lifting against bots.
    Only ACCEPTED enquiries count, so someone retrying after a validation
-   error or a delivery failure can never lock themselves out. */
-const seen = new Map();
-const WINDOW = 10 * 60 * 1000, MAX = 5;
-function recent(ip){
-  const now = Date.now();
-  if(seen.size > 500) for(const [k,v] of seen) if(!v.some(t => now - t < WINDOW)) seen.delete(k);
-  return (seen.get(ip) || []).filter(t => now - t < WINDOW);
-}
-const throttled = ip => recent(ip).length >= MAX;
-const countHit  = ip => seen.set(ip, recent(ip).concat(Date.now()));
+   error or a delivery failure can never lock themselves out. Dry runs
+   never count. */
+const RL = require('./_lib/ratelimit.js');
+const POLICY = RL.POLICIES.enquiry;
 
 const clean = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
 const esc = s => String(s).replace(/[&<>"']/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 const handler = async (req, res) => {
+  setApiHeaders(res);
+  const ip = RL.clientIp(req);
+  RL.setHeaders(res, RL.status(POLICY, ip));
   if(req.method !== 'POST'){
     res.setHeader('Allow','POST');
     return sendError(res, 405, 'method_not_allowed', 'Method not allowed.', 'Send the enquiry as POST with a JSON body.');
@@ -82,11 +80,13 @@ const handler = async (req, res) => {
      Answer 200 so the bot believes it succeeded and does not retry. */
   if(clean(body.website, 200)) return res.status(200).json({ ok:true });
 
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if(throttled(ip)){
-    res.setHeader('Retry-After', String(WINDOW / 1000));
-    return sendError(res, 429, 'rate_limited', 'Too many messages just now. Please try again shortly.', 'Wait ten minutes before sending another enquiry, or email itaiagami@gmail.com.');
-  }
+  /* sandbox: "dry_run": true (or ?dry_run=1) validates everything and sends nothing */
+  const dryRun = body.dry_run === true || /^(1|true)$/i.test(String((req.query && req.query.dry_run) || ''));
+
+  const standing = RL.status(POLICY, ip);
+  if(!dryRun && standing.limited)
+    return RL.tooMany(res, standing, 'Too many messages just now. Please try again shortly.',
+      'Wait ' + standing.reset + ' seconds (see Retry-After) before sending another enquiry, or email itaiagami@gmail.com.');
 
   const name     = clean(body.name, 120);
   const email    = clean(body.email, 200);
@@ -106,6 +106,8 @@ const handler = async (req, res) => {
   if(budget   && !BUDGETS.includes(budget))     return invalid('invalid_budget', 'Invalid budget value.', 'Use one of: ' + BUDGETS.join(' | ') + ', or omit "budget".');
   if(timeline && !TIMELINES.includes(timeline)) return invalid('invalid_timeline', 'Invalid timeline value.', 'Use one of: ' + TIMELINES.join(' | ') + ', or omit "timeline".');
   if(source   && !SOURCES.includes(source))     return invalid('invalid_source', 'Invalid source value.', 'Use one of: ' + SOURCES.join(' | ') + ', or omit "source".');
+
+  if(dryRun) return res.status(200).json({ ok:true, dryRun:true, message:'Valid enquiry. Nothing was sent: remove "dry_run" to send it.' });
 
   /* Attribution — filled by the page, never typed, so it is reported rather
      than validated. Kept short so a crafted request cannot bloat the email. */
@@ -137,7 +139,8 @@ const handler = async (req, res) => {
     console.error('enquiry: NOT DELIVERED — lead follows', JSON.stringify(lead));
     return sendError(res, 502, 'delivery_failed', 'Could not send just now.', 'Retry in a few minutes, or email itaiagami@gmail.com directly.', { fallback:true });
   }
-  countHit(ip);
+  RL.record(POLICY, ip);
+  RL.setHeaders(res, RL.status(POLICY, ip));
   if(!emailed) console.error('enquiry: email failed but lead is stored in the backup sheet', lead.timestamp);
   if(!stored && process.env.LEAD_WEBHOOK_URL) console.error('enquiry: backup store failed but email was sent', lead.timestamp);
 

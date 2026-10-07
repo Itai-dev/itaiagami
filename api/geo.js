@@ -8,9 +8,10 @@
    Consumed by the engagement-floor block in js/site.js.
    ============================================================ */
 
-const { sendError } = require('./_lib/errors.js');
+const { sendError, setApiHeaders } = require('./_lib/errors.js');
 
 module.exports = (req, res) => {
+  setApiHeaders(res);
   if(req.method !== 'GET' && req.method !== 'HEAD'){
     res.setHeader('Allow','GET');
     return sendError(res, 405, 'method_not_allowed', 'Method not allowed.', 'Use GET.');

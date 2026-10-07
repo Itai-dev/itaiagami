@@ -61,6 +61,11 @@
       "permanent": true
     },
     {
+      "source": "/developers",
+      "destination": "/developers.html",
+      "permanent": true
+    },
+    {
       "source": "/work/:slug([a-z0-9-]+)",
       "destination": "/work/:slug.html",
       "permanent": true
@@ -135,6 +140,19 @@
         {
           "key": "Content-Type",
           "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/cli/itaiagami.mjs",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/javascript; charset=utf-8"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
         }
       ]
     }

@@ -35,6 +35,25 @@ test('openapi.json is a self-describing OpenAPI 3.1 document', () => {
   assert.deepEqual([...ids].sort(), ['getProject', 'getVisitorCountry', 'listProjects', 'listServices', 'submitEnquiry']);
 });
 
+test('openapi.json: versioned paths, API-Version and RateLimit headers, deprecation policy', () => {
+  for(const p of Object.keys(spec.paths)) assert.match(p, /^\/api\/v1\//, p);
+  for(const name of ['API-Version', 'RateLimit', 'RateLimit-Policy', 'Retry-After']) assert.ok(spec.components.headers[name], name);
+  for(const item of Object.values(spec.paths)) for(const op of Object.values(item)){
+    for(const [code, r] of Object.entries(op.responses))
+      assert.equal(r.headers['API-Version'].$ref, '#/components/headers/API-Version', op.operationId + ' ' + code);
+    if(op.operationId === 'getVisitorCountry') continue;
+    assert.ok(op['x-rateLimitPolicy'], op.operationId);
+    assert.ok(op.responses[429].headers['Retry-After'], op.operationId + ' 429 Retry-After');
+    assert.ok(op.responses[200].headers.RateLimit, op.operationId + ' 200 RateLimit');
+  }
+  const d = spec.info.description;
+  for(const s of ['/api/v1/', 'API-Version', 'Deprecation', 'RFC 9745', 'Sunset', 'RFC 8594', 'rel="deprecation"', 'RateLimit-Policy', 'Retry-After'])
+    assert.ok(d.includes(s), s);
+  assert.equal(spec.externalDocs.url, 'https://itaiagami.com/developers.html');
+  const props = spec.components.schemas.EnquiryRequest.properties;
+  assert.equal(props.dry_run.type, 'boolean');
+});
+
 test('every $ref in openapi.json resolves', () => {
   const refs = [...JSON.stringify(spec).matchAll(/"\$ref":"#\/components\/schemas\/([A-Za-z]+)"/g)].map(m => m[1]);
   assert.ok(refs.length > 10);
@@ -64,7 +83,8 @@ test('llms.txt keeps its format and gives agents when-to-use guidance', () => {
   assert.match(t, /^# Itai Agami\n\n> /);
   assert.match(t, /\n## When to use this site \(for agents\)\n/);
   assert.match(t, /\n## API and agent resources\n/);
-  for(const l of ['https://itaiagami.com/openapi.json', 'https://itaiagami.com/api/services', 'POST https://itaiagami.com/api/enquiry', 'Accept: text/markdown'])
+  for(const l of ['https://itaiagami.com/openapi.json', 'https://itaiagami.com/api/v1/services', 'POST https://itaiagami.com/api/v1/enquiry',
+    'Accept: text/markdown', 'https://itaiagami.com/developers.html', 'dry_run'])
     assert.ok(t.includes(l), l);
 });
 
@@ -77,4 +97,26 @@ test('vercel.json wires the function files and headers', () => {
   assert.ok(h('/openapi.json').some(x => x.key === 'Content-Type' && /openapi\+json/.test(x.value)));
   assert.ok(h('/.well-known/api-catalog').some(x => x.key === 'Content-Type' && /^application\/linkset\+json/.test(x.value)));
   assert.ok(!read('.vercelignore').split('\n').includes('data'), 'data/ must deploy: the API reads data/projects.json');
+});
+
+test('developer portal: page, clean URL, sitemap, discovery links', () => {
+  const html = read('developers.html');
+  assert.match(html, /<title>Itai Agami API: Developer Portal \| Itai Agami<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/itaiagami\.com\/developers\.html" \/>/);
+  for(const id of ['quickstart', 'endpoints', 'auth', 'sandbox', 'cli', 'errors', 'rate-limits', 'versioning', 'changelog'])
+    assert.ok(html.includes('id="' + id + '"'), id);
+  for(const op of ['listServices', 'listProjects', 'getProject', 'submitEnquiry', 'getVisitorCountry']) assert.ok(html.includes(op), op);
+  const v = JSON.parse(read('vercel.json'));
+  assert.ok(v.redirects.some(r => r.source === '/developers' && r.destination === '/developers.html'));
+  assert.ok(read('sitemap.xml').includes('<loc>https://itaiagami.com/developers.html</loc>'));
+  const cat = JSON.parse(read('.well-known/api-catalog')).linkset[0];
+  assert.equal(cat.anchor, 'https://itaiagami.com/api/v1');
+  assert.ok(cat['service-doc'].some(d => d.href === 'https://itaiagami.com/developers.html'));
+});
+
+test('homepage structured data names the site for brand searches', () => {
+  const graph = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(read('index.html'))[1])['@graph'];
+  const site = graph.find(n => n['@type'] === 'WebSite');
+  assert.ok(site.alternateName.includes('Itai Agami, Creative Director'));
+  assert.equal(graph.find(n => n['@type'] === 'Person').jobTitle, 'Creative Director');
 });

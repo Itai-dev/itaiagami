@@ -15,7 +15,15 @@
 
 const DOCS = 'https://itaiagami.com/openapi.json';
 
+/* The API's major version. Every response says which version answered it;
+   /api/v1/... is the stable versioned path and the unversioned /api/...
+   paths are aliases of it. The versioning and deprecation policy is in
+   /developers.html and the info.description of /openapi.json. */
+const API_VERSION = '1';
+const setApiHeaders = res => res.setHeader('API-Version', API_VERSION);
+
 function sendError(res, status, code, message, hint, extra){
+  setApiHeaders(res);
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   return res.status(status).json(Object.assign(
     { ok: false, error: message, code, hint: hint || '', status, docs: DOCS },
@@ -23,4 +31,4 @@ function sendError(res, status, code, message, hint, extra){
   ));
 }
 
-module.exports = { sendError, DOCS };
+module.exports = { sendError, setApiHeaders, API_VERSION, DOCS };

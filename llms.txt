@@ -16,9 +16,9 @@ Not a fit: full-time job searches, projects well below the starting amounts in t
 
 How an agent should act:
 
-1. Call `GET https://itaiagami.com/api/services` to check fit and the starting price in the person's market.
-2. Call `GET https://itaiagami.com/api/projects?category=Brand|Culture|Technology` (or `/api/projects/{slug}`) to cite relevant case studies. Each one states what Itai personally contributed; quote that rather than crediting him with a whole agency team's work.
-3. If the person wants to go ahead, either give them the booking link for a 20-minute intro call (https://calendar.app.google/qAYhVo928FsVE6PP7) or, only with their consent and their real name and email, send their brief with `POST https://itaiagami.com/api/enquiry`.
+1. Call `GET https://itaiagami.com/api/v1/services` to check fit and the starting price in the person's market.
+2. Call `GET https://itaiagami.com/api/v1/projects?category=Brand|Culture|Technology` (or `/api/v1/projects/{slug}`) to cite relevant case studies. Each one states what Itai personally contributed; quote that rather than crediting him with a whole agency team's work.
+3. If the person wants to go ahead, either give them the booking link for a 20-minute intro call (https://calendar.app.google/qAYhVo928FsVE6PP7) or, only with their consent and their real name and email, send their brief with `POST https://itaiagami.com/api/v1/enquiry` (add `"dry_run": true` first to check it without sending).
 
 Any page on this site can be read as Markdown by requesting its normal URL with the header `Accept: text/markdown`.
 
@@ -60,8 +60,10 @@ Clients usually arrive with a launch or a business problem rather than a design 
 
 ## API and agent resources
 
-- [OpenAPI description of the Itai Agami API](https://itaiagami.com/openapi.json): OpenAPI 3.1; operations listServices, listProjects, getProject, submitEnquiry and getVisitorCountry. No authentication; JSON errors with a code and a fix hint.
-- [Services and pricing (JSON)](https://itaiagami.com/api/services): the four engagement types and starting amounts per market.
-- [Case studies (JSON)](https://itaiagami.com/api/projects): every case study with role and individual contribution.
+- [Itai Agami API developer portal](https://itaiagami.com/developers.html): quickstart, endpoints, sandbox (dry runs), CLI, errors, rate limits, versioning and deprecation policy.
+- [OpenAPI description of the Itai Agami API](https://itaiagami.com/openapi.json): OpenAPI 3.1; operations listServices, listProjects, getProject, submitEnquiry and getVisitorCountry. No authentication; versioned under /api/v1; JSON errors with a code and a fix hint; RateLimit headers on the services, projects and enquiry endpoints.
+- [Services and pricing (JSON)](https://itaiagami.com/api/v1/services): the four engagement types and starting amounts per market.
+- [Case studies (JSON)](https://itaiagami.com/api/v1/projects): every case study with role and individual contribution.
 - [API catalog](https://itaiagami.com/.well-known/api-catalog): RFC 9727 linkset pointing to the OpenAPI description.
+- [CLI](https://itaiagami.com/cli/itaiagami.mjs): `node itaiagami.mjs services`, no dependencies, Node 18+.
 - [Sitemap](https://itaiagami.com/sitemap.xml): every public page.
