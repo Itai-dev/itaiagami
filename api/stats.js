@@ -24,6 +24,7 @@
    ============================================================ */
 
 const crypto = require('node:crypto');
+const { sendError } = require('./_lib/errors.js');
 
 const FUNNEL = ['contact_view', 'contact_form_start', 'contact_form_submit', 'book_call_click', 'portfolio_cta_click', 'project_view'];
 const GA_TTL = 10 * 60 * 1000, CLARITY_TTL = 3 * 60 * 60 * 1000;
@@ -33,13 +34,13 @@ let token = null;
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'private, no-store, max-age=0');
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
-  if (req.method !== 'GET') { res.setHeader('Allow', 'GET'); return res.status(405).json({ error: 'Method not allowed.' }); }
+  if (req.method !== 'GET') { res.setHeader('Allow', 'GET'); return sendError(res, 405, 'method_not_allowed', 'Method not allowed.', 'Use GET.'); }
 
   const pass = process.env.STATS_PASSWORD;
-  if (!pass) return res.status(503).json({ error: 'STATS_PASSWORD is not set.' });
+  if (!pass) return sendError(res, 503, 'not_configured', 'STATS_PASSWORD is not set.', 'This private endpoint is not configured on this deployment.');
   if (!same(String(req.headers['x-stats-key'] || ''), pass)) {
     await new Promise((r) => setTimeout(r, 600));
-    return res.status(401).json({ error: 'Wrong password.' });
+    return sendError(res, 401, 'unauthorized', 'Wrong password.', 'This is the site owner\'s private analytics endpoint; it is not part of the public API.');
   }
 
   const days = [7, 28, 90].includes(Number(req.query.days)) ? Number(req.query.days) : 28;

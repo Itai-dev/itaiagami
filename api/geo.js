@@ -8,10 +8,12 @@
    Consumed by the engagement-floor block in js/site.js.
    ============================================================ */
 
+const { sendError } = require('./_lib/errors.js');
+
 module.exports = (req, res) => {
   if(req.method !== 'GET' && req.method !== 'HEAD'){
     res.setHeader('Allow','GET');
-    return res.status(405).json({ error:'Method not allowed.' });
+    return sendError(res, 405, 'method_not_allowed', 'Method not allowed.', 'Use GET.');
   }
 
   const raw = String(req.headers['x-vercel-ip-country'] || '').toUpperCase();

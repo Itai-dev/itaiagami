@@ -3,7 +3,6 @@ node_modules
 package.json
 package-lock.json
 tools
-data
 server.ps1
 .env.local
 *.md
@@ -11,3 +10,4 @@ server.ps1
 /docs
 .claude
 skills-lock.json
+tests
