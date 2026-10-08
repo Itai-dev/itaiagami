@@ -459,6 +459,14 @@ h2,h3{text-wrap:balance}
 .clients-strip:hover .cs-track{animation-play-state:paused}
 .cs-track a{font-size:var(--t-meta);font-weight:500;color:var(--dim);white-space:nowrap;display:flex;align-items:center;gap:44px;transition:color var(--dur-fast) var(--ease)}
 .cs-track a:hover{color:var(--fg)}
+/* client logos: one-colour silhouettes (black ink on transparent, assets/logos),
+   greyed by opacity so they sit back from the hero; height is set per logo
+   (--h) to balance their visual weight. Dark theme inverts the ink to white. */
+.cs-track img{display:block;height:calc(var(--h) * var(--logo-k,1));width:auto;opacity:.42;transition:opacity var(--dur-fast) var(--ease)}
+:root:not([data-theme="light"]) .cs-track img{filter:invert(1);opacity:.5}
+@media (hover:hover) and (pointer:fine){.cs-track a:hover img{opacity:.9}}
+@media (max-width:600px){.cs-track{--logo-k:.82;gap:36px}.cs-track a{gap:36px}}
+@media (prefers-contrast:more){.cs-track img{opacity:.85}}
 .cs-track a::after{content:"";width:4px;height:4px;border-radius:13%;background:var(--mark);display:inline-block}
 @keyframes cs-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.cs-track{animation:none!important;flex-wrap:wrap;width:auto}}
