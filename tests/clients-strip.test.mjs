@@ -13,7 +13,7 @@ const attr = (img, k) => (new RegExp(k + '="([^"]*)"').exec(img) || [])[1];
 
 test('every client is a logo image linking to its case study', () => {
   const visible = links.filter(l => !l.dup);
-  assert.equal(visible.length, 11);
+  assert.equal(visible.length, 13);
   assert.ok(!/<a [^>]*>[^<]/.test(track), 'no plain-text names left');
   for(const l of visible){
     assert.ok(fs.existsSync(path.join(ROOT, l.href)), l.href);
