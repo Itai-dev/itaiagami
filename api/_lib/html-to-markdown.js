@@ -103,6 +103,9 @@ function inline(node, ctx){
       const d = (node.children || []).find(c => c.tag && cls(c).includes('d'));
       if(t && d) return '\n- [' + joinInline(t, ctx).trim() + '](' + abs(a.href, ctx.base) + '): ' + joinInline(d, ctx).trim() + '\n';
       const imgs = all(node, n => n.tag === 'img' && n.attrs.alt);
+      /* a link that is only a logo reads as a link named by the logo */
+      if(imgs.length === 1 && !textOf(node).trim())
+        return '[' + escMd(squash(imgs[0].attrs.alt).trim()) + '](' + abs(a.href, ctx.base) + ')';
       if(imgs.length) return imgs.map(i => inline(i, ctx)).join(' ');
       const text = kids().replace(/\s+/g, ' ').trim();
       const href = abs(a.href, ctx.base);
