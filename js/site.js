@@ -478,7 +478,11 @@ const MARKETS = {
   apply(saved==='dark'?'dark':'light');
   function toggle(){
     const next=root.getAttribute('data-theme')==='light'?'dark':'light';
-    apply(next); try{localStorage.setItem('theme',next)}catch(e){}
+    try{localStorage.setItem('theme',next)}catch(e){}
+    /* ease the light/dark jump with a short cross-fade instead of a flash */
+    if(document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches)
+      document.startViewTransition(()=>apply(next));
+    else apply(next);
   }
   addEventListener('DOMContentLoaded',()=>{
     apply(root.getAttribute('data-theme')==='light'?'light':'dark');
@@ -501,6 +505,7 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   close.type='button';close.className='mm-close';close.textContent='Close';
   close.setAttribute('aria-label','Close menu');
   menu.prepend(close);
+  menu.querySelectorAll(':scope > a, .mm-foot').forEach((el,i)=>el.style.setProperty('--i',i));
   function set(open){
     menu.classList.toggle('open',open);
     btn.setAttribute('aria-expanded',String(open));
@@ -857,9 +862,25 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       if(activeView==='vertical'){hoverimgSrc.src=row.dataset.img;hoverimg.classList.add('show');}
     });
     indexList.addEventListener('mouseout',e=>{if(e.target.closest('.prow'))hideHover();});
+    /* Decorative cursor follower: eases toward the pointer (exponential
+       smoothing, ~60ms time constant, frame-rate independent) and moves with
+       the compositor-only `translate` property instead of left/top. The side
+       flip (--hx) is written only when it changes, not on every move. */
+    let tx=0,ty=0,x=0,y=0,side='',raf=0,last=0,primed=false;
+    const step=t=>{
+      const dt=last?Math.min(t-last,64):16; last=t;
+      const k=1-Math.exp(-dt/60);
+      x+=(tx-x)*k; y+=(ty-y)*k;
+      hoverimg.style.translate=x+'px '+y+'px';
+      raf=(Math.abs(tx-x)>.5||Math.abs(ty-y)>.5)?requestAnimationFrame(step):0;
+      if(!raf)last=0;
+    };
     addEventListener('mousemove',e=>{
-      hoverimg.style.left=e.clientX+'px';hoverimg.style.top=e.clientY+'px';
-      hoverimg.style.setProperty('--hx',e.clientX>innerWidth*0.5?'calc(-100% - 32px)':'32px');
+      tx=e.clientX; ty=e.clientY;
+      if(!primed||!hoverimg.classList.contains('show')){x=tx;y=ty;primed=true;}  /* appear at the pointer, don't fly in */
+      const s=e.clientX>innerWidth*0.5?'calc(-100% - 32px)':'32px';
+      if(s!==side){side=s;hoverimg.style.setProperty('--hx',s);}
+      if(!raf)raf=requestAnimationFrame(step);
     });
   }
 })();

@@ -19,8 +19,13 @@
 --sp-section:clamp(56px,7vw,112px);
 --pad-x:clamp(20px,4vw,48px);
 --dur:.7s;
---dur-fast:.35s;
---ease:cubic-bezier(.6,.01,.05,1);
+--dur-fast:.25s;
+/* Motion tokens. --ease is a strong ease-out: entrances and hover responses
+   start moving on the first frame instead of easing in. --ease-drawer is the
+   iOS sheet curve for the mobile menu. */
+--ease:cubic-bezier(.23,1,.32,1);
+--ease-out:cubic-bezier(.23,1,.32,1);
+--ease-drawer:cubic-bezier(.32,.72,0,1);
 --maxw:1440px;
 --maxw-case:var(--maxw);
 }
@@ -65,21 +70,24 @@ header.site .hwrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-x);di
 .brand{font-family:"Inter",system-ui,sans-serif;font-size:1.15rem;font-weight:500;letter-spacing:-.01em;display:flex;align-items:center;gap:.5em}
 nav.primary{display:flex;gap:28px;align-items:center;font-size:var(--t-meta);letter-spacing:0}
 nav.primary a{position:relative;color:var(--dim);transition:color var(--dur-fast)}
-nav.primary a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--fg);transition:width var(--dur-fast) var(--ease)}
+nav.primary a::after{content:"";position:absolute;left:0;bottom:-5px;width:100%;height:1px;background:var(--fg);transform:scaleX(0);transform-origin:0 50%;transition:transform var(--dur-fast) var(--ease)}
 nav.primary a:hover,nav.primary a.active{color:var(--fg)}
-nav.primary a.active::after{width:100%}
+nav.primary a.active::after{transform:scaleX(1)}
 .toggle{background:none;border:1px solid var(--line);color:var(--fg);font-family:inherit;font-size:var(--t-micro);letter-spacing:0;cursor:pointer;padding:6px 11px;border-radius:9999px;display:inline-flex;align-items:center;gap:6px;transition:border-color var(--dur-fast)}
 .toggle:hover{border-color:var(--fg)}
 .menu-btn{display:none;background:none;border:none;color:var(--fg);cursor:pointer;font-family:inherit;font-size:var(--t-meta);letter-spacing:0;padding:6px 0}
-.mobile-menu{position:fixed;inset:0;z-index:8500;background:var(--bg);transform:translateY(-100%);transition:transform var(--dur) var(--ease);display:flex;flex-direction:column;justify-content:center;padding:var(--pad-x);gap:8px}
-.mobile-menu.open{transform:translateY(0)}
+.mobile-menu{position:fixed;inset:0;z-index:8500;background:var(--bg);transform:translateY(-100%);visibility:hidden;transition:transform .45s var(--ease-drawer),visibility 0s linear .45s;display:flex;flex-direction:column;justify-content:center;padding:var(--pad-x);gap:8px}
+.mobile-menu.open{transform:translateY(0);visibility:visible;transition:transform .45s var(--ease-drawer),visibility 0s}
+/* links settle in just behind the sheet on open; on close they leave with it, no stagger */
+.mobile-menu > a,.mobile-menu .mm-foot{opacity:0;transform:translateY(-10px);transition:opacity .2s ease,transform .2s var(--ease)}
+.mobile-menu.open > a,.mobile-menu.open .mm-foot{opacity:1;transform:none;transition:opacity .35s ease,transform .45s var(--ease);transition-delay:calc(120ms + var(--i,0) * 40ms)}
 .mobile-menu a{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:clamp(1.75rem,7vw,2.25rem);line-height:1.3;letter-spacing:-.01em;padding:10px 0;border-bottom:1px solid var(--line)}
 .mobile-menu .mm-foot{margin-top:32px;font-size:var(--t-meta);letter-spacing:0;color:var(--dim);display:flex;flex-direction:column;gap:8px}
 .mobile-menu .toggle{padding:13px 20px}
 .mobile-menu .mm-close{position:absolute;top:14px;right:var(--pad-x);display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--line-strong);border-radius:9999px;color:var(--fg);font-family:inherit;font-size:var(--t-meta);padding:8px 16px;cursor:pointer;touch-action:manipulation}
 .mobile-menu .mm-close::after{content:"\00d7";font-size:1.15em;line-height:1}
 .mobile-menu .mm-close:hover{border-color:var(--fg)}
-.btn{display:inline-flex;align-items:center;gap:10px;font-size:var(--t-meta);font-weight:500;letter-spacing:0;padding:11px 20px;border-radius:9999px;border:1px solid var(--line-strong);color:var(--fg);cursor:pointer;background:none;font-family:inherit;transition:background var(--dur-fast),color var(--dur-fast),border-color var(--dur-fast)}
+.btn{display:inline-flex;align-items:center;gap:10px;font-size:var(--t-meta);font-weight:500;letter-spacing:0;padding:11px 20px;border-radius:9999px;border:1px solid var(--line-strong);color:var(--fg);cursor:pointer;background:none;font-family:inherit;transition:background var(--dur-fast),color var(--dur-fast),border-color var(--dur-fast),opacity var(--dur-fast),transform .16s var(--ease)}
 .btn .arw{transition:transform var(--dur-fast) var(--ease)}
 .btn:hover .arw{transform:translateX(4px)}
 .btn.solid{background:var(--fg);color:var(--bg);border-color:var(--fg)}
@@ -197,7 +205,7 @@ display:flex;align-items:center;justify-content:center;
 .prow .p-name{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:clamp(1.25rem,2vw,1.75rem);line-height:1.25;letter-spacing:-.01em;transition:transform var(--dur-fast) var(--ease)}
 .prow .p-cat{font-size:var(--t-meta);letter-spacing:0;color:var(--dim);text-align:right}
 .prow .p-thumb,.prow .p-metaline{display:none}
-.hoverimg{position:fixed;z-index:60;width:min(30vw,440px);aspect-ratio:16/11;top:0;left:0;overflow:hidden;opacity:0;transform:translate(var(--hx,32px),-50%) scale(.94);transition:opacity var(--dur-fast) var(--ease),transform var(--dur) var(--ease);border-radius:var(--r-media);pointer-events:none}
+.hoverimg{position:fixed;z-index:60;width:min(30vw,440px);aspect-ratio:16/11;top:0;left:0;overflow:hidden;opacity:0;transform:translate(var(--hx,32px),-50%) scale(.94);transition:opacity .2s var(--ease),transform .3s var(--ease);border-radius:var(--r-media);pointer-events:none}
 .hoverimg.show{opacity:1;transform:translate(var(--hx,32px),-50%) scale(1)}
 .hoverimg img{width:100%;height:100%;object-fit:cover}
 .index-list.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,2.4vw,34px)}
@@ -652,7 +660,8 @@ display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;font-size:var(--t-meta
 .mo .rv.c-meta>*,.mo .rv.index-list>*,.mo .rv.svc-cases>*,.mo .rv.c-sites>*,.mo .rv.notes-list>*,.mo .obs .caps>*{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .6s var(--ease-out)}
 .mo .rv.in-view.c-meta>*,.mo .rv.in-view.index-list>*,.mo .rv.in-view.svc-cases>*,.mo .rv.in-view.c-sites>*,.mo .rv.in-view.notes-list>*,.mo .obs.in .caps>*{opacity:1;transform:none;transition-delay:calc(min(var(--i),16) * 45ms)}
 /* pressed buttons give way, instantly */
-.btn:active,.c-play:active .pb,.mm-close:active,.toggle:active{transform:scale(.97);transition:transform .1s ease-out}
+.btn:active,.mm-close:active,.toggle:active,.menu-btn:active,.filters button:active,.views button:active,.c-tabs [role="tab"]:active{transform:scale(.97);transition:transform .1s ease-out}
+.c-play:active .pb{transform:translate(-50%,-50%) scale(.97);transition:transform .1s ease-out}
 /* reading progress: a hairline under the header, driven by scroll */
 @supports (animation-timeline: scroll()){
   header.site::before{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--mark);transform-origin:0 50%;transform:scaleX(0);animation:read-progress linear both;animation-timeline:scroll(root)}
@@ -1248,3 +1257,44 @@ nav.primary a{color:var(--fg)}
 .cap-fig{display:block;width:min(100%,240px);margin:-8px 0 8px -12px;opacity:0;transition:opacity 1.2s var(--ease)}
 .cap-fig.ready{opacity:1}
 .cap-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
+
+/* ---------- motion & material refinements ----------
+   Press feedback eases back on release; hover motion only where a real hover
+   exists; translucent chrome goes solid for reduced transparency; reduced
+   motion keeps gentle fades instead of cutting everything to instant; the
+   theme switch cross-fades instead of flashing. */
+.toggle,.mm-close{transition:border-color var(--dur-fast),background var(--dur-fast),transform .16s var(--ease)}
+.menu-btn{transition:transform .16s var(--ease)}
+.filters button,.views button{transition:color var(--dur-fast),border-color var(--dur-fast),background var(--dur-fast),transform .16s var(--ease)}
+.c-tabs [role="tab"]{transition:color var(--dur-fast),background var(--dur-fast),transform .16s var(--ease)}
+
+/* touch screens fire :hover on tap and leave it stuck; put every hover
+   transform back at rest there (colour and background hovers are left alone) */
+@media (hover:none),(pointer:coarse){
+  .btn:hover .arw,.swork:hover .info .open .arw,.fit-link:hover .arw,.c-service a:hover .arw,.c-sites a:hover .cap .arw,
+  .swork:hover .media img,.swork.obs.in:hover .media img,.index-list.grid .prow>a:hover .p-thumb img,.c-gallery figure:hover img,
+  .tile:hover img,.tile:hover video,.c-sites a:hover img,.c-next a:hover,.c-next a:hover .thumb img,.svc-cases a:hover .shot img,
+  .c-play:hover img{transform:none}
+}
+
+/* the work-index preview follows the cursor with JS-driven `translate` */
+.hoverimg{will-change:translate,transform}
+
+@media (prefers-reduced-transparency:reduce){
+  header.site{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .c-play .pb{background:#0d0d0d;-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+@media (prefers-contrast:more){
+  header.site{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom-color:var(--line-strong)}
+}
+
+/* theme switch: a short cross-fade of the whole page (View Transitions, see js/site.js) */
+::view-transition-old(root),::view-transition-new(root){animation-duration:.28s;animation-timing-function:ease}
+
+@media (prefers-reduced-motion:reduce){
+  /* the menu fades instead of sliding; its links appear with it */
+  .mobile-menu{transform:none!important;opacity:0;transition:opacity .2s ease,visibility 0s linear .2s!important}
+  .mobile-menu.open{opacity:1;transition:opacity .2s ease,visibility 0s!important}
+  .mobile-menu > a,.mobile-menu .mm-foot{opacity:1!important;transform:none!important}
+  ::view-transition-old(root),::view-transition-new(root){animation:none}
+}
