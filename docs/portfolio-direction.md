@@ -125,3 +125,24 @@ squares appear, one after another, and they open as the visitor scrolls
 (the first scroll opens every square above the middle line). If nobody
 scrolls, the first screen opens by itself after 6 seconds. A scroll or key
 during the writing hurries the rest of the side.
+
+## Every page in the homepage's style
+
+`css/site.css` ends with a "site system" layer (scoped to `body:not(.hf)`, so
+the homepage keeps its own layout): white; one type size for all text
+(24px at 1920 wide, Inter Medium; the name Inter Bold −10%), tags excepted;
+the side column holds still on wide screens (name, Work / About / Contact,
+email / LinkedIn / Book a call), with content in columns 2–5; no boxes,
+borders, pills, rounded corners, coloured accents or decorative figures;
+buttons become text links with the same underline as the homepage. Every
+inner page's header now carries the contact list (`.side-contact`); the
+theme toggle left the header (it stays in the mobile menu).
+
+## The Work page cloud
+
+`js/cloud.js` gathers every case-study image (101, 240px thumbnails from
+`tools/make-cloud.mjs` into `assets/opt/cloud/`) into a shape: square,
+ring, star, grid, taking turns every few seconds or with ‹ ›. Hovering a
+tile lights that project's tiles and names it; a click opens the case
+study; the filters apply. It is decorative (aria-hidden, out of the tab
+order): the list below carries the same links for everyone.
