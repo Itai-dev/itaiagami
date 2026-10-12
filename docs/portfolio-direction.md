@@ -88,3 +88,12 @@ moves down; the marks go, the piece settles and its title slides left; then
 the rest of the mosaic arrives. About 3.3 seconds. Scrolling, clicking or a
 key skips it. Decided by a small inline script before first paint, with a
 6-second failsafe so nothing stays hidden if `js/home.js` fails.
+
+### Every piece opens from a square
+
+Each piece waits as one black square at the centre of its empty frame. When
+its centre reaches 60% of the way down the screen, the square splits into four
+corner marks that open out with the picture, the title fades in centred under
+it, then the marks go and the title slides left. Pieces that reach the line in
+the same moment open 160ms apart. The opening sequence is this same routine
+applied to the first piece. Hover dimming only applies once a piece is open.

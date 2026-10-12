@@ -1,10 +1,14 @@
 /* ============================================================
    HOME: the side and the mosaic (index.html only; styles in css/home.css)
 
-   - reveal:  each piece opens upward and settles as it reaches the screen
+   - square:  every piece waits as one black square at the centre of its
+              frame; when it reaches the middle of the screen the square
+              splits into four corner marks that open out with the picture,
+              then the marks go and the title slides into place
+   - opening: on the first visit of a session the first piece does this on
+              its own while the about line settles (Figma artboards 11 → 10 → 9)
    - depth:   while scrolling, small pieces drift faster than large ones and
-              the picture moves a little inside its frame, so the mosaic
-              reads in layers
+              the picture moves a little inside its frame
    - cursor:  over the work, a small "View" disc trails the pointer
 
    Nothing here is needed to see or use the page: without it the work is
@@ -18,53 +22,49 @@
   const fine=matchMedia('(hover: hover) and (pointer: fine)');
   const media=items.map(i=>i.querySelector('.hf-media'));
   const imgs=items.map(i=>i.querySelector('.hf-media img'));
-  if(still.matches) return;
+  if(still.matches){ root.classList.remove('hf-intro'); return; }
   root.classList.add('hf-live');
-  /* reveal (waits for the opening, when there is one) */
-  function reveal(){
-    if('IntersectionObserver' in window){
-      const io=new IntersectionObserver(es=>es.forEach(e=>{
-        if(e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
-      }),{rootMargin:'0px 0px -8% 0px'});
-      items.forEach(i=>io.observe(i));
-    }else items.forEach(i=>i.classList.add('seen'));
-  }
-  /* the opening draws the first piece itself; without one the first two arrive by CSS */
-  if(!root.classList.contains('hf-intro')) items[0].classList.add('seen');
-  if(!root.classList.contains('hf-played')) items[1].classList.add('seen');
 
-  /* the opening: one square, four corners, the first piece, then the rest */
-  if(root.classList.contains('hf-intro')){
-    const m=media[0], r=m.getBoundingClientRect();
-    const marks=document.createElement('div'); marks.className='hf-marks'; marks.setAttribute('aria-hidden','true');
-    marks.innerHTML='<i></i><i></i><i></i><i></i>';
-    Object.assign(marks.style,{left:(r.left+scrollX)+'px',top:(r.top+scrollY)+'px',width:r.width+'px',height:r.height+'px'});
-    marks.style.setProperty('--hw',(r.width/2)+'px'); marks.style.setProperty('--hh',(r.height/2)+'px');
-    document.body.appendChild(marks);
-    const title=items[0].querySelector('.hf-title');
-    if(title){                                              /* the text's own width, not the heading box */
-      const rg=document.createRange(); rg.selectNodeContents(title);
-      title.style.setProperty('--lx',((r.width-rg.getBoundingClientRect().width)/2)+'px');
-    }
-    const timers=[];
-    const at=(ms,fn)=>timers.push(setTimeout(fn,ms));
-    function end(){
-      timers.forEach(clearTimeout);
-      items[0].classList.add('seen');
-      root.classList.remove('hf-intro','s1','s2','s3');
-      setTimeout(()=>marks.remove(),600);
-      removeEventListener('wheel',skip); removeEventListener('touchstart',skip);
-      removeEventListener('keydown',skip); removeEventListener('pointerdown',skip);
-      reveal();
-    }
-    function skip(){ root.classList.add('s1','s2','s3'); end(); }
-    at(350,()=>root.classList.add('s1'));
-    at(1100,()=>root.classList.add('s2'));
-    at(2500,()=>root.classList.add('s3'));
-    at(3300,end);
-    addEventListener('wheel',skip,{passive:true}); addEventListener('touchstart',skip,{passive:true});
-    addEventListener('keydown',skip); addEventListener('pointerdown',skip);
-  }else reveal();
+  /* one square per piece (decorative), laid over the frame */
+  items.forEach(it=>{
+    const m=document.createElement('span'); m.className='hf-marks'; m.setAttribute('aria-hidden','true');
+    m.innerHTML='<i></i><i></i><i></i><i></i>';
+    it.querySelector('.hf-media').after(m);
+  });
+
+  /* square → corners → picture → title. The title starts centred under the
+     picture (the text's own width, not the heading box) and slides left. */
+  const state=items.map(()=>0);                      /* 0 hidden · 1 waiting · 2 opening/open */
+  function wait(i){ if(state[i]) return; state[i]=1; items[i].classList.add('w'); }
+  function open(i,delay){
+    if(state[i]===2) return; state[i]=2;
+    const it=items[i];
+    setTimeout(()=>{
+      it.classList.add('w');
+      const t=it.querySelector('.hf-title');
+      if(t){ const rg=document.createRange(); rg.selectNodeContents(t);
+        t.style.setProperty('--lx',((media[i].getBoundingClientRect().width-rg.getBoundingClientRect().width)/2)+'px'); }
+      /* a square that has not been seen yet shows for a beat before it opens */
+      const lead=it.dataset.waited?0:350;
+      setTimeout(()=>it.classList.add('o'),lead);
+      setTimeout(()=>it.classList.add('d'),lead+1400);
+    },delay||0);
+  }
+
+  /* which pieces are waiting, and which have reached the middle of the screen */
+  let running=!root.classList.contains('hf-intro');
+  function check(){
+    if(!running) return;
+    const vh=innerHeight, line=vh*.6;
+    const atEnd=innerHeight+scrollY>=document.documentElement.scrollHeight-4;
+    let n=0;
+    items.forEach((it,i)=>{
+      if(state[i]===2) return;
+      const r=media[i].getBoundingClientRect();
+      if(r.top<vh&&r.bottom>0){ if(!state[i]){ wait(i); requestAnimationFrame(()=>{ it.dataset.waited='1'; }); } }
+      if(r.top+r.height/2<=line||(atEnd&&r.top<vh)) open(i,(n++)*160);
+    });
+  }
 
   /* depth: small pieces (1st and 4th of every four) travel further. Drift is
      measured from where each piece sits with the page at the top, so the
@@ -91,11 +91,34 @@
       imgs[i].style.setProperty('--pr',(on?clamp((p-base[i])/2):0).toFixed(3));
       imgs[i].style.setProperty('--ps',(on?1+Math.abs(p)*.04:1).toFixed(4));
     });
+    check();
   }
   const queue=()=>{ if(!ticking){ ticking=true; requestAnimationFrame(frame); } };
   addEventListener('scroll',queue,{passive:true});
   addEventListener('resize',()=>{ base=null; queue(); });
+
+  /* the opening: the first piece opens from its square, then the rest follows */
+  if(root.classList.contains('hf-intro')){
+    const timers=[];
+    const at=(ms,fn)=>timers.push(setTimeout(fn,ms));
+    function end(){
+      timers.forEach(clearTimeout);
+      ['wheel','touchstart','keydown','pointerdown'].forEach(t=>removeEventListener(t,skip));
+      if(state[0]!==2){ state[0]=2; items[0].classList.add('w','o','d'); }
+      root.classList.add('hf-go');
+      root.classList.remove('hf-intro');
+      running=true; queue();
+    }
+    function skip(){ end(); }
+    at(350,()=>{ state[0]=1; items[0].classList.add('w'); });
+    at(1100,()=>{ items[0].dataset.waited='1'; open(0); root.classList.add('hf-go'); });
+    at(3300,end);
+    ['wheel','touchstart','pointerdown'].forEach(t=>addEventListener(t,skip,{passive:true}));
+    addEventListener('keydown',skip);
+  }
   frame();
+  /* a first look before any scroll: give the squares on screen a beat, then open what is high enough */
+  if(running) setTimeout(queue,300);
 
   /* cursor: eases toward the pointer, so it trails rather than sticks */
   const cur=document.querySelector('.hf-cursor');
