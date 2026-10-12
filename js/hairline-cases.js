@@ -8,6 +8,12 @@
  *
  * Left alone, it riffles through the cards by itself, back to front and back.
  *
+ * Each card holds a still from one case study (WORK, card 01 at the front). It
+ * shows only while the card is pulled, in a window under the card's head rule,
+ * drifting slowly; clicking a pulled card opens its case study. The projection
+ * is axonometric, so a card's plane is one affine matrix and the still is a
+ * plain SVG <image> painted in the card's own place in the stack.
+ *
  * The pattern: discrete items. Tweens, a stagger by distance, identity carried
  * by geometry, and a hit test on static bands along the resting top edges, so
  * a card moving out from under the pointer cannot flip the choice.
@@ -20,7 +26,18 @@ const {
 const N = 7, W = 84, H = 54, G = 13, TW = 22, TH = 7, TABS = [6, 31, 56], TK = 1.4;
 const REST = -12, BACK = -24, FWD = 20, LIFT = 16;
 // the idle riffle: one card every HOLD seconds, back to front and back again; it waits AWAY seconds after the pointer leaves
-const HOLD = 1.1, AWAY = 1.6;
+const HOLD = 2.2, AWAY = 1.6;
+// the still's window on a card, in the card's own units measured down from its top edge
+const PX = 5, PT = 15, PB = H - 5, PR = 2.6;
+const WORK = [
+  ["amdocs-make-it-amazing", "amdocs", "Amdocs: Make It Amazing"],
+  ["simply-vision-pro", "simply", "Simply Vision Pro"],
+  ["sky-max", "sky-max", "SkyMax"],
+  ["national-library-of-israel", "national-library", "National Library of Israel"],
+  ["channel-13", "channel-13", "Channel 13"],
+  ["tower-of-david", "tower-of-david", "Tower of David"],
+  ["partner-tv", "partner-tv", "Partner TV"],
+];
 const X0 = -5, X1 = W + 5, Y0 = -9, Y1 = (N - 1) * G + 9, WH = 20, WR = 6, WT = 2.4;
 
 /** A run of points ordered left to right on screen. */
@@ -63,6 +80,8 @@ function card(i) {
 function pose(P, i, t0, shape, th, lift) {
   const yb = i * G, s = Math.sin(rad(th)), c = Math.cos(rad(th));
   const w = (u, v) => P(u, yb + v * s, v * c + lift);
+  // the card's plane as a matrix: x along the card, y down from its top edge
+  const o = w(0, H), eu = w(1, H), ev = w(0, H - 1);
   const wb = (u, v) => P(u, yb + v * s - TK * c, v * c + TK * s + lift);
   const punch = [];
   for (let k = 0; k < 8; k++) punch.push(w(t0 + TW / 2 + ((k % 4) - 1.5) * 3.6, H + TH / 2 + (0.5 - Math.floor(k / 4)) * 2.8));
@@ -72,6 +91,7 @@ function pose(P, i, t0, shape, th, lift) {
     head: seg(w(6, H - 11), w(W - 6, H - 11)),
     rules: [H - 18, H - 25, H - 32, H - 39].map((v) => seg(w(6, v), w(W - 6, v))).join(""),
     punch,
+    plane: `matrix(${[eu[0] - o[0], eu[1] - o[1], ev[0] - o[0], ev[1] - o[1], o[0], o[1]].map((x) => x.toFixed(4)).join(" ")})`,
   };
 }
 
@@ -90,16 +110,25 @@ function mount({ stage, svg, read }, value) {
   reflect(svg, g, P, front, outer, 0, 14);
   for (const [d, cls] of paths.far) mk("path", { d, class: cls }, g);
 
+  // one clip for every still: the window, in card units
+  const uid = "hc" + Math.random().toString(36).slice(2, 7);
+  const defs = mk("defs", {}, svg), clip = mk("clipPath", { id: uid, clipPathUnits: "userSpaceOnUse" }, defs);
+  mk("rect", { x: PX, y: PT, width: W - 2 * PX, height: PB - PT, rx: PR }, clip);
+
   const cards = [];
   for (let i = 0; i < N; i++) {
     const { n, t0, shape } = card(i);
     const grp = mk("g", {}, g);
     const back = mk("path", { class: "lo" }, grp), face = mk("path", { class: "sil" }, grp);
+    const pic = mk("g", { class: "hc-pic" }, grp), win = mk("g", { "clip-path": `url(#${uid})` }, pic);
+    const img = mk("image", { x: PX, y: PT, width: W - 2 * PX, height: PB - PT, preserveAspectRatio: "xMidYMid slice" }, win);
+    mk("path", { d: poly(rrect(PX, PT, W - PX, PB, PR, 4).map((q) => [q.u, q.v])), class: "nf lo" }, pic);
     const head = mk("path", { class: "nf" }, grp), rules = mk("path", { class: "nf lo" }, grp);
     // the card's number, punched in a 4 × 2 grid on its tab
     const punch = [];
     for (let k = 0; k < 8; k++) punch.push(mk("circle", { r: 1.05, class: "dot " + (k === n - 1 ? "m" : "off") }, grp));
-    cards.push({ n, t0, shape, back, face, head, rules, punch, a: tween(REST), z: tween(0) });
+    rules.classList.add("hc-rules");
+    cards.push({ n, t0, shape, back, face, head, rules, punch, pic, img, work: WORK[n - 1], a: tween(REST), z: tween(0) });
   }
 
   for (const [d, cls] of paths.near) mk("path", { d, class: cls }, g);
@@ -125,7 +154,13 @@ function mount({ stage, svg, read }, value) {
     cd.head.setAttribute("d", q.head);
     cd.rules.setAttribute("d", q.rules);
     cd.punch.forEach((el, k) => place(el, q.punch[k]));
+    cd.pic.setAttribute("transform", q.plane);
   }
+
+  // the stills load once the page is idle, so they never hold up the first paint
+  const load = () => cards.forEach((cd) => cd.img.setAttribute("href", `/assets/opt/hero/${cd.work[1]}.webp`));
+  const later = window.requestIdleCallback || ((fn) => setTimeout(fn, 300));
+  if (document.readyState === "complete") later(load); else addEventListener("load", () => later(load), { once: true });
 
   let over = false, idle = 0, step = -1, dir = 1;
   const B = register(stage, (dt, now) => {
@@ -156,7 +191,10 @@ function mount({ stage, svg, read }, value) {
       const th = a < 0 ? REST : i < a ? BACK : i > a ? FWD : 0;
       tset(cd.a, th, now, delay); tset(cd.z, a === i ? LIFT : 0, now, delay);
       cd.face.classList.toggle("hi", i === a); cd.head.classList.toggle("hi", i === a); cd.punch[cd.n - 1].classList.toggle("m", i !== a);
+      cd.pic.classList.toggle("on", i === a); cd.rules.classList.toggle("off", i === a);
     });
+    stage.classList.toggle("hc-open", a >= 0 && !auto);
+    stage.title = a >= 0 ? cards[a].work[2] : "";
     read.textContent = auto ? "rest" : caption(a);
     B.wake();
   }
@@ -165,6 +203,10 @@ function mount({ stage, svg, read }, value) {
     move: (p) => { over = true; setActive(hit(p)); },
     leave: () => { over = false; idle = -AWAY; step = act; setActive(-1); },
   }));
+  // a mouse click opens the pulled card's case study (touch has the selected work list below)
+  const go = (e) => { if (act >= 0 && e.pointerType !== "touch") location.href = `/work/${cards[act].work[0]}.html`; };
+  stage.addEventListener("click", go);
+  bag.add(() => stage.removeEventListener("click", go));
   bag.add(() => svg.replaceChildren());
 
   return {
@@ -175,7 +217,7 @@ function mount({ stage, svg, read }, value) {
 
 hairline({
   name: "cases",
-  means: "Seven case cards in a tray: the one under the pointer stands up, and its neighbours lean away in turn.",
+  means: "Seven case cards in a tray, each holding a still from a case study: the one under the pointer stands up and shows it, and its neighbours lean away in turn.",
   rules: [1, 2, 8, 10],
   range: [0, 40, 90],
   mount,

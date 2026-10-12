@@ -124,6 +124,16 @@ display:flex;align-items:center;justify-content:center;
 .hero-system [data-hairline]{width:100%;max-width:760px;pointer-events:auto;-webkit-tap-highlight-color:transparent;
 --hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
 :root[data-theme="light"] .hero-system [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
+/* case stills in the hero cards (js/hairline-cases.js): shown only on the pulled card, drifting slowly */
+.hero-system .hc-pic{opacity:0;transition:opacity .35s ease}
+.hero-system .hc-pic.on{opacity:1;transition:opacity .6s ease .25s}
+.hero-system .hc-pic image{transform-box:fill-box;transform-origin:50% 50%}
+.hero-system .hc-pic.on image{animation:hc-drift 6s ease-out both}
+.hero-system .hc-rules{transition:opacity .35s ease}
+.hero-system .hc-rules.off{opacity:0}
+.hero-system .hc-open{cursor:pointer}
+@keyframes hc-drift{from{transform:scale(1.14)}to{transform:scale(1.02)}}
+@media (prefers-reduced-motion:reduce){.hero-system .hc-pic.on image{animation:none}}
 .hero .cta{margin-top:clamp(32px,4vw,48px);display:flex;gap:14px;flex-wrap:wrap}
 .reveal-line{overflow:hidden}
 .reveal-line > *{display:block;transform:translateY(105%);opacity:0;transition:transform 1s var(--ease),opacity 1s var(--ease)}
