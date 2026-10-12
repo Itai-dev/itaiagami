@@ -37,13 +37,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="css/site.css" />
 <link rel="stylesheet" href="css/home.css" />
-<!-- Opening sequence (Figma artboards 11 → 10 → 9): once per browser session,
-     large screens only, never with reduced motion. Decided before first paint;
-     a failsafe ends it even if js/home.js never runs. -->
+<!-- Writing and the opening (Figma artboards 24 → 27). Decided before first
+     paint: never with reduced motion; the opening once per browser session.
+     A failsafe shows everything even if js/home.js never runs. -->
 <script>(function(){try{var d=document.documentElement;
-if(matchMedia('(min-width:1024px)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!sessionStorage.getItem('ia-intro')){
-sessionStorage.setItem('ia-intro','1');d.classList.add('hf-played','hf-intro');
-setTimeout(function(){d.classList.remove('hf-intro','s1','s2','s3')},6000);}}catch(e){}})();</script>
+if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+d.classList.add('hf-type');
+if(!sessionStorage.getItem('ia-intro')){sessionStorage.setItem('ia-intro','1');d.classList.add('hf-intro');}
+setTimeout(function(){if(!d.classList.contains('hf-ready'))d.classList.remove('hf-type','hf-intro');},7000);}catch(e){}})();</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -136,14 +137,14 @@ setTimeout(function(){d.classList.remove('hf-intro','s1','s2','s3')},6000);}}cat
        while the work scrolls past in the other four. Inside <main> so the
        Markdown view for agents keeps all of it. -->
   <div class="hf-side">
-    <h1 class="hf-name hf-in">Itai Agami</h1>
-    <p class="hf-about hf-in" style="--d:.08s">Creative Director for brands, launches and experiences. Identity, campaigns, digital and motion, from Tel&nbsp;Aviv for clients worldwide.</p>
+    <h1 class="hf-name">Itai Agami</h1>
+    <p class="hf-about">Creative Director for brands, launches and experiences. Identity, campaigns, digital and motion, from Tel&nbsp;Aviv for clients worldwide.</p>
     <nav class="hf-nav" aria-label="Primary">
-      <a class="hf-in" style="--d:.16s" href="work.html">Work</a>
-      <a class="hf-in" style="--d:.2s" href="about.html">About</a>
-      <a class="hf-in" style="--d:.24s" href="contact.html">Contact</a>
+      <a href="work.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
     </nav>
-    <ul class="hf-contact hf-in" style="--d:.3s" aria-label="Contact details">
+    <ul class="hf-contact" aria-label="Contact details">
       <li><a href="mailto:itaiagami@gmail.com">itaiagami@gmail.com</a></li>
       <li><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="home" target="_blank" rel="noopener">Book a call</a></li>

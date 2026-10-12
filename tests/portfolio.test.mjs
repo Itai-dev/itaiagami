@@ -26,21 +26,23 @@ test('homepage: the frame (name, contact, about) and the work, with no sales sec
   assert.ok(html.includes('<script src="js/home.js" defer></script>'));
 });
 
-test('homepage motion stays optional: arrival is CSS, reduced motion is respected', () => {
+test('homepage motion stays optional: writing, squares and the opening all fall back to plain content', () => {
   const css = read('css/home.css');
   const js = read('js/home.js');
-  assert.match(css, /@media \(prefers-reduced-motion:no-preference\)\{\s*\.hf-in/);
+  assert.match(css, /\.hf-type :is\(\.hf-name,[^)]*\):not\(\.typing\):not\(\.typed\)\{visibility:hidden\}/, 'text is held back only while .hf-type is set');
   assert.match(css, /\.hf-live \.hf-media\{clip-path:inset\(50% 50% 50% 50%\)/, 'pieces wait as a square only once JS is live');
   assert.match(css, /\.o \.hf-marks i:nth-child\(1\)\{translate:calc\(-50cqw/, 'the corners land on the frame at any size');
   /* the opening: decided before paint, never for reduced motion or small screens, with a failsafe */
   const html = read('index.html');
   const intro = /<script>\(function\(\)\{try\{var d=document\.documentElement;([\s\S]*?)<\/script>/.exec(html)[1];
-  assert.match(intro, /min-width:1024px/);
   assert.match(intro, /prefers-reduced-motion: reduce/);
   assert.match(intro, /sessionStorage/, 'once per session');
-  assert.match(intro, /setTimeout\(function\(\)\{d\.classList\.remove\('hf-intro'/, 'failsafe ends the opening without home.js');
+  assert.match(intro, /setTimeout\(function\(\)\{if\(!d\.classList\.contains\('hf-ready'\)\)d\.classList\.remove\('hf-type','hf-intro'\)/, 'failsafe shows all text if home.js never runs');
+  assert.match(intro, /prefers-reduced-motion: reduce\)'\)\.matches\)return;\s*d\.classList\.add\('hf-type'\)/, 'no writing effect with reduced motion');
   assert.match(js, /\['wheel','touchstart','pointerdown'\]\.forEach\(t=>addEventListener\(t,skip/, 'scrolling skips the opening');
-  assert.match(js, /if\(still\.matches\)\{ root\.classList\.remove\('hf-intro'\); return; \}\s*root\.classList\.add\('hf-live'\)/, 'reduced motion never turns the live layer on');
+  assert.match(js, /if\(still\.matches\)\{ root\.classList\.remove\('hf-type','hf-intro'\); return; \}\s*root\.classList\.add\('hf-live'\)/, 'reduced motion never turns the live layer on');
+  assert.match(js, /groups\.forEach\(g=>\{ g\.spans\[0\]\.before\(g\.node\)/, 'written text goes back to plain text nodes');
+  assert.match(css, /\.hf-name\{position:absolute;top:6\.4vh;font-size:var\(--fs\);font-weight:700;letter-spacing:-\.1em/, 'the name is Inter Bold, -10%');
   assert.ok(!/style\.(left|top)=/.test(js), 'cursor and parallax move with transforms');
 });
 

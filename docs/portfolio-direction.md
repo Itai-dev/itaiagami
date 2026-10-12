@@ -97,3 +97,24 @@ corner marks that open out with the picture, the title fades in centred under
 it, then the marks go and the title slides left. Pieces that reach the line in
 the same moment open 160ms apart. The opening sequence is this same routine
 applied to the first piece. Hover dimming only applies once a piece is open.
+
+### The opening, v2 (Figma artboards 24 → 27) and writing
+
+Replaces the 11 → 10 opening. Once per browser session, at every width:
+the name writes itself in letter by letter across the full screen (Inter
+Bold, −10% tracking, artboard 25), holds, then shrinks into the corner
+(artboards 26 → 27). On a tall screen it runs down the screen turned 90°
+and turns upright as it lands (the iPhone frames). The name is the real
+`<h1>`, enlarged with a transform from its own spot and measured once the
+web font has loaded, so it lands exactly in place.
+
+All text now writes itself in: the side (about, menu, contact) after the
+name lands; each project title as its square opens; "All 18 projects",
+"Selected clients" and the footer as they scroll into view. Letters are
+spans that keep their space (no reflow) and the plain text nodes are put
+back once written. `.hf-type` hides text only until it is written; a
+failsafe in `index.html` drops it if `js/home.js` never runs.
+
+Type: one size for everything except the discipline tags, 24px at 1920
+wide (artboard 27): Inter Medium, 107% leading; the name Inter Bold, −10%.
+Spacing keeps artboard 9's 20px unit.
