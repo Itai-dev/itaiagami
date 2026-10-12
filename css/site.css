@@ -1309,6 +1309,29 @@ nav.primary a{color:var(--fg)}
 /* theme switch: a short cross-fade of the whole page (View Transitions, see js/site.js) */
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.28s;animation-timing-function:ease}
 
+/* ---------- DIVIDERS ----------
+   The page as a drawn grid: two vertical rules frame the content column, and
+   full-width hairlines run between the bands (header, client strip, section
+   heads, each selected work, the closing band, footer). The horizontal rules
+   are border-images pushed out 100vw on both sides, so they bleed to the
+   window edge without widening the page. */
+:root{--bleed:linear-gradient(var(--line),var(--line));--frame-in:calc(var(--pad-x) * .6)}
+header.site,header.site.scrolled{border-bottom-color:var(--line)}
+.clients-strip{border-block:1px solid var(--line);border-image:var(--bleed) 1 / 1px 0 / 0 100vw}
+.sec-head{border-top:1px solid var(--line);border-image:var(--bleed) 1 / 1px 0 / 0 100vw;padding-top:14px}
+.selected{gap:0}
+.selected .swork{padding-block:clamp(35px,4.5vw,65px);border-bottom:1px solid var(--line);border-image:var(--bleed) 1 / 0 0 1px / 0 100vw}
+.selected .swork:first-child{padding-top:0}
+.see-all{margin-top:clamp(35px,4.5vw,65px)}
+.band{border-image:var(--bleed) 1 / 1px 0 0 / 0 100vw}
+footer.site .grid{border-image:var(--bleed) 1 / 1px 0 0 / 0 100vw}
+@media (min-width:900px){
+  body{position:relative}
+  body::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;margin:0 auto;
+    width:min(calc(var(--maxw) - 2 * var(--pad-x) + 2 * var(--frame-in)),calc(100% - 2 * var(--pad-x) + 2 * var(--frame-in)));
+    border-inline:1px solid var(--line)}
+}
+
 @media (prefers-reduced-motion:reduce){
   /* the menu fades instead of sliding; its links appear with it */
   .mobile-menu{transform:none!important;opacity:0;transition:opacity .2s ease,visibility 0s linear .2s!important}
