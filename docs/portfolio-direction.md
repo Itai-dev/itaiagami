@@ -118,3 +118,10 @@ failsafe in `index.html` drops it if `js/home.js` never runs.
 Type: one size for everything except the discipline tags, 24px at 1920
 wide (artboard 27): Inter Medium, 107% leading; the name Inter Bold, −10%.
 Spacing keeps artboard 9's 20px unit.
+
+Order after the name lands, one thing at a time: the about line writes in,
+then the menu item by item, then the contact details; only then do the
+squares appear, one after another, and they open as the visitor scrolls
+(the first scroll opens every square above the middle line). If nobody
+scrolls, the first screen opens by itself after 6 seconds. A scroll or key
+during the writing hurries the rest of the side.

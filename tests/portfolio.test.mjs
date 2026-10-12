@@ -42,6 +42,8 @@ test('homepage motion stays optional: writing, squares and the opening all fall 
   assert.match(js, /\['wheel','touchstart','pointerdown'\]\.forEach\(t=>addEventListener\(t,skip/, 'scrolling skips the opening');
   assert.match(js, /if\(still\.matches\)\{ root\.classList\.remove\('hf-type','hf-intro'\); return; \}\s*root\.classList\.add\('hf-live'\)/, 'reduced motion never turns the live layer on');
   assert.match(js, /groups\.forEach\(g=>\{ g\.spans\[0\]\.before\(g\.node\)/, 'written text goes back to plain text nodes');
+  assert.match(js, /writeSide\(\(\)=>\{\s*running=true;/, 'the squares wait until the side has finished writing');
+  assert.match(js, /if\(scrolled&&\(r\.top\+r\.height\/2<=line/, 'squares open on scroll');
   assert.match(css, /\.hf-name\{position:absolute;top:6\.4vh;font-size:var\(--fs\);font-weight:700;letter-spacing:-\.1em/, 'the name is Inter Bold, -10%');
   assert.ok(!/style\.(left|top)=/.test(js), 'cursor and parallax move with transforms');
 });

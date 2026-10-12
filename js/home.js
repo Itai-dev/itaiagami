@@ -55,16 +55,28 @@
     }};
     writers.add(w);
     (function tick(){
-      if(i>=chars.length){ w.finish(); return; }
+      if(!perChar||i>=chars.length){ w.finish(); return; }
       chars[i++].classList.add('on');
       timer=setTimeout(tick,perChar);
     })();
     return w;
   }
-  const side=[...document.querySelectorAll('.hf-about, .hf-nav a, .hf-contact a')];
-  function writeSide(){
-    write(side[0],12);                                        /* the about line */
-    side.slice(1).forEach((el,k)=>setTimeout(()=>write(el,34),260+k*120));
+  /* the side writes in one thing after another: the about line, then the
+     menu item by item, then the contact details; a scroll or a key hurries
+     whatever is left */
+  let hurried=false;
+  function hurry(){ hurried=true; while(writers.size) [...writers].forEach(w=>w.finish()); }
+  function writeSide(done){
+    const menu=[...document.querySelectorAll('.hf-nav a')], contact=[...document.querySelectorAll('.hf-contact a')];
+    const seq=[[document.querySelector('.hf-about'),12,300]]
+      .concat(menu.map((a,k)=>[a,30,k===menu.length-1?300:90]))
+      .concat(contact.map((a,k)=>[a,22,k===contact.length-1?320:90]));
+    let k=0;
+    (function next(){
+      if(k>=seq.length){ done(); return; }
+      const [el,speed,gap]=seq[k++];
+      write(el,hurried?0:speed,()=>{ if(hurried) next(); else setTimeout(next,gap); });
+    })();
   }
   /* everything else writes itself in when it scrolls into view */
   const later=[...document.querySelectorAll('.hf-all a, .hf-label, .hf-foot li, .hf-foot p > *')];
@@ -103,19 +115,29 @@
   }
 
   /* which pieces are waiting, and which have reached the middle of the screen */
-  let running=false;
+  let running=false, scrolled=false;
   function check(){
     if(!running) return;
     const vh=innerHeight, line=vh*.6;
     const atEnd=innerHeight+scrollY>=document.documentElement.scrollHeight-4;
-    let n=0;
+    let n=0, m=0;
     items.forEach((it,i)=>{
       if(state[i]===2) return;
       const r=media[i].getBoundingClientRect();
-      if(r.top<vh&&r.bottom>0&&!state[i]){ state[i]=1; it.classList.add('w'); requestAnimationFrame(()=>{ it.dataset.waited='1'; }); }
-      if(r.top+r.height/2<=line||(atEnd&&r.top<vh)) open(i,(n++)*160);
+      if(r.top<vh&&r.bottom>0&&!state[i]){       /* squares on screen appear one after another */
+        state[i]=1; setTimeout(()=>{ it.classList.add('w'); it.dataset.waited='1'; },(m++)*120);
+      }
+      if(scrolled&&(r.top+r.height/2<=line||(atEnd&&r.top<vh))) open(i,(n++)*160);
     });
   }
+  /* the work opens on scroll: the first scroll (wheel, touch, keys or the
+     scrollbar) lets every square above the middle line open. If the visitor
+     never scrolls, the first screen opens on its own after a few seconds. */
+  const y0=scrollY;
+  function scrolledNow(){ if(scrolled) return; scrolled=true; if(!running) hurry(); queue(); }
+  ['wheel','touchmove'].forEach(t=>addEventListener(t,scrolledNow,{passive:true}));
+  addEventListener('keydown',e=>{ if(/^(ArrowDown|PageDown|End| |Spacebar)$/.test(e.key)) scrolledNow(); });
+  addEventListener('scroll',()=>{ if(Math.abs(scrollY-y0)>2) scrolledNow(); },{passive:true});
 
   /* ---------- depth ----------
      Small pieces (1st and 4th of every four) travel further. Drift is
@@ -154,8 +176,11 @@
   function begin(){
     if(begun) return; begun=true;
     root.classList.remove('hf-intro');
-    writeSide(); writeLater();
-    setTimeout(()=>{ running=true; queue(); },380);
+    writeLater();
+    writeSide(()=>{
+      running=true; queue();
+      setTimeout(()=>{ if(!scrolled){ scrolled=true; queue(); } },6000);
+    });
   }
 
   /* ---------- the opening ---------- */
@@ -189,7 +214,7 @@
       if(!name.classList.contains('typed')) name.classList.add('typed');
       begin();
     }
-    function skip(){ writers.forEach(w=>w.finish()); finish(); }
+    function skip(){ hurry(); finish(); }
     at(250,()=>write(name,105,()=>at(450,land)));
     ['wheel','touchstart','pointerdown'].forEach(t=>addEventListener(t,skip,{passive:true}));
     addEventListener('keydown',skip);
@@ -199,8 +224,7 @@
     const fonts=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();
     Promise.race([fonts,new Promise(r=>setTimeout(r,1200))]).then(opening);
   }else{
-    write(name,55);
-    setTimeout(begin,200);
+    write(name,55,()=>setTimeout(begin,250));
   }
   root.classList.add('hf-ready');
   frame();
