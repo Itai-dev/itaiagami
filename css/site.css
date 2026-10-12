@@ -742,75 +742,15 @@ nav.primary a{color:var(--fg)}
 /* quieter structure everywhere: section titles lose their rule */
 .sec-head{border-bottom:0;padding-bottom:0}
 
-/* shared home labels and the one text-link style */
-.h-label{font-family:var(--mono);font-size:.75rem;font-weight:400;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);line-height:1.4}
-.h-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;margin-bottom:clamp(18px,2.2vw,28px)}
-.h-more{display:inline-flex;align-items:baseline;gap:.5em;font-size:var(--t-meta);font-weight:500;color:var(--fg);
-  text-decoration:underline;text-decoration-color:transparent;text-underline-offset:4px;transition:text-decoration-color var(--dur-fast)}
-.h-more:hover{text-decoration-color:currentColor}
-.h-more span{transition:transform var(--dur-fast) var(--ease)}
-@media (hover:hover) and (pointer:fine){.h-more:hover span{transform:translateX(3px)}}
-
-/* 1. identity: name, title, one line */
-.id-hero{padding-top:clamp(40px,10vh,140px);padding-bottom:clamp(48px,8vh,104px)}
-/* the name runs close to the full measure; 21vw keeps it on one line down to 320px */
-.id-hero h1{font-family:var(--display);font-weight:700;font-size:clamp(3.5rem,21vw,19.5rem);line-height:.84;letter-spacing:-.055em}
-/* room below the mask for the descender of the g */
-.id-hero h1 .reveal-line{display:block;padding-bottom:.22em;margin-bottom:-.22em}
-.id-hero h1 > .reveal-line:first-child{margin-left:-.04em}
-.id-hero h1 .reveal-line > *{white-space:nowrap}
-.id-hero .id-role{font-size:clamp(1.5rem,3.6vw,3.25rem);font-weight:600;line-height:1.1;letter-spacing:-.035em;margin-top:clamp(14px,1.8vw,26px)}
-.id-hero .id-line{margin-top:clamp(16px,1.8vw,24px);max-width:56ch;font-size:var(--t-lead);line-height:1.45;color:var(--dim);text-wrap:pretty}
-
-/* 2. selected work: big media, minimal caption */
-.wk-grid{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(16px,2vw,32px);row-gap:clamp(56px,7vw,112px)}
-.wk--wide{grid-column:1 / -1}
-.wk a{display:block}
-.wk-media{position:relative;overflow:hidden;aspect-ratio:3 / 2;background:var(--faint);border-radius:var(--r-media)}
-.wk--wide .wk-media{aspect-ratio:16 / 9}
-.wk-media img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
-.wk-cap{display:flex;justify-content:space-between;align-items:baseline;gap:8px 24px;padding-top:16px}
-.wk-name{font-family:var(--display);font-weight:600;font-size:clamp(1.125rem,1.5vw,1.375rem);line-height:1.2;letter-spacing:-.025em}
-.wk--wide .wk-name{font-size:clamp(1.25rem,2vw,1.75rem)}
-.wk-tags{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);text-align:right}
-@media (hover:hover) and (pointer:fine){.wk a:hover .wk-media img{transform:scale(1.03)}}
-@media(max-width:700px){
-  .wk-grid{grid-template-columns:1fr;row-gap:clamp(44px,12vw,64px)}
-  .wk-media,.wk--wide .wk-media{aspect-ratio:4 / 3}
-  .wk-cap{flex-direction:column;gap:6px;padding-top:12px}
-  .wk-tags{text-align:left}
-}
-/* entrance: the frame opens upward and the picture settles; no tilt, no bounce.
-   Only with the motion layer (.mo), so without JS or with reduced motion the work is simply there */
-.wk.obs{opacity:1;transform:none;transition:none}
-.mo .wk.obs .wk-media{clip-path:inset(12% 0 0 0 round var(--r-media));transition:clip-path 1.1s cubic-bezier(.16,1,.3,1)}
-.mo .wk.obs .wk-media img{transform:scale(1.1);transition:transform 1.6s cubic-bezier(.16,1,.3,1)}
-.mo .wk.obs .wk-cap{opacity:0;transform:translateY(10px);transition:opacity .7s ease .15s,transform .9s var(--ease) .15s}
-.mo .wk.obs:nth-child(3n) :is(.wk-media,.wk-cap){transition-delay:.12s}
-.mo .wk.obs.in .wk-media{clip-path:inset(0 0 0 0 round var(--r-media))}
-.mo .wk.obs.in .wk-media img{transform:none}
-.mo .wk.obs.in .wk-cap{opacity:1;transform:none}
-@media (hover:hover) and (pointer:fine){.mo .wk.obs.in a:hover .wk-media img{transform:scale(1.03)}}
-
-/* 3–4. about and clients: label left, content right */
-.home-about,.home-clients{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:20px clamp(24px,4vw,64px);align-items:start}
-.home-about{padding-top:clamp(112px,13vw,216px)}
-.home-clients{padding-top:clamp(80px,9vw,144px)}
-.ha-lead{font-family:var(--display);font-weight:600;font-size:clamp(1.625rem,3.1vw,2.875rem);line-height:1.1;letter-spacing:-.035em;max-width:22ch;text-wrap:balance}
-.ha-body p:not(.ha-lead){margin-top:clamp(18px,2vw,26px);max-width:48ch;font-size:var(--t-lead);line-height:1.5;color:var(--dim);text-wrap:pretty}
-.ha-body .h-more{margin-top:clamp(22px,2.6vw,32px)}
+/* cl-list: the client logos (homepage) */
 .cl-list{list-style:none;display:flex;flex-wrap:wrap;align-items:center;gap:clamp(26px,3vw,44px) clamp(34px,4vw,60px)}
 .cl-list a{display:block;padding:4px 0}
 .cl-list img{display:block;height:calc(var(--h) * var(--logo-k,1));width:auto;opacity:.42;transition:opacity var(--dur-fast) var(--ease)}
 :root:not([data-theme="light"]) .cl-list img{filter:invert(1);opacity:.5}
 @media (hover:hover) and (pointer:fine){.cl-list a:hover img{opacity:.9}}
 @media (prefers-contrast:more){.cl-list img{opacity:.85}}
-@media(max-width:800px){
-  .home-about,.home-clients{grid-template-columns:1fr}
-  .cl-list{--logo-k:.82;gap:28px 36px}
-}
 
-/* 5. contact: one calm moment */
+/* the contact moment (about page; the contact page reuses its email and links) */
 .home-contact{padding-top:clamp(120px,15vw,248px)}
 .home-contact h2{font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,6.6vw,6.25rem);line-height:.98;letter-spacing:-.045em;max-width:13ch;text-wrap:balance}
 .home-contact h2 span{display:block;color:var(--dim)}

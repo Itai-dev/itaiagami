@@ -41,3 +41,23 @@ service page.
   roles are not a fit.
 - Markdown negotiation, API, OpenAPI, redirects, robots and analytics untouched.
 - Guarded by `tests/portfolio.test.mjs`.
+
+## Version 2: the frame (from the Figma wireframe)
+
+Homepage rebuilt on a five-column grid on white, after the Figma frame
+`aArdk3QdaZxqawQUZgnRUt` node 2:2. One type size (Inter 24px at 1920 wide,
+scaling with the viewport), bold caps for the name and menu.
+
+- Fixed: name (col 1) and Work / About / Contact (cols 2–4) across the top,
+  email / LinkedIn / Book a call in col 1, one about sentence in col 5, and a
+  01 / 10 counter bottom-left.
+- Scrolling through cols 2–4: the ten projects, one per screen, then the
+  client logos and a small footer.
+- Motion (`js/home.js`, `css/home.css`): CSS-only arrival; each piece opens
+  upward as it arrives; slight parallax inside the frame; the piece in focus
+  is full strength while the others step back; the counter rolls to the
+  piece in focus; a "View" disc trails the pointer over the work. All of it
+  is off for reduced motion, and without JS the work is simply visible.
+- Below 1024px the frame lets go and everything stacks.
+- The name, contact and about live inside `<main>` (positioned fixed), so the
+  Markdown view for agents still carries them.

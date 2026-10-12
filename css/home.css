@@ -1,0 +1,152 @@
+/* ==========================================================================
+   HOME: the frame
+   A five-column grid on white. Name and menu across the top, contact in
+   the first column and a single sentence in the last hold still; the work
+   scrolls through the three middle columns, one piece per screen.
+   Loaded by index.html only, after site.css.
+   ========================================================================== */
+.hf{
+  --m:20px;                         /* outer margin */
+  --g:20px;                         /* column gap */
+  --fs:clamp(16px,1.25vw,24px);     /* the one type size: 24px on a 1920 screen */
+  --top:clamp(28px,5.9vh,64px);     /* header baseline band */
+  --start:23.4vh;                   /* where the first image sits (253/1080) */
+  --ink:var(--fg);
+  --soft:color-mix(in srgb,var(--fg) 46%,var(--bg));
+  font-size:var(--fs);line-height:1.2;font-weight:500;
+}
+:root[data-theme="light"] .hf{--bg:#fff;--faint:#f2f2f2}
+:root[data-theme="light"] body.hf{background:#fff}
+.hf .grain{display:none}
+.hf section{padding-top:0}
+.hf a{transition:color .3s var(--ease)}
+.hf :focus-visible{outline:2px solid var(--fg);outline-offset:4px}
+
+/* ---------- the fixed frame ---------- */
+.hf-frame{position:fixed;inset:0;z-index:20;pointer-events:none;
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:var(--g);padding:0 var(--m)}
+.hf-frame > *{pointer-events:auto}
+.hf-top{position:fixed;left:0;right:0;top:0;z-index:25;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:var(--g);
+  padding:var(--top) var(--m) 0;pointer-events:none}
+.hf-top > *{pointer-events:auto}
+.hf-name,.hf-nav a{font-size:var(--fs);font-weight:700;letter-spacing:0;text-transform:uppercase;line-height:1.2}
+.hf-name{position:absolute;left:var(--m);top:var(--top)}
+.hf-nav{grid-column:2 / 5;display:grid;grid-template-columns:subgrid;align-items:baseline}
+.hf-nav a{position:relative;justify-self:start}
+.hf-nav a::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2px;background:currentColor;
+  transform:scaleX(0);transform-origin:100% 50%;transition:transform .45s var(--ease)}
+.hf-nav a:hover::after,.hf-nav a:focus-visible::after{transform:scaleX(1);transform-origin:0 50%}
+.hf .hf-menu{display:none}
+
+.hf-contact{position:absolute;left:var(--m);top:calc(var(--start) + .6vh);width:calc((100% - 2 * var(--m) - 4 * var(--g)) / 5)}
+.hf-contact ul{list-style:none}
+.hf-contact a,.hf-foot a,.hf-foot button,.hf-all a{background:linear-gradient(currentColor,currentColor) 0 100% / 0 1px no-repeat;
+  transition:background-size .45s var(--ease),color .3s var(--ease);overflow-wrap:anywhere}
+.hf-contact a:hover,.hf-foot a:hover,.hf-foot button:hover,.hf-all a:hover{background-size:100% 1px}
+.hf-about{position:absolute;right:var(--m);top:50%;transform:translateY(-50%);
+  width:calc((100% - 2 * var(--m) - 4 * var(--g)) / 5)}
+.hf-about p{max-width:14em;text-wrap:pretty}
+
+/* the piece on screen, counted */
+.hf-count{position:absolute;left:var(--m);bottom:var(--top);display:flex;align-items:baseline;
+  font-variant-numeric:tabular-nums;color:var(--soft)}
+.hf-count-n{display:inline-block;overflow:hidden;height:1.2em;color:var(--ink)}
+.hf-count-n > span{display:block;transition:transform .5s var(--ease),opacity .5s var(--ease)}
+.hf-count-n.out > span{transform:translateY(-100%);opacity:0}
+.hf-count-n.in-from > span{transform:translateY(100%);opacity:0;transition:none}
+
+/* the work fades out under the header instead of sliding beneath the type */
+.hf-fade{position:fixed;left:0;right:0;top:0;height:calc(var(--top) + 3.2em);z-index:15;pointer-events:none;
+  background:var(--bg);-webkit-mask-image:linear-gradient(#000 62%,transparent);mask-image:linear-gradient(#000 62%,transparent)}
+
+/* ---------- the work ---------- */
+.hf .hf-main{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:var(--g);padding:var(--start) var(--m) 0}
+.hf-work,.hf-clients,.hf-foot{grid-column:2 / 5}
+.hf-list{list-style:none}
+.hf-item{margin-bottom:max(34vh,120px)}
+.hf-item > a{display:block;outline-offset:8px}
+.hf-media{position:relative;overflow:hidden;aspect-ratio:16 / 9;background:var(--faint);
+  width:min(100%,calc(64svh * 16 / 9))}
+.hf-media img{position:absolute;inset:-4% 0;width:100%;height:108%;object-fit:cover;
+  transform:translate3d(0,var(--py,0px),0) scale(var(--ps,1));will-change:transform}
+.hf-cap{display:flex;justify-content:space-between;align-items:baseline;gap:6px 24px;padding-top:20px;
+  width:min(100%,calc(64svh * 16 / 9))}
+.hf-title{font-size:var(--fs);font-weight:500;letter-spacing:0;line-height:1.2}
+.hf-tags{color:var(--soft);text-align:right}
+.hf-all{margin:-12vh 0 0;padding-bottom:max(30vh,120px)}
+
+.hf-clients{padding-bottom:max(24vh,100px)}
+.hf-label{font-size:var(--fs);font-weight:500;color:var(--soft);margin-bottom:1.4em}
+.hf .cl-list{--logo-k:1.15;gap:clamp(26px,2.6vw,48px) clamp(34px,3.4vw,64px)}
+:root[data-theme="light"] .hf .cl-list img{opacity:.38}
+
+.hf-foot{padding-bottom:var(--top);display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:12px 32px;color:var(--soft);font-size:max(14px,.75em)}
+.hf-foot ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px 24px}
+.hf-foot p{display:flex;flex-wrap:wrap;gap:8px 20px}
+.hf-foot a:hover,.hf-foot button:hover{color:var(--ink)}
+.hf-foot button{border:0;padding:0;font:inherit;color:inherit;cursor:pointer;background-color:transparent}
+
+/* ---------- motion ----------
+   Arrival is CSS only (nothing waits on JS); the scroll reveal, parallax,
+   counter and cursor come from js/home.js and switch on with .hf-live. */
+@media (prefers-reduced-motion:no-preference){
+  .hf-in,.hf-item:first-child .hf-cap{animation:hf-rise .9s var(--ease) both;animation-delay:calc(.15s + var(--d,0s))}
+  .hf-item:first-child .hf-media{animation:hf-open 1.25s cubic-bezier(.65,0,.15,1) .2s both}
+  .hf-item:first-child .hf-media img{animation:hf-settle 1.8s var(--ease) .2s both}
+  .hf-item:first-child .hf-cap{--d:.55s}
+
+  .hf-live .hf-item:not(:first-child) .hf-media{clip-path:inset(0 0 100% 0);transition:clip-path 1.15s cubic-bezier(.65,0,.15,1)}
+  .hf-live .hf-item:not(:first-child) .hf-cap{opacity:0;transform:translateY(14px);transition:opacity .8s var(--ease) .35s,transform .9s var(--ease) .35s}
+  .hf-live .hf-item.seen .hf-media{clip-path:inset(0 0 0 0)}
+  .hf-live .hf-item.seen .hf-cap{opacity:1;transform:none}
+  /* the piece in focus is full strength; the others step back a little */
+  .hf-live .hf-item .hf-media{transition:clip-path 1.15s cubic-bezier(.65,0,.15,1),opacity .6s var(--ease)}
+  .hf-live .hf-item:not(.on) .hf-media{opacity:.55}
+}
+@keyframes hf-rise{from{opacity:0;transform:translateY(16px)}}
+@keyframes hf-open{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes hf-settle{from{scale:1.18}}
+/* .hf-about is centred with a transform, so it rises with `translate` instead */
+.hf-about.hf-in{animation-name:hf-rise-c}
+@keyframes hf-rise-c{from{opacity:0;translate:0 16px}}
+
+/* the cursor: a small "View" disc that trails the pointer over the work */
+.hf-cursor{position:fixed;left:0;top:0;z-index:30;pointer-events:none;width:88px;height:88px;margin:-44px 0 0 -44px;
+  border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;
+  font-size:14px;font-weight:500;letter-spacing:.01em;
+  transform:translate3d(var(--cx,-200px),var(--cy,-200px),0);scale:0;transition:scale .35s var(--ease)}
+.hf-cursor.show{scale:1}
+@media (hover:hover) and (pointer:fine){.hf-live.hf-cursor-on .hf-media{cursor:none}}
+@media (hover:none),(pointer:coarse){.hf-cursor{display:none}}
+
+/* ---------- smaller screens: the frame lets go and everything stacks ---------- */
+@media (max-width:1023px){
+  .hf{--fs:clamp(17px,2.3vw,20px);--m:var(--pad-x)}
+  .hf-frame{position:static;display:block;padding:0}
+  .hf-top{position:absolute;left:auto;right:var(--m);top:20px;display:block;padding:0}
+  .hf-name{position:static;padding-top:20px}
+  .hf-nav{display:none}
+  .hf .hf-menu{display:inline-block;padding:0;line-height:1.2;font-size:var(--fs);font-weight:700;text-transform:uppercase}
+  .hf-about,.hf-contact{position:static;transform:none;width:auto}
+  .hf-about{margin-top:clamp(56px,12vw,96px)}
+  .hf-about p{max-width:22em;font-size:1.25em;line-height:1.25}
+  .hf-contact{margin-top:28px}
+  .hf-contact ul{display:flex;flex-wrap:wrap;gap:6px 22px}
+  .hf-count,.hf-fade,.hf-cursor{display:none}
+  .hf .hf-main{display:block;padding-top:0}
+  .hf .hf-work{padding-top:clamp(64px,14vw,112px)}
+  .hf-media,.hf-cap{width:100%}
+  .hf-media{aspect-ratio:4 / 3}
+  .hf-item{margin-bottom:clamp(64px,16vw,112px)}
+  .hf-cap{flex-direction:column;padding-top:14px}
+  .hf-tags{text-align:left}
+  .hf-all{margin:0;padding-bottom:clamp(80px,18vw,140px)}
+  .hf-clients{padding-bottom:clamp(80px,18vw,140px)}
+  .hf .cl-list{--logo-k:.9}
+  .hf-live .hf-item:not(.on) .hf-media{opacity:1}
+  .hf-about.hf-in{animation-name:hf-rise}
+}
+@media (prefers-reduced-motion:reduce){
+  .hf-media img{transform:none!important}
+  .hf-cursor{display:none}
+}
