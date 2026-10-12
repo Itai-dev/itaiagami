@@ -30,8 +30,8 @@ test('homepage motion stays optional: arrival is CSS, reduced motion is respecte
   const css = read('css/home.css');
   const js = read('js/home.js');
   assert.match(css, /@media \(prefers-reduced-motion:no-preference\)\{\s*\.hf-in/);
-  assert.match(css, /\.hf-live \.hf-item:not\(:first-child\) \.hf-media\{clip-path/, 'hidden-until-seen only once JS is live');
-  assert.match(js, /if\(!still\.matches\) root\.classList\.add\('hf-live'\)/);
+  assert.match(css, /\.hf-live \.hf-item:nth-child\(n\+3\) \.hf-media\{clip-path/, 'hidden-until-seen only once JS is live');
+  assert.match(js, /if\(still\.matches\) return;\s*root\.classList\.add\('hf-live'\)/, 'reduced motion never turns the live layer on');
   assert.ok(!/style\.(left|top)=/.test(js), 'cursor and parallax move with transforms');
 });
 

@@ -124,46 +124,26 @@
 <body class="home hf">
 <div class="grain" aria-hidden="true"></div>
 
-<header class="hf-top" id="siteHeader">
-  <nav class="hf-nav" aria-label="Primary">
-    <a class="hf-in" style="--d:.06s" href="work.html">Work</a>
-    <a class="hf-in" style="--d:.12s" href="about.html">About</a>
-    <a class="hf-in" style="--d:.18s" href="contact.html">Contact</a>
-  </nav>
-  <button class="menu-btn hf-menu" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
-</header>
-<div class="hf-fade" aria-hidden="true"></div>
-
-<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
-  <a href="work.html">Work</a>
-  <a href="about.html">About</a>
-  <a href="contact.html">Contact</a>
-  <div class="mm-foot">
-    <button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button>
-    <span>Tel Aviv, IL · Worldwide</span>
-  </div>
-</nav>
-
 <main class="hf-main">
-  <!-- THE FRAME: name, contact and about hold still while the work scrolls
-       through the middle. Inside <main> so the Markdown view for agents keeps them. -->
-  <div class="hf-frame">
+  <!-- THE SIDE: name, about, menu and contact hold still in the first column
+       while the work scrolls past in the other four. Inside <main> so the
+       Markdown view for agents keeps all of it. -->
+  <div class="hf-side">
     <h1 class="hf-name hf-in">Itai Agami</h1>
-    <aside class="hf-contact hf-in" style="--d:.24s" aria-label="Contact details">
-      <ul>
-        <li><a href="mailto:itaiagami@gmail.com">itaiagami@gmail.com</a></li>
-        <li><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a></li>
-        <li><a href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="home" target="_blank" rel="noopener">Book a call</a></li>
-      </ul>
-    </aside>
-
-    <aside class="hf-about hf-in" style="--d:.3s" aria-label="About">
-      <p>Creative Director for brands, launches and experiences. Identity, campaigns, digital and motion, from Tel&nbsp;Aviv for clients worldwide.</p>
-    </aside>
-
-    <p class="hf-count" aria-hidden="true"><span class="hf-count-n"><span>01</span></span><span class="hf-count-of">&thinsp;/&thinsp;10</span></p>
+    <p class="hf-about hf-in" style="--d:.08s">Creative Director for brands, launches and experiences. Identity, campaigns, digital and motion, from Tel&nbsp;Aviv for clients worldwide.</p>
+    <nav class="hf-nav" aria-label="Primary">
+      <a class="hf-in" style="--d:.16s" href="work.html">Work</a>
+      <a class="hf-in" style="--d:.2s" href="about.html">About</a>
+      <a class="hf-in" style="--d:.24s" href="contact.html">Contact</a>
+    </nav>
+    <ul class="hf-contact hf-in" style="--d:.3s" aria-label="Contact details">
+      <li><a href="mailto:itaiagami@gmail.com">itaiagami@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="home" target="_blank" rel="noopener">Book a call</a></li>
+    </ul>
   </div>
 
+  <!-- THE WORK: a staggered mosaic, small and large pieces, four to a screen -->
   <section class="hf-work" aria-label="Selected work">
     <ol class="hf-list">
       <li class="hf-item">

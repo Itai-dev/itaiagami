@@ -61,3 +61,19 @@ scaling with the viewport), bold caps for the name and menu.
 - Below 1024px the frame lets go and everything stacks.
 - The name, contact and about live inside `<main>` (positioned fixed), so the
   Markdown view for agents still carries them.
+
+## Version 3: the side and the mosaic (Figma artboard 9, node 5:2)
+
+Replaces version 2. One type size, Inter SemiBold 20px at 1920 wide.
+
+- Fixed first column, top to bottom: name, one about sentence, Work / About /
+  Contact, and email / LinkedIn / Book a call at the bottom.
+- Columns 2–5: the ten projects as a staggered mosaic that repeats every four
+  pieces: small (one column, set lower) in column 3, large in 4–5, then large
+  in 2–3 and small in 5. Title under each piece; disciplines appear on hover.
+- Motion: CSS arrival; pieces open upward as they arrive; small pieces drift
+  faster than large ones (zero drift with the page at the top, so the first
+  screen is the designed layout); hovering one piece lets the others step
+  back; a "View" disc trails the pointer. Off for reduced motion.
+- Below 1024px the side stacks on top and the mosaic keeps its stagger in two
+  columns.

@@ -1,14 +1,14 @@
 /* ============================================================
-   HOME: the frame (index.html only; styles in css/home.css)
+   HOME: the side and the mosaic (index.html only; styles in css/home.css)
 
-   - reveal:   each piece of work opens upward as it reaches the screen
-   - focus:    the piece nearest the middle of the screen is full strength,
-               the others step back; the fixed counter follows it
-   - parallax: the picture drifts a little inside its frame while scrolling
-   - cursor:   over the work, a small "View" disc trails the pointer
+   - reveal:  each piece opens upward and settles as it reaches the screen
+   - depth:   while scrolling, small pieces drift faster than large ones and
+              the picture moves a little inside its frame, so the mosaic
+              reads in layers
+   - cursor:  over the work, a small "View" disc trails the pointer
 
    Nothing here is needed to see or use the page: without it the work is
-   simply there. Reduced motion keeps only the counter.
+   simply there. All of it is off for reduced motion.
    ============================================================ */
 (function(){
   const items=[...document.querySelectorAll('.hf-item')]; if(!items.length) return;
@@ -18,59 +18,52 @@
   const fine=matchMedia('(hover: hover) and (pointer: fine)');
   const media=items.map(i=>i.querySelector('.hf-media'));
   const imgs=items.map(i=>i.querySelector('.hf-media img'));
-
-  if(!still.matches) root.classList.add('hf-live');
-  items[0].classList.add('seen','on');
+  if(still.matches) return;
+  root.classList.add('hf-live');
+  items.slice(0,2).forEach(i=>i.classList.add('seen'));
 
   /* reveal */
   if('IntersectionObserver' in window){
     const io=new IntersectionObserver(es=>es.forEach(e=>{
       if(e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
-    }),{rootMargin:'0px 0px -10% 0px'});
+    }),{rootMargin:'0px 0px -8% 0px'});
     items.forEach(i=>io.observe(i));
   }else items.forEach(i=>i.classList.add('seen'));
 
-  /* counter: the number slides up and out, the next one slides in */
-  const count=document.querySelector('.hf-count-n'); const digit=count&&count.firstElementChild;
-  let shown=0, swap=0;
-  function setCount(n){
-    if(!count||n===shown) return; shown=n;
-    const text=String(n+1).padStart(2,'0');
-    if(still.matches){ digit.textContent=text; return; }
-    clearTimeout(swap); count.classList.add('out');
-    swap=setTimeout(()=>{
-      digit.textContent=text; count.classList.remove('out'); count.classList.add('in-from');
-      requestAnimationFrame(()=>requestAnimationFrame(()=>count.classList.remove('in-from')));
-    },220);
+  /* depth: small pieces (1st and 4th of every four) travel further. Drift is
+     measured from where each piece sits with the page at the top, so the
+     first screen is exactly the designed layout and motion starts on scroll. */
+  const reach=items.map((_,i)=>(i%4===0||i%4===3)?64:18);
+  const dy=items.map(()=>0);
+  let base=null, ticking=false;
+  const clamp=v=>Math.max(-1,Math.min(1,v));
+  function measure(){
+    const vh=innerHeight, mid=vh/2;
+    base=items.map((it,i)=>{ const r=it.getBoundingClientRect();
+      return clamp((r.top+scrollY-dy[i]+r.height/2-mid)/vh); });
   }
-
-  /* focus + parallax, one pass per frame while scrolling */
-  let ticking=false;
   function frame(){
     ticking=false;
-    const vh=innerHeight, mid=vh/2;
-    let best=0, bestD=Infinity;
-    media.forEach((m,i)=>{
-      const r=m.getBoundingClientRect(); const c=r.top+r.height/2; const d=Math.abs(c-mid);
-      if(d<bestD){ bestD=d; best=i; }
-      if(still.matches||!wide.matches||r.bottom<-vh*.2||r.top>vh*1.2) return;
-      const p=Math.max(-1,Math.min(1,(c-mid)/vh));          /* -1 above … 0 centred … 1 below */
-      imgs[i].style.setProperty('--py',(p*-28).toFixed(1)+'px');
-      imgs[i].style.setProperty('--ps',(1+Math.abs(p)*.05).toFixed(4));
+    if(!base) measure();
+    const vh=innerHeight, mid=vh/2, on=wide.matches;
+    items.forEach((it,i)=>{
+      const r=it.getBoundingClientRect();
+      if(r.bottom<-vh*.3||r.top>vh*1.3) return;
+      const p=clamp((r.top-dy[i]+r.height/2-mid)/vh);      /* layout position, without our own drift */
+      dy[i]=on?(p-base[i])*reach[i]:0;
+      it.style.setProperty('--dy',dy[i].toFixed(1)+'px');
+      imgs[i].style.setProperty('--pr',(on?clamp((p-base[i])/2):0).toFixed(3));
+      imgs[i].style.setProperty('--ps',(on?1+Math.abs(p)*.04:1).toFixed(4));
     });
-    /* at the very bottom the last piece counts as in focus */
-    if(innerHeight+scrollY>=document.documentElement.scrollHeight-4) best=items.length-1;
-    items.forEach((it,i)=>it.classList.toggle('on',i===best));
-    setCount(best);
   }
   const queue=()=>{ if(!ticking){ ticking=true; requestAnimationFrame(frame); } };
   addEventListener('scroll',queue,{passive:true});
-  addEventListener('resize',queue);
+  addEventListener('resize',()=>{ base=null; queue(); });
   frame();
 
   /* cursor: eases toward the pointer, so it trails rather than sticks */
   const cur=document.querySelector('.hf-cursor');
-  if(cur&&fine.matches&&!still.matches){
+  if(cur&&fine.matches){
     root.classList.add('hf-cursor-on');
     let x=-200,y=-200,tx=-200,ty=-200,raf=0;
     const step=()=>{
