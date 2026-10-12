@@ -1314,22 +1314,25 @@ nav.primary a{color:var(--fg)}
    full-width hairlines run between the bands (header, client strip, section
    heads, each selected work, the closing band, footer). The horizontal rules
    are border-images pushed out 100vw on both sides, so they bleed to the
-   window edge without widening the page. */
-:root{--bleed:linear-gradient(var(--line),var(--line));--frame-in:calc(var(--pad-x) * .6)}
-header.site,header.site.scrolled{border-bottom-color:var(--line)}
-.clients-strip{border-block:1px solid var(--line);border-image:var(--bleed) 1 / 1px 0 / 0 100vw}
-.sec-head{border-top:1px solid var(--line);border-image:var(--bleed) 1 / 1px 0 / 0 100vw;padding-top:14px}
+   window edge without widening the page. Each selected work is a cell of the
+   grid: its hover panel fills exactly the space between the rules. */
+:root{--bleed:linear-gradient(var(--line),var(--line));--rule:2px;--frame-in:calc(var(--pad-x) * .6);--sw-pad:clamp(35px,4.5vw,65px)}
+header.site,header.site.scrolled{border-bottom:var(--rule) solid var(--line)}
+.clients-strip{border-block:var(--rule) solid var(--line);border-image:var(--bleed) 1 / var(--rule) 0 / 0 100vw}
+.sec-head{border-top:var(--rule) solid var(--line);border-bottom-width:var(--rule);border-image:var(--bleed) 1 / var(--rule) 0 / 0 100vw;padding-top:14px}
 .selected{gap:0}
-.selected .swork{padding-block:clamp(35px,4.5vw,65px);border-bottom:1px solid var(--line);border-image:var(--bleed) 1 / 0 0 1px / 0 100vw}
-.selected .swork:first-child{padding-top:0}
-.see-all{margin-top:clamp(35px,4.5vw,65px)}
-.band{border-image:var(--bleed) 1 / 1px 0 0 / 0 100vw}
-footer.site .grid{border-image:var(--bleed) 1 / 1px 0 0 / 0 100vw}
+.sec-head + .selected{margin-top:calc(-1 * clamp(32px,4.5vw,56px))}
+.selected .swork{padding-block:var(--sw-pad);border-bottom:var(--rule) solid var(--line);border-image:var(--bleed) 1 / 0 0 var(--rule) / 0 100vw}
+.see-all{margin-top:var(--sw-pad)}
+.band{border-top-width:var(--rule);border-image:var(--bleed) 1 / var(--rule) 0 0 / 0 100vw}
+footer.site .grid{border-top-width:var(--rule);border-image:var(--bleed) 1 / var(--rule) 0 0 / 0 100vw}
+:root[data-theme="light"] .selected .swork::before{inset:0 calc(-1 * var(--pad-x));border-radius:0}
 @media (min-width:900px){
   body{position:relative}
   body::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;margin:0 auto;
     width:min(calc(var(--maxw) - 2 * var(--pad-x) + 2 * var(--frame-in)),calc(100% - 2 * var(--pad-x) + 2 * var(--frame-in)));
-    border-inline:1px solid var(--line)}
+    border-inline:var(--rule) solid var(--line)}
+  :root[data-theme="light"] .selected .swork::before{inset:0 calc(var(--rule) - var(--frame-in))}
 }
 
 @media (prefers-reduced-motion:reduce){
