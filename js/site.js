@@ -29,9 +29,7 @@ const ANALYTICS_DEBUG     = false;
      site navigation; this injection only remains as a fallback for pages without it */
   if(document.getElementById('siteHeader')) return;
   /* which top-level section this sub-page belongs to — drives the nav highlight */
-  var sec = location.pathname.indexOf('/notes/') > -1 ? 'notes'
-          : location.pathname.indexOf('/services/') > -1 ? 'services'
-          : 'work';
+  var sec = location.pathname.indexOf('/work/') > -1 ? 'work' : '';
   var on = function(name){ return sec===name ? ' class="active"' : ''; };
   var hdr = ''
   +'<div class="grain" aria-hidden="true"></div>'
@@ -39,19 +37,14 @@ const ANALYTICS_DEBUG     = false;
   +'<a href="../index.html" class="brand" aria-label="Itai Agami, home">Itai&nbsp;Agami</a>'
   +'<nav class="primary" aria-label="Primary">'
   +'<a href="../work.html"'+on('work')+'>Work</a>'
-  +'<a href="../services.html"'+on('services')+'>Services</a>'
-  +'<a href="../notes.html"'+on('notes')+'>Notes</a>'
   +'<a href="../about.html">About</a>'
   +'<a href="../contact.html">Contact</a>'
   +'<button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>'
   +'</nav>'
-  +'<a class="btn solid nav-cta" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>'
   +'<button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>'
   +'</div></header>'
   +'<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">'
   +'<a href="../work.html">Work</a>'
-  +'<a href="../services.html">Services</a>'
-  +'<a href="../notes.html">Notes</a>'
   +'<a href="../about.html">About</a>'
   +'<a href="../contact.html">Contact</a>'
   +'<div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button>'
@@ -59,13 +52,13 @@ const ANALYTICS_DEBUG     = false;
   +'</nav>';
   var ftr = ''
   +'<footer class="site"><div class="wrap"><div class="grid">'
-  +'<div class="col"><h4>Menu</h4><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></div>'
+  +'<div class="col"><h4>Index</h4><a href="../work.html">Work</a><a href="../about.html">About</a><a href="../notes.html">Notes</a><a href="../contact.html">Contact</a></div>'
   +'<div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>'
-  +'<div class="col"><h4>Studio</h4><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div>'
+  +'<div class="col"><h4>Working together</h4><a href="../services.html">Services &amp; engagements</a><a href="../developers.html">For developers &amp; agents</a></div>'
   +'</div><div class="base">'
   +'<span>© 2026 Itai Agami. All rights reserved.</span>'
   +'<span class="legal"><a href="../privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span>'
-  +'<span>Independent Creative Director</span>'
+  +'<span>Creative Director, Tel Aviv</span>'
   +'</div></div></footer>';
   document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
@@ -519,13 +512,6 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
 })();
 
-/* ---------- border beam on primary CTAs (styles in site.css) ---------- */
-document.querySelectorAll('.btn.solid').forEach(b=>{
-  b.setAttribute('data-beam','cta'); b.setAttribute('data-active','');
-  const bloom=document.createElement('span'); bloom.setAttribute('data-beam-bloom',''); bloom.setAttribute('aria-hidden','true');
-  b.appendChild(bloom);
-});
-
 /* ---------- Hairline figures (home hero, services) ----------
    Hairline engine (@lucasmarkes/hairline, js/vendor/hairline-kernel.js).
    Each figure, js/hairline-<name>.js, loads as a module and calls
@@ -603,7 +589,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
    page is idle they are requested anyway. Safari's lazy-load window is small,
    so without this the images arrive late on iPhone and pop in while scrolling. */
 (function(){
-  const imgs=[...document.querySelectorAll('.swork img[loading="lazy"]')]; if(!imgs.length)return;
+  const imgs=[...document.querySelectorAll('.wk img[loading="lazy"]')]; if(!imgs.length)return;
   const warm=()=>imgs.forEach(img=>{ img.loading='eager'; });
   const idle=window.requestIdleCallback||(fn=>setTimeout(fn,200));
   if(document.readyState==='complete') idle(warm); else addEventListener('load',()=>idle(warm),{once:true});
@@ -669,7 +655,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     filled:PROGRESS.filter(n=>{const el=form.elements[n]; return el&&String(el.value||'').trim()!=='';}).length }}));
   form.addEventListener('input',progress); form.addEventListener('change',progress);
 
-  /* contact tabs: "Book a call" (default) and "Send a brief" (the form) */
+  /* contact tabs: "Write" (the form, default) and "Book a call" */
   const tabs=[...document.querySelectorAll('.c-tabs [role="tab"]')];
   function selectTab(id,focus){
     tabs.forEach(t=>{
@@ -1028,33 +1014,3 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   addEventListener('load',sweep);
 })();
 
-/* ---------- scrubbed statement ----------
-   [data-scrub] paragraphs light up word by word as they cross the viewport.
-   Plain text only; skipped entirely for reduced motion. */
-(function(){
-  const els=[...document.querySelectorAll('[data-scrub]')];
-  if(!els.length||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const words=[];
-  els.forEach(el=>{
-    const parts=el.textContent.trim().split(/\s+/);
-    el.setAttribute('aria-label',el.textContent.trim());
-    el.innerHTML=parts.map(w=>'<span class="sw" aria-hidden="true">'+w.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</span>').join(' ');
-    el.classList.add('scrubbing');
-    words.push([...el.querySelectorAll('.sw')]);
-  });
-  let ticking=false;
-  function paint(){
-    ticking=false;
-    const vh=innerHeight;
-    els.forEach((el,i)=>{
-      const r=el.getBoundingClientRect();
-      /* 0 when the block's top reaches 85% of the viewport, 1 when its bottom reaches 45% */
-      const p=Math.min(1,Math.max(0,(vh*.85-r.top)/((vh*.85-vh*.45)+r.height)));
-      const lit=Math.round(p*words[i].length);
-      words[i].forEach((w,j)=>w.classList.toggle('lit',j<lit));
-    });
-  }
-  addEventListener('scroll',()=>{ if(!ticking){ticking=true;requestAnimationFrame(paint);} },{passive:true});
-  addEventListener('resize',paint);
-  paint();
-})();

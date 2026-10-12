@@ -1,0 +1,148 @@
+# Portfolio direction (homepage simplification)
+
+Internal. Not deployed (`*.md` and `/docs` are in `.vercelignore`).
+
+Goal: the site reads first as a Creative Director's portfolio, not a services
+funnel. Visible copy is reduced; machine-readable context is kept or added.
+
+## What changed visually
+
+- **Homepage**: identity hero (name, "Creative Director", one line) → 10 large
+  project cards (name + disciplines, each to its case study) → short about →
+  static client logos → one contact moment (email, LinkedIn, one booking link).
+- **Navigation**: Work / About / Contact on every page. The header "Book a call"
+  button is gone. Services, Notes and the developer portal are in the footer.
+- **About**: three paragraphs; "Good fit" and pricing removed; "Open to" lists
+  Creative Director roles, freelance direction and studio collaborations.
+- **Contact**: same invitation as the homepage, email first; the form is the
+  default tab, booking is the second; no pricing copy. Form gained "Studio or
+  agency collaboration" and "Creative Director role" project types.
+- Removed: CTA border-beam animation, hero Hairline figure, word-scrub effect,
+  client marquee, section-title rules, pill-style work filters.
+
+## Where the commercial content went
+
+`/services.html` (also reachable at `/work-with-me`) now holds, in addition to
+the four engagements, budget and FAQ: "How a project runs" (the four steps from
+the homepage) and "Where I help most" (the homepage fit block and the six
+moments from About). The `ProfessionalService` node with `priceRange` and the
+offer catalog moved there with it. Case studies still link to their related
+service page.
+
+## Machine-readable layer
+
+- Homepage JSON-LD: `Person` gains `hasOccupation`, broader `knowsAbout` and a
+  description that names the opportunity types; a `#selected-work` `ItemList`
+  of `CreativeWork` items mirrors the cards. About uses the same description.
+- Titles and descriptions for home, about, contact and work updated to lead
+  with "Creative Director"; canonicals, OG and sitemap unchanged apart from
+  lastmod.
+- `llms.txt` leads with the broader positioning and no longer says full-time
+  roles are not a fit.
+- Markdown negotiation, API, OpenAPI, redirects, robots and analytics untouched.
+- Guarded by `tests/portfolio.test.mjs`.
+
+## Version 2: the frame (from the Figma wireframe)
+
+Homepage rebuilt on a five-column grid on white, after the Figma frame
+`aArdk3QdaZxqawQUZgnRUt` node 2:2. One type size (Inter 24px at 1920 wide,
+scaling with the viewport), bold caps for the name and menu.
+
+- Fixed: name (col 1) and Work / About / Contact (cols 2–4) across the top,
+  email / LinkedIn / Book a call in col 1, one about sentence in col 5, and a
+  01 / 10 counter bottom-left.
+- Scrolling through cols 2–4: the ten projects, one per screen, then the
+  client logos and a small footer.
+- Motion (`js/home.js`, `css/home.css`): CSS-only arrival; each piece opens
+  upward as it arrives; slight parallax inside the frame; the piece in focus
+  is full strength while the others step back; the counter rolls to the
+  piece in focus; a "View" disc trails the pointer over the work. All of it
+  is off for reduced motion, and without JS the work is simply visible.
+- Below 1024px the frame lets go and everything stacks.
+- The name, contact and about live inside `<main>` (positioned fixed), so the
+  Markdown view for agents still carries them.
+
+## Version 3: the side and the mosaic (Figma artboard 9, node 5:2)
+
+Replaces version 2. One type size, Inter SemiBold 20px at 1920 wide.
+
+- Fixed first column, top to bottom: name, one about sentence, Work / About /
+  Contact, and email / LinkedIn / Book a call at the bottom.
+- Columns 2–5: the ten projects as a staggered mosaic that repeats every four
+  pieces: small (one column, set lower) in column 3, large in 4–5, then large
+  in 2–3 and small in 5. Title under each piece; disciplines appear on hover.
+- Motion: CSS arrival; pieces open upward as they arrive; small pieces drift
+  faster than large ones (zero drift with the page at the top, so the first
+  screen is the designed layout); hovering one piece lets the others step
+  back; a "View" disc trails the pointer. Off for reduced motion.
+- Below 1024px the side stacks on top and the mosaic keeps its stagger in two
+  columns.
+
+### The opening (Figma artboards 11 → 10 → 9)
+
+Once per browser session, on screens 1024px and wider, never with reduced
+motion: one black square at the centre of the first piece (the about line
+sits just under the name); the square splits into four corner marks that
+open out to frame SkyMax as it appears, title centred, while the about line
+moves down; the marks go, the piece settles and its title slides left; then
+the rest of the mosaic arrives. About 3.3 seconds. Scrolling, clicking or a
+key skips it. Decided by a small inline script before first paint, with a
+6-second failsafe so nothing stays hidden if `js/home.js` fails.
+
+### Every piece opens from a square
+
+Each piece waits as one black square at the centre of its empty frame. When
+its centre reaches 60% of the way down the screen, the square splits into four
+corner marks that open out with the picture, the title fades in centred under
+it, then the marks go and the title slides left. Pieces that reach the line in
+the same moment open 160ms apart. The opening sequence is this same routine
+applied to the first piece. Hover dimming only applies once a piece is open.
+
+### The opening, v2 (Figma artboards 24 → 27) and writing
+
+Replaces the 11 → 10 opening. Once per browser session, at every width:
+the name writes itself in letter by letter across the full screen (Inter
+Bold, −10% tracking, artboard 25), holds, then shrinks into the corner
+(artboards 26 → 27). On a tall screen it runs down the screen turned 90°
+and turns upright as it lands (the iPhone frames). The name is the real
+`<h1>`, enlarged with a transform from its own spot and measured once the
+web font has loaded, so it lands exactly in place.
+
+All text now writes itself in: the side (about, menu, contact) after the
+name lands; each project title as its square opens; "All 18 projects",
+"Selected clients" and the footer as they scroll into view. Letters are
+spans that keep their space (no reflow) and the plain text nodes are put
+back once written. `.hf-type` hides text only until it is written; a
+failsafe in `index.html` drops it if `js/home.js` never runs.
+
+Type: one size for everything except the discipline tags, 24px at 1920
+wide (artboard 27): Inter Medium, 107% leading; the name Inter Bold, −10%.
+Spacing keeps artboard 9's 20px unit.
+
+Order after the name lands, one thing at a time: the about line writes in,
+then the menu item by item, then the contact details; only then do the
+squares appear, one after another, and they open as the visitor scrolls
+(the first scroll opens every square above the middle line). If nobody
+scrolls, the first screen opens by itself after 6 seconds. A scroll or key
+during the writing hurries the rest of the side.
+
+## Every page in the homepage's style
+
+`css/site.css` ends with a "site system" layer (scoped to `body:not(.hf)`, so
+the homepage keeps its own layout): white; one type size for all text
+(24px at 1920 wide, Inter Medium; the name Inter Bold −10%), tags excepted;
+the side column holds still on wide screens (name, Work / About / Contact,
+email / LinkedIn / Book a call), with content in columns 2–5; no boxes,
+borders, pills, rounded corners, coloured accents or decorative figures;
+buttons become text links with the same underline as the homepage. Every
+inner page's header now carries the contact list (`.side-contact`); the
+theme toggle left the header (it stays in the mobile menu).
+
+## The Work page cloud
+
+`js/cloud.js` gathers every case-study image (101, 240px thumbnails from
+`tools/make-cloud.mjs` into `assets/opt/cloud/`) into a shape: square,
+ring, star, grid, taking turns every few seconds or with ‹ ›. Hovering a
+tile lights that project's tiles and names it; a click opens the case
+study; the filters apply. It is decorative (aria-hidden, out of the tab
+order): the list below carries the same links for everyone.
