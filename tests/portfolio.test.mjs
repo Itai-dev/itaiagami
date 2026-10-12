@@ -30,7 +30,15 @@ test('homepage motion stays optional: arrival is CSS, reduced motion is respecte
   const css = read('css/home.css');
   const js = read('js/home.js');
   assert.match(css, /@media \(prefers-reduced-motion:no-preference\)\{\s*\.hf-in/);
-  assert.match(css, /\.hf-live \.hf-item:nth-child\(n\+3\) \.hf-media\{clip-path/, 'hidden-until-seen only once JS is live');
+  assert.match(css, /\.hf-live \.hf-item:nth-child\(n\+3\) \.hf-media,[^{]*\{clip-path/, 'hidden-until-seen only once JS is live');
+  /* the opening: decided before paint, never for reduced motion or small screens, with a failsafe */
+  const html = read('index.html');
+  const intro = /<script>\(function\(\)\{try\{var d=document\.documentElement;([\s\S]*?)<\/script>/.exec(html)[1];
+  assert.match(intro, /min-width:1024px/);
+  assert.match(intro, /prefers-reduced-motion: reduce/);
+  assert.match(intro, /sessionStorage/, 'once per session');
+  assert.match(intro, /setTimeout\(function\(\)\{d\.classList\.remove\('hf-intro'/, 'failsafe ends the opening without home.js');
+  assert.match(js, /addEventListener\('wheel',skip/, 'scrolling skips the opening');
   assert.match(js, /if\(still\.matches\) return;\s*root\.classList\.add\('hf-live'\)/, 'reduced motion never turns the live layer on');
   assert.ok(!/style\.(left|top)=/.test(js), 'cursor and parallax move with transforms');
 });

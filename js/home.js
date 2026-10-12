@@ -20,15 +20,51 @@
   const imgs=items.map(i=>i.querySelector('.hf-media img'));
   if(still.matches) return;
   root.classList.add('hf-live');
-  items.slice(0,2).forEach(i=>i.classList.add('seen'));
+  /* reveal (waits for the opening, when there is one) */
+  function reveal(){
+    if('IntersectionObserver' in window){
+      const io=new IntersectionObserver(es=>es.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
+      }),{rootMargin:'0px 0px -8% 0px'});
+      items.forEach(i=>io.observe(i));
+    }else items.forEach(i=>i.classList.add('seen'));
+  }
+  /* the opening draws the first piece itself; without one the first two arrive by CSS */
+  if(!root.classList.contains('hf-intro')) items[0].classList.add('seen');
+  if(!root.classList.contains('hf-played')) items[1].classList.add('seen');
 
-  /* reveal */
-  if('IntersectionObserver' in window){
-    const io=new IntersectionObserver(es=>es.forEach(e=>{
-      if(e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
-    }),{rootMargin:'0px 0px -8% 0px'});
-    items.forEach(i=>io.observe(i));
-  }else items.forEach(i=>i.classList.add('seen'));
+  /* the opening: one square, four corners, the first piece, then the rest */
+  if(root.classList.contains('hf-intro')){
+    const m=media[0], r=m.getBoundingClientRect();
+    const marks=document.createElement('div'); marks.className='hf-marks'; marks.setAttribute('aria-hidden','true');
+    marks.innerHTML='<i></i><i></i><i></i><i></i>';
+    Object.assign(marks.style,{left:(r.left+scrollX)+'px',top:(r.top+scrollY)+'px',width:r.width+'px',height:r.height+'px'});
+    marks.style.setProperty('--hw',(r.width/2)+'px'); marks.style.setProperty('--hh',(r.height/2)+'px');
+    document.body.appendChild(marks);
+    const title=items[0].querySelector('.hf-title');
+    if(title){                                              /* the text's own width, not the heading box */
+      const rg=document.createRange(); rg.selectNodeContents(title);
+      title.style.setProperty('--lx',((r.width-rg.getBoundingClientRect().width)/2)+'px');
+    }
+    const timers=[];
+    const at=(ms,fn)=>timers.push(setTimeout(fn,ms));
+    function end(){
+      timers.forEach(clearTimeout);
+      items[0].classList.add('seen');
+      root.classList.remove('hf-intro','s1','s2','s3');
+      setTimeout(()=>marks.remove(),600);
+      removeEventListener('wheel',skip); removeEventListener('touchstart',skip);
+      removeEventListener('keydown',skip); removeEventListener('pointerdown',skip);
+      reveal();
+    }
+    function skip(){ root.classList.add('s1','s2','s3'); end(); }
+    at(350,()=>root.classList.add('s1'));
+    at(1100,()=>root.classList.add('s2'));
+    at(2500,()=>root.classList.add('s3'));
+    at(3300,end);
+    addEventListener('wheel',skip,{passive:true}); addEventListener('touchstart',skip,{passive:true});
+    addEventListener('keydown',skip); addEventListener('pointerdown',skip);
+  }else reveal();
 
   /* depth: small pieces (1st and 4th of every four) travel further. Drift is
      measured from where each piece sits with the page at the top, so the

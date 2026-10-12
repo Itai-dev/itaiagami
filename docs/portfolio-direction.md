@@ -77,3 +77,14 @@ Replaces version 2. One type size, Inter SemiBold 20px at 1920 wide.
   back; a "View" disc trails the pointer. Off for reduced motion.
 - Below 1024px the side stacks on top and the mosaic keeps its stagger in two
   columns.
+
+### The opening (Figma artboards 11 → 10 → 9)
+
+Once per browser session, on screens 1024px and wider, never with reduced
+motion: one black square at the centre of the first piece (the about line
+sits just under the name); the square splits into four corner marks that
+open out to frame SkyMax as it appears, title centred, while the about line
+moves down; the marks go, the piece settles and its title slides left; then
+the rest of the mosaic arrives. About 3.3 seconds. Scrolling, clicking or a
+key skips it. Decided by a small inline script before first paint, with a
+6-second failsafe so nothing stays hidden if `js/home.js` fails.

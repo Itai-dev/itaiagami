@@ -37,6 +37,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="css/site.css" />
 <link rel="stylesheet" href="css/home.css" />
+<!-- Opening sequence (Figma artboards 11 → 10 → 9): once per browser session,
+     large screens only, never with reduced motion. Decided before first paint;
+     a failsafe ends it even if js/home.js never runs. -->
+<script>(function(){try{var d=document.documentElement;
+if(matchMedia('(min-width:1024px)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!sessionStorage.getItem('ia-intro')){
+sessionStorage.setItem('ia-intro','1');d.classList.add('hf-played','hf-intro');
+setTimeout(function(){d.classList.remove('hf-intro','s1','s2','s3')},6000);}}catch(e){}})();</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
