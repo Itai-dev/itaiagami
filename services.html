@@ -27,6 +27,31 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "ProfessionalService",
+      "@id": "https://itaiagami.com/#practice",
+      "name": "Itai Agami Creative Direction",
+      "description": "Independent creative direction practice in Tel Aviv for founders, CMOs, heads of brand and product leaders launching or changing a brand, product, campaign or experience. One senior creative lead, with collaborators assembled around each project.",
+      "url": "https://itaiagami.com/services.html",
+      "image": "https://itaiagami.com/assets/opt/15b0b9d98c42.webp",
+      "email": "itaiagami@gmail.com",
+      "telephone": "+972525523688",
+      "founder": { "@id": "https://itaiagami.com/#itai" },
+      "address": { "@type": "PostalAddress", "addressLocality": "Tel Aviv", "addressCountry": "IL" },
+      "areaServed": [{ "@type": "Country", "name": "Israel" }, "Worldwide"],
+      "priceRange": "From ₪30,000 / $10,000 / €10,000 / £8,000",
+      "knowsLanguage": ["en","he"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Creative direction engagements",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Brand Strategy & Identity Systems", "url": "https://itaiagami.com/services/brand-strategy-identity-systems.html" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Creative Direction for Product & Brand Launches", "url": "https://itaiagami.com/services/creative-direction-product-launches.html" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Interactive & Immersive Experiences", "url": "https://itaiagami.com/services/interactive-immersive-experiences.html" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Fractional Creative Direction & Creative Systems", "url": "https://itaiagami.com/services/fractional-creative-direction.html" } }
+        ]
+      }
+    },
+    {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://itaiagami.com/" },
@@ -95,21 +120,16 @@
     <a href="index.html" class="brand" aria-label="Itai Agami, home">Itai&nbsp;Agami</a>
     <nav class="primary" aria-label="Primary">
       <a href="work.html">Work</a>
-      <a href="services.html" class="active">Services</a>
-      <a href="notes.html">Notes</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
       <button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>
     </nav>
-    <a class="btn solid nav-cta" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
   </div>
 </header>
 
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
   <a href="work.html">Work</a>
-  <a href="services.html">Services</a>
-  <a href="notes.html">Notes</a>
   <a href="about.html">About</a>
   <a href="contact.html">Contact</a>
   <div class="mm-foot">
@@ -157,6 +177,41 @@
         <span class="go">Read more →</span>
         <span class="d">For companies with strong internal teams and no Creative Director. Ongoing creative leadership, and the systems that let a team generate, test and scale ideas with consistency.</span>
       </a>
+    </div>
+  </section>
+
+  <!-- HOW A PROJECT RUNS (moved from the homepage) -->
+  <section class="obs" aria-label="How a project runs" style="margin-top:var(--sp-section)">
+    <div class="sec-head"><h2>How a project runs</h2><span class="count">From problem to launch</span></div>
+    <p class="caps-note" style="margin-top:0">Most projects arrive as a problem, not a brief: a product going to market, a brand that has outgrown itself, a development, a campaign, a new audience. The deliverables come later. First someone has to decide what the work is for, and then hold that decision all the way to launch.</p>
+    <div class="caps" style="margin-top:clamp(28px,4vw,44px)">
+      <div class="cap"><div class="n">01</div><h3>What the launch has to say</h3><p>Positioning, audience and the one thing people should understand and feel.</p></div>
+      <div class="cap"><div class="n">02</div><h3>The central idea</h3><p>The creative concept everything else answers to, so every touchpoint reads as one launch.</p></div>
+      <div class="cap"><div class="n">03</div><h3>How the brand looks and behaves</h3><p>Identity, art direction, motion and the visual world, built as a system teams can use.</p></div>
+      <div class="cap"><div class="n">04</div><h3>Where it goes, and who makes it</h3><p>Campaign, product, website and content, and the specialists needed to build them, directed through production.</p></div>
+    </div>
+  </section>
+
+  <!-- WHERE I HELP MOST (moved from the homepage and the about page) -->
+  <section class="obs" aria-label="Where I help most" style="margin-top:var(--sp-section)">
+    <div class="sec-head"><h2>Where I help most</h2><span class="count">Fit</span></div>
+    <div class="svc-body" style="margin-top:0">
+      <div class="svc-sec">
+        <h3 class="st">Who it is for</h3>
+        <div class="sb"><p>Founders, CMOs, heads of brand and product leaders launching or changing something (a product, a brand, a campaign, a development, a move into a new market) while the idea is still open and the answer has to work across several disciplines at once. Best suited to launches, brand systems and campaigns that need senior creative ownership across many touchpoints.</p></div>
+      </div>
+      <div class="svc-sec">
+        <h3 class="st">Where</h3>
+        <div class="sb"><p>Based in Tel Aviv, working with teams internationally, remotely and on site when the project needs it.</p></div>
+      </div>
+    </div>
+    <div class="caps" style="margin-top:clamp(28px,4vw,44px)">
+      <div class="cap"><div class="n">01</div><h3>Building or rebuilding a brand</h3><p>A new company, a repositioning, or an identity that no longer matches what the organization has become.</p></div>
+      <div class="cap"><div class="n">02</div><h3>Launching something new</h3><p>A product, platform or category with one window of attention and no story for it yet.</p></div>
+      <div class="cap"><div class="n">03</div><h3>Explaining something complex</h3><p>Technology, science or a service that is genuinely hard to describe, where the value comes from a clear decision about the idea.</p></div>
+      <div class="cap"><div class="n">04</div><h3>Building an experience people enter</h3><p>An exhibition, installation or spatial experience, where content, space and technology have to be resolved together.</p></div>
+      <div class="cap"><div class="n">05</div><h3>A team without creative leadership</h3><p>A capable team that would benefit from one person owning the idea and holding a single standard.</p></div>
+      <div class="cap"><div class="n">06</div><h3>Several teams pulling apart</h3><p>Brand, product and growth each producing their own version of the company, and nothing holding them to one language.</p></div>
     </div>
   </section>
 
@@ -243,14 +298,14 @@
 <footer class="site">
   <div class="wrap">
     <div class="grid">
-      <div class="col"><h4>Menu</h4><a href="work.html">Work</a><a href="services.html">Services</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+      <div class="col"><h4>Index</h4><a href="work.html">Work</a><a href="about.html">About</a><a href="notes.html">Notes</a><a href="contact.html">Contact</a></div>
       <div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>
-      <div class="col"><h4>Studio</h4><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
+      <div class="col"><h4>Working together</h4><a href="services.html">Services &amp; engagements</a><a href="developers.html">For developers &amp; agents</a></div>
     </div>
     <div class="base">
       <span>© 2026 Itai Agami. All rights reserved.</span>
       <span class="legal"><a href="privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span>
-      <span>Independent Creative Director</span>
+      <span>Creative Director, Tel Aviv</span>
     </div>
   </div>
 </footer>

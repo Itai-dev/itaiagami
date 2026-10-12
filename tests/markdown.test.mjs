@@ -12,8 +12,9 @@ test('homepage as Markdown: 200, text/markdown, Vary: Accept, real content', asy
   assert.equal(r.statusCode, 200);
   assert.match(r.headers['content-type'], /^text\/markdown; charset=utf-8$/);
   assert.equal(r.headers.vary, 'Accept');
-  assert.match(r.body, /^# Itai Agami \| Independent Creative Director/);
-  assert.match(r.body, /## Creative direction for your next big move\./);
+  assert.match(r.body, /^# Itai Agami \| Creative Director/);
+  assert.match(r.body, /## Itai Agami Creative Director/);
+  assert.match(r.body, /### Selected work/);
   assert.match(r.body, /\[Channel 13\]\(https:\/\/itaiagami\.com\/work\/channel-13\.html\)/);
   assert.doesNotMatch(r.body, /<(?!https:)[a-z][^>]*>/i, 'no HTML tags left');
 });
