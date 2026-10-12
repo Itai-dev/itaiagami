@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Itai Agami — Creative Director and Designer (3D prototype)</title>
+<meta name="description" content="Prototype: the portfolio of Itai Agami, Creative Director and Designer in Tel Aviv, as a walk through a dark exhibition of the work.">
+<!-- a test route: kept out of search until the direction is decided; links are still followed -->
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://itaiagami.com/3d-test">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Itai Agami — Creative Director and Designer">
+<meta property="og:description" content="Brand, campaign and experience work, as a walk through a dark exhibition.">
+<meta property="og:image" content="https://itaiagami.com/3d-test/tex/partner-lg.webp">
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap">
+<link rel="stylesheet" href="/3d-test/style.css">
+<!-- the first screen, before anything else: it is on screen the moment the page opens -->
+<link rel="preload" as="image" href="/3d-test/tex/partner-lg.webp" media="(min-width: 760px)">
+<link rel="preload" as="image" href="/3d-test/tex/partner-sm.webp" media="(max-width: 759px)">
+<link rel="modulepreload" href="/3d-test/app.js">
+<script>
+/* Decide before first paint: the 3D walk, or the plain page underneath.
+   WebGL and motion are both required; ?static forces the plain page. */
+(function () {
+  var d = document.documentElement, rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var gl = 'WebGLRenderingContext' in window;
+  d.classList.add(!rm && gl && !/[?&]static/.test(location.search) ? 'has3d' : 'no3d');
+  if (rm) d.classList.add('rm');
+})();
+</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Person", "@id": "https://itaiagami.com/#person", "name": "Itai Agami", "jobTitle": "Creative Director", "url": "https://itaiagami.com/", "address": {"@type": "PostalAddress", "addressLocality": "Tel Aviv", "addressCountry": "IL"}, "sameAs": ["https://www.linkedin.com/in/itai-agami-237353189/"]}, {"@type": "ItemList", "name": "Selected work", "itemListElement": [{"@type": "ListItem", "position": 1, "item": {"@type": "CreativeWork", "name": "Partner TV", "url": "https://itaiagami.com/work/partner-tv.html", "description": "A channel-ID system for Partner TV across series, kids and movies.", "genre": "Art Direction / Identity / Broadcast", "image": "https://itaiagami.com/3d-test/tex/partner-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}, {"@type": "ListItem", "position": 2, "item": {"@type": "CreativeWork", "name": "SkyMax", "url": "https://itaiagami.com/work/sky-max.html", "description": "Positioning a credit card as the one that makes travel happen with every purchase.", "genre": "Art Direction / Concept Art / 3D", "image": "https://itaiagami.com/3d-test/tex/skymax-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}, {"@type": "ListItem", "position": 3, "item": {"@type": "CreativeWork", "name": "Natural Intelligence", "url": "https://itaiagami.com/work/natural-intelligence.html", "description": "Turning creative production into a system that generates, tests and scales ideas.", "genre": "Creative Systems / Concept Development / Art Direction / AI-assisted Workflow / Motion & Video", "image": "https://itaiagami.com/3d-test/tex/ni-storm-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}, {"@type": "ListItem", "position": 4, "item": {"@type": "CreativeWork", "name": "Mako 12+", "url": "https://itaiagami.com/work/mako-12.html", "description": "Positioning 12+ as the home of Israel’s most-loved streaming content.", "genre": "Design / Motion / Broadcast", "image": "https://itaiagami.com/3d-test/tex/mako-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}, {"@type": "ListItem", "position": 5, "item": {"@type": "CreativeWork", "name": "Google Shopping IL", "url": "https://itaiagami.com/work/google-shopping-il.html", "description": "Helping local businesses grow through Google’s ShoppingIL event.", "genre": "Art Direction / Concept Art / 2D+3D", "image": "https://itaiagami.com/3d-test/tex/google-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}, {"@type": "ListItem", "position": 6, "item": {"@type": "CreativeWork", "name": "Channel 13", "url": "https://itaiagami.com/work/channel-13.html", "description": "An identity bold enough to hold together everything a national network broadcasts.", "genre": "Brand Strategy / Identity / Broadcast", "image": "https://itaiagami.com/3d-test/tex/ch13-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}, {"@type": "ListItem", "position": 7, "item": {"@type": "CreativeWork", "name": "Museum of Natural History", "url": "https://itaiagami.com/work/museum-of-natural-history.html", "description": "Turning dense science into an experience visitors explore rather than read.", "genre": "Art Direction / Interaction / Experience Design", "image": "https://itaiagami.com/3d-test/tex/mnh-1-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}, {"@type": "ListItem", "position": 8, "item": {"@type": "CreativeWork", "name": "Simply Vision Pro", "url": "https://itaiagami.com/work/simply-vision-pro.html", "description": "Showing how it would feel to learn an instrument in augmented reality, before the platform to try it existed.", "genre": "Creative Direction / 3D / Emerging Technology", "image": "https://itaiagami.com/3d-test/tex/simply-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}, {"@type": "ListItem", "position": 9, "item": {"@type": "CreativeWork", "name": "National Library of Israel", "url": "https://itaiagami.com/work/national-library-of-israel.html", "description": "Making a national archive personal: a country’s history told through the people who lived it.", "genre": "Design / Narrative / Experience Design", "image": "https://itaiagami.com/3d-test/tex/nli-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}, {"@type": "ListItem", "position": 10, "item": {"@type": "CreativeWork", "name": "Tower of David", "url": "https://itaiagami.com/work/tower-of-david.html", "description": "Turning the history of Jerusalem into exhibitions you walk through, with projection, touch and sound.", "genre": "Art Direction / Illustration / Interactive Installation", "image": "https://itaiagami.com/3d-test/tex/tod-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}, {"@type": "ListItem", "position": 11, "item": {"@type": "CreativeWork", "name": "Amdocs: Make It Amazing", "url": "https://itaiagami.com/work/amdocs-make-it-amazing.html", "description": "A music-led film at the center of a global tech company’s rebrand - and the early concept work behind it.", "genre": "Concept Development / Brand Film", "image": "https://itaiagami.com/3d-test/tex/amdocs-lg.webp", "creator": {"@id": "https://itaiagami.com/#person"}}}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#contact">Skip to contact</a>
+<header class="bar">
+  <h1><a href="/">Itai Agami</a> <span>Creative Director / Designer</span></h1>
+  <nav aria-label="Primary"><a href="/work.html">Work</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></nav>
+</header>
+
+<div class="stage" aria-hidden="true">
+  <img class="poster" src="/3d-test/tex/partner-lg.webp" srcset="/3d-test/tex/partner-sm.webp 640w, /3d-test/tex/partner-lg.webp 1600w" sizes="60vw" alt="">
+  <canvas id="gl"></canvas>
+  <div class="tip"><b></b><span></span></div>
+</div>
+
+<main>
+    <section class="chapter" data-chapter="0" style="--len:220" aria-labelledby="ch0">
+      <div class="frame">
+        <div class="caps">
+        <p class="hint">Selected work. Scroll to enter.</p>
+        <h2 id="ch0"><span>01</span> Broadcast identity</h2>
+        <article class="work" data-slug="partner-tv" data-name="Partner TV" data-meta="Art Direction, Identity, Broadcast">
+          <figure><img src="/3d-test/tex/partner-sm.webp" srcset="/3d-test/tex/partner-sm.webp 640w, /3d-test/tex/partner-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="A Partner TV channel ID: the wordmark emerging in soft relief from a saturated yellow field." loading="eager" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">01</span>
+            <h3><a href="/work/partner-tv.html">Partner TV</a></h3>
+            <p class="meta">Art Direction, Identity, Broadcast</p>
+            <div class="detail">
+              <p class="desc">A channel-ID system for Partner TV across series, kids and movies.</p>
+              <p class="acts"><a class="go" href="/work/partner-tv.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" data-chapter="1" style="--len:280" aria-labelledby="ch1">
+      <div class="frame">
+        <div class="caps">
+        <h2 id="ch1"><span>02</span> Campaigns</h2>
+        <article class="work" data-slug="sky-max" data-name="SkyMax" data-meta="Art Direction, Concept Art, 3D">
+          <figure><img src="/3d-test/tex/skymax-sm.webp" srcset="/3d-test/tex/skymax-sm.webp 640w, /3d-test/tex/skymax-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="A SkyMax frame: a hooded sweatshirt lifting off its rail in a clothing store as shoes and a hat float around it." loading="lazy" decoding="async"><img src="/3d-test/tex/skymax-2-sm.webp" srcset="/3d-test/tex/skymax-2-sm.webp 640w, /3d-test/tex/skymax-2-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="Hands holding a phone in a shop while a plush monkey and a pineapple float out of the screen." loading="lazy" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">02</span>
+            <h3><a href="/work/sky-max.html">SkyMax</a></h3>
+            <p class="meta">Art Direction, Concept Art, 3D</p>
+            <div class="detail">
+              <p class="desc">Positioning a credit card as the one that makes travel happen with every purchase.</p>
+              <p class="acts"><a class="go" href="/work/sky-max.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="work" data-slug="natural-intelligence" data-name="Natural Intelligence" data-meta="Creative Systems, Concept Development, Art Direction, AI-assisted Workflow, Motion &amp; Video · 2025–2026">
+          <figure><img src="/3d-test/tex/ni-storm-sm.webp" srcset="/3d-test/tex/ni-storm-sm.webp 640w, /3d-test/tex/ni-storm-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="A frame from a Natural Intelligence home-insurance ad: a tree bending over a house in a storm, captioned “homeowners in all 50 states”." loading="lazy" decoding="async"><img src="/3d-test/tex/ni-street-sm.webp" srcset="/3d-test/tex/ni-street-sm.webp 640w, /3d-test/tex/ni-street-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="A frame from a Natural Intelligence street-interview ad: a presenter stopping a woman on a city sidewalk." loading="lazy" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">03</span>
+            <h3><a href="/work/natural-intelligence.html">Natural Intelligence</a></h3>
+            <p class="meta">Creative Systems, Concept Development, Art Direction, AI-assisted Workflow, Motion &amp; Video <span class="year">2025–2026</span></p>
+            <div class="detail">
+              <p class="desc">Turning creative production into a system that generates, tests and scales ideas.</p>
+              <p class="acts"><a class="go" href="/work/natural-intelligence.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="work" data-slug="mako-12" data-name="Mako 12+" data-meta="Design, Motion, Broadcast">
+          <figure><img src="/3d-test/tex/mako-sm.webp" srcset="/3d-test/tex/mako-sm.webp 640w, /3d-test/tex/mako-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="A Mako 12+ campaign frame: two figures embracing in a drift of stars and prism light." loading="lazy" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">04</span>
+            <h3><a href="/work/mako-12.html">Mako 12+</a></h3>
+            <p class="meta">Design, Motion, Broadcast</p>
+            <div class="detail">
+              <p class="desc">Positioning 12+ as the home of Israel’s most-loved streaming content.</p>
+              <p class="acts"><a class="go" href="/work/mako-12.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="work" data-slug="google-shopping-il" data-name="Google Shopping IL" data-meta="Art Direction, Concept Art, 2D+3D">
+          <figure><img src="/3d-test/tex/google-sm.webp" srcset="/3d-test/tex/google-sm.webp 640w, /3d-test/tex/google-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="A Google ShoppingIL set: a shopkeeper arranging bottles on a stylised stand in Google’s four brand colours, with a ShoppingIL search bar in the scene." loading="lazy" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">05</span>
+            <h3><a href="/work/google-shopping-il.html">Google Shopping IL</a></h3>
+            <p class="meta">Art Direction, Concept Art, 2D+3D</p>
+            <div class="detail">
+              <p class="desc">Helping local businesses grow through Google’s ShoppingIL event.</p>
+              <p class="acts"><a class="go" href="/work/google-shopping-il.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="work" data-slug="channel-13" data-name="Channel 13" data-meta="Brand Strategy, Identity, Broadcast">
+          <figure><img src="/3d-test/tex/ch13-sm.webp" srcset="/3d-test/tex/ch13-sm.webp 640w, /3d-test/tex/ch13-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="The Channel 13 logo: a white 13 with a folded ribbon of pink, yellow and mint across the 3." loading="lazy" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">06</span>
+            <h3><a href="/work/channel-13.html">Channel 13</a></h3>
+            <p class="meta">Brand Strategy, Identity, Broadcast</p>
+            <div class="detail">
+              <p class="desc">An identity bold enough to hold together everything a national network broadcasts.</p>
+              <p class="acts"><a class="go" href="/work/channel-13.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" data-chapter="2" style="--len:220" aria-labelledby="ch2">
+      <div class="frame">
+        <div class="caps">
+        <h2 id="ch2"><span>03</span> Installation</h2>
+        <article class="work" data-slug="museum-of-natural-history" data-name="Museum of Natural History" data-meta="Art Direction, Interaction, Experience Design">
+          <figure><img src="/3d-test/tex/mnh-1-sm.webp" srcset="/3d-test/tex/mnh-1-sm.webp 640w, /3d-test/tex/mnh-1-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="Visitors at the Museum of Natural History reaching toward a large illuminated display of an illustrated habitat." loading="lazy" decoding="async"><img src="/3d-test/tex/mnh-2-sm.webp" srcset="/3d-test/tex/mnh-2-sm.webp 640w, /3d-test/tex/mnh-2-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="Visitors reaching toward a large blue interactive display with a figure of light rendered across it." loading="lazy" decoding="async"><img src="/3d-test/tex/mnh-3-sm.webp" srcset="/3d-test/tex/mnh-3-sm.webp 640w, /3d-test/tex/mnh-3-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="A tall illustration of a green city street: planted balconies, mature trees and a cycle lane running through it." loading="lazy" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">07</span>
+            <h3><a href="/work/museum-of-natural-history.html">Museum of Natural History</a></h3>
+            <p class="meta">Art Direction, Interaction, Experience Design</p>
+            <div class="detail">
+              <p class="desc">Turning dense science into an experience visitors explore rather than read.</p>
+              <p class="acts"><a class="go" href="/work/museum-of-natural-history.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" data-chapter="3" style="--len:230" aria-labelledby="ch3">
+      <div class="frame">
+        <div class="caps">
+        <h2 id="ch3"><span>04</span> Exhibitions and spatial work</h2>
+        <article class="work" data-slug="simply-vision-pro" data-name="Simply Vision Pro" data-meta="Creative Direction, 3D, Emerging Technology">
+          <figure><img src="/3d-test/tex/simply-sm.webp" srcset="/3d-test/tex/simply-sm.webp 640w, /3d-test/tex/simply-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="Simply Piano on Apple Vision Pro: an upright piano with notation floating above the keys as a hand plays." loading="lazy" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">08</span>
+            <h3><a href="/work/simply-vision-pro.html">Simply Vision Pro</a></h3>
+            <p class="meta">Creative Direction, 3D, Emerging Technology</p>
+            <div class="detail">
+              <p class="desc">Showing how it would feel to learn an instrument in augmented reality, before the platform to try it existed.</p>
+              <p class="acts"><a class="go" href="/work/simply-vision-pro.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="work" data-slug="national-library-of-israel" data-name="National Library of Israel" data-meta="Design, Narrative, Experience Design">
+          <figure><img src="/3d-test/tex/nli-sm.webp" srcset="/3d-test/tex/nli-sm.webp 640w, /3d-test/tex/nli-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="A reading gallery at the National Library of Israel: archival documents in lit vitrines beneath a stone volume." loading="lazy" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">09</span>
+            <h3><a href="/work/national-library-of-israel.html">National Library of Israel</a></h3>
+            <p class="meta">Design, Narrative, Experience Design</p>
+            <div class="detail">
+              <p class="desc">Making a national archive personal: a country’s history told through the people who lived it.</p>
+              <p class="acts"><a class="go" href="/work/national-library-of-israel.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="work" data-slug="tower-of-david" data-name="Tower of David" data-meta="Art Direction, Illustration, Interactive Installation">
+          <figure><img src="/3d-test/tex/tod-sm.webp" srcset="/3d-test/tex/tod-sm.webp 640w, /3d-test/tex/tod-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="A vaulted gallery at the Tower of David Museum: a gilded model of the Dome of the Rock lit inside a glass vitrine." loading="lazy" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">10</span>
+            <h3><a href="/work/tower-of-david.html">Tower of David</a></h3>
+            <p class="meta">Art Direction, Illustration, Interactive Installation</p>
+            <div class="detail">
+              <p class="desc">Turning the history of Jerusalem into exhibitions you walk through, with projection, touch and sound.</p>
+              <p class="acts"><a class="go" href="/work/tower-of-david.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" data-chapter="4" style="--len:200" aria-labelledby="ch4">
+      <div class="frame">
+        <div class="caps">
+        <h2 id="ch4"><span>05</span> Film</h2>
+        <article class="work" data-slug="amdocs-make-it-amazing" data-name="Amdocs: Make It Amazing" data-meta="Concept Development, Brand Film">
+          <figure><img src="/3d-test/tex/amdocs-sm.webp" srcset="/3d-test/tex/amdocs-sm.webp 640w, /3d-test/tex/amdocs-lg.webp 1600w" sizes="(min-width: 900px) 60vw, 100vw" alt="A frame from the Amdocs ‘Make It Amazing’ film: a figure alone in an orange corridor beneath a MAKE IT sign, facing two lit cabinets." loading="lazy" decoding="async"></figure>
+          <div class="cap">
+            <span class="n">11</span>
+            <h3><a href="/work/amdocs-make-it-amazing.html">Amdocs: Make It Amazing</a></h3>
+            <p class="meta">Concept Development, Brand Film</p>
+            <div class="detail">
+              <p class="desc">A music-led film at the center of a global tech company’s rebrand - and the early concept work behind it.</p>
+              <p class="acts"><a class="go" href="/work/amdocs-make-it-amazing.html">Open case study <span aria-hidden="true">→</span></a><button class="close" type="button">Close</button></p>
+            </div>
+          </div>
+        </article>
+        </div>
+      </div>
+    </section>
+    <section class="chapter contact" data-chapter="5" style="--len:170" id="contact" aria-labelledby="ch5">
+      <div class="frame">
+        <div class="end">
+          <h2 id="ch5">Itai Agami</h2>
+          <p>Creative Director + Designer</p>
+          <p class="dim">Tel Aviv + Anywhere</p>
+          <p class="links"><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a class="cta" href="/contact.html">Start a project <span aria-hidden="true">→</span></a></p>
+        </div>
+      </div>
+    </section>
+</main>
+<script type="module" src="/3d-test/app.js" onerror="document.documentElement.classList.replace('has3d','no3d')"></script>
+</body>
+</html>
