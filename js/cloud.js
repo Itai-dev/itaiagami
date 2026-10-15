@@ -114,6 +114,7 @@ async function start() {
       <span class="cl-chip cl-focus-tag" aria-hidden="true"></span>
       <button class="cl-chip cl-focus-min" type="button" aria-label="Minimise"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1.5V6H1.5M10 1.5V6h4.5M6 14.5V10H1.5M10 14.5V10h4.5"/></svg></button>
       <a class="cl-chip cl-focus-site" target="_blank" rel="noopener">visit site ↗</a>
+      <a class="cl-chip cl-focus-site cl-focus-case" hidden>full story</a>
       <span class="cl-chip cl-focus-nav" role="group" aria-label="Media"><button type="button" class="cl-focus-prev" aria-label="Previous">←</button><span class="cl-focus-count" aria-live="polite"></span><button type="button" class="cl-focus-next" aria-label="Next">→</button></span>
       <p class="cl-chip cl-focus-info"></p>
       <div class="cl-fade"></div>
@@ -176,6 +177,7 @@ async function start() {
   const focusCount = $('.cl-focus-count');
   const focusInfo = $('.cl-focus-info');
   const focusSite = $('.cl-focus-site');
+  const focusCase = $('.cl-focus-case');
   const [prevShapeBtn, , nextShapeBtn] = root.querySelectorAll('.cl-shapes button');
 
   // show the cloud before measuring anything; the regular page goes inert underneath
@@ -584,7 +586,8 @@ async function start() {
     opened = false;
     clearTimeout(winTimer);
     caseEl.classList.remove('open');
-    setTimeout(() => { if (!opened) setMode('cloud'); }, reduceMotion ? 0 : 260);
+    // back to the project the story was opened from, else the cloud
+    setTimeout(() => { if (!opened) setMode(zoomed ? 'focus' : 'cloud'); }, reduceMotion ? 0 : 260);
     setTimeout(() => { if (!opened) { caseEl.hidden = true; caseFrame.src = 'about:blank'; } }, 420);
     if (returnFocus && returnFocus.focus) returnFocus.focus({ preventScroll: true });
   }
@@ -675,7 +678,7 @@ async function start() {
     focusMin.style.height = `${focusTag.offsetHeight}px`;
     focusMin.style.transform = `translate3d(${left - 1 + focusTag.offsetWidth + 1}px,${top - focusTag.offsetHeight}px,0)`;
     let x = left - 1 + focusTag.offsetWidth + focusMin.offsetWidth + 2;
-    for (const el of [focusSite, focusNav]) {
+    for (const el of [focusSite, focusCase, focusNav]) {
       if (el.hidden) continue;
       el.style.height = `${focusTag.offsetHeight}px`;
       el.style.transform = `translate3d(${x}px,${top - focusTag.offsetHeight}px,0)`;
@@ -684,6 +687,14 @@ async function start() {
     focusInfo.style.maxWidth = `${Math.round(r.w) + 2}px`;
     focusInfo.style.transform = `translate3d(${left - 1}px,${top + r.h}px,0)`;
   }
+  // case studies are pages of their own (/work/<slug>.html), so search engines can read them
+  const casePath = slug => `/work/${encodeURIComponent(slug)}.html`;
+  const caseChecks = new Map();
+  const hasCase = slug => {
+    if (!slug) return Promise.resolve(false);
+    if (!caseChecks.has(slug)) caseChecks.set(slug, fetch(casePath(slug), { method: 'HEAD' }).then(r => r.ok, () => false));
+    return caseChecks.get(slug);
+  };
   const siteOf = p => /^https?:\/\//i.test(p.siteUrl || '') ? p.siteUrl : '';
   // the tags for one project: its title, its text and its site link
   function showProject(p) {
@@ -701,6 +712,14 @@ async function start() {
     const site = siteOf(p);
     focusSite.hidden = !site;
     if (site) focusSite.href = site;
+    // the full case study, where the project has one: it opens over the cloud
+    focusCase.hidden = true;
+    hasCase(p.slug).then(yes => {
+      if (!yes || focusShown !== p) return;
+      focusCase.href = casePath(p.slug);
+      focusCase.hidden = false;
+      placeFocus();
+    });
   }
   function openFocus(it) {
     const p = it.project;
@@ -708,7 +727,7 @@ async function start() {
     openedAt = performance.now();
     setMode('focus');
     // title, minimise and text tag share the project's colour
-    for (const el of [focusTag, focusMin, focusSite, focusNav, focusInfo]) {
+    for (const el of [focusTag, focusMin, focusSite, focusCase, focusNav, focusInfo]) {
       el.style.background = it.accent;
       el.style.color = isLight(it.accent) ? '#000' : '#fff';
     }
@@ -725,7 +744,7 @@ async function start() {
     clearTimeout(focusTimer);
     // let the card scale up first, then lay the playing film exactly over it
     focusTimer = setTimeout(() => {
-      for (const el of [focusTag, focusMin, focusSite, focusNav, focusInfo]) el.classList.add('on');
+      for (const el of [focusTag, focusMin, focusSite, focusCase, focusNav, focusInfo]) el.classList.add('on');
       focusMin.focus({ preventScroll: true });
       if (!playEl.firstElementChild) return;
       playEl.classList.add('on');
@@ -734,11 +753,21 @@ async function start() {
     say(p.name || 'untitled');
   }
   focusMin.addEventListener('click', () => closeFocus());
+  focusCase.addEventListener('click', e => {
+    e.preventDefault();
+    if (!zoomed || !focusShown) return;
+    // hold the film while the story is open
+    const player = playEl.querySelector('mux-player');
+    if (player && player.pause) player.pause();
+    const vimeo = playEl.querySelector('iframe[src*="vimeo"]');
+    if (vimeo) vimeo.contentWindow.postMessage('{"method":"pause"}', '*');
+    openWindow(focusCase.getAttribute('href'), focusShown.name || 'project', zoomed.accent);
+  });
   function closeFocus() {
     if (mode !== 'focus') return;
     clearTimeout(focusTimer);
     playEl.classList.remove('on');
-    for (const el of [focusTag, focusMin, focusSite, focusNav, focusInfo]) el.classList.remove('on');
+    for (const el of [focusTag, focusMin, focusSite, focusCase, focusNav, focusInfo]) el.classList.remove('on');
     // the film fades, then the card scales back into the cloud
     setTimeout(() => { if (mode !== 'focus') playEl.innerHTML = ''; }, 260);
     zoomed = null;

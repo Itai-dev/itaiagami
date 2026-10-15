@@ -91,12 +91,11 @@ export function route(method, url, accept){
 
 function decodeURIComponentSafe(s){ try{ return decodeURIComponent(s); }catch{ return s; } }
 
-/** The homepage cloud replaces the case study, services and about pages: a browser
-    (or search engine) asking for one is sent permanently to the same project or panel
-    inside the cloud. Requests for Markdown still get the page (route() runs first). */
+/** The homepage cloud replaces the work index, services and about pages: a browser
+    (or search engine) asking for one is sent permanently to the cloud or the matching
+    panel. Case studies (/work/<slug>.html) stay pages of their own; the cloud opens
+    them in its window. Requests for Markdown still get the page (route() runs first). */
 export function moved(pathname){
-  const work = /^\/work\/([a-z0-9-]+)\.html$/.exec(pathname);
-  if(work) return '/?p=' + work[1];
   if(pathname === '/work.html') return '/';
   if(pathname === '/services.html' || /^\/services\/[a-z0-9-]+\.html$/.test(pathname)) return '/?panel=offer';
   if(pathname === '/about.html') return '/?panel=about';
