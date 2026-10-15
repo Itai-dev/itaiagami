@@ -128,7 +128,7 @@ async function start() {
         <button class="cl-offer-btn cl-in cl-ctl" type="button" aria-expanded="false" aria-controls="cl-offer"><span class="cl-letters"></span></button>
         <button class="cl-about-btn cl-in cl-ctl" type="button" aria-expanded="false" aria-controls="cl-about"><span class="cl-letters"></span></button>
       </div>
-      <section class="cl-about" id="cl-offer" aria-label="Work with Itai Agami">
+      <section class="cl-about" id="cl-offer" aria-label="Let’s talk">
         <div class="cl-about-inner">
           ${[offerLine, ...offerLines].map(l => `<p>${esc(l)}</p>`).join('')}
           <p class="links"><a href="${esc(booking)}" target="_blank" rel="noopener">book a call ↗</a><a href="/contact.html" data-pop>send a brief</a><a href="mailto:${esc(email)}">email</a></p>
@@ -505,8 +505,8 @@ async function start() {
       requestAnimationFrame(() => requestAnimationFrame(() => [...wrap.children].forEach(s => s.classList.remove('out'))));
     }, old.length ? 200 : 0);
   }
-  setLetters(aboutBtn, 'about me');
-  setLetters(offerBtn, 'work with me');
+  setLetters(aboutBtn, 'about');
+  setLetters(offerBtn, 'let’s talk');
 
   function setMode(m) {
     mode = m;
@@ -522,8 +522,8 @@ async function start() {
     setMode(name || 'cloud');
     aboutBtn.setAttribute('aria-expanded', String(name === 'about'));
     offerBtn.setAttribute('aria-expanded', String(name === 'offer'));
-    setLetters(aboutBtn, name === 'about' ? 'close' : 'about me');
-    setLetters(offerBtn, name === 'offer' ? 'close' : 'work with me');
+    setLetters(aboutBtn, name === 'about' ? 'close' : 'about');
+    setLetters(offerBtn, name === 'offer' ? 'close' : 'let’s talk');
     setUrl(name ? { panel: name } : {});
   }
   aboutBtn.addEventListener('click', () => openPanel(mode === 'about' ? null : 'about'));
