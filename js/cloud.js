@@ -1003,7 +1003,6 @@ async function start() {
   const target = new THREE.Vector3();
   const euler = new THREE.Euler();
   const q = new THREE.Quaternion();
-  const bounds = { x0: 0, y0: 0, x1: 0, y1: 0 };
   let lastPick = 0;
   let readyShown = false;
   let lastNow = performance.now();
@@ -1061,8 +1060,6 @@ async function start() {
 
     if (pointerIn && !drag && mode === 'cloud' && now - lastPick > 45) { lastPick = now; setHover(pick()); }
 
-    bounds.x0 = Infinity; bounds.y0 = Infinity; bounds.x1 = -Infinity; bounds.y1 = -Infinity;
-    let onCount = 0;
 
     for (const it of items) {
       const appear = now - startTime > it.delay;
@@ -1118,15 +1115,9 @@ async function start() {
 
       it.group.renderOrder = it === zoomed ? 10 : 0;
       [it.sx, it.sy] = project(it.pos);
-      if (it.on && it.vis > .5 && g.visible && it !== zoomed) {
-        onCount++;
-        const r = cardRect(it);
-        bounds.x0 = Math.min(bounds.x0, r.x); bounds.x1 = Math.max(bounds.x1, r.x + r.w);
-        bounds.y0 = Math.min(bounds.y0, r.y); bounds.y1 = Math.max(bounds.y1, r.y + r.h);
-      }
     }
 
-    updateOverlay(now, onCount);
+    updateOverlay(now);
     renderer.render(scene, camera);
 
     if (!readyShown && now - startTime > 500) {
@@ -1136,17 +1127,12 @@ async function start() {
     }
   }
 
-  function updateOverlay(now, onCount) {
+  function updateOverlay(now) {
     overlay.style.opacity = mode === 'cloud' && readyShown ? '1' : '0';
-    let r, text, color = '';
+    // a frame and tag only around the card under the pointer
+    bbox.style.opacity = label.style.opacity = hovered ? '1' : '0';
     if (hovered) {
-      r = cardRect(hovered); text = tagOf(hovered.project); color = hovered.accent;
-    } else if (onCount) {
-      const pad = 10;
-      r = { x: bounds.x0 - pad, y: bounds.y0 - pad, w: bounds.x1 - bounds.x0 + pad * 2, h: bounds.y1 - bounds.y0 + pad * 2 };
-      text = `itai agami’s ${filter.label} · ${onCount}`;
-    }
-    if (r) {
+      const r = cardRect(hovered), text = tagOf(hovered.project), color = hovered.accent;
       bbox.style.transform = `translate3d(${r.x}px,${r.y}px,0)`;
       bbox.style.width = `${Math.max(0, r.w)}px`;
       bbox.style.height = `${Math.max(0, r.h)}px`;

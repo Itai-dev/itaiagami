@@ -19,7 +19,7 @@ html.cloud-on #cloud{display:block}
 
 /* overlay: bounding box + label chips, positioned from the 3D scene each frame */
 .cl-overlay{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;z-index:10}
-.cl-bbox{position:absolute;left:0;top:0;border:1px solid var(--cl-box,var(--cl-frame));will-change:transform;transition:border-color .3s}
+.cl-bbox{position:absolute;left:0;top:0;border:1px solid var(--cl-box,var(--cl-frame));will-change:transform;transition:border-color .3s,opacity .18s}
 .cl-chip{position:absolute;left:0;top:0;white-space:nowrap;padding:2px 6px;font:15px/1.25 "IBM Plex Mono",ui-monospace,monospace;
   color:#fff;background:var(--cl-frame);will-change:transform;transition:background .3s,color .3s,opacity .18s}
 .cl-label{pointer-events:auto;cursor:default}
