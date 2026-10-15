@@ -13,12 +13,13 @@ const FILTERS = [
   { id: 'culture', label: 'culture', test: p => p.cat === 'Culture' },
   { id: 'tech', label: 'tech', test: p => p.cat === 'Technology' },
 ];
-// Scene geometry, in world units, matched to the reference layout:
-// cards are 1.8 on their long side, the sphere has a 4.6 radius (squashed to .92
-// vertically) and the camera sits 15 back with a 40° vertical field of view.
+// Scene geometry, in world units, matched to the reference layout: cards are 1.8
+// on their long side and the camera sits 15 back with a 40° vertical field of view.
+// The sphere is sized from the card count so neighbours sit edge to edge.
 const CARD = 1.8;
-const SPHERE_R = 4.6;
+const NEIGHBOUR = 1.15;         // centre-to-centre distance between neighbouring cards
 const SPHERE_SQUASH = .92;
+const ZOOM_D = 6;               // a clicked card zooms to this distance from the camera
 const CAM_Z = 15;
 const FOV = 40;
 const SHAPE_CARD = { sphere: 1, heart: .7, smiley: .58, star: .6 };
@@ -80,7 +81,7 @@ async function start() {
           <p>companies bring me something they need to launch or change: a product, a brand, a campaign, a place. i define the creative direction and carry it across brand, campaign, content and digital experience.</p>
           <p class="dim">before going independent: natural intelligence, elements, shortcut playground. media design at shenkar, with honors.</p>
           <p class="dim">everything floating behind this text is real work — ${items.length} projects.</p>
-          <p class="links"><a href="/work.html">all work</a><a href="/services.html">services</a><a href="/notes.html">notes</a><a href="/contact.html">contact</a><a href="mailto:itaiagami@gmail.com">email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">linkedin</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">cv</a></p>
+          <p class="links"><a href="/work.html" data-pop>all work</a><a href="/services.html" data-pop>services</a><a href="/notes.html" data-pop>notes</a><a href="/contact.html" data-pop>contact</a><a href="mailto:itaiagami@gmail.com">email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">linkedin</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">cv</a></p>
         </div>
       </section>
       <div class="cl-case" role="dialog" aria-modal="true" aria-labelledby="cl-case-title" hidden>
@@ -89,7 +90,6 @@ async function start() {
           <div class="cl-case-bar">
             <span class="cl-case-dot"></span>
             <span class="cl-case-title" id="cl-case-title"></span>
-            <a class="cl-case-full" href="#">open page</a>
             <button class="cl-case-close" type="button">close</button>
           </div>
           <iframe class="cl-case-frame" title="Case study"></iframe>
@@ -151,6 +151,9 @@ async function start() {
     it.target = new THREE.Vector3();
     it.size = 0;               // animated long-side length in world units
     it.hover = 0;
+    it.near = 0;               // pointer proximity 0..1
+    it.sx = -1e4; it.sy = -1e4; // last screen position
+    it.seed = i;
     it.delay = reduceMotion ? 0 : 150 + Math.random() * 1100;
   });
 
@@ -184,13 +187,16 @@ async function start() {
   let filter = FILTERS[0];
   let mode = 'cloud';           // cloud | about | case
   let hovered = null;
-  let opened = null;
+  let opened = false;
+  let zoomed = null;            // the card that grows into the pop-up
+  let px = -1e4, py = -1e4;     // pointer in screen px
   let W = 1, H = 1;
   let rotY = .6, velY = 0, tiltX = 0, velX = 0;
   let zoom = 1;
   let shapeBlend = 0;           // 0 = free spinning (sphere), 1 = flat shape facing camera
   let aboutBlend = 0;
   let caseBlend = 0;
+  let zoomBlend = 0;
   let gridScroll = 0, gridScrollMax = 0;
   let lastInteract = 0;
   const startTime = performance.now();
@@ -232,13 +238,16 @@ async function start() {
       return;
     }
 
+    // shapes grow with the number of cards so the spacing stays the same
+    const R = Math.max(.7, NEIGHBOUR * Math.sqrt(n) / 1.9);
+    const flatScale = THREE.MathUtils.clamp(Math.sqrt(n / 62), .42, 1);
     vis.forEach((it, i) => {
       const v = it.target;
       if (shape === 'sphere') {
         const y = 1 - 2 * (n <= 1 ? .5 : i / (n - 1));
         const r = Math.sqrt(Math.max(0, 1 - y * y));
         const a = i * GOLDEN_ANGLE;
-        v.set(Math.cos(a) * r * SPHERE_R, y * SPHERE_R * SPHERE_SQUASH, Math.sin(a) * r * SPHERE_R);
+        v.set(Math.cos(a) * r * R, y * R * SPHERE_SQUASH, Math.sin(a) * r * R);
       } else if (shape === 'heart') {
         const a = frac(i / PHI) * Math.PI * 2;
         const fill = Math.pow(frac(i * .7548776662 + .31), .4) * .45 + .55;
@@ -270,7 +279,8 @@ async function start() {
         const [x0, y0] = p(k), [x1, y1] = p((k + 1) % pts);
         v.set(x0 + (x1 - x0) * f, y0 + (y1 - y0) * f - .25, hash(i) * .4);
       }
-      const noise = SHAPE_NOISE[shape];
+      if (shape !== 'sphere') v.multiplyScalar(flatScale);
+      const noise = SHAPE_NOISE[shape] * flatScale;
       if (noise) v.add(new THREE.Vector3(hash(i + 1) * noise, hash(i + 2) * noise, hash(i + 3) * noise));
     });
   }
@@ -342,51 +352,66 @@ async function start() {
   }
   aboutBtn.addEventListener('click', () => openAbout(mode !== 'about'));
 
-  /* ---------- case study pop-up ---------- */
+  /* ---------- pop-up: a card zooms in, the case study opens on top of it ---------- */
   let returnFocus = null;
   let openedAt = 0;
-  function openCase(it) {
-    opened = it;
+  let winTimer = 0;
+  function openWindow(url, title, accent, it) {
+    opened = true;
     openedAt = performance.now();
-    const p = it.project;
-    const url = `/work/${p.slug}.html`;
-    $('.cl-case-title').textContent = p.name.toLowerCase();
-    $('.cl-case-dot').style.background = it.accent;
-    $('.cl-case-full').href = url;
+    zoomed = it || null;
+    $('.cl-case-title').textContent = title;
+    $('.cl-case-dot').style.background = accent || '#fff';
     caseFrame.src = url;
     returnFocus = document.activeElement;
     caseEl.hidden = false;
-    // grow the window out of the card that was clicked (offsets ignore the centring translate)
-    const r = cardRect(it);
-    const left = caseWin.offsetLeft - caseWin.offsetWidth / 2, top = caseWin.offsetTop - caseWin.offsetHeight / 2;
-    caseWin.style.transformOrigin = `${r.x + r.w / 2 - left}px ${r.y + r.h / 2 - top}px`;
-    requestAnimationFrame(() => requestAnimationFrame(() => caseEl.classList.add('open')));
     setMode('case');
+    clearTimeout(winTimer);
+    // let the card fill the screen first, then reveal the page over it
+    winTimer = setTimeout(() => caseEl.classList.add('open'), it && !reduceMotion ? 520 : 30);
     $('.cl-case-close').focus({ preventScroll: true });
-    say(`${p.name} case study opened`);
+    say(`${title} opened`);
   }
+  const openCase = it => openWindow(`/work/${it.project.slug}.html`, it.project.name.toLowerCase(), it.accent, it);
   function closeCase() {
     if (!opened) return;
-    opened = null;
+    opened = false;
+    clearTimeout(winTimer);
     caseEl.classList.remove('open');
-    setMode('cloud');
-    setTimeout(() => { if (!opened) { caseEl.hidden = true; caseFrame.src = 'about:blank'; } }, 380);
+    // the page fades, then the card zooms back out to its place
+    setTimeout(() => { if (!opened) { zoomed = null; setMode('cloud'); } }, reduceMotion ? 0 : 260);
+    setTimeout(() => { if (!opened) { caseEl.hidden = true; caseFrame.src = 'about:blank'; } }, 420);
     if (returnFocus && returnFocus.focus) returnFocus.focus({ preventScroll: true });
   }
-  // inside the window, show only the case study itself; links leave the pop-up
+  // inside the window show only the content; internal links stay in the window,
+  // external ones open a new tab, and a link home just closes the window
   caseFrame.addEventListener('load', () => {
     try {
       const doc = caseFrame.contentDocument;
       if (!doc || !doc.head || doc.location.href === 'about:blank') return;
       const style = doc.createElement('style');
-      style.textContent = 'header.site,footer.site,.mobile-menu,.consent,.grain{display:none!important}body{padding-top:0!important}';
+      style.textContent = 'header.site,footer.site,.mobile-menu,.consent,.grain,.crumb,.c-next{display:none!important}body{padding-top:0!important}';
       doc.head.appendChild(style);
-      const base = doc.createElement('base');
-      base.target = '_top';
-      doc.head.prepend(base);
+      const t = (doc.title || '').split('|')[0].trim().toLowerCase();
+      if (t) $('.cl-case-title').textContent = t;
       doc.addEventListener('keydown', e => { if (e.key === 'Escape') closeCase(); });
+      doc.addEventListener('click', e => {
+        const a = e.target.closest && e.target.closest('a[href]');
+        if (!a) return;
+        const u = new URL(a.getAttribute('href'), doc.baseURI);
+        if (u.origin !== location.origin) { a.target = '_blank'; a.rel = 'noopener'; return; }
+        if (u.pathname === '/' || u.pathname === '/index.html') { e.preventDefault(); closeCase(); return; }
+        if (a.target === '_top' || a.target === '_parent') a.target = '_self';
+      });
     } catch { /* cross-origin: leave the page as is */ }
   });
+  for (const a of root.querySelectorAll('[data-pop]')) {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      openAbout(false);
+      openWindow(a.getAttribute('href'), a.textContent, '', null);
+    });
+  }
   $('.cl-case-close').addEventListener('click', closeCase);
   // a tap's follow-up click lands on the backdrop that just appeared under the finger
   $('.cl-case-backdrop').addEventListener('click', () => { if (performance.now() - openedAt > 450) closeCase(); });
@@ -418,6 +443,7 @@ async function start() {
   });
   stage.addEventListener('pointermove', e => {
     pointerIn = true;
+    px = e.clientX; py = e.clientY;
     ndc.set(e.clientX / W * 2 - 1, -(e.clientY / H) * 2 + 1);
     if (!drag || drag.id !== e.pointerId) return;
     const dx = e.clientX - drag.lx, dy = e.clientY - drag.ly;
@@ -435,7 +461,7 @@ async function start() {
       lastInteract = performance.now();
     }
   });
-  stage.addEventListener('pointerleave', () => { pointerIn = false; ndc.set(-9, -9); });
+  stage.addEventListener('pointerleave', () => { pointerIn = false; px = py = -1e4; ndc.set(-9, -9); });
   stage.addEventListener('pointerup', e => {
     if (!drag || drag.id !== e.pointerId) return;
     stage.classList.remove('is-drag');
@@ -491,6 +517,13 @@ async function start() {
     return [(tmp.x + 1) / 2 * W, (1 - tmp.y) / 2 * H];
   }
   function pxPerUnit(z) { return H / (2 * halfTan * Math.max(.1, camera.position.z - z)); }
+  // the pop-up window's size on screen, and the card length that covers it at ZOOM_D
+  const winSize = () => (W <= 640 ? [W - 16, H - 96] : [Math.min(1120, W - 60), H - 110]);
+  function zoomLen(it) {
+    const [ww, wh] = winSize();
+    const u = 2 * halfTan * ZOOM_D / H;
+    return it.aspect >= 1 ? Math.max(ww * u, wh * u * it.aspect) : Math.max(ww * u / it.aspect, wh * u);
+  }
   function cardRect(it) {
     const [x, y] = project(it.pos);
     const [w, h] = dims(it, it.size);
@@ -510,6 +543,9 @@ async function start() {
     shapeBlend += ((flat ? 1 : 0) - shapeBlend) * k(.06);
     aboutBlend += ((mode === 'about' ? 1 : 0) - aboutBlend) * k(.09);
     caseBlend += ((mode === 'case' ? 1 : 0) - caseBlend) * k(.12);
+    zoomBlend += ((zoomed ? 1 : 0) - zoomBlend) * k(.12);
+    // the whole cloud breathes slowly
+    const breathe = reduceMotion ? 1 : 1 + Math.sin(t * 1.15) * .022;
     const idle = now - lastInteract > 2500;
     if (!drag) {
       rotY += velY * f; velY *= Math.pow(.94, f);
@@ -539,13 +575,27 @@ async function start() {
       it.hover += ((it === hovered ? 1 : 0) - it.hover) * k(.18);
 
       target.copy(it.target);
+      if (shape !== 'grid') target.multiplyScalar(breathe);
+      if (!reduceMotion) {
+        target.x += Math.sin(t * .7 + it.seed * 1.7) * .045;
+        target.y += Math.cos(t * .6 + it.seed * 2.3) * .045;
+      }
       if (shape === 'grid') target.y += gridScroll;
       else target.applyQuaternion(q);
-      if (aboutBlend > .001) target.multiplyScalar(1 + aboutBlend * .25);
-      it.pos.lerp(target, k(.075));
+      // step back for the about text; recoil from a card that is zooming in
+      const spread = 1 + aboutBlend * .25 + (it === zoomed ? 0 : zoomBlend * .45);
+      if (spread > 1.001) target.multiplyScalar(spread);
+      // cards near the pointer lean toward the viewer
+      const d2 = (it.sx - px) ** 2 + (it.sy - py) ** 2;
+      const near = mode === 'cloud' && pointerIn && !reduceMotion ? Math.exp(-d2 / (2 * 130 * 130)) : 0;
+      it.near += (near - it.near) * k(.1);
+      target.z += it.near * .6;
 
-      const len = shape === 'grid' && it.grid ? Math.max(it.grid.w, it.grid.h) : CARD * SHAPE_CARD[shape];
-      it.size += (len * (1 + it.hover * .18) * it.vis - it.size) * k(.16);
+      let len = shape === 'grid' && it.grid ? Math.max(it.grid.w, it.grid.h) : CARD * SHAPE_CARD[shape];
+      len *= 1 + it.hover * .18 + it.near * .08;
+      if (it === zoomed) { target.set(0, 0, camera.position.z - ZOOM_D); len = zoomLen(it); }
+      it.pos.lerp(target, k(it === zoomed ? .13 : .075));
+      it.size += (len * it.vis - it.size) * k(it === zoomed ? .13 : .16);
 
       const g = it.group;
       g.position.copy(it.pos);
@@ -556,11 +606,13 @@ async function start() {
       it.frame.scale.set(w + fw, h + fw, 1);
       g.visible = it.size > .004;
 
-      const dim = (1 - aboutBlend * .93) * (1 - caseBlend * .6);
+      const dim = it === zoomed ? 1 : (1 - aboutBlend * .93) * (1 - caseBlend * .7);
       it.mat.opacity += (dim - it.mat.opacity) * k(.12);
       it.frameMat.opacity = it.mat.opacity;
 
-      if (it.on && it.vis > .5 && g.visible) {
+      it.group.renderOrder = it === zoomed ? 10 : 0;
+      [it.sx, it.sy] = project(it.pos);
+      if (it.on && it.vis > .5 && g.visible && it !== zoomed) {
         onCount++;
         const r = cardRect(it);
         bounds.x0 = Math.min(bounds.x0, r.x); bounds.x1 = Math.max(bounds.x1, r.x + r.w);

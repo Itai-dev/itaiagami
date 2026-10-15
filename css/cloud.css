@@ -67,12 +67,12 @@ html.cloud-on #cloud{display:block}
 /* case study pop-up window */
 .cl-case{position:absolute;inset:0;z-index:40}
 .cl-case[hidden]{display:none}
-.cl-case-backdrop{position:absolute;inset:0;background:rgba(191,191,191,.55);opacity:0;transition:opacity .35s}
+.cl-case-backdrop{position:absolute;inset:0;background:rgba(191,191,191,.35);opacity:0;transition:opacity .35s}
 .cl-case.open .cl-case-backdrop{opacity:1}
 .cl-case-win{position:absolute;left:50%;top:50%;width:min(1120px,calc(100% - 60px));height:calc(100% - 110px);margin:0;
   translate:-50% -50%;display:flex;flex-direction:column;background:#fff;border:1px solid var(--cl-frame);
-  box-shadow:0 30px 80px -20px rgba(0,0,0,.35);transform:scale(.12);opacity:0;
-  transition:transform .5s cubic-bezier(.2,.9,.25,1),opacity .25s}
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.35);transform:scale(.985);opacity:0;
+  transition:transform .45s cubic-bezier(.2,.9,.25,1),opacity .3s}
 .cl-case.open .cl-case-win{transform:none;opacity:1}
 .cl-case-bar{display:flex;align-items:center;gap:10px;height:34px;padding:0 6px 0 12px;flex:none;
   background:var(--cl-frame);color:#fff;font:11px/1 "IBM Plex Mono",ui-monospace,monospace;text-transform:lowercase}
