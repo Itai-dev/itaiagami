@@ -1,0 +1,17 @@
+{
+  "name": "itaiagami-studio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "seed": "node ../tools/sanity-seed.mjs && sanity dataset import seed.ndjson production --replace"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sanity": "^3.68.0",
+    "styled-components": "^6.1.15"
+  }
+}

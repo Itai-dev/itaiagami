@@ -1,8 +1,9 @@
-/* Homepage cloud. One card per project from data/projects.json floats in 3D and
+/* Homepage cloud. One card per project (from Sanity, or data/projects.json) floats in 3D and
    re-forms into a sphere, heart, smiley, star or grid. Drag to spin, scroll to
    zoom, hover for the project, click to open its case study in a pop-up window.
    If WebGL or the data is unavailable nothing changes: the regular homepage stays. */
 import * as THREE from 'three';
+import { loadContent, sized } from './cms.js';
 
 const root = document.getElementById('cloud');
 const ACCENTS = ['#2979ff', '#ff2fae', '#ffd400', '#00c853', '#ff6d00', '#7c4dff', '#00b8d4', '#e53935', '#26262b'];
@@ -25,12 +26,6 @@ const FOV = 40;
 const SHAPE_CARD = { sphere: 1, heart: .7, smiley: .58, star: .6 };
 const SHAPE_NOISE = { sphere: 0, heart: .2, smiley: .12, star: .12, grid: 0 };
 const FRAME = 0x26262b;
-// projects with a local film loop: the card plays it instead of a still
-// (Vimeo-hosted films can't be drawn into WebGL; they play when the card opens)
-const VIDEO = {
-  'natural-intelligence': '/assets/opt/ni-ad-home-options.mp4',
-  riddle: '/assets/opt/riddle-logo.mp4',
-};
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function webglOK() {
@@ -46,11 +41,20 @@ function teardown() {
 }
 
 async function start() {
-  const projects = await fetch('/data/projects.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  const { projects, settings } = await loadContent();
+  const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const aboutLines = settings && Array.isArray(settings.about) && settings.about.length ? settings.about : [
+    'itai agami. independent creative director, tel aviv.',
+    'i set the creative direction for launches: brand, campaign, digital.',
+    'before: natural intelligence, elements, shortcut playground.',
+  ];
+  const email = (settings && settings.email) || 'itaiagami@gmail.com';
+  const linkedin = (settings && settings.linkedin) || 'https://www.linkedin.com/in/itai-agami-237353189/';
+  const cv = (settings && settings.cv) || '/assets/docs/Itai_Agami_CV.pdf';
 
   /* ---------- items: one card per project ---------- */
   const items = projects
-    .map((p, pi) => ({ src: p.thumb || p.hero, project: p, accent: ACCENTS[pi % ACCENTS.length] }))
+    .map((p, pi) => ({ src: sized(p.thumb || p.hero, 1024), project: p, accent: ACCENTS[pi % ACCENTS.length] }))
     .filter(it => it.src);
   // shuffle so neighbours differ between visits
   for (let i = items.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [items[i], items[j]] = [items[j], items[i]]; }
@@ -83,10 +87,8 @@ async function start() {
       <button class="cl-about-btn cl-in cl-ctl" type="button" aria-expanded="false" aria-controls="cl-about"><span class="cl-letters"></span></button>
       <section class="cl-about" id="cl-about" aria-label="About Itai Agami">
         <div class="cl-about-inner">
-          <p>itai agami. independent creative director, tel aviv.</p>
-          <p>i set the creative direction for launches: brand, campaign, digital.</p>
-          <p class="dim">before: natural intelligence, elements, shortcut playground.</p>
-          <p class="links"><a href="/work.html" data-pop>all work</a><a href="/services.html" data-pop>services</a><a href="/notes.html" data-pop>notes</a><a href="/contact.html" data-pop>contact</a><a href="mailto:itaiagami@gmail.com">email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">linkedin</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">cv</a></p>
+          ${aboutLines.map((l, i) => `<p${i === aboutLines.length - 1 && i > 1 ? ' class="dim"' : ''}>${esc(l)}</p>`).join('')}
+          <p class="links"><a href="/work.html" data-pop>all work</a><a href="/services.html" data-pop>services</a><a href="/notes.html" data-pop>notes</a><a href="/contact.html" data-pop>contact</a><a href="mailto:${esc(email)}">email</a><a href="${esc(linkedin)}" target="_blank" rel="noopener">linkedin</a><a href="${esc(cv)}" target="_blank" rel="noopener">cv</a></p>
         </div>
       </section>
       <div class="cl-case" role="dialog" aria-modal="true" aria-labelledby="cl-case-title" hidden>
@@ -97,7 +99,8 @@ async function start() {
             <span class="cl-case-title" id="cl-case-title"></span>
             <button class="cl-case-close" type="button">close</button>
           </div>
-          <iframe class="cl-case-frame" title="Case study" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+          <iframe class="cl-case-frame" title="Page" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+          <article class="cl-case-doc" hidden></article>
         </div>
       </div>
       <div class="cl-sr" aria-live="polite"></div>
@@ -116,6 +119,7 @@ async function start() {
   const caseEl = $('.cl-case');
   const caseWin = $('.cl-case-win');
   const caseFrame = $('.cl-case-frame');
+  const caseDoc = $('.cl-case-doc');
   const [prevShapeBtn, , nextShapeBtn] = root.querySelectorAll('.cl-shapes button');
 
   // show the cloud before measuring anything; the regular page goes inert underneath
@@ -165,6 +169,7 @@ async function start() {
   // a project with a film loop plays it on its card
   function attachVideo(it, src) {
     const v = document.createElement('video');
+    v.crossOrigin = 'anonymous';
     v.src = src;
     v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
     v.preload = 'auto';
@@ -186,6 +191,7 @@ async function start() {
   items.forEach(it => {
     const img = new Image();
     img.decoding = 'async';
+    img.crossOrigin = 'anonymous';
     img.onload = () => {
       const w = Math.min(1024, img.naturalWidth);
       const h = Math.round(w * img.naturalHeight / img.naturalWidth);
@@ -203,7 +209,7 @@ async function start() {
       layout();
     };
     img.src = it.src;
-    if (VIDEO[it.project.slug] && !reduceMotion) attachVideo(it, VIDEO[it.project.slug]);
+    if (it.project.loop && !reduceMotion) attachVideo(it, it.project.loop);
   });
 
   // card width/height for a long side of `len`
@@ -383,13 +389,20 @@ async function start() {
   let returnFocus = null;
   let openedAt = 0;
   let winTimer = 0;
-  function openWindow(url, title, accent, it) {
+  function openWindow(url, title, accent, it, html) {
     opened = true;
     openedAt = performance.now();
     zoomed = it || null;
     $('.cl-case-title').textContent = title;
     $('.cl-case-dot').style.background = accent || '#fff';
-    caseFrame.src = url;
+    // a case study is rendered from the content; any other page loads in the frame
+    caseDoc.hidden = !html;
+    caseFrame.hidden = !!html;
+    if (html) {
+      caseDoc.innerHTML = html;
+      caseDoc.scrollTop = 0;
+      for (const v of caseDoc.querySelectorAll('video')) v.play().catch(() => {});
+    } else caseFrame.src = url;
     returnFocus = document.activeElement;
     caseEl.hidden = false;
     setMode('case');
@@ -399,7 +412,27 @@ async function start() {
     $('.cl-case-close').focus({ preventScroll: true });
     say(`${title} opened`);
   }
-  const openCase = it => openWindow(`/work/${it.project.slug}.html`, it.project.name.toLowerCase(), it.accent, it);
+  const openCase = it => openWindow(null, it.project.name.toLowerCase(), it.accent, it, caseHTML(it.project));
+
+  // One plain paragraph on top (one-liner, idea, outcome; first sentences), a
+  // client and role line, then the film and every image together in a mosaic.
+  function caseHTML(p) {
+    const firstSentence = t => { const m = String(t || '').match(/^(.{20,}?[.!?])(\s|$)/); return m ? m[1] : String(t || ''); };
+    const para = [p.oneline, p.idea, p.result].filter(Boolean).map(firstSentence)
+      .filter((t, i) => i === 0 || t.length <= 150).join(' ');
+    const meta = [p.client, p.role].filter(Boolean).join(' · ');
+    let film = '';
+    if (p.vimeo) {
+      film = `<div class="clc-film"><iframe src="https://player.vimeo.com/video/${encodeURIComponent(p.vimeo)}?autoplay=1&title=0&byline=0&portrait=0&dnt=1" title="${esc(p.name)} film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+    } else if (p.loop) {
+      film = `<div class="clc-m"><video src="${esc(p.loop)}" muted loop autoplay playsinline></video></div>`;
+    }
+    const srcs = [...new Set([p.hero, ...(p.gallery || []).map(g => g && g.src)].filter(Boolean))];
+    const imgs = srcs.map(src => `<div class="clc-m"><img src="${esc(sized(src, 1600))}" alt=""></div>`).join('');
+    return `<p class="clc-text"><strong>${esc(p.name)}</strong> ${esc(para)}</p>
+      ${meta ? `<p class="clc-meta">${esc(meta)}</p>` : ''}
+      <div class="clc-media">${film}${imgs}</div>`;
+  }
   function closeCase() {
     if (!opened) return;
     opened = false;
@@ -407,7 +440,7 @@ async function start() {
     caseEl.classList.remove('open');
     // the page fades, then the card zooms back out to its place
     setTimeout(() => { if (!opened) { zoomed = null; setMode('cloud'); } }, reduceMotion ? 0 : 260);
-    setTimeout(() => { if (!opened) { caseEl.hidden = true; caseFrame.src = 'about:blank'; } }, 420);
+    setTimeout(() => { if (!opened) { caseEl.hidden = true; caseFrame.src = 'about:blank'; caseDoc.innerHTML = ''; } }, 420);
     if (returnFocus && returnFocus.focus) returnFocus.focus({ preventScroll: true });
   }
   // inside the window show only the content; internal links stay in the window,
