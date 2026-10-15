@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
+  --color-ground: #bfbfbf;
+  --color-paper: #e8e8e3;
+  --color-frame: #26262b;
+}
+
+/* one type size everywhere, like the main site */
+html {
+  font-size: 15px;
+}
+
+body {
+  background: var(--color-ground);
+  color: #111;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 1rem;
+  font-weight: 600;
+}

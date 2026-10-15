@@ -12,3 +12,5 @@ server.ps1
 skills-lock.json
 tests
 studio
+.agents
+web

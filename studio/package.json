@@ -1,17 +1,25 @@
 {
-  "name": "itaiagami-studio",
+  "name": "itai-agami-studio",
   "private": true,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "sanity dev",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "seed": "node ../tools/sanity-seed.mjs && sanity dataset import seed.ndjson production --replace"
+    "schema:deploy": "sanity schemas deploy",
+    "typegen": "sanity schemas extract --force && sanity typegen generate",
+    "seed": "node ../tools/sanity-seed.mjs && sanity dataset import seed.ndjson production"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "sanity": "^3.68.0",
-    "styled-components": "^6.1.15"
+    "@sanity/vision": "^6.19.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "sanity": "^6.19.0",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "typescript": "^5.9.0"
   }
 }

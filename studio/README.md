@@ -1,41 +1,53 @@
-# Sanity CMS
+# Sanity: Itai Agami Portfolio (`c8rr77b1`)
 
-The homepage cloud and its case-study pop-ups read projects and the about text
-from Sanity. Until a project ID is set in `js/cms.js`, or whenever Sanity can't be
-reached, the site uses `data/projects.json` instead, so nothing breaks.
+```
+itaiagami/            repo root = project folder
+├── studio/           Sanity Studio (standalone, TypeScript)
+├── web/              Next.js app that renders the Sanity content
+└── (static site)     the current homepage cloud, also reads Sanity via js/cms.js
+```
 
-## One-time setup
+## Content model
 
-1. **Create the project.** Sign in at sanity.io/manage → *Create project* → dataset
-   `production`, visibility **public**. Copy the project ID.
-2. **Allow the site to read it.** Project → *API* → *CORS origins* → add
-   `https://itaiagami.com` and your Vercel preview domain
-   (`https://*.vercel.app` or the exact preview URL). No credentials needed.
-3. **Import the current content** (images, video loops and the CV are uploaded):
-   ```sh
-   cd studio
-   npm install
-   npx sanity login
-   SANITY_STUDIO_PROJECT_ID=<id> npm run seed
-   ```
-4. **Point the site at it.** In `js/cms.js` set `projectId: '<id>'`, commit, push.
-5. **Open the editor.**
-   - Locally: `SANITY_STUDIO_PROJECT_ID=<id> npm run dev` → http://localhost:3333
-   - Hosted: `SANITY_STUDIO_PROJECT_ID=<id> npm run deploy` → https://itaiagami.sanity.studio
+- **Project**: name, slug, client, category (Brand / Culture / Technology), order,
+  card image, optional card video loop (short mp4), one-liner, role, idea, outcome,
+  challenge, system, contribution, disciplines, credits, Vimeo film ID, hero, images.
+- **Site settings** (single document): about lines, email, LinkedIn, CV.
 
-## Editing
+## One-time setup (needs your Sanity login)
 
-- **Projects**: name, category (drives the filters), order, card image, optional card
-  video loop (short mp4), one-liner, idea, outcome, Vimeo film ID, hero and images.
-  The pop-up shows the one-liner plus the first sentence of idea and outcome, then
-  the film and all images.
-- **Site settings**: the about lines, email, LinkedIn and CV.
+```sh
+cd studio
+npm install
+npx sanity login
+npm run schema:deploy        # upload the schema to the Content Lake
+npm run seed                 # import the 18 current projects, images, loops and CV (run once)
+npx sanity cors add http://localhost:3000 --credentials
+npx sanity cors add https://itaiagami.com
+npm run deploy               # hosted Studio at https://itai-agami.sanity.studio
+```
 
-Published changes show on the site within about a minute (Sanity's API CDN cache);
-no redeploy is needed.
+Also add your Vercel URLs as CORS origins (sanity.io/manage → project → API).
 
-## What still reads the repo
+## Day to day
 
-The static case-study pages under `/work/`, the sitemap, `llms.txt` and the API in
-`api/` are built from `data/projects.json`. They stay as they are for search engines
-and direct links; update `data/projects.json` if those need to change too.
+- Studio: `cd studio && npm run dev` → http://localhost:3333
+- Web app: `cd web && npm run dev` → http://localhost:3000
+- After changing the schema or a query: `cd studio && npm run typegen`
+  (writes `web/sanity.types.ts`), and `npm run schema:deploy` for schema changes.
+
+Published edits reach the web app instantly via Sanity Live, and the static
+homepage within about a minute.
+
+## Deploying the web app
+
+Create a second Vercel project from this repo with **Root Directory = `web`**.
+The existing Vercel project keeps deploying the static site from the root
+(`web/`, `studio/` and `.agents/` are in `.vercelignore`).
+
+The project ID is pinned to `c8rr77b1` in `web/src/sanity/env.ts` and `js/cms.js`
+on purpose, so a `NEXT_PUBLIC_SANITY_PROJECT_ID` meant for another project can't
+redirect the site.
+
+Drafts and Visual Editing need a server-only `SANITY_API_READ_TOKEN` (Viewer role)
+in the web app's environment; without it the app shows published content only.

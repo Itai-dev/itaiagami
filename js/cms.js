@@ -4,7 +4,7 @@
    Both paths return the same shape, so the cloud doesn't care which one answered. */
 
 export const SANITY = {
-  projectId: '',              // e.g. 'abc123xy' (sanity.io/manage → project → ID)
+  projectId: 'c8rr77b1',      // Itai Agami Portfolio
   dataset: 'production',
   apiVersion: '2024-06-01',
 };
@@ -16,10 +16,11 @@ const LOCAL_LOOPS = {
 };
 
 const QUERY = `{
-  "projects": *[_type == "project" && !(_id in path("drafts.**"))] | order(coalesce(homeRank, 999) asc, name asc) {
-    "slug": slug.current, name, client, cat, role, disciplines,
-    oneline, challenge, idea, system, result, contribution, credits, vimeo,
-    "thumb": thumb.asset->url,
+  "projects": *[_type == "project" && defined(slug.current)] | order(coalesce(order, 999) asc, name asc) {
+    "slug": slug.current, name, client, "cat": category, role, disciplines,
+    "oneline": oneliner, challenge, idea, system, "result": outcome, contribution, credits,
+    "vimeo": vimeoId,
+    "thumb": thumbnail.asset->url,
     "hero": hero.asset->url,
     "gallery": gallery[]{ "src": image.asset->url, half },
     "loop": loop.asset->url

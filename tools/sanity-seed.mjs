@@ -2,7 +2,10 @@
    Reads data/projects.json and writes studio/seed.ndjson, with every image and
    video loop referenced as a local file so `sanity dataset import` uploads them.
 
-   cd studio && SANITY_STUDIO_PROJECT_ID=<id> npm run seed   */
+   Run once, after `npx sanity login`:  cd studio && npm run seed
+   Projects get random IDs (Sanity's recommendation), so running it twice
+   creates duplicates; delete the projects in the Studio first if you re-run. */
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -27,25 +30,25 @@ function asset(kind, src) {
 }
 
 const docs = projects.map((p, i) => ({
-  _id: `project-${p.slug}`,
+  _id: crypto.randomUUID(),
   _type: 'project',
   name: p.name,
   slug: { _type: 'slug', current: p.slug },
   client: p.client,
-  cat: p.cat,
-  homeRank: p.homeRank ?? i + 1,
-  thumb: asset('image', p.thumb || p.hero),
+  category: p.cat,
+  order: p.homeRank ?? i + 1,
+  thumbnail: asset('image', p.thumb || p.hero),
   loop: asset('file', LOOPS[p.slug]),
-  oneline: p.oneline,
+  oneliner: p.oneline,
   role: p.role,
   idea: p.idea,
-  result: p.result,
+  outcome: p.result,
   challenge: p.challenge,
   system: p.system,
   contribution: p.contribution,
   disciplines: p.disciplines,
   credits: p.credits || [],
-  vimeo: p.vimeo || undefined,
+  vimeoId: p.vimeo || undefined,
   hero: asset('image', p.hero),
   gallery: (p.gallery || []).map((g, k) => ({
     _key: `g${k}`,
