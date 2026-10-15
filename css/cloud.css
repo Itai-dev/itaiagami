@@ -46,6 +46,7 @@ html.cloud-on #cloud{display:block}
 .cl .cl-view:hover{color:rgba(0,0,0,.7)}
 .cl .cl-view[aria-pressed=true]{color:rgba(0,0,0,.85)}
 .cl .cl-view:active{transform:scale(.9)}
+.cl .cl-view rect{fill:var(--cl-bg)}   /* front cards hide the edges of the ones behind */
 
 .cl-filters{position:absolute;right:30px;bottom:14px;z-index:20;display:flex;align-items:center;gap:24px;height:36px}
 .cl-filters button{color:rgba(0,0,0,.35);transition:color .2s,opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1);transform:translateY(14px)}

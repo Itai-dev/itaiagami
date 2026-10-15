@@ -1188,10 +1188,10 @@ async function start() {
   requestAnimationFrame(frame);
 }
 
-// layout icons: loose cards tumbling in space, and a tidy grid
+// layout icons: overlapping cards of slightly different sizes, and a tidy grid
 function icon(name) {
   const paths = name === 'grid'
     ? '<rect x="2.5" y="2.5" width="6.5" height="6.5"/><rect x="11" y="2.5" width="6.5" height="6.5"/><rect x="2.5" y="11" width="6.5" height="6.5"/><rect x="11" y="11" width="6.5" height="6.5"/>'
-    : '<path d="M2.2 6.8 7.9 4.6l1.5 4.9-5.7 2.2z"/><path d="M10.6 2.4l5.9 1.2-.9 4.6-5.9-1.2z"/><path d="M9.2 11.4l6.3-1.2.9 5.4-6.3 1.2z"/><path d="M2.6 14.2l3.9.9-.8 3.3-3.9-.9z"/>';
+    : '<rect x="2" y="3.5" width="8" height="8"/><rect x="9" y="2" width="7" height="7"/><rect x="6.5" y="9" width="9.5" height="9.5"/>';
   return `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
 }
