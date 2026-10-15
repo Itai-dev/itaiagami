@@ -115,7 +115,7 @@ async function start() {
       <button class="cl-chip cl-focus-min" type="button" aria-label="Minimise"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1.5V6H1.5M10 1.5V6h4.5M6 14.5V10H1.5M10 14.5V10h4.5"/></svg></button>
       <a class="cl-chip cl-focus-site" target="_blank" rel="noopener">visit site ↗</a>
       <span class="cl-chip cl-focus-nav" role="group" aria-label="Media"><button type="button" class="cl-focus-prev" aria-label="Previous">←</button><span class="cl-focus-count" aria-live="polite"></span><button type="button" class="cl-focus-next" aria-label="Next">→</button></span>
-      <p class="cl-chip cl-focus-info"></p>
+      <div class="cl-chip cl-focus-info"><div class="cl-focus-text"></div></div>
       <div class="cl-fade"></div>
       <div class="cl-shapes cl-in cl-ctl">
         <button class="cl-arrow" type="button" aria-label="Previous shape">${arrow('l')}</button>
@@ -175,6 +175,7 @@ async function start() {
   const focusNav = $('.cl-focus-nav');
   const focusCount = $('.cl-focus-count');
   const focusInfo = $('.cl-focus-info');
+  const focusText = $('.cl-focus-text');
   const focusSite = $('.cl-focus-site');
   const [prevShapeBtn, , nextShapeBtn] = root.querySelectorAll('.cl-shapes button');
 
@@ -238,9 +239,38 @@ async function start() {
       it.mat.needsUpdate = true;
       it.aspect = v.videoWidth / v.videoHeight || it.aspect;
       it.video = v;
+      if (!it.tint) it.tint = mainColor(v);
       layout();
     }, { once: true });
     v.play().catch(() => {});
+  }
+
+  // the main colour of an image: the most common hue, favouring colour over greys
+  function mainColor(src) {
+    try {
+      const c = document.createElement('canvas');
+      c.width = c.height = 32;
+      const g = c.getContext('2d', { willReadFrequently: true });
+      g.drawImage(src, 0, 0, 32, 32);
+      const d = g.getImageData(0, 0, 32, 32).data;
+      const bins = new Map();
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i], gr = d[i + 1], b = d[i + 2];
+        const mx = Math.max(r, gr, b), mn = Math.min(r, gr, b);
+        const sat = mx ? (mx - mn) / mx : 0;
+        if (mx < 24 || (mn > 235)) continue;          // near black or white
+        const key = (r >> 5) << 6 | (gr >> 5) << 3 | (b >> 5);
+        const bin = bins.get(key) || { w: 0, r: 0, g: 0, b: 0 };
+        const w = sat < .18 ? .02 : sat * sat * 4;   // a little colour outweighs a lot of grey
+        bin.w += w; bin.r += r * w; bin.g += gr * w; bin.b += b * w;
+        bins.set(key, bin);
+      }
+      let best = null;
+      for (const bin of bins.values()) if (!best || bin.w > best.w) best = bin;
+      if (!best) return null;
+      const hex = v => Math.round(v / best.w).toString(16).padStart(2, '0');
+      return `#${hex(best.r)}${hex(best.g)}${hex(best.b)}`;
+    } catch { return null; }   // an image without CORS can't be read
   }
 
   // a card with nothing to show: the project name on its colour
@@ -286,6 +316,8 @@ async function start() {
       const c = document.createElement('canvas');
       c.width = w; c.height = h;
       c.getContext('2d').drawImage(img, 0, 0, w, h);
+      it.tint = mainColor(c);
+      if (focusShown === it.project) tintInfo(it.project);
       const tex = new THREE.CanvasTexture(c);
       tex.colorSpace = THREE.SRGBColorSpace;
       tex.anisotropy = Math.min(8, maxAniso);
@@ -685,7 +717,7 @@ async function start() {
     focusInfo.style.maxWidth = `${Math.round(r.w) + 2}px`;
     // the opened text stays under the film, a few lines tall, and scrolls with a fade
     const below = H - (top + r.h) - 64;   // clear of the shape and filter controls
-    focusInfo.style.maxHeight = focusExpanded ? `${Math.round(Math.max(below, 76))}px` : '';
+    focusText.style.maxHeight = focusExpanded ? `${Math.round(Math.max(below, 76)) - 4}px` : '';
     const lift = Math.max(0, focusInfo.offsetHeight - below);
     fadeInfo();
     focusInfo.style.transform = `translate3d(${left - 1}px,${top + r.h - (focusExpanded ? lift : 0)}px,0)`;
@@ -700,7 +732,7 @@ async function start() {
     const own = p.text || (p.group && p.group.text);
     const info = own
       ? [String(own).trim()]
-      : [firstSentence(String(p.oneline || '')), [p.client, p.role].filter(Boolean).join(' · ')].filter(Boolean);
+      : [firstSentence(String(p.oneline || ''))].filter(Boolean);
     // the rest of the story (the older case study text), behind "…"
     const shown = info.join(' ');
     const rest = [p.oneline, p.idea, p.challenge, p.system, p.result, p.contribution]
@@ -708,8 +740,10 @@ async function start() {
       .map(t => t && shown.includes(firstSentence(t)) ? t.slice(firstSentence(t).length).trim() : t)
       .filter(t => t && !shown.includes(t));
     if (Array.isArray(p.credits) && p.credits.length) rest.push(p.credits.join(' · '));
+    if (!info.length && rest.length) info.push(rest.shift());
     focusLines = info;
     focusMore = rest;
+    tintInfo(p);
     focusExpanded = false;
     renderInfo();
     // an optional link to the live site, opened in a new tab
@@ -717,24 +751,31 @@ async function start() {
     focusSite.hidden = !site;
     if (site) focusSite.href = site;
   }
+  // the text takes the project's own main colour (once its image has loaded)
+  function tintInfo(p) {
+    const it = items.find(x => x.project === p);
+    const tint = (it && it.tint) || (zoomed && zoomed.accent) || '#26262b';
+    focusInfo.style.background = tint;
+    focusInfo.style.color = isLight(tint) ? '#000' : '#fff';
+  }
   function renderInfo() {
     const lines = focusExpanded ? [...focusLines, ...focusMore] : focusLines;
     const toggle = focusMore.length
-      ? ` <button type="button" class="cl-focus-more" aria-expanded="${focusExpanded}" aria-label="${focusExpanded ? 'Less' : 'More about this project'}">${focusExpanded ? 'less' : '…'}</button>`
+      ? ` <button type="button" class="cl-focus-more" aria-expanded="${focusExpanded}">${focusExpanded ? 'show less' : 'show more'}</button>`
       : '';
     const at = focusExpanded ? lines.length - 1 : 0;
-    focusInfo.innerHTML = lines.map((line, i) =>
+    focusText.innerHTML = lines.map((line, i) =>
       `<span${i >= focusLines.length ? ' class="more"' : ''}>${esc(line.toLowerCase())}${i === at ? toggle : ''}</span>`).join('');
     focusInfo.hidden = !lines.length;
-    focusInfo.scrollTop = 0;
-    focusInfo.classList.toggle('is-open', focusExpanded);
+    focusText.scrollTop = 0;
+    focusText.classList.toggle('is-open', focusExpanded);
   }
   // fade the bottom edge while there is more to scroll to
   function fadeInfo() {
-    const more = focusExpanded && focusInfo.scrollTop + focusInfo.clientHeight < focusInfo.scrollHeight - 2;
-    focusInfo.classList.toggle('has-more', more);
+    const more = focusExpanded && focusText.scrollTop + focusText.clientHeight < focusText.scrollHeight - 2;
+    focusText.classList.toggle('has-more', more);
   }
-  focusInfo.addEventListener('scroll', fadeInfo, { passive: true });
+  focusText.addEventListener('scroll', fadeInfo, { passive: true });
   focusInfo.addEventListener('click', e => {
     if (!e.target.closest('.cl-focus-more')) return;
     focusExpanded = !focusExpanded;
