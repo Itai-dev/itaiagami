@@ -61,7 +61,7 @@ async function start() {
   const email = (settings && settings.email) || 'itaiagami@gmail.com';
   const linkedin = (settings && settings.linkedin) || 'https://www.linkedin.com/in/itai-agami-237353189/';
   const cv = (settings && settings.cv) || '/assets/docs/Itai_Agami_CV.pdf';
-  // the one offer: a line under the mark, and the "work with me" panel
+  // the one offer, in the "work with me" panel: its headline line, then the details
   const offerLine = (settings && settings.offerLine) || 'creative direction and launch sites for startups. weeks, not months.';
   const offerLines = settings && Array.isArray(settings.offer) && settings.offer.length ? settings.offer : [
     'one sprint, one lead: the idea, the identity and the launch site, start to finish.',
@@ -101,7 +101,6 @@ async function start() {
         <path d="M19.5 38.4C24 27 29.2 14.8 33.1 5.6c4 10.4 8.4 21.4 13 32.4"/>
         <path d="M24.6 25.8c5.7-.9 11.6-1 16.6-.3"/>
       </svg>
-      <p class="cl-offer-line cl-in">${esc(offerLine)}</p>
       <div class="cl-overlay" data-mode="cloud">
         <div class="cl-bbox"></div>
         <span class="cl-chip cl-label"></span>
@@ -127,7 +126,7 @@ async function start() {
       </div>
       <section class="cl-about" id="cl-offer" aria-label="Work with Itai Agami">
         <div class="cl-about-inner">
-          ${offerLines.map(l => `<p>${esc(l)}</p>`).join('')}
+          ${[offerLine, ...offerLines].map(l => `<p>${esc(l)}</p>`).join('')}
           <p class="links"><a href="${esc(booking)}" target="_blank" rel="noopener">book a call ↗</a><a href="/contact.html" data-pop>send a brief</a><a href="mailto:${esc(email)}">email</a></p>
         </div>
       </section>

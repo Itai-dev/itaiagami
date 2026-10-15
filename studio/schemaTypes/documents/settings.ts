@@ -16,7 +16,7 @@ export const settings = defineType({
       name: 'offerLine',
       title: 'Offer, in one line',
       type: 'string',
-      description: 'Shown under the logo on the homepage. What you do, for whom, how fast.',
+      description: 'The first line of the "work with me" panel. What you do, for whom, how fast.',
       validation: (rule) => rule.max(90).warning('Keep it to one short line.'),
     }),
     defineField({
