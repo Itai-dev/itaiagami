@@ -17,7 +17,8 @@ const LOCAL_LOOPS = {
 
 const QUERY = `{
   "projects": *[_type == "project" && !(_id in path("drafts.**"))] | order(coalesce(order, 999) asc, name asc) {
-    "slug": coalesce(slug.current, _id), name, type, text, client, "cat": category, role, disciplines,
+    "slug": coalesce(slug.current, _id), name, type, text,
+    "group": group->{ "id": _id, name, text }, groupOrder, client, "cat": category, role, disciplines,
     "oneline": oneliner, challenge, idea, system, "result": outcome, contribution, credits,
     "vimeo": vimeoId, siteUrl, siteEmbed,
     "mux": film.asset->{ playbackId, "aspect": data.aspect_ratio },

@@ -64,6 +64,13 @@ export type Settings = {
   };
 };
 
+export type GroupReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "group";
+};
+
 export type Project = {
   _id: string;
   _type: "project";
@@ -71,6 +78,8 @@ export type Project = {
   _updatedAt: string;
   _rev: string;
   name?: string;
+  group?: GroupReference;
+  groupOrder?: number;
   type?: "video" | "image" | "site";
   text?: string;
   film?: MuxVideo;
@@ -171,6 +180,16 @@ export type Slug = {
   _type: "slug";
   current?: string;
   source?: string;
+};
+
+export type Group = {
+  _id: string;
+  _type: "group";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  text?: string;
 };
 
 export type MuxVideoAsset = {
@@ -374,12 +393,14 @@ export type AllSanitySchemaTypes =
   | GalleryImage
   | SanityFileAssetReference
   | Settings
+  | GroupReference
   | Project
   | MuxVideoAssetReference
   | MuxVideo
   | SanityImageCrop
   | SanityImageHotspot
   | Slug
+  | Group
   | MuxVideoAsset
   | MuxAssetData
   | MuxMasterFile

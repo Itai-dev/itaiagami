@@ -65,11 +65,25 @@ async function start() {
   const linkedin = (settings && settings.linkedin) || 'https://www.linkedin.com/in/itai-agami-237353189/';
   const cv = (settings && settings.cv) || '/assets/docs/Itai_Agami_CV.pdf';
 
-  /* ---------- items: one card per project ---------- */
-  const items = projects
-    .map((p, pi) => ({ src: cardImage(p), project: p, accent: ACCENTS[pi % ACCENTS.length] }));
-  // shuffle so neighbours differ between visits
-  for (let i = items.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [items[i], items[j]] = [items[j], items[i]]; }
+  /* ---------- items: one card per project; a group's projects stay together ---------- */
+  const units = [];
+  const byGroup = new Map();
+  for (const p of projects) {
+    const id = p.group && p.group.id;
+    if (id && byGroup.has(id)) { byGroup.get(id).push(p); continue; }
+    const unit = [p];
+    if (id) byGroup.set(id, unit);
+    units.push(unit);
+  }
+  for (const u of units) u.sort((a, b) => (a.groupOrder ?? 999) - (b.groupOrder ?? 999));
+  // shuffle the groups so neighbours differ between visits
+  for (let i = units.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [units[i], units[j]] = [units[j], units[i]]; }
+  const items = units.flatMap((u, ui) => {
+    // the projects of a group share one colour
+    const members = u.map((p, k) => ({ src: cardImage(p), project: p, accent: ACCENTS[ui % ACCENTS.length], unit: ui, k }));
+    for (const m of members) m.members = members;
+    return members;
+  });
 
   /* ---------- DOM ---------- */
   root.innerHTML = `
@@ -316,11 +330,23 @@ async function start() {
       const cols = Math.max(2, Math.round(viewW / 1.7));
       const colW = viewW / cols, cardW = colW * .92, gap = colW * .08;
       const heights = new Array(cols).fill(0);
+      // a group takes neighbouring columns at the same height, side by side
+      const runs = [];
       for (const it of vis) {
-        const h = cardW / it.aspect;
-        const c = heights.indexOf(Math.min(...heights));
-        it.grid = { x: (c - (cols - 1) / 2) * colW, top: heights[c], h, w: cardW };
-        heights[c] += h + gap;
+        const last = runs[runs.length - 1];
+        if (last && last[0].unit === it.unit && last.length < cols) last.push(it); else runs.push([it]);
+      }
+      for (const run of runs) {
+        let c0 = 0, best = Infinity;
+        for (let c = 0; c + run.length <= cols; c++) {
+          const top = Math.max(...heights.slice(c, c + run.length));
+          if (top < best - 1e-6) { best = top; c0 = c; }
+        }
+        run.forEach((it, k) => {
+          const c = c0 + k, h = cardW / it.aspect;
+          it.grid = { x: (c - (cols - 1) / 2) * colW, top: best, h, w: cardW };
+          heights[c] = best + h + gap;
+        });
       }
       const total = Math.max(...heights) - gap;
       const top = Math.min(halfH * .8, total / 2 + (aspect < .8 ? halfH * .07 : 0));
@@ -333,8 +359,36 @@ async function start() {
     // shapes grow with the number of cards so the spacing stays the same
     const R = Math.max(.7, NEIGHBOUR * Math.sqrt(n) / 1.9);
     const flatScale = THREE.MathUtils.clamp(Math.sqrt(n / 62), .42, 1);
-    vis.forEach((it, i) => {
-      const v = it.target;
+    // each group takes one point of the shape and its cards sit side by side there
+    const groups = [];
+    for (const it of vis) {
+      const last = groups[groups.length - 1];
+      if (last && last[0].unit === it.unit) last.push(it); else groups.push([it]);
+    }
+    const nu = groups.length;
+    const v = new THREE.Vector3(), east = new THREE.Vector3();
+    groups.forEach((members, i) => {
+      shapePoint(i, nu, v);
+      const m = members.length;
+      if (shape === 'sphere') {
+        // step along the sphere's latitude, staying on its surface
+        east.set(v.z, 0, -v.x);
+        if (east.lengthSq() < 1e-4) east.set(1, 0, 0);
+        east.normalize();
+      } else east.set(1, 0, 0);
+      const step = shape === 'sphere' ? NEIGHBOUR * 1.15 : CARD * SHAPE_CARD[shape] * 1.04;
+      members.forEach((it, k) => {
+        it.target.copy(v).addScaledVector(east, (k - (m - 1) / 2) * step);
+        if (shape === 'sphere' && m > 1) {
+          const y = it.target.y;
+          it.target.y = 0;
+          it.target.setLength(Math.sqrt(Math.max(0, R * R - (y / SPHERE_SQUASH) ** 2)) || it.target.length());
+          it.target.y = y;
+        }
+      });
+    });
+
+    function shapePoint(i, n, v) {
       if (shape === 'sphere') {
         const y = 1 - 2 * (n <= 1 ? .5 : i / (n - 1));
         const r = Math.sqrt(Math.max(0, 1 - y * y));
@@ -374,7 +428,7 @@ async function start() {
       if (shape !== 'sphere') v.multiplyScalar(flatScale);
       const noise = SHAPE_NOISE[shape] * flatScale;
       if (noise) v.add(new THREE.Vector3(hash(i + 1) * noise, hash(i + 2) * noise, hash(i + 3) * noise));
-    });
+    }
 
     const tall = aspect < .8;
     cardBoost = tall ? 1.25 : 1;
@@ -509,6 +563,7 @@ async function start() {
   let focusTimer = 0;
   let focusMedia = [];
   let focusIndex = 0;
+  let focusShown = null;        // the project whose tags are showing
   // everything a project can show when opened, in order: a live site, then its
   // videos and images (images first for an image project). Arrows step through them.
   function mediaOf(p, site) {
@@ -536,7 +591,12 @@ async function start() {
   }
   function showMedia(play) {
     const m = focusMedia[focusIndex];
-    playEl.innerHTML = m && zoomed ? mediaHtml(m, zoomed.project) : '';
+    if (m && m.project !== focusShown) {
+      showProject(m.project);
+      placeFocus();
+      if (play) say(m.project.name || 'untitled');
+    }
+    playEl.innerHTML = m ? mediaHtml(m, m.project) : '';
     focusCount.textContent = `${focusIndex + 1}/${focusMedia.length}`;
     // warm up the next image so stepping feels instant
     const next = focusMedia[(focusIndex + 1) % focusMedia.length];
@@ -578,34 +638,43 @@ async function start() {
     focusInfo.style.maxWidth = `${Math.round(r.w) + 2}px`;
     focusInfo.style.transform = `translate3d(${left - 1}px,${top + r.h}px,0)`;
   }
+  const siteOf = p => /^https?:\/\//i.test(p.siteUrl || '') ? p.siteUrl : '';
+  // the tags for one project: its title, its text and its site link
+  function showProject(p) {
+    focusShown = p;
+    focusTag.textContent = tagOf(p);
+    // its own text, else the group's, else the older one-liner and credits
+    const own = p.text || (p.group && p.group.text);
+    const info = own
+      ? [String(own).trim()]
+      : [firstSentence(String(p.oneline || '')), [p.client, p.role].filter(Boolean).join(' · ')].filter(Boolean);
+    focusInfo.innerHTML = info.map(line => `<span>${esc(line.toLowerCase())}</span>`).join('');
+    focusInfo.hidden = !info.length;
+    // an optional link to the live site, opened in a new tab
+    const site = siteOf(p);
+    focusSite.hidden = !site;
+    if (site) focusSite.href = site;
+  }
   function openFocus(it) {
     const p = it.project;
     zoomed = it;
     openedAt = performance.now();
     setMode('focus');
-    focusTag.textContent = tagOf(p);
     // title, minimise and text tag share the project's colour
     for (const el of [focusTag, focusMin, focusSite, focusNav, focusInfo]) {
       el.style.background = it.accent;
       el.style.color = isLight(it.accent) ? '#000' : '#fff';
     }
-    // a few words about the project under the film, in the same tag style
-    const firstSentence = t => { const m = String(t || '').match(/^(.{20,}?[.!?])(\s|$)/); return m ? m[1] : String(t || ''); };
-    // the project's own text if it has one, else the older one-liner and credits
-    const info = p.text
-      ? [String(p.text).trim()]
-      : [firstSentence(p.oneline), [p.client, p.role].filter(Boolean).join(' · ')].filter(Boolean);
-    focusInfo.innerHTML = info.map(line => `<span>${esc(line.toLowerCase())}</span>`).join('');
-    focusInfo.hidden = !info.length;
-    // an optional link to the live site, opened in a new tab
-    const site = /^https?:\/\//i.test(p.siteUrl || '') ? p.siteUrl : '';
-    focusSite.hidden = !site;
-    if (site) focusSite.href = site;
-    focusMedia = mediaOf(p, site);
-    focusIndex = 0;
+    // every video, image and site of the clicked project's group, in group
+    // order; a project with nothing to show still gets a stop for its text
+    focusMedia = it.members.flatMap(m => {
+      const list = mediaOf(m.project, siteOf(m.project));
+      return (list.length ? list : [{}]).map(x => ({ ...x, project: m.project }));
+    });
+    focusIndex = Math.max(0, focusMedia.findIndex(x => x.project === p));
+    focusShown = null;
     focusNav.hidden = focusMedia.length < 2;
     showMedia(false);
-    placeFocus();
     clearTimeout(focusTimer);
     // let the card scale up first, then lay the playing film exactly over it
     focusTimer = setTimeout(() => {

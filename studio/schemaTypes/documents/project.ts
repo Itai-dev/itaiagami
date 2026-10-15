@@ -30,6 +30,21 @@ export const project = defineType({
       validation: (rule) => rule.required().warning('Add a name so the project has a tag on the site.'),
     }),
     defineField({
+      name: 'group',
+      type: 'reference',
+      to: [{type: 'group'}],
+      group: 'main',
+      description: 'Related projects (e.g. Partner TV, Partner Kids) sit next to each other on the site and open together. Pick a group or create one.',
+    }),
+    defineField({
+      name: 'groupOrder',
+      title: 'Place in group',
+      type: 'number',
+      group: 'main',
+      hidden: ({parent}) => !parent?.group,
+      description: 'Lower comes first within the group.',
+    }),
+    defineField({
       name: 'type',
       type: 'string',
       group: 'main',
@@ -42,7 +57,7 @@ export const project = defineType({
       type: 'text',
       rows: 3,
       group: 'main',
-      description: 'A few words shown under the project when it opens.',
+      description: 'A few words shown under the project when it opens. Leave empty to use the group\'s text.',
     }),
 
     // video
@@ -169,10 +184,10 @@ export const project = defineType({
   ],
   orderings: [{title: 'Order', name: 'orderAsc', by: [{field: 'order', direction: 'asc'}]}],
   preview: {
-    select: {title: 'name', type: 'type', category: 'category', thumb: 'thumbnail', image: 'image'},
-    prepare: ({title, type, category, thumb, image}) => ({
+    select: {title: 'name', type: 'type', category: 'category', thumb: 'thumbnail', image: 'image', groupName: 'group.name'},
+    prepare: ({title, type, category, thumb, image, groupName}) => ({
       title: title || 'Untitled project',
-      subtitle: [type, category].filter(Boolean).join(' · '),
+      subtitle: [groupName, type, category].filter(Boolean).join(' · '),
       media: thumb || image,
     }),
   },
