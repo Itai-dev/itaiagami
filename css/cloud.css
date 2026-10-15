@@ -8,7 +8,7 @@ html.cloud-on body > :not(#cloud):not(script):not(.consent){display:none !import
 html.cloud-on #cloud{display:block}
 
 .cl{--cl-bg:#bfbfbf;--cl-ink:#000;--cl-frame:#26262b;position:fixed;inset:0;overflow:hidden;background:var(--cl-bg);
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--cl-ink);-webkit-font-smoothing:antialiased}
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--cl-ink);-webkit-font-smoothing:antialiased}
 .cl-stage{position:fixed;inset:0;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden}
 .cl-stage canvas{display:block;width:100%;height:100%}
 .cl-stage.is-hover{cursor:pointer}
@@ -25,12 +25,11 @@ html.cloud-on #cloud{display:block}
 .cl-label{pointer-events:auto;cursor:default}
 .cl-ambient{opacity:0}
 .cl-ambient.on{opacity:1}
-.cl-overlay[data-mode=focus] .cl-ambient,.cl-overlay[data-mode=card] .cl-ambient{opacity:0}
+.cl-overlay[data-mode=card] .cl-ambient{opacity:0}
 
 /* bottom fade so the controls stay legible over the cloud */
 .cl-fade{position:absolute;left:0;right:0;bottom:0;height:130px;z-index:15;pointer-events:none;transition:height .5s ease-out;
   background:linear-gradient(to top,#bfbfbf 30%,rgba(191,191,191,.85) 50%,rgba(191,191,191,.55) 68%,rgba(191,191,191,.25) 84%,rgba(191,191,191,0))}
-.cl[data-mode=focus] .cl-fade{height:210px}
 
 /* controls */
 .cl button,.cl a{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-decoration:none}
@@ -63,20 +62,26 @@ html.cloud-on #cloud{display:block}
 .cl-letters span.out{transform:translateY(105%);opacity:0}
 
 .cl[data-mode=about] .cl-shapes,.cl[data-mode=about] .cl-filters{opacity:0 !important;pointer-events:none}
+.cl[data-mode=case] .cl-shapes,.cl[data-mode=case] .cl-filters,.cl[data-mode=case] .cl-about-btn{pointer-events:none}
 
-/* focused card caption */
-.cl-caption{position:absolute;left:50%;bottom:64px;z-index:20;width:min(560px,calc(100% - 32px));transform:translate(-50%,10px);
-  text-align:center;opacity:0;pointer-events:none;transition:opacity .35s,transform .45s cubic-bezier(.2,.8,.2,1)}
-.cl[data-mode=focus] .cl-caption{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-.cl-caption p{margin:0 0 10px;font-size:15px;line-height:1.4;color:rgba(0,0,0,.72);text-wrap:balance}
-.cl-caption .cl-meta{font:10px/1.3 "IBM Plex Mono",ui-monospace,monospace;text-transform:lowercase;color:rgba(0,0,0,.55);margin-bottom:8px}
-.cl-caption .cl-open{font-size:17px;text-transform:lowercase;color:rgba(0,0,0,.85);border-bottom:1px solid rgba(0,0,0,.25);padding-bottom:1px;transition:border-color .2s}
-.cl-caption .cl-open:hover{border-color:#000}
-.cl-step{position:absolute;bottom:14px;z-index:21;display:grid;place-items:center;width:36px;height:36px;color:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .3s,color .2s}
-.cl-step:hover{color:#000}
-.cl-step.prev{left:calc(50% - 44px)}
-.cl-step.next{left:calc(50% + 8px)}
-.cl[data-mode=focus] .cl-step{opacity:1;pointer-events:auto}
+/* case study pop-up window */
+.cl-case{position:absolute;inset:0;z-index:40}
+.cl-case[hidden]{display:none}
+.cl-case-backdrop{position:absolute;inset:0;background:rgba(191,191,191,.55);opacity:0;transition:opacity .35s}
+.cl-case.open .cl-case-backdrop{opacity:1}
+.cl-case-win{position:absolute;left:50%;top:50%;width:min(1120px,calc(100% - 60px));height:calc(100% - 110px);margin:0;
+  translate:-50% -50%;display:flex;flex-direction:column;background:#fff;border:1px solid var(--cl-frame);
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.35);transform:scale(.12);opacity:0;
+  transition:transform .5s cubic-bezier(.2,.9,.25,1),opacity .25s}
+.cl-case.open .cl-case-win{transform:none;opacity:1}
+.cl-case-bar{display:flex;align-items:center;gap:10px;height:34px;padding:0 6px 0 12px;flex:none;
+  background:var(--cl-frame);color:#fff;font:11px/1 "IBM Plex Mono",ui-monospace,monospace;text-transform:lowercase}
+.cl-case-dot{width:8px;height:8px;flex:none}
+.cl-case-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cl .cl-case-bar a,.cl .cl-case-bar button{padding:6px 8px;color:rgba(255,255,255,.7);transition:color .2s}
+.cl .cl-case-bar a:hover,.cl .cl-case-bar button:hover{color:#fff}
+.cl .cl-case-bar :focus-visible{outline-color:#fff}
+.cl-case-frame{flex:1;width:100%;border:0;background:#fff}
 
 /* about */
 .cl-about{position:absolute;inset:0;z-index:25;display:flex;align-items:center;padding:110px 30px 90px;overflow:auto;
@@ -102,11 +107,9 @@ html.cloud-on #cloud{display:block}
   .cl-shapes{left:16px;bottom:20px}
   .cl-filters{right:16px;bottom:20px;gap:16px}
   .cl-fade{height:176px}
-  .cl[data-mode=focus] .cl-fade{height:260px}
-  .cl-caption{bottom:120px}
-  .cl-step{bottom:70px}
   .cl-about{padding:96px 16px 80px;align-items:flex-start}
   .cl-about-inner{font-size:19px}
+  .cl-case-win{width:calc(100% - 16px);height:calc(100% - 96px)}
 }
 @media (max-width:380px){ .cl-filters{gap:12px} .cl-ctl{font-size:16px} }
 @media (prefers-reduced-motion:reduce){

@@ -1,6 +1,6 @@
-/* Homepage cloud. Every still from data/projects.json floats as a card in 3D and
+/* Homepage cloud. One card per project from data/projects.json floats in 3D and
    re-forms into a sphere, heart, smiley, star or grid. Drag to spin, scroll to
-   zoom, hover for the project, click to bring a card forward.
+   zoom, hover for the project, click to open its case study in a pop-up window.
    If WebGL or the data is unavailable nothing changes: the regular homepage stays. */
 import * as THREE from 'three';
 
@@ -13,10 +13,17 @@ const FILTERS = [
   { id: 'culture', label: 'culture', test: p => p.cat === 'Culture' },
   { id: 'tech', label: 'tech', test: p => p.cat === 'Technology' },
 ];
-const SHAPE_CARD = { sphere: 1, heart: .72, smiley: .6, star: .62, grid: 1 };
+// Scene geometry, in world units, matched to the reference layout:
+// cards are 1.8 on their long side, the sphere has a 4.6 radius (squashed to .92
+// vertically) and the camera sits 15 back with a 40° vertical field of view.
+const CARD = 1.8;
+const SPHERE_R = 4.6;
+const SPHERE_SQUASH = .92;
+const CAM_Z = 15;
+const FOV = 40;
+const SHAPE_CARD = { sphere: 1, heart: .7, smiley: .58, star: .6 };
 const SHAPE_NOISE = { sphere: 0, heart: .2, smiley: .12, star: .12, grid: 0 };
 const FRAME = 0x26262b;
-const FOV = 40;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function webglOK() {
@@ -34,21 +41,12 @@ function teardown() {
 async function start() {
   const projects = await fetch('/data/projects.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
 
-  /* ---------- items: one card per unique still, grouped by project ---------- */
-  const items = [];
-  const seen = new Set();
-  projects.forEach((p, pi) => {
-    const accent = ACCENTS[pi % ACCENTS.length];
-    const srcs = [p.thumb, p.hero, ...(p.gallery || []).map(g => g.src)].filter(Boolean);
-    for (const src of srcs) {
-      if (seen.has(src)) continue;
-      seen.add(src);
-      items.push({ src, project: p, accent });
-    }
-  });
-  // shuffle so neighbours in a shape come from different projects
+  /* ---------- items: one card per project ---------- */
+  const items = projects
+    .map((p, pi) => ({ src: p.thumb || p.hero, project: p, accent: ACCENTS[pi % ACCENTS.length] }))
+    .filter(it => it.src);
+  // shuffle so neighbours differ between visits
   for (let i = items.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [items[i], items[j]] = [items[j], items[i]]; }
-  items.forEach((it, i) => { it.seed = i; });
 
   /* ---------- DOM ---------- */
   root.innerHTML = `
@@ -64,16 +62,9 @@ async function start() {
       <div class="cl-overlay" data-mode="cloud">
         <div class="cl-bbox"></div>
         <span class="cl-chip cl-label"></span>
-        ${'<span class="cl-chip cl-ambient"></span>'.repeat(5)}
+        ${'<span class="cl-chip cl-ambient"></span>'.repeat(4)}
       </div>
       <div class="cl-fade"></div>
-      <div class="cl-caption" aria-live="polite">
-        <div class="cl-meta"></div>
-        <p></p>
-        <a class="cl-open" href="#">view case study</a>
-      </div>
-      <button class="cl-step prev cl-ctl" type="button" aria-label="Previous image">${arrow('l')}</button>
-      <button class="cl-step next cl-ctl" type="button" aria-label="Next image">${arrow('r')}</button>
       <div class="cl-shapes cl-in cl-ctl">
         <button class="cl-arrow" type="button" aria-label="Previous shape">${arrow('l')}</button>
         <button class="cl-shape" type="button" aria-label="Change shape"><span>sphere</span></button>
@@ -88,10 +79,22 @@ async function start() {
           <p>itai agami — independent creative director in tel aviv, working with brands and teams internationally.</p>
           <p>companies bring me something they need to launch or change: a product, a brand, a campaign, a place. i define the creative direction and carry it across brand, campaign, content and digital experience.</p>
           <p class="dim">before going independent: natural intelligence, elements, shortcut playground. media design at shenkar, with honors.</p>
-          <p class="dim">everything floating behind this text is real work — ${projects.length} projects, ${items.length} images.</p>
+          <p class="dim">everything floating behind this text is real work — ${items.length} projects.</p>
           <p class="links"><a href="/work.html">all work</a><a href="/services.html">services</a><a href="/notes.html">notes</a><a href="/contact.html">contact</a><a href="mailto:itaiagami@gmail.com">email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">linkedin</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">cv</a></p>
         </div>
       </section>
+      <div class="cl-case" role="dialog" aria-modal="true" aria-labelledby="cl-case-title" hidden>
+        <div class="cl-case-backdrop"></div>
+        <div class="cl-case-win">
+          <div class="cl-case-bar">
+            <span class="cl-case-dot"></span>
+            <span class="cl-case-title" id="cl-case-title"></span>
+            <a class="cl-case-full" href="#">open page</a>
+            <button class="cl-case-close" type="button">close</button>
+          </div>
+          <iframe class="cl-case-frame" title="Case study"></iframe>
+        </div>
+      </div>
       <div class="cl-sr" aria-live="polite"></div>
     </div>`;
 
@@ -102,10 +105,12 @@ async function start() {
   const bbox = $('.cl-bbox');
   const label = $('.cl-label');
   const ambientEls = [...root.querySelectorAll('.cl-ambient')];
-  const caption = $('.cl-caption');
   const live = $('.cl-sr');
   const shapeBtn = $('.cl-shape');
   const aboutBtn = $('.cl-about-btn');
+  const caseEl = $('.cl-case');
+  const caseWin = $('.cl-case-win');
+  const caseFrame = $('.cl-case-frame');
   const [prevShapeBtn, , nextShapeBtn] = root.querySelectorAll('.cl-shapes button');
 
   // show the cloud before measuring anything; the regular page goes inert underneath
@@ -128,13 +133,12 @@ async function start() {
   const maxAniso = renderer.capabilities.getMaxAnisotropy();
   const pickables = [];
 
-  const placeholder = new THREE.Color('#cfcfcf');
   items.forEach((it, i) => {
-    it.mat = new THREE.MeshBasicMaterial({ color: placeholder.clone(), transparent: true, opacity: 1 });
+    it.mat = new THREE.MeshBasicMaterial({ color: '#cfcfcf', transparent: true, opacity: 1 });
     it.frameMat = new THREE.MeshBasicMaterial({ color: FRAME, transparent: true, opacity: 1 });
     it.mesh = new THREE.Mesh(plane, it.mat);
     it.frame = new THREE.Mesh(plane, it.frameMat);
-    it.frame.position.z = -.002;
+    it.frame.position.z = -.006;
     it.group = new THREE.Group();
     it.group.add(it.frame, it.mesh);
     it.mesh.userData.index = i;
@@ -142,151 +146,133 @@ async function start() {
     pickables.push(it.mesh);
     it.aspect = 16 / 9;
     it.on = true;
-    it.vis = 0;               // animated visibility 0..1
+    it.vis = 0;
     it.pos = new THREE.Vector3((Math.random() - .5) * .4, (Math.random() - .5) * .4, (Math.random() - .5) * .4);
     it.target = new THREE.Vector3();
-    it.scale = 0;
+    it.size = 0;               // animated long-side length in world units
     it.hover = 0;
-    it.delay = reduceMotion ? 0 : 120 + Math.random() * 900;
+    it.delay = reduceMotion ? 0 : 150 + Math.random() * 1100;
   });
 
-  // small textures for the cloud; the full image is loaded only when a card is focused
-  const loadQueue = [...items];
-  let loading = 0;
-  function pump() {
-    while (loading < 6 && loadQueue.length) {
-      const it = loadQueue.shift();
-      loading++;
-      const img = new Image();
-      img.decoding = 'async';
-      img.onload = () => {
-        const w = Math.min(512, img.naturalWidth);
-        const h = Math.round(w * img.naturalHeight / img.naturalWidth);
-        const c = document.createElement('canvas');
-        c.width = w; c.height = h;
-        c.getContext('2d').drawImage(img, 0, 0, w, h);
-        const tex = new THREE.CanvasTexture(c);
-        tex.colorSpace = THREE.SRGBColorSpace;
-        tex.anisotropy = Math.min(4, maxAniso);
-        it.small = tex;
-        it.mat.map = tex;
-        it.mat.color.set(0xffffff);
-        it.mat.needsUpdate = true;
-        it.aspect = img.naturalWidth / img.naturalHeight;
-        loading--; pump();
-      };
-      img.onerror = () => { loading--; pump(); };
-      img.src = it.src;
-    }
-  }
-  pump();
-
-  function loadFull(it) {
-    if (it.full || it.fullLoading) return;
-    it.fullLoading = true;
-    new THREE.TextureLoader().load(it.src, tex => {
+  // textures are capped at 1024px; with one card per project that stays light
+  items.forEach(it => {
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => {
+      const w = Math.min(1024, img.naturalWidth);
+      const h = Math.round(w * img.naturalHeight / img.naturalWidth);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      const tex = new THREE.CanvasTexture(c);
       tex.colorSpace = THREE.SRGBColorSpace;
-      tex.anisotropy = maxAniso;
-      it.full = tex;
-      it.fullLoading = false;
-      if (focused === it) { it.mat.map = tex; it.mat.needsUpdate = true; }
-      else dropFull(it);
-    }, undefined, () => { it.fullLoading = false; });
-  }
-  function dropFull(it) {
-    if (!it.full) return;
-    if (it.mat.map === it.full) { it.mat.map = it.small || null; it.mat.needsUpdate = true; }
-    it.full.dispose();
-    it.full = null;
-  }
+      tex.anisotropy = Math.min(8, maxAniso);
+      it.mat.map = tex;
+      it.mat.color.set(0xffffff);
+      it.mat.needsUpdate = true;
+      it.aspect = img.naturalWidth / img.naturalHeight;
+      layout();
+    };
+    img.src = it.src;
+  });
+
+  // card width/height for a long side of `len`
+  const dims = (it, len) => it.aspect >= 1 ? [len, len / it.aspect] : [len * it.aspect, len];
 
   /* ---------- state ---------- */
   let shape = 'sphere';
   let filter = FILTERS[0];
-  let mode = 'cloud';           // cloud | focus | about
+  let mode = 'cloud';           // cloud | about | case
   let hovered = null;
-  let focused = null;
+  let opened = null;
   let W = 1, H = 1;
   let rotY = .6, velY = 0, tiltX = 0, velX = 0;
   let zoom = 1;
   let shapeBlend = 0;           // 0 = free spinning (sphere), 1 = flat shape facing camera
   let aboutBlend = 0;
+  let caseBlend = 0;
+  let gridScroll = 0, gridScrollMax = 0;
   let lastInteract = 0;
   const startTime = performance.now();
 
   /* ---------- layouts ---------- */
   const PHI = (1 + Math.sqrt(5)) / 2;
+  const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
   const frac = x => x - Math.floor(x);
-  // deterministic per-item noise in [-1, 1]
   const hash = n => frac(Math.sin(n * 127.1 + 311.7) * 43758.5453) * 2 - 1;
+
+  function baseCamZ() {
+    const aspect = W / H;
+    return Math.max(CAM_Z, 3.9 / (halfTan * aspect));
+  }
 
   function layout() {
     const vis = items.filter(it => it.on);
     const n = vis.length;
     const aspect = W / H;
+    const halfH = halfTan * baseCamZ();
+
+    if (shape === 'grid') {
+      // masonry columns across 92% of the view width, 8% of a column as the gap
+      const viewW = halfH * aspect * 1.84;
+      const cols = Math.max(2, Math.round(viewW / 1.7));
+      const colW = viewW / cols, cardW = colW * .92, gap = colW * .08;
+      const heights = new Array(cols).fill(0);
+      for (const it of vis) {
+        const h = cardW / it.aspect;
+        const c = heights.indexOf(Math.min(...heights));
+        it.grid = { x: (c - (cols - 1) / 2) * colW, top: heights[c], h, w: cardW };
+        heights[c] += h + gap;
+      }
+      const total = Math.max(...heights) - gap;
+      const top = Math.min(halfH * .8, total / 2 + (aspect < .8 ? halfH * .07 : 0));
+      gridScrollMax = Math.max(0, total - halfH * 1.55);
+      gridScroll = Math.min(gridScroll, gridScrollMax);
+      for (const it of vis) it.target.set(it.grid.x, top - it.grid.top - it.grid.h / 2, 0);
+      return;
+    }
+
     vis.forEach((it, i) => {
-      const t = n <= 1 ? .5 : i / (n - 1);
       const v = it.target;
       if (shape === 'sphere') {
-        const y = 1 - 2 * ((i + .5) / n);
-        const r = Math.sqrt(1 - y * y);
-        const a = i * 2 * Math.PI / PHI / PHI;
-        const R = sphereRadius(n);
-        v.set(Math.cos(a) * r * R, y * R * .92, Math.sin(a) * r * R);
+        const y = 1 - 2 * (n <= 1 ? .5 : i / (n - 1));
+        const r = Math.sqrt(Math.max(0, 1 - y * y));
+        const a = i * GOLDEN_ANGLE;
+        v.set(Math.cos(a) * r * SPHERE_R, y * SPHERE_R * SPHERE_SQUASH, Math.sin(a) * r * SPHERE_R);
       } else if (shape === 'heart') {
         const a = frac(i / PHI) * Math.PI * 2;
-        const fill = Math.pow(frac(i * .7548776662 + .31), .4);
+        const fill = Math.pow(frac(i * .7548776662 + .31), .4) * .45 + .55;
         const x = 16 * Math.pow(Math.sin(a), 3);
         const yy = 13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a);
         v.set(x * fill * .29, (yy * fill + 2.6 * (1 - fill)) * .29 + .3, hash(i) * .9);
       } else if (shape === 'smiley') {
-        const ringN = Math.round(n * .58), eyeN = Math.max(2, Math.round(n * .09));
+        const eyeN = Math.max(1, Math.round(n * .09));
+        const mouthN = Math.max(3, Math.round(n * .26));
+        const ringN = Math.max(1, n - eyeN * 2 - mouthN);
         const R = 4.2;
         if (i < ringN) {
-          const a = (i / ringN) * Math.PI * 2;
-          const rr = R + hash(i) * .35;
-          v.set(Math.cos(a) * rr, Math.sin(a) * rr, hash(i + 9) * .5);
+          const a = (i / ringN) * Math.PI * 2 + Math.PI / 2;
+          v.set(Math.cos(a) * R, Math.sin(a) * R, hash(i + 9) * .4);
         } else if (i < ringN + eyeN * 2) {
           const k = i - ringN, side = k < eyeN ? -1 : 1, e = k % eyeN;
-          const a = frac(e / PHI) * Math.PI * 2, rr = Math.sqrt((e + .5) / eyeN) * .55;
-          v.set(side * 1.45 + Math.cos(a) * rr, 1.25 + Math.sin(a) * rr * 1.5, hash(i) * .4);
+          v.set(side * 1.45 + (eyeN > 1 ? (e - (eyeN - 1) / 2) * .5 : 0), 1.3, hash(i) * .3);
         } else {
-          const m = n - ringN - eyeN * 2, k = i - ringN - eyeN * 2;
-          const a = Math.PI * (1.18 + .64 * (m <= 1 ? .5 : k / (m - 1)));
-          v.set(Math.cos(a) * 2.5, Math.sin(a) * 2.5 + .15, hash(i) * .4);
+          const k = i - ringN - eyeN * 2;
+          const a = Math.PI * (1.2 + .6 * (mouthN <= 1 ? .5 : k / (mouthN - 1)));
+          v.set(Math.cos(a) * 2.5, Math.sin(a) * 2.5 + .15, hash(i) * .3);
         }
-      } else if (shape === 'star') {
-        // walk the perimeter of a five-pointed star, then pull some cards inward to fill it
-        const pts = 10, outer = 4.6, inner = 1.9;
-        const u = frac(i / PHI + .123) * pts;
-        const k = Math.floor(u), f = u - k;
-        const p = j => { const a = Math.PI / 2 + j * Math.PI / 5; const r = j % 2 ? inner : outer; return [Math.cos(a) * r, Math.sin(a) * r]; };
-        const [x0, y0] = p(k), [x1, y1] = p((k + 1) % pts);
-        const fill = i % 3 === 0 ? .35 + .55 * frac(i * .618) : 1;
-        v.set((x0 + (x1 - x0) * f) * fill, (y0 + (y1 - y0) * f) * fill - .25, hash(i) * .5);
       } else {
-        // grid fills the visible frustum at z = 0
-        const viewH = 2 * halfTan * cameraDistance() * .78;
-        const viewW = viewH * aspect * (aspect < .8 ? 1.12 : 1.02);
-        const cols = Math.max(2, Math.round(Math.sqrt(n * viewW / viewH * 1.25)));
-        const rows = Math.ceil(n / cols);
-        const cw = viewW / cols, ch = Math.min(viewH / rows, cw * .82);
-        const c = i % cols, r = Math.floor(i / cols);
-        v.set((c - (cols - 1) / 2) * cw, ((rows - 1) / 2 - r) * ch + (aspect < .8 ? ch * .3 : 0), 0);
-        it.cell = [cw * .88, ch * .88];
+        // star: walk the outline of a five-pointed star, evenly spaced
+        const pts = 10, outer = 4.6, inner = 1.9;
+        const p = j => { const a = Math.PI / 2 + j * Math.PI / 5; const r = j % 2 ? inner : outer; return [Math.cos(a) * r, Math.sin(a) * r]; };
+        const u = (i / n) * pts;
+        const k = Math.floor(u), f = u - k;
+        const [x0, y0] = p(k), [x1, y1] = p((k + 1) % pts);
+        v.set(x0 + (x1 - x0) * f, y0 + (y1 - y0) * f - .25, hash(i) * .4);
       }
       const noise = SHAPE_NOISE[shape];
       if (noise) v.add(new THREE.Vector3(hash(i + 1) * noise, hash(i + 2) * noise, hash(i + 3) * noise));
-      it.order = i;
     });
-  }
-
-  function sphereRadius(n) { return 2.6 + Math.sqrt(n) * .2; }
-  function cameraDistance() {
-    const aspect = W / H;
-    const fit = 5.6 / halfTan;                      // fits a ~5.6 unit radius vertically
-    const fitW = 4.3 / (halfTan * aspect);          // and horizontally on narrow screens
-    return Math.max(fit, fitW);
   }
 
   function resize() {
@@ -311,7 +297,7 @@ async function start() {
     span.className = dir > 0 ? 'out-l' : 'out-r';
     setTimeout(() => span.remove(), 450);
     shape = next;
-    if (mode === 'focus') unfocus();
+    gridScroll = 0;
     layout();
     say(`shape: ${next}`);
   }
@@ -325,9 +311,8 @@ async function start() {
       filter = FILTERS.find(f => f.id === b.dataset.filter);
       for (const o of root.querySelectorAll('[data-filter]')) o.setAttribute('aria-pressed', String(o === b));
       for (const it of items) it.on = filter.test(it.project);
-      if (focused && !focused.on) unfocus();
       layout();
-      say(`${filter.label}: ${items.filter(it => it.on).length} images`);
+      say(`${filter.label}: ${items.filter(it => it.on).length} projects`);
     });
   }
 
@@ -346,65 +331,88 @@ async function start() {
   function setMode(m) {
     mode = m;
     ui.dataset.mode = m;
-    overlay.dataset.mode = m === 'focus' ? 'focus' : hovered ? 'card' : 'cloud';
+    if (m !== 'cloud') setHover(null);
   }
   function openAbout(open) {
     if (open === (mode === 'about')) return;
-    if (open && focused) unfocus();
+    if (open && opened) closeCase();
     setMode(open ? 'about' : 'cloud');
     aboutBtn.setAttribute('aria-expanded', String(open));
     setLetters(open ? 'close' : 'about me');
-    if (open) setHover(null);
   }
   aboutBtn.addEventListener('click', () => openAbout(mode !== 'about'));
 
-  function focusItem(it) {
-    if (!it) return;
-    if (focused && focused !== it) dropFull(focused);
-    focused = it;
-    setHover(null);
-    setMode('focus');
-    loadFull(it);
+  /* ---------- case study pop-up ---------- */
+  let returnFocus = null;
+  let openedAt = 0;
+  function openCase(it) {
+    opened = it;
+    openedAt = performance.now();
     const p = it.project;
-    caption.querySelector('.cl-meta').textContent = [p.client, p.cat].filter(Boolean).join(' · ');
-    caption.querySelector('p').textContent = p.oneline || p.name;
-    const open = caption.querySelector('.cl-open');
-    open.href = `/work/${p.slug}.html`;
-    open.textContent = `${p.name.toLowerCase()} — view case study`;
-    lastInteract = performance.now();
+    const url = `/work/${p.slug}.html`;
+    $('.cl-case-title').textContent = p.name.toLowerCase();
+    $('.cl-case-dot').style.background = it.accent;
+    $('.cl-case-full').href = url;
+    caseFrame.src = url;
+    returnFocus = document.activeElement;
+    caseEl.hidden = false;
+    // grow the window out of the card that was clicked (offsets ignore the centring translate)
+    const r = cardRect(it);
+    const left = caseWin.offsetLeft - caseWin.offsetWidth / 2, top = caseWin.offsetTop - caseWin.offsetHeight / 2;
+    caseWin.style.transformOrigin = `${r.x + r.w / 2 - left}px ${r.y + r.h / 2 - top}px`;
+    requestAnimationFrame(() => requestAnimationFrame(() => caseEl.classList.add('open')));
+    setMode('case');
+    $('.cl-case-close').focus({ preventScroll: true });
+    say(`${p.name} case study opened`);
   }
-  function unfocus() {
-    if (!focused) return;
-    const it = focused;
-    focused = null;
-    setTimeout(() => { if (focused !== it) dropFull(it); }, 600);
+  function closeCase() {
+    if (!opened) return;
+    opened = null;
+    caseEl.classList.remove('open');
     setMode('cloud');
+    setTimeout(() => { if (!opened) { caseEl.hidden = true; caseFrame.src = 'about:blank'; } }, 380);
+    if (returnFocus && returnFocus.focus) returnFocus.focus({ preventScroll: true });
   }
-  function stepFocus(dir) {
-    const vis = items.filter(it => it.on).sort((a, b) => a.order - b.order);
-    if (!vis.length) return;
-    const i = focused ? vis.indexOf(focused) : -1;
-    focusItem(vis[(i + dir + vis.length) % vis.length]);
-  }
-  $('.cl-step.prev').addEventListener('click', () => stepFocus(-1));
-  $('.cl-step.next').addEventListener('click', () => stepFocus(1));
-
-  addEventListener('keydown', e => {
-    if (e.target.closest && e.target.closest('input,textarea,select')) return;
-    if (e.key === 'Escape') { if (mode === 'about') openAbout(false); else unfocus(); }
-    else if (mode === 'focus' && e.key === 'ArrowRight') stepFocus(1);
-    else if (mode === 'focus' && e.key === 'ArrowLeft') stepFocus(-1);
-    else if (mode === 'focus' && e.key === 'Enter' && document.activeElement === document.body) location.href = caption.querySelector('.cl-open').href;
+  // inside the window, show only the case study itself; links leave the pop-up
+  caseFrame.addEventListener('load', () => {
+    try {
+      const doc = caseFrame.contentDocument;
+      if (!doc || !doc.head || doc.location.href === 'about:blank') return;
+      const style = doc.createElement('style');
+      style.textContent = 'header.site,footer.site,.mobile-menu,.consent,.grain{display:none!important}body{padding-top:0!important}';
+      doc.head.appendChild(style);
+      const base = doc.createElement('base');
+      base.target = '_top';
+      doc.head.prepend(base);
+      doc.addEventListener('keydown', e => { if (e.key === 'Escape') closeCase(); });
+    } catch { /* cross-origin: leave the page as is */ }
+  });
+  $('.cl-case-close').addEventListener('click', closeCase);
+  // a tap's follow-up click lands on the backdrop that just appeared under the finger
+  $('.cl-case-backdrop').addEventListener('click', () => { if (performance.now() - openedAt > 450) closeCase(); });
+  caseEl.addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    // keep keyboard focus inside the dialog
+    const f = [...caseEl.querySelectorAll('a,button,iframe')];
+    const i = f.indexOf(document.activeElement);
+    if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
   });
 
-  /* ---------- pointer: drag to spin, click to focus ---------- */
+  addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (mode === 'case') closeCase();
+    else if (mode === 'about') openAbout(false);
+  });
+
+  /* ---------- pointer: drag to spin, click to open ---------- */
   const ndc = new THREE.Vector2(-9, -9);
   const ray = new THREE.Raycaster();
   let drag = null;
   let pointerIn = false;
 
   stage.addEventListener('pointerdown', e => {
-    drag = { x: e.clientX, y: e.clientY, lx: e.clientX, ly: e.clientY, t: performance.now(), moved: 0, id: e.pointerId };
+    drag = { lx: e.clientX, ly: e.clientY, moved: 0, id: e.pointerId };
     stage.setPointerCapture(e.pointerId);
     velY = 0; velX = 0;
   });
@@ -415,11 +423,15 @@ async function start() {
     const dx = e.clientX - drag.lx, dy = e.clientY - drag.ly;
     drag.lx = e.clientX; drag.ly = e.clientY;
     drag.moved += Math.abs(dx) + Math.abs(dy);
-    if (drag.moved > 6 && mode !== 'about') {
+    if (drag.moved > 6 && mode === 'cloud') {
       stage.classList.add('is-drag');
-      const k = 4.2 / Math.max(W, 1);
-      velY = dx * k; rotY += dx * k;
-      if (shape === 'sphere') { velX = dy * k * .6; tiltX = THREE.MathUtils.clamp(tiltX + dy * k * .6, -.7, .7); }
+      if (shape === 'grid') {
+        gridScroll = THREE.MathUtils.clamp(gridScroll + dy * (2 * halfTan * camera.position.z / H), 0, gridScrollMax);
+      } else {
+        const k = 4.2 / Math.max(W, 1);
+        velY = dx * k; rotY += dx * k;
+        if (shape === 'sphere') { velX = dy * k * .6; tiltX = THREE.MathUtils.clamp(tiltX + dy * k * .6, -.7, .7); }
+      }
       lastInteract = performance.now();
     }
   });
@@ -429,17 +441,16 @@ async function start() {
     stage.classList.remove('is-drag');
     const click = drag.moved < 8;
     drag = null;
-    if (!click) return;
+    if (!click || mode !== 'cloud') return;
     if (e.pointerType !== 'mouse') ndc.set(e.clientX / W * 2 - 1, -(e.clientY / H) * 2 + 1);
     const hit = pick();
-    if (mode === 'about') return;
-    if (hit && hit !== focused) focusItem(hit);
-    else if (!hit) unfocus();
+    if (hit) openCase(hit);
   });
   stage.addEventListener('wheel', e => {
     e.preventDefault();
-    if (mode === 'about') return;
-    zoom = THREE.MathUtils.clamp(zoom * Math.exp(e.deltaY * .0012), .45, 1.6);
+    if (mode !== 'cloud') return;
+    if (shape === 'grid') gridScroll = THREE.MathUtils.clamp(gridScroll + e.deltaY * .01, 0, gridScrollMax);
+    else zoom = THREE.MathUtils.clamp(zoom * Math.exp(e.deltaY * .0012), .45, 1.6);
     lastInteract = performance.now();
   }, { passive: false });
 
@@ -447,7 +458,7 @@ async function start() {
     ray.setFromCamera(ndc, camera);
     for (const h of ray.intersectObjects(pickables, false)) {
       const it = items[h.object.userData.index];
-      if (it.on && it.vis > .5 && (mode !== 'focus' || it === focused || it.scale > .1)) return it;
+      if (it.on && it.vis > .5) return it;
     }
     return null;
   }
@@ -456,7 +467,7 @@ async function start() {
     if (it === hovered) return;
     hovered = it;
     stage.classList.toggle('is-hover', !!it);
-    if (mode !== 'focus') overlay.dataset.mode = it ? 'card' : 'cloud';
+    overlay.dataset.mode = it ? 'card' : 'cloud';
   }
 
   function say(text) { live.textContent = text; }
@@ -467,18 +478,26 @@ async function start() {
 
   /* ---------- frame loop ---------- */
   const tmp = new THREE.Vector3();
+  const target = new THREE.Vector3();
   const euler = new THREE.Euler();
   const q = new THREE.Quaternion();
   const bounds = { x0: 0, y0: 0, x1: 0, y1: 0 };
   let lastPick = 0;
   let readyShown = false;
+  let lastNow = performance.now();
 
   function project(v) {
     tmp.copy(v).project(camera);
-    return [(tmp.x + 1) / 2 * W, (1 - tmp.y) / 2 * H, tmp.z];
+    return [(tmp.x + 1) / 2 * W, (1 - tmp.y) / 2 * H];
+  }
+  function pxPerUnit(z) { return H / (2 * halfTan * Math.max(.1, camera.position.z - z)); }
+  function cardRect(it) {
+    const [x, y] = project(it.pos);
+    const [w, h] = dims(it, it.size);
+    const k = pxPerUnit(it.pos.z);
+    return { x: x - w * k / 2, y: y - h * k / 2, w: w * k, h: h * k };
   }
 
-  let lastNow = performance.now();
   function frame(now) {
     requestAnimationFrame(frame);
     const t = (now - startTime) / 1000;
@@ -488,14 +507,14 @@ async function start() {
     const k = a => 1 - Math.pow(1 - a, f);
     const flat = shape !== 'sphere';
 
-    // rotation: free spin on the sphere, settle face-on for the flat shapes
     shapeBlend += ((flat ? 1 : 0) - shapeBlend) * k(.06);
     aboutBlend += ((mode === 'about' ? 1 : 0) - aboutBlend) * k(.09);
+    caseBlend += ((mode === 'case' ? 1 : 0) - caseBlend) * k(.12);
     const idle = now - lastInteract > 2500;
     if (!drag) {
       rotY += velY * f; velY *= Math.pow(.94, f);
       tiltX += velX * f; velX *= Math.pow(.9, f);
-      if (!reduceMotion && mode !== 'focus') rotY += (.0016 * (1 - shapeBlend) + .0005 * aboutBlend) * f;
+      if (!reduceMotion) rotY += (.0016 * (1 - shapeBlend) * (1 - caseBlend) + .0005 * aboutBlend) * f;
       if (shapeBlend > .01) { const home = Math.round(rotY / (Math.PI * 2)) * Math.PI * 2; rotY += (home - rotY) * k(.08 * shapeBlend); }
       if (idle || flat) tiltX *= Math.pow(.97, f);
     }
@@ -503,20 +522,12 @@ async function start() {
     euler.set(tiltX, rotY + sway, 0, 'YXZ');
     q.setFromEuler(euler);
 
-    // camera distance: shape fit × user zoom, pushed back while the about text is up
-    const dist = cameraDistance() * zoom * (1 + aboutBlend * 1.1);
+    const dist = baseCamZ() * (shape === 'grid' ? 1 : zoom) * (1 + aboutBlend * 1.1);
     camera.position.z += (dist - camera.position.z) * k(.1);
     camera.lookAt(0, 0, 0);
     camera.updateMatrixWorld();
 
-    // hover picking (throttled)
     if (pointerIn && !drag && mode === 'cloud' && now - lastPick > 45) { lastPick = now; setHover(pick()); }
-    else if (mode !== 'cloud' && hovered) setHover(null);
-
-    const focusH = Math.min(H * .56, 520, Math.min(W * .8, 620) / (focused ? focused.aspect : 1));
-    const focusDepth = camera.position.z - 6;           // world height for focused card at that depth
-    const focusWorldH = 2 * halfTan * 6 * (focusH / H);
-    const cardBase = shape === 'grid' ? 1 : .95 * SHAPE_CARD[shape];
 
     bounds.x0 = Infinity; bounds.y0 = Infinity; bounds.x1 = -Infinity; bounds.y1 = -Infinity;
     let onCount = 0;
@@ -527,40 +538,33 @@ async function start() {
       it.vis += (wantVis - it.vis) * k(wantVis ? .07 : .12);
       it.hover += ((it === hovered ? 1 : 0) - it.hover) * k(.18);
 
-      let target = tmp.copy(it.target).applyQuaternion(q);
-      let size;
-      if (it === focused) {
-        target.set(0, H < 700 && W < 640 ? .55 : .35, focusDepth);
-        size = focusWorldH;
-      } else {
-        size = (shape === 'grid' && it.cell ? Math.min(it.cell[0] / it.aspect, it.cell[1]) : cardBase) * (1 + it.hover * .22);
-        if (aboutBlend > .001) target.multiplyScalar(1 + aboutBlend * .25);
-      }
-      const ease = it === focused ? .14 : .075;
-      it.pos.lerp(target, k(ease));
-      it.scale += (size * it.vis - it.scale) * k(.16);
+      target.copy(it.target);
+      if (shape === 'grid') target.y += gridScroll;
+      else target.applyQuaternion(q);
+      if (aboutBlend > .001) target.multiplyScalar(1 + aboutBlend * .25);
+      it.pos.lerp(target, k(.075));
+
+      const len = shape === 'grid' && it.grid ? Math.max(it.grid.w, it.grid.h) : CARD * SHAPE_CARD[shape];
+      it.size += (len * (1 + it.hover * .18) * it.vis - it.size) * k(.16);
 
       const g = it.group;
       g.position.copy(it.pos);
       g.quaternion.copy(camera.quaternion);
-      const w = it.scale * it.aspect, h = it.scale;
+      const [w, h] = dims(it, it.size);
       it.mesh.scale.set(w, h, 1);
-      const fw = shape === 'grid' || it === focused ? .012 : .02;
-      it.frame.scale.set(w + fw * 2 * Math.max(.6, it.scale), h + fw * 2 * Math.max(.6, it.scale), 1);
-      g.visible = it.scale > .004;
+      const fw = .007 * 2 * Math.min(1, it.size / CARD);
+      it.frame.scale.set(w + fw, h + fw, 1);
+      g.visible = it.size > .004;
 
-      // fade the rest of the cloud behind a focused card or the about text
-      const dim = focused ? (it === focused ? 1 : .14) : 1 - aboutBlend * .93;
+      const dim = (1 - aboutBlend * .93) * (1 - caseBlend * .6);
       it.mat.opacity += (dim - it.mat.opacity) * k(.12);
       it.frameMat.opacity = it.mat.opacity;
-      it.group.renderOrder = it === focused ? 10 : 0;
 
       if (it.on && it.vis > .5 && g.visible) {
         onCount++;
-        const [x, y] = project(it.pos);
-        const r = (it.scale * 1.1) / (camera.position.z - it.pos.z) / halfTan * H / 2;
-        bounds.x0 = Math.min(bounds.x0, x - r * it.aspect / 2); bounds.x1 = Math.max(bounds.x1, x + r * it.aspect / 2);
-        bounds.y0 = Math.min(bounds.y0, y - r / 2); bounds.y1 = Math.max(bounds.y1, y + r / 2);
+        const r = cardRect(it);
+        bounds.x0 = Math.min(bounds.x0, r.x); bounds.x1 = Math.max(bounds.x1, r.x + r.w);
+        bounds.y0 = Math.min(bounds.y0, r.y); bounds.y1 = Math.max(bounds.y1, r.y + r.h);
       }
     }
 
@@ -570,37 +574,26 @@ async function start() {
     if (!readyShown && now - startTime > 500) {
       readyShown = true;
       ui.classList.add('is-ready');
-      overlay.style.opacity = '1';
     }
   }
 
-  function cardRect(it) {
-    const [x, y] = project(it.pos);
-    const ph = it.scale / (camera.position.z - it.pos.z) / halfTan * H / 2;
-    const pw = ph * it.aspect;
-    return { x: x - pw / 2, y: y - ph / 2, w: pw, h: ph };
-  }
-
   function updateOverlay(now, onCount) {
-    overlay.style.opacity = mode === 'about' ? '0' : '1';
-    let r, text, color;
-    if (focused) {
-      r = cardRect(focused); text = focused.project.name.toLowerCase(); color = focused.accent;
-    } else if (hovered) {
+    overlay.style.opacity = mode === 'cloud' && readyShown ? '1' : '0';
+    let r, text, color = '';
+    if (hovered) {
       r = cardRect(hovered); text = `${hovered.project.name.toLowerCase()} · ${hovered.project.cat.toLowerCase()}`; color = hovered.accent;
     } else if (onCount) {
       const pad = 10;
       r = { x: bounds.x0 - pad, y: bounds.y0 - pad, w: bounds.x1 - bounds.x0 + pad * 2, h: bounds.y1 - bounds.y0 + pad * 2 };
-      text = `itai agami’s ${filter.label} · ${onCount}`; color = '';
+      text = `itai agami’s ${filter.label} · ${onCount}`;
     }
     if (r) {
       bbox.style.transform = `translate3d(${r.x}px,${r.y}px,0)`;
       bbox.style.width = `${Math.max(0, r.w)}px`;
       bbox.style.height = `${Math.max(0, r.h)}px`;
-      bbox.style.setProperty('--cl-box', color || '');
-      bbox.style.opacity = focused ? '0' : '1';
+      bbox.style.setProperty('--cl-box', color);
       label.textContent = text;
-      label.style.background = color || '';
+      label.style.background = color;
       label.style.color = color && isLight(color) ? '#000' : '#fff';
       label.style.transform = `translate3d(${r.x - 1}px,${r.y - 19}px,0)`;
     }
@@ -609,7 +602,7 @@ async function start() {
     if (!reduceMotion && mode === 'cloud' && !hovered && now > nextAmbient) {
       nextAmbient = now + 2200 + Math.random() * 1400;
       const slot = ambient.find(a => !a.it) || ambient.reduce((a, b) => (a.until < b.until ? a : b));
-      const front = items.filter(it => it.on && it.vis > .9 && it.pos.z > 1 && !ambient.some(a => a.it === it));
+      const front = items.filter(it => it.on && it.vis > .9 && (shape !== 'sphere' || it.pos.z > 1) && !ambient.some(a => a.it === it));
       if (front.length) {
         const it = front[Math.floor(Math.random() * front.length)];
         slot.it = it; slot.until = now + 2600;
@@ -632,8 +625,7 @@ async function start() {
     return .299 * (n >> 16 & 255) + .587 * (n >> 8 & 255) + .114 * (n & 255) > 150;
   }
 
-  /* ---------- go ---------- */
-  camera.position.z = cameraDistance() * 1.25;
+  camera.position.z = baseCamZ() * 1.25;
   requestAnimationFrame(frame);
 }
 
