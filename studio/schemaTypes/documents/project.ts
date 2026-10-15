@@ -81,6 +81,23 @@ export const project = defineType({
       description: 'Fallback while a film is not uploaded above: the number in vimeo.com/123456789.',
       validation: (rule) => rule.regex(/^\d+$/, {name: 'numeric id'}),
     }),
+    defineField({
+      name: 'siteUrl',
+      title: 'Live site',
+      type: 'url',
+      group: 'media',
+      description: 'Adds a "visit site ↗" tag that opens the site in a new tab.',
+    }),
+    defineField({
+      name: 'siteEmbed',
+      title: 'Show the site live and clickable',
+      type: 'boolean',
+      group: 'media',
+      initialValue: false,
+      hidden: ({parent}) => !parent?.siteUrl,
+      description:
+        'Opens the site inside the card instead of the film. Only works if the site allows being shown inside other sites. Many (e.g. exhibition.nli.org.il) do not, and stay blank. Check the preview after turning this on.',
+    }),
     defineField({name: 'hero', title: 'Hero image', type: 'image', group: 'media', options: {hotspot: true}}),
     defineField({
       name: 'gallery',

@@ -27,6 +27,7 @@ export const PROJECT_QUERY = defineQuery(`
     idea,
     outcome,
     vimeoId,
+    siteUrl,
     "muxPlaybackId": film.asset->playbackId,
     "muxAspect": film.asset->data.aspect_ratio,
     hero,

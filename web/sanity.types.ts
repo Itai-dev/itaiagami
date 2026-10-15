@@ -98,6 +98,8 @@ export type Project = {
   credits?: Array<string>;
   film?: MuxVideo;
   vimeoId?: string;
+  siteUrl?: string;
+  siteEmbed?: boolean;
   hero?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -401,7 +403,7 @@ export type PROJECT_SLUGS_QUERY_RESULT = Array<{
 
 // Source: ../web/src/sanity/queries.ts
 // Variable: PROJECT_QUERY
-// Query: *[_type == "project" && slug.current == $slug][0]{    _id,    name,    client,    role,    oneliner,    idea,    outcome,    vimeoId,    "muxPlaybackId": film.asset->playbackId,    "muxAspect": film.asset->data.aspect_ratio,    hero,    gallery[]{      _key,      _type,      image,      alt,      half,      "muxPlaybackId": video.asset->playbackId,      "muxAspect": video.asset->data.aspect_ratio    },    "loopUrl": loop.asset->url  }
+// Query: *[_type == "project" && slug.current == $slug][0]{    _id,    name,    client,    role,    oneliner,    idea,    outcome,    vimeoId,    siteUrl,    "muxPlaybackId": film.asset->playbackId,    "muxAspect": film.asset->data.aspect_ratio,    hero,    gallery[]{      _key,      _type,      image,      alt,      half,      "muxPlaybackId": video.asset->playbackId,      "muxAspect": video.asset->data.aspect_ratio    },    "loopUrl": loop.asset->url  }
 export type PROJECT_QUERY_RESULT = {
   _id: string;
   name: string | null;
@@ -411,6 +413,7 @@ export type PROJECT_QUERY_RESULT = {
   idea: string | null;
   outcome: string | null;
   vimeoId: string | null;
+  siteUrl: string | null;
   muxPlaybackId: string | null;
   muxAspect: string | null;
   hero: {
@@ -472,7 +475,7 @@ declare global {
   interface SanityQueries {
     '\n  *[_type == "project" && defined(slug.current)] | order(coalesce(order, 999) asc, name asc){\n    _id,\n    name,\n    "slug": slug.current,\n    category,\n    client,\n    thumbnail,\n    "muxPlaybackId": film.asset->playbackId,\n    "loopUrl": loop.asset->url\n  }\n': PROJECTS_QUERY_RESULT;
     '\n  *[_type == "project" && defined(slug.current)]{"slug": slug.current}\n': PROJECT_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    name,\n    client,\n    role,\n    oneliner,\n    idea,\n    outcome,\n    vimeoId,\n    "muxPlaybackId": film.asset->playbackId,\n    "muxAspect": film.asset->data.aspect_ratio,\n    hero,\n    gallery[]{\n      _key,\n      _type,\n      image,\n      alt,\n      half,\n      "muxPlaybackId": video.asset->playbackId,\n      "muxAspect": video.asset->data.aspect_ratio\n    },\n    "loopUrl": loop.asset->url\n  }\n': PROJECT_QUERY_RESULT;
+    '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    name,\n    client,\n    role,\n    oneliner,\n    idea,\n    outcome,\n    vimeoId,\n    siteUrl,\n    "muxPlaybackId": film.asset->playbackId,\n    "muxAspect": film.asset->data.aspect_ratio,\n    hero,\n    gallery[]{\n      _key,\n      _type,\n      image,\n      alt,\n      half,\n      "muxPlaybackId": video.asset->playbackId,\n      "muxAspect": video.asset->data.aspect_ratio\n    },\n    "loopUrl": loop.asset->url\n  }\n': PROJECT_QUERY_RESULT;
     '\n  *[_id == "settings"][0]{about, email, linkedin, "cvUrl": cv.asset->url}\n': SETTINGS_QUERY_RESULT;
   }
 }

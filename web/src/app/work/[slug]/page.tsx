@@ -58,7 +58,13 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
       <p className="mt-6 max-w-[62ch]">
         <strong className="font-semibold">{project.name}</strong> {paragraph}
       </p>
-      {meta && <p className="mb-6 text-black/55">{meta}</p>}
+      {meta && <p className="text-black/55">{meta}</p>}
+      {project.siteUrl && (
+        <a href={project.siteUrl} target="_blank" rel="noopener" className="lowercase underline underline-offset-2">
+          visit site ↗
+        </a>
+      )}
+      <div className="mb-6" />
 
       <div className="columns-1 gap-1.5 sm:columns-2">
         {project.muxPlaybackId ? (

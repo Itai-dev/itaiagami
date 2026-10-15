@@ -84,6 +84,7 @@ async function start() {
       <div class="cl-play"></div>
       <span class="cl-chip cl-focus-tag" aria-hidden="true"></span>
       <button class="cl-chip cl-focus-min" type="button" aria-label="Minimise"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1.5V6H1.5M10 1.5V6h4.5M6 14.5V10H1.5M10 14.5V10h4.5"/></svg></button>
+      <a class="cl-chip cl-focus-site" target="_blank" rel="noopener">visit site ↗</a>
       <p class="cl-chip cl-focus-info"></p>
       <div class="cl-fade"></div>
       <div class="cl-shapes cl-in cl-ctl">
@@ -132,6 +133,7 @@ async function start() {
   const focusTag = $('.cl-focus-tag');
   const focusMin = $('.cl-focus-min');
   const focusInfo = $('.cl-focus-info');
+  const focusSite = $('.cl-focus-site');
   const [prevShapeBtn, , nextShapeBtn] = root.querySelectorAll('.cl-shapes button');
 
   // show the cloud before measuring anything; the regular page goes inert underneath
@@ -462,6 +464,8 @@ async function start() {
     // the minimise button sits right after the title tag, same height
     focusMin.style.height = `${focusTag.offsetHeight}px`;
     focusMin.style.transform = `translate3d(${left - 1 + focusTag.offsetWidth + 1}px,${top - focusTag.offsetHeight}px,0)`;
+    focusSite.style.height = `${focusTag.offsetHeight}px`;
+    focusSite.style.transform = `translate3d(${left - 1 + focusTag.offsetWidth + focusMin.offsetWidth + 2}px,${top - focusTag.offsetHeight}px,0)`;
     focusInfo.style.maxWidth = `${Math.round(r.w) + 2}px`;
     focusInfo.style.transform = `translate3d(${left - 1}px,${top + r.h}px,0)`;
   }
@@ -472,7 +476,7 @@ async function start() {
     setMode('focus');
     focusTag.textContent = `${p.name.toLowerCase()} · ${String(p.cat || '').toLowerCase()}`;
     // title, minimise and text tag share the project's colour
-    for (const el of [focusTag, focusMin, focusInfo]) {
+    for (const el of [focusTag, focusMin, focusSite, focusInfo]) {
       el.style.background = it.accent;
       el.style.color = isLight(it.accent) ? '#000' : '#fff';
     }
@@ -481,9 +485,16 @@ async function start() {
     const info = [firstSentence(p.oneline), [p.client, p.role].filter(Boolean).join(' · ')].filter(Boolean);
     focusInfo.innerHTML = info.map(line => `<span>${esc(line.toLowerCase())}</span>`).join('');
     focusInfo.hidden = !info.length;
+    // an optional link to the live site, opened in a new tab
+    const site = /^https?:\/\//i.test(p.siteUrl || '') ? p.siteUrl : '';
+    focusSite.hidden = !site;
+    if (site) focusSite.href = site;
     placeFocus();
     const id = muxId(p);
-    if (id) {
+    if (site && p.siteEmbed) {
+      // the site itself, live and clickable, in place of the film
+      playEl.innerHTML = `<iframe src="${esc(site)}" title="${esc(p.name)} site" loading="eager" referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; autoplay"></iframe>`;
+    } else if (id) {
       loadMuxPlayer();
       playEl.innerHTML = `<mux-player playback-id="${esc(id)}" stream-type="on-demand" thumbnail-time="0" accent-color="#26262b" primary-color="#ffffff" title="${esc(p.name)}" metadata-video-title="${esc(p.name)}"></mux-player>`;
     } else if (p.vimeo) {
@@ -494,7 +505,7 @@ async function start() {
     clearTimeout(focusTimer);
     // let the card scale up first, then lay the playing film exactly over it
     focusTimer = setTimeout(() => {
-      for (const el of [focusTag, focusMin, focusInfo]) el.classList.add('on');
+      for (const el of [focusTag, focusMin, focusSite, focusInfo]) el.classList.add('on');
       focusMin.focus({ preventScroll: true });
       if (!playEl.firstElementChild) return;
       playEl.classList.add('on');
@@ -507,7 +518,7 @@ async function start() {
     if (mode !== 'focus') return;
     clearTimeout(focusTimer);
     playEl.classList.remove('on');
-    for (const el of [focusTag, focusMin, focusInfo]) el.classList.remove('on');
+    for (const el of [focusTag, focusMin, focusSite, focusInfo]) el.classList.remove('on');
     // the film fades, then the card scales back into the cloud
     setTimeout(() => { if (mode !== 'focus') playEl.innerHTML = ''; }, 260);
     zoomed = null;

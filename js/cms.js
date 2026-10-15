@@ -19,7 +19,7 @@ const QUERY = `{
   "projects": *[_type == "project" && defined(slug.current)] | order(coalesce(order, 999) asc, name asc) {
     "slug": slug.current, name, client, "cat": category, role, disciplines,
     "oneline": oneliner, challenge, idea, system, "result": outcome, contribution, credits,
-    "vimeo": vimeoId,
+    "vimeo": vimeoId, siteUrl, siteEmbed,
     "mux": film.asset->{ playbackId, "aspect": data.aspect_ratio },
     "thumb": thumbnail.asset->url,
     "hero": hero.asset->url,
