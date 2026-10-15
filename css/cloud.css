@@ -136,6 +136,13 @@ html.cloud-on #cloud{display:block}
 .cl-about-inner a:hover{border-color:#000}
 .cl-about-inner .links{display:flex;flex-wrap:wrap;gap:6px 22px}
 
+/* white version, for comparison: add ?bg=white to the address */
+html.cl-white.cloud-on,html.cl-white.cloud-on body{background:#fff}
+html.cl-white .cl{--cl-bg:#fff}
+html.cl-white .cl-mark{color:#000}
+html.cl-white .cl-fade{background:linear-gradient(to top,#fff 30%,rgba(255,255,255,.85) 50%,rgba(255,255,255,.55) 68%,rgba(255,255,255,.25) 84%,rgba(255,255,255,0))}
+html.cl-white .cl-case-backdrop{background:rgba(255,255,255,.35)}
+
 .cl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 
 @media (max-width:640px){

@@ -39,6 +39,8 @@ function teardown() {
 }
 
 async function start() {
+  // a white background to compare against the grey one: ?bg=white
+  if (new URLSearchParams(location.search).get('bg') === 'white') document.documentElement.classList.add('cl-white');
   const { projects, settings } = await loadContent();
   // what a project is: video, image or site (older entries are inferred)
   const muxId = p => (p.mux && p.mux.playbackId) || null;
