@@ -90,8 +90,8 @@ html.cloud-on #cloud{display:block}
 .cl-focus-tag,.cl-focus-min,.cl-focus-info{z-index:13;opacity:0;pointer-events:none;transition:opacity .2s}
 .cl-focus-tag.on,.cl-focus-info.on{opacity:1}
 .cl-focus-min.on{opacity:1;pointer-events:auto}
-.cl .cl-focus-min{display:grid;place-items:center;width:26px;height:auto;align-self:stretch;padding:4px 0;background:var(--cl-frame);color:#fff;cursor:pointer}
-.cl .cl-focus-min:hover{background:#000}
+.cl .cl-focus-min{display:grid;place-items:center;width:26px;padding:0;cursor:pointer}
+.cl .cl-focus-min:hover{filter:brightness(.85)}
 .cl-focus-info{margin:0;white-space:normal;line-height:1.4;display:flex;flex-direction:column}
 .cl-focus-info span+span{opacity:.6}
 .cl-focus-info[hidden]{display:none}

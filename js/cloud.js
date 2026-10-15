@@ -459,7 +459,9 @@ async function start() {
     const left = r.cx - r.w / 2, top = r.cy - r.h / 2;
     Object.assign(playEl.style, { left: `${left}px`, top: `${top}px`, width: `${r.w}px`, height: `${r.h}px` });
     focusTag.style.transform = `translate3d(${left - 1}px,${top - focusTag.offsetHeight}px,0)`;
-    focusMin.style.transform = `translate3d(${left + r.w - focusMin.offsetWidth + 1}px,${top - focusMin.offsetHeight}px,0)`;
+    // the minimise button sits right after the title tag, same height
+    focusMin.style.height = `${focusTag.offsetHeight}px`;
+    focusMin.style.transform = `translate3d(${left - 1 + focusTag.offsetWidth + 1}px,${top - focusTag.offsetHeight}px,0)`;
     focusInfo.style.maxWidth = `${Math.round(r.w) + 2}px`;
     focusInfo.style.transform = `translate3d(${left - 1}px,${top + r.h}px,0)`;
   }
@@ -469,8 +471,11 @@ async function start() {
     openedAt = performance.now();
     setMode('focus');
     focusTag.textContent = `${p.name.toLowerCase()} · ${String(p.cat || '').toLowerCase()}`;
-    focusTag.style.background = it.accent;
-    focusTag.style.color = isLight(it.accent) ? '#000' : '#fff';
+    // title, minimise and text tag share the project's colour
+    for (const el of [focusTag, focusMin, focusInfo]) {
+      el.style.background = it.accent;
+      el.style.color = isLight(it.accent) ? '#000' : '#fff';
+    }
     // a few words about the project under the film, in the same tag style
     const firstSentence = t => { const m = String(t || '').match(/^(.{20,}?[.!?])(\s|$)/); return m ? m[1] : String(t || ''); };
     const info = [firstSentence(p.oneline), [p.client, p.role].filter(Boolean).join(' · ')].filter(Boolean);
