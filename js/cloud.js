@@ -683,10 +683,11 @@ async function start() {
       x += el.offsetWidth + 1;
     }
     focusInfo.style.maxWidth = `${Math.round(r.w) + 2}px`;
-    // the opened text stays under the film while it fits, else slides up over it and scrolls
+    // the opened text stays under the film, a few lines tall, and scrolls with a fade
     const below = H - (top + r.h) - 64;   // clear of the shape and filter controls
-    focusInfo.style.maxHeight = focusExpanded ? `${Math.round(below + r.h * .8)}px` : '';
+    focusInfo.style.maxHeight = focusExpanded ? `${Math.round(Math.max(below, 76))}px` : '';
     const lift = Math.max(0, focusInfo.offsetHeight - below);
+    fadeInfo();
     focusInfo.style.transform = `translate3d(${left - 1}px,${top + r.h - (focusExpanded ? lift : 0)}px,0)`;
   }
   const siteOf = p => /^https?:\/\//i.test(p.siteUrl || '') ? p.siteUrl : '';
@@ -726,7 +727,14 @@ async function start() {
       `<span${i >= focusLines.length ? ' class="more"' : ''}>${esc(line.toLowerCase())}${i === at ? toggle : ''}</span>`).join('');
     focusInfo.hidden = !lines.length;
     focusInfo.scrollTop = 0;
+    focusInfo.classList.toggle('is-open', focusExpanded);
   }
+  // fade the bottom edge while there is more to scroll to
+  function fadeInfo() {
+    const more = focusExpanded && focusInfo.scrollTop + focusInfo.clientHeight < focusInfo.scrollHeight - 2;
+    focusInfo.classList.toggle('has-more', more);
+  }
+  focusInfo.addEventListener('scroll', fadeInfo, { passive: true });
   focusInfo.addEventListener('click', e => {
     if (!e.target.closest('.cl-focus-more')) return;
     focusExpanded = !focusExpanded;

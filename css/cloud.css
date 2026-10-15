@@ -117,6 +117,9 @@ html.cloud-on #cloud{display:block}
 .cl-focus-info.on{pointer-events:auto}
 .cl-focus-info{overflow-y:auto;overscroll-behavior:contain}
 .cl-focus-info span.more{opacity:1;margin-top:.55em}
+.cl-focus-info.has-more{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 34px),transparent)}
+.cl-focus-info.is-open{scrollbar-width:none}
+.cl-focus-info.is-open::-webkit-scrollbar{display:none}
 .cl .cl-focus-more{color:inherit;padding:0 2px;cursor:pointer;font:inherit;letter-spacing:.05em}
 .cl .cl-focus-more:hover{filter:brightness(.85);text-decoration:underline}
 .cl-focus-info[hidden]{display:none}
