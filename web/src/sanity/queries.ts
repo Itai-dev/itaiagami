@@ -8,6 +8,7 @@ export const PROJECTS_QUERY = defineQuery(`
     category,
     client,
     thumbnail,
+    "muxPlaybackId": film.asset->playbackId,
     "loopUrl": loop.asset->url
   }
 `)

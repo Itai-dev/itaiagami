@@ -16,6 +16,7 @@ export function Film({playbackId, aspect, title, clip = false}: FilmProps) {
     <MuxPlayer
       playbackId={playbackId}
       streamType="on-demand"
+      thumbnailTime={0}
       autoPlay={clip ? 'muted' : 'any'}
       muted={clip}
       loop={clip}

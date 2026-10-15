@@ -37,6 +37,14 @@ export default async function Home() {
                       playsInline
                       className="absolute inset-0 h-full w-full object-cover"
                     />
+                  ) : project.muxPlaybackId ? (
+                    <Image
+                      src={`https://image.mux.com/${project.muxPlaybackId}/thumbnail.webp?time=0&width=900`}
+                      alt={project.name ?? ''}
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
                   ) : project.thumbnail ? (
                     <Image
                       src={urlFor(project.thumbnail).width(900).url()}

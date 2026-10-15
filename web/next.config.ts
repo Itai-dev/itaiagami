@@ -9,7 +9,10 @@ const nextConfig: NextConfig = {
     default: sanity,
   },
   images: {
-    remotePatterns: [{protocol: 'https', hostname: 'cdn.sanity.io'}],
+    remotePatterns: [
+      {protocol: 'https', hostname: 'cdn.sanity.io'},
+      {protocol: 'https', hostname: 'image.mux.com'},
+    ],
   },
   turbopack: {
     rules: {

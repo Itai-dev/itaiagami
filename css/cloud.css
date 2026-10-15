@@ -74,6 +74,7 @@ html.cloud-on #cloud{display:block}
   box-shadow:0 30px 80px -20px rgba(0,0,0,.35);transform:scale(.985);opacity:0;
   transition:transform .45s cubic-bezier(.2,.9,.25,1),opacity .3s}
 .cl-case.open .cl-case-win{transform:none;opacity:1}
+.cl-case.measure .cl-case-win{transform:none;transition:none}
 .cl-case-bar{display:flex;align-items:center;gap:10px;height:40px;padding:0 6px 0 12px;flex:none;
   background:var(--cl-frame);color:#fff;font:15px/1 "IBM Plex Sans",system-ui,sans-serif;text-transform:lowercase}
 .cl-case-dot{width:8px;height:8px;flex:none}

@@ -42,6 +42,12 @@ function teardown() {
 
 async function start() {
   const { projects, settings } = await loadContent();
+  // a project with a Mux film shows the film's first frame on its card, so the
+  // card can hand over to the playing film without a visible cut
+  const muxId = p => (p.mux && p.mux.playbackId) || null;
+  const cardImage = p => muxId(p)
+    ? `https://image.mux.com/${encodeURIComponent(muxId(p))}/thumbnail.webp?time=0&width=1024`
+    : sized(p.thumb || p.hero, 1024);
   const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const aboutLines = settings && Array.isArray(settings.about) && settings.about.length ? settings.about : [
     'itai agami. independent creative director, tel aviv.',
@@ -54,7 +60,7 @@ async function start() {
 
   /* ---------- items: one card per project ---------- */
   const items = projects
-    .map((p, pi) => ({ src: sized(p.thumb || p.hero, 1024), project: p, accent: ACCENTS[pi % ACCENTS.length] }))
+    .map((p, pi) => ({ src: cardImage(p), project: p, accent: ACCENTS[pi % ACCENTS.length] }))
     .filter(it => it.src);
   // shuffle so neighbours differ between visits
   for (let i = items.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [items[i], items[j]] = [items[j], items[i]]; }
@@ -222,6 +228,7 @@ async function start() {
   let hovered = null;
   let opened = false;
   let zoomed = null;            // the card that grows into the pop-up
+  let zoomRect = null;          // screen rect of the film slot it grows into, if any
   let px = -1e4, py = -1e4;     // pointer in screen px
   let W = 1, H = 1;
   let rotY = .6, velY = 0, tiltX = 0, velX = 0;
@@ -405,12 +412,32 @@ async function start() {
     } else caseFrame.src = url;
     returnFocus = document.activeElement;
     caseEl.hidden = false;
+    // where the film will sit once the window is open: the card zooms exactly there
+    zoomRect = null;
+    const slot = html && it && muxId(it.project) && caseDoc.querySelector('.clc-film');
+    if (slot) {
+      caseEl.classList.add('measure');
+      const r = slot.getBoundingClientRect();
+      caseEl.classList.remove('measure');
+      if (r.width > 0 && r.top < H) zoomRect = { cx: r.left + r.width / 2, cy: r.top + r.height / 2, w: r.width, h: r.height };
+    }
     setMode('case');
     clearTimeout(winTimer);
-    // let the card fill the screen first, then reveal the page over it
-    winTimer = setTimeout(() => caseEl.classList.add('open'), it && !reduceMotion ? 520 : 30);
+    // let the card scale up first, then reveal the page around it and start the film
+    winTimer = setTimeout(() => {
+      caseEl.classList.add('open');
+      if (slot) playFilm(slot.querySelector('mux-player'));
+    }, it && !reduceMotion ? 560 : 30);
     $('.cl-case-close').focus({ preventScroll: true });
     say(`${title} opened`);
+  }
+  // try with sound (the click still counts as the user's gesture), else muted
+  function playFilm(player) {
+    if (!player) return;
+    customElements.whenDefined('mux-player').then(() => {
+      const p = player.play && player.play();
+      if (p && p.catch) p.catch(() => { player.muted = true; player.play().catch(() => {}); });
+    });
   }
   const openCase = it => openWindow(null, it.project.name.toLowerCase(), it.accent, it, caseHTML(it.project));
 
@@ -433,7 +460,7 @@ async function start() {
       // Mux: unbranded player, adaptive streaming; tries sound, falls back to muted
       loadMuxPlayer();
       const ratio = String(p.mux.aspect || '16:9').replace(':', ' / ');
-      film = `<div class="clc-film clc-mux" style="aspect-ratio:${esc(ratio)}"><mux-player playback-id="${esc(p.mux.playbackId)}" stream-type="on-demand" autoplay="any" accent-color="#26262b" primary-color="#ffffff" title="${esc(p.name)}" metadata-video-title="${esc(p.name)}"></mux-player></div>`;
+      film = `<div class="clc-film clc-mux" style="aspect-ratio:${esc(ratio)}"><mux-player playback-id="${esc(p.mux.playbackId)}" stream-type="on-demand" thumbnail-time="0" accent-color="#26262b" primary-color="#ffffff" title="${esc(p.name)}" metadata-video-title="${esc(p.name)}"></mux-player></div>`;
     } else if (p.vimeo) {
       film = `<div class="clc-film"><iframe src="https://player.vimeo.com/video/${encodeURIComponent(p.vimeo)}?autoplay=1&title=0&byline=0&portrait=0&dnt=1" title="${esc(p.name)} film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
     } else if (p.loop) {
@@ -784,7 +811,17 @@ async function start() {
 
       let len = shape === 'grid' && it.grid ? Math.max(it.grid.w, it.grid.h) : CARD * SHAPE_CARD[shape];
       len *= 1 + it.hover * .18 + it.near * .08;
-      if (it === zoomed) { target.set(0, 0, camera.position.z - ZOOM_D); len = zoomLen(it); }
+      if (it === zoomed) {
+        if (zoomRect) {
+          // land exactly on the film slot: screen px → world units at ZOOM_D
+          const u = 2 * halfTan * ZOOM_D / H;
+          target.set((zoomRect.cx - W / 2) * u, (H / 2 - zoomRect.cy) * u, camera.position.z - ZOOM_D);
+          len = (it.aspect >= 1 ? zoomRect.w : zoomRect.h) * u;
+        } else {
+          target.set(0, 0, camera.position.z - ZOOM_D);
+          len = zoomLen(it);
+        }
+      }
       it.pos.lerp(target, k(it === zoomed ? .13 : .075));
       it.size += (len * it.vis - it.size) * k(it === zoomed ? .13 : .16);
 
