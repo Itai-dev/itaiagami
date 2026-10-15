@@ -1,3 +1,6 @@
 node_modules
 .vercel
 .env*
+studio/seed.ndjson
+studio/dist
+studio/.sanity

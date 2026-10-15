@@ -1,0 +1,6 @@
+node_modules
+dist
+.sanity
+seed.ndjson
+schema.json
+*.tsbuildinfo

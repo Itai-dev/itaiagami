@@ -11,3 +11,6 @@ server.ps1
 .claude
 skills-lock.json
 tests
+studio
+.agents
+web

@@ -50,3 +50,16 @@ test('the default export rewrites with x-middleware-rewrite, or passes through',
   assert.equal(r.headers.get('x-middleware-rewrite'), 'https://itaiagami.com/api/markdown?path=%2F');
   assert.equal(mw.default(new Request('https://itaiagami.com/', { headers: { accept: 'text/html' } })), undefined);
 });
+
+test('old index, service and about pages send browsers into the homepage cloud', () => {
+  assert.equal(mw.moved('/work.html'), '/');
+  assert.equal(mw.moved('/services/fractional-creative-direction.html'), '/?panel=offer');
+  assert.equal(mw.moved('/about.html'), '/?panel=offer');
+  for(const p of ['/', '/work/channel-13.html', '/notes.html', '/notes/how-to-brief-a-creative-director.html', '/contact.html', '/privacy.html']) assert.equal(mw.moved(p), null, p);
+  const r = mw.default(new Request('https://itaiagami.com/services/fractional-creative-direction.html', { headers: { accept: 'text/html' } }));
+  assert.equal(r.status, 308);
+  assert.equal(r.headers.get('location'), 'https://itaiagami.com/?panel=offer');
+  /* case studies stay pages of their own, and agents asking for Markdown still get the page */
+  assert.equal(mw.default(new Request('https://itaiagami.com/work/channel-13.html', { headers: { accept: 'text/html' } })), undefined);
+  assert.match(mw.default(new Request('https://itaiagami.com/services.html', { headers: { accept: 'text/markdown' } })).headers.get('x-middleware-rewrite'), /\/api\/markdown/);
+});
