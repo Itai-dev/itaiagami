@@ -67,11 +67,18 @@ export const project = defineType({
     }),
 
     defineField({
+      name: 'film',
+      title: 'Film',
+      type: 'mux.video',
+      group: 'media',
+      description: 'Upload the project film. It plays first when the project opens, without any player branding. Takes priority over the Vimeo ID.',
+    }),
+    defineField({
       name: 'vimeoId',
       title: 'Vimeo film ID',
       type: 'string',
       group: 'media',
-      description: 'The number in vimeo.com/123456789. Plays first when the project opens.',
+      description: 'Fallback while a film is not uploaded above: the number in vimeo.com/123456789.',
       validation: (rule) => rule.regex(/^\d+$/, {name: 'numeric id'}),
     }),
     defineField({name: 'hero', title: 'Hero image', type: 'image', group: 'media', options: {hotspot: true}}),

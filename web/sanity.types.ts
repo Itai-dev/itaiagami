@@ -90,6 +90,7 @@ export type Project = {
   contribution?: string;
   disciplines?: string;
   credits?: Array<string>;
+  film?: MuxVideo;
   vimeoId?: string;
   hero?: {
     asset?: SanityImageAssetReference;
@@ -121,10 +122,120 @@ export type SanityImageHotspot = {
   width?: number;
 };
 
+export type MuxVideoAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "mux.videoAsset";
+};
+
+export type MuxVideo = {
+  _type: "mux.video";
+  asset?: MuxVideoAssetReference;
+};
+
 export type Slug = {
   _type: "slug";
   current?: string;
   source?: string;
+};
+
+export type MuxVideoAsset = {
+  _id: string;
+  _type: "mux.videoAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  status?: string;
+  assetId?: string;
+  playbackId?: string;
+  filename?: string;
+  thumbTime?: number;
+  data?: MuxAssetData;
+};
+
+export type MuxAssetData = {
+  _type: "mux.assetData";
+  resolution_tier?: string;
+  upload_id?: string;
+  created_at?: string;
+  id?: string;
+  status?: string;
+  max_stored_resolution?: string;
+  passthrough?: string;
+  encoding_tier?: string;
+  video_quality?: string;
+  master_access?: string;
+  aspect_ratio?: string;
+  duration?: number;
+  max_stored_frame_rate?: number;
+  mp4_support?: string;
+  max_resolution_tier?: string;
+  tracks?: Array<
+    {
+      _key: string;
+    } & MuxTrack
+  >;
+  playback_ids?: Array<
+    {
+      _key: string;
+    } & MuxPlaybackId
+  >;
+  static_renditions?: MuxStaticRenditions;
+  master?: MuxMasterFile;
+};
+
+export type MuxMasterFile = {
+  _type: "mux.masterFile";
+  status?: string;
+  url?: string;
+};
+
+export type MuxStaticRenditions = {
+  _type: "mux.staticRenditions";
+  status?: string;
+  files?: Array<
+    {
+      _key: string;
+    } & MuxStaticRenditionFile
+  >;
+};
+
+export type MuxStaticRenditionFile = {
+  _type: "mux.staticRenditionFile";
+  name?: string;
+  ext?: string;
+  height?: number;
+  width?: number;
+  bitrate?: number;
+  filesize?: string;
+  type?: string;
+  status?: string;
+  resolution_tier?: string;
+  resolution?: string;
+  id?: string;
+  passthrough?: string;
+};
+
+export type MuxPlaybackId = {
+  _type: "mux.playbackId";
+  id?: string;
+  policy?: string;
+};
+
+export type MuxTrack = {
+  _type: "mux.track";
+  id?: string;
+  type?: string;
+  max_width?: number;
+  max_frame_rate?: number;
+  duration?: number;
+  max_height?: number;
+  language_code?: string;
+  name?: string;
+  status?: string;
+  text_source?: string;
+  text_type?: string;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -232,7 +343,16 @@ export type AllSanitySchemaTypes =
   | Project
   | SanityImageCrop
   | SanityImageHotspot
+  | MuxVideoAssetReference
+  | MuxVideo
   | Slug
+  | MuxVideoAsset
+  | MuxAssetData
+  | MuxMasterFile
+  | MuxStaticRenditions
+  | MuxStaticRenditionFile
+  | MuxPlaybackId
+  | MuxTrack
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -270,7 +390,7 @@ export type PROJECT_SLUGS_QUERY_RESULT = Array<{
 
 // Source: ../web/src/sanity/queries.ts
 // Variable: PROJECT_QUERY
-// Query: *[_type == "project" && slug.current == $slug][0]{    _id,    name,    client,    role,    oneliner,    idea,    outcome,    vimeoId,    hero,    gallery[]{_key, image, alt, half},    "loopUrl": loop.asset->url  }
+// Query: *[_type == "project" && slug.current == $slug][0]{    _id,    name,    client,    role,    oneliner,    idea,    outcome,    vimeoId,    "muxPlaybackId": film.asset->playbackId,    "muxAspect": film.asset->data.aspect_ratio,    hero,    gallery[]{_key, image, alt, half},    "loopUrl": loop.asset->url  }
 export type PROJECT_QUERY_RESULT = {
   _id: string;
   name: string | null;
@@ -280,6 +400,8 @@ export type PROJECT_QUERY_RESULT = {
   idea: string | null;
   outcome: string | null;
   vimeoId: string | null;
+  muxPlaybackId: string | null;
+  muxAspect: string | null;
   hero: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -325,7 +447,7 @@ declare global {
   interface SanityQueries {
     '\n  *[_type == "project" && defined(slug.current)] | order(coalesce(order, 999) asc, name asc){\n    _id,\n    name,\n    "slug": slug.current,\n    category,\n    client,\n    thumbnail,\n    "loopUrl": loop.asset->url\n  }\n': PROJECTS_QUERY_RESULT;
     '\n  *[_type == "project" && defined(slug.current)]{"slug": slug.current}\n': PROJECT_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    name,\n    client,\n    role,\n    oneliner,\n    idea,\n    outcome,\n    vimeoId,\n    hero,\n    gallery[]{_key, image, alt, half},\n    "loopUrl": loop.asset->url\n  }\n': PROJECT_QUERY_RESULT;
+    '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    name,\n    client,\n    role,\n    oneliner,\n    idea,\n    outcome,\n    vimeoId,\n    "muxPlaybackId": film.asset->playbackId,\n    "muxAspect": film.asset->data.aspect_ratio,\n    hero,\n    gallery[]{_key, image, alt, half},\n    "loopUrl": loop.asset->url\n  }\n': PROJECT_QUERY_RESULT;
     '\n  *[_id == "settings"][0]{about, email, linkedin, "cvUrl": cv.asset->url}\n': SETTINGS_QUERY_RESULT;
   }
 }

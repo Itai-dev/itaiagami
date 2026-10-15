@@ -5,6 +5,7 @@ import {notFound} from 'next/navigation'
 import {cachedSanity} from '@/sanity/live'
 import {urlFor} from '@/sanity/image'
 import {PROJECT_QUERY, PROJECT_SLUGS_QUERY} from '@/sanity/queries'
+import {Film} from './film'
 
 export async function generateStaticParams() {
   const {data} = await cachedSanity({query: PROJECT_SLUGS_QUERY, perspective: 'published', stega: false})
@@ -53,7 +54,11 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
       {meta && <p className="mb-6 text-black/55">{meta}</p>}
 
       <div className="columns-1 gap-1.5 sm:columns-2">
-        {project.vimeoId ? (
+        {project.muxPlaybackId ? (
+          <div className="mb-1.5 [column-span:all]">
+            <Film playbackId={project.muxPlaybackId} aspect={project.muxAspect} title={project.name} />
+          </div>
+        ) : project.vimeoId ? (
           <div className="relative mb-1.5 aspect-video bg-black [column-span:all]">
             <iframe
               src={`https://player.vimeo.com/video/${project.vimeoId}?autoplay=1&title=0&byline=0&portrait=0&dnt=1`}

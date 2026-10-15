@@ -414,6 +414,13 @@ async function start() {
   }
   const openCase = it => openWindow(null, it.project.name.toLowerCase(), it.accent, it, caseHTML(it.project));
 
+  // Mux's player is a web component, loaded the first time a film is shown
+  let muxLoading = null;
+  function loadMuxPlayer() {
+    if (muxLoading || customElements.get('mux-player')) return;
+    muxLoading = import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs').catch(err => console.warn('mux player failed to load', err));
+  }
+
   // One plain paragraph on top (one-liner, idea, outcome; first sentences), a
   // client and role line, then the film and every image together in a mosaic.
   function caseHTML(p) {
@@ -422,7 +429,12 @@ async function start() {
       .filter((t, i) => i === 0 || t.length <= 150).join(' ');
     const meta = [p.client, p.role].filter(Boolean).join(' · ');
     let film = '';
-    if (p.vimeo) {
+    if (p.mux && p.mux.playbackId) {
+      // Mux: unbranded player, adaptive streaming; tries sound, falls back to muted
+      loadMuxPlayer();
+      const ratio = String(p.mux.aspect || '16:9').replace(':', ' / ');
+      film = `<div class="clc-film clc-mux" style="aspect-ratio:${esc(ratio)}"><mux-player playback-id="${esc(p.mux.playbackId)}" stream-type="on-demand" autoplay="any" accent-color="#26262b" primary-color="#ffffff" title="${esc(p.name)}" metadata-video-title="${esc(p.name)}"></mux-player></div>`;
+    } else if (p.vimeo) {
       film = `<div class="clc-film"><iframe src="https://player.vimeo.com/video/${encodeURIComponent(p.vimeo)}?autoplay=1&title=0&byline=0&portrait=0&dnt=1" title="${esc(p.name)} film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
     } else if (p.loop) {
       film = `<div class="clc-m"><video src="${esc(p.loop)}" muted loop autoplay playsinline></video></div>`;

@@ -20,6 +20,7 @@ const QUERY = `{
     "slug": slug.current, name, client, "cat": category, role, disciplines,
     "oneline": oneliner, challenge, idea, system, "result": outcome, contribution, credits,
     "vimeo": vimeoId,
+    "mux": film.asset->{ playbackId, "aspect": data.aspect_ratio },
     "thumb": thumbnail.asset->url,
     "hero": hero.asset->url,
     "gallery": gallery[]{ "src": image.asset->url, half },

@@ -92,6 +92,7 @@ html.cloud-on #cloud{display:block}
 .clc-media>*{break-inside:avoid;margin:0 0 6px}
 .clc-film{column-span:all;position:relative;aspect-ratio:16/9;background:#111}
 .clc-film iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.clc-mux mux-player{position:absolute;inset:0;width:100%;height:100%;--media-object-fit:contain;--controls-backdrop-color:transparent}
 .clc-m img,.clc-m video{display:block;width:100%;height:auto}
 @media (max-width:640px){.cl-case-doc{padding:20px 16px 48px}.clc-media{columns:1}}
 
