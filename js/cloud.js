@@ -126,18 +126,13 @@ async function start() {
       </div>
       <div class="cl-top">
         <button class="cl-offer-btn cl-in cl-ctl" type="button" aria-expanded="false" aria-controls="cl-offer"><span class="cl-letters"></span></button>
-        <button class="cl-about-btn cl-in cl-ctl" type="button" aria-expanded="false" aria-controls="cl-about"><span class="cl-letters"></span></button>
       </div>
       <section class="cl-about" id="cl-offer" aria-label="Let’s talk">
         <div class="cl-about-inner">
-          ${[offerLine, ...offerLines].map(l => `<p>${esc(l)}</p>`).join('')}
-          <p class="links"><a href="${esc(booking)}" target="_blank" rel="noopener">book a call ↗</a><a href="/contact.html" data-pop>send a brief</a><a href="mailto:${esc(email)}">email</a></p>
-        </div>
-      </section>
-      <section class="cl-about" id="cl-about" aria-label="About Itai Agami">
-        <div class="cl-about-inner">
           ${aboutLines.map((l, i) => `<p${i === aboutLines.length - 1 && i > 1 ? ' class="dim"' : ''}>${esc(l)}</p>`).join('')}
-          <p class="links"><a href="/notes.html" data-pop>notes</a><a href="mailto:${esc(email)}">email</a><a href="${esc(linkedin)}" target="_blank" rel="noopener">linkedin</a><a href="${esc(cv)}" target="_blank" rel="noopener">cv</a></p>
+          ${[offerLine, ...offerLines].map((l, i) => `<p${i === 0 ? ' class="gap"' : ''}>${esc(l)}</p>`).join('')}
+          <p class="links gap"><a href="${esc(booking)}" target="_blank" rel="noopener">book a call ↗</a><a href="/contact.html" data-pop>send a brief</a><a href="mailto:${esc(email)}">email</a></p>
+          <p class="links"><a href="${esc(linkedin)}" target="_blank" rel="noopener">linkedin</a><a href="${esc(cv)}" target="_blank" rel="noopener">cv</a><a href="/notes.html" data-pop>notes</a></p>
         </div>
       </section>
       <div class="cl-case" role="dialog" aria-modal="true" aria-labelledby="cl-case-title" hidden>
@@ -162,7 +157,6 @@ async function start() {
   const label = $('.cl-label');
   const ambientEls = [...root.querySelectorAll('.cl-ambient')];
   const live = $('.cl-sr');
-  const aboutBtn = $('.cl-about-btn');
   const offerBtn = $('.cl-offer-btn');
   const caseEl = $('.cl-case');
   const caseWin = $('.cl-case-win');
@@ -505,7 +499,6 @@ async function start() {
       requestAnimationFrame(() => requestAnimationFrame(() => [...wrap.children].forEach(s => s.classList.remove('out'))));
     }, old.length ? 200 : 0);
   }
-  setLetters(aboutBtn, 'about');
   setLetters(offerBtn, 'let’s talk');
 
   function setMode(m) {
@@ -513,20 +506,17 @@ async function start() {
     ui.dataset.mode = m;
     if (m !== 'cloud') setHover(null);
   }
-  // the two text panels: 'about', 'offer', or null to close
-  const panelOpen = () => mode === 'about' || mode === 'offer';
+  // the one text panel, "let's talk" (who, the offer, how to reach me): 'offer', or null to close
+  const panelOpen = () => mode === 'offer';
   function openPanel(name) {
     if (name === (panelOpen() ? mode : null)) return;
     if (name && opened) closeCase();
     if (name && mode === 'focus') closeFocus();
     setMode(name || 'cloud');
-    aboutBtn.setAttribute('aria-expanded', String(name === 'about'));
     offerBtn.setAttribute('aria-expanded', String(name === 'offer'));
-    setLetters(aboutBtn, name === 'about' ? 'close' : 'about');
     setLetters(offerBtn, name === 'offer' ? 'close' : 'let’s talk');
     setUrl(name ? { panel: name } : {});
   }
-  aboutBtn.addEventListener('click', () => openPanel(mode === 'about' ? null : 'about'));
   offerBtn.addEventListener('click', () => openPanel(mode === 'offer' ? null : 'offer'));
 
   // an open project or panel has its own address (/?p=slug, /?panel=offer), so it can be shared
@@ -542,7 +532,7 @@ async function start() {
     const slug = q.get('p'), panel = q.get('panel');
     const it = slug && items.find(x => x.project.slug === slug);
     if (it) openFocus(it);
-    else if (panel === 'about' || panel === 'offer') openPanel(panel);
+    else if (panel === 'about' || panel === 'offer') openPanel('offer');   // older ?panel=about links land here too
     else setUrl({});
   }
 

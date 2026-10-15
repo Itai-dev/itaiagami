@@ -98,7 +98,7 @@ function decodeURIComponentSafe(s){ try{ return decodeURIComponent(s); }catch{ r
 export function moved(pathname){
   if(pathname === '/work.html') return '/';
   if(pathname === '/services.html' || /^\/services\/[a-z0-9-]+\.html$/.test(pathname)) return '/?panel=offer';
-  if(pathname === '/about.html') return '/?panel=about';
+  if(pathname === '/about.html') return '/?panel=offer';
   return null;
 }
 
