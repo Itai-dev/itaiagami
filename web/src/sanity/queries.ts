@@ -36,6 +36,8 @@ export const PROJECT_QUERY = defineQuery(`
     siteUrl,
     "muxPlaybackId": film.asset->playbackId,
     "muxAspect": film.asset->data.aspect_ratio,
+    moreVideos[]{_key, "muxPlaybackId": asset->playbackId, "muxAspect": asset->data.aspect_ratio},
+    moreImages,
     hero,
     gallery[]{
       _key,

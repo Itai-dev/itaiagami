@@ -23,6 +23,8 @@ const QUERY = `{
     "mux": film.asset->{ playbackId, "aspect": data.aspect_ratio },
     "thumb": thumbnail.asset->url,
     "image": image.asset->url,
+    "moreMux": moreVideos[].asset->{ playbackId, "aspect": data.aspect_ratio },
+    "moreImages": moreImages[].asset->url,
     "hero": hero.asset->url,
     "gallery": gallery[]{ "src": image.asset->url, half, "mux": video.asset->{ playbackId, "aspect": data.aspect_ratio } },
     "loop": loop.asset->url

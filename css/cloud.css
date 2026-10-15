@@ -88,7 +88,7 @@ html.cloud-on #cloud{display:block}
 .cl-play.on{opacity:1;pointer-events:auto}
 .cl-play img{display:block;width:100%;height:100%;object-fit:contain;background:transparent}
 .cl-play mux-player,.cl-play iframe{display:block;width:100%;height:100%;border:0;--media-object-fit:contain;--controls-backdrop-color:transparent}
-.cl-focus-tag,.cl-focus-min,.cl-focus-site,.cl-focus-info{z-index:16;opacity:0;pointer-events:none;transition:opacity .2s}
+.cl-focus-tag,.cl-focus-min,.cl-focus-site,.cl-focus-nav,.cl-focus-info{z-index:16;opacity:0;pointer-events:none;transition:opacity .2s}
 .cl-focus-tag.on,.cl-focus-info.on{opacity:1}
 .cl-focus-min.on,.cl-focus-site.on{opacity:1;pointer-events:auto}
 .cl .cl-focus-site{display:flex;align-items:center;cursor:pointer;font:15px/1.25 "IBM Plex Mono",ui-monospace,monospace;padding:2px 6px}
@@ -96,6 +96,13 @@ html.cloud-on #cloud{display:block}
 .cl-fade{transition:height .5s ease-out,opacity .3s}
 .cl .cl-focus-site:hover{filter:brightness(.85)}
 .cl-focus-site[hidden]{display:none}
+/* several videos / images: ← 1/3 → */
+.cl .cl-focus-nav{display:flex;align-items:center;padding:0}
+.cl-focus-nav[hidden]{display:none}
+.cl-focus-nav.on{opacity:1;pointer-events:auto}
+.cl .cl-focus-nav button{height:100%;padding:0 7px;color:inherit;font:inherit;cursor:pointer}
+.cl .cl-focus-nav button:hover{filter:brightness(.85);background:rgba(0,0,0,.08)}
+.cl-focus-count{font-variant-numeric:tabular-nums;padding:0 1px}
 .cl-play iframe:not([src*="vimeo"]){background:#fff}
 .cl .cl-focus-min{display:grid;place-items:center;width:26px;padding:0;cursor:pointer}
 .cl .cl-focus-min:hover{filter:brightness(.85)}

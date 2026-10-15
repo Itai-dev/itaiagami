@@ -1,6 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
-// A project is a video, an image or a site, each with a short text.
+// A project is a video, an image or a site, each with a short text. Videos and
+// images can be several: the first one, then "more", stepped through on the site.
 // Nothing blocks publishing: missing pieces show as warnings, and the site
 // falls back sensibly (e.g. a card without an image shows the project name).
 const TYPES = [
@@ -54,6 +55,15 @@ export const project = defineType({
       description: 'Upload the video. Its first frame becomes the card image unless you set one in "Card".',
     }),
     defineField({
+      name: 'moreVideos',
+      title: 'More videos',
+      type: 'array',
+      group: 'main',
+      of: [defineArrayMember({type: 'mux.video'})],
+      hidden: ({parent}) => !isType(parent, 'video', 'site'),
+      description: 'Shown after the video above, with arrows to step through them. Drag to reorder.',
+    }),
+    defineField({
       name: 'vimeoId',
       title: 'Vimeo ID (fallback)',
       type: 'string',
@@ -71,6 +81,16 @@ export const project = defineType({
       options: {hotspot: true},
       hidden: ({parent}) => !isType(parent, 'image', 'site'),
       description: 'Shown large when the card is clicked. Also used as the card image unless you set one in "Card".',
+    }),
+    defineField({
+      name: 'moreImages',
+      title: 'More images',
+      type: 'array',
+      group: 'main',
+      of: [defineArrayMember({type: 'image', options: {hotspot: true}})],
+      options: {layout: 'grid'},
+      hidden: ({parent}) => !isType(parent, 'image', 'site'),
+      description: 'Shown after the image above, with arrows to step through them. Drag to reorder.',
     }),
 
     // site

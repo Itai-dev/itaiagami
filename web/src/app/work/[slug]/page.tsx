@@ -42,8 +42,21 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
       .join(' ')
   const type = project.type ?? (project.muxPlaybackId || project.vimeoId ? 'video' : 'image')
   const meta = [project.client, project.role].filter(Boolean).join(' · ')
-  // the mosaic: hero, then gallery images and video clips in the order set in the CMS
+  // the mosaic: the extra videos and images, the hero, then gallery images and
+  // video clips in the order set in the CMS
   const media = [
+    ...(project.moreVideos ?? []).map((item) => ({
+      key: item._key,
+      image: null,
+      playbackId: item.muxPlaybackId ?? null,
+      aspect: item.muxAspect ?? null,
+    })),
+    ...(project.moreImages ?? []).map((item) => ({
+      key: item._key,
+      image: item.asset ? item : null,
+      playbackId: null,
+      aspect: null,
+    })),
     ...(project.hero?.asset ? [{key: 'hero', image: project.hero, playbackId: null, aspect: null}] : []),
     ...(project.gallery ?? []).map((item) => ({
       key: item._key,
