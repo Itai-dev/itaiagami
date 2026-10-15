@@ -1,0 +1,114 @@
+/* Homepage cloud: a 3D field of every project still, re-forming into shapes.
+   The regular homepage markup stays underneath as the no-JS / no-WebGL fallback
+   and for assistive tech; it is hidden only once the cloud has started. */
+
+#cloud{display:none}
+html.cloud-on,html.cloud-on body{height:100%;overflow:hidden;background:#bfbfbf}
+html.cloud-on body > :not(#cloud):not(script):not(.consent){display:none !important}
+html.cloud-on #cloud{display:block}
+
+.cl{--cl-bg:#bfbfbf;--cl-ink:#000;--cl-frame:#26262b;position:fixed;inset:0;overflow:hidden;background:var(--cl-bg);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--cl-ink);-webkit-font-smoothing:antialiased}
+.cl-stage{position:fixed;inset:0;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden}
+.cl-stage canvas{display:block;width:100%;height:100%}
+.cl-stage.is-hover{cursor:pointer}
+.cl-stage.is-drag{cursor:grabbing}
+
+/* mark */
+.cl-mark{position:absolute;left:30px;top:25px;height:52px;width:auto;z-index:20;pointer-events:none;color:#fff}
+
+/* overlay: bounding box + label chips, positioned from the 3D scene each frame */
+.cl-overlay{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;z-index:10}
+.cl-bbox{position:absolute;left:0;top:0;border:1px solid var(--cl-box,var(--cl-frame));will-change:transform;transition:border-color .3s}
+.cl-chip{position:absolute;left:0;top:0;white-space:nowrap;padding:2px 6px;font:10px/1.25 "IBM Plex Mono",ui-monospace,monospace;
+  color:#fff;background:var(--cl-frame);will-change:transform;transition:background .3s,color .3s,opacity .18s}
+.cl-label{pointer-events:auto;cursor:default}
+.cl-ambient{opacity:0}
+.cl-ambient.on{opacity:1}
+.cl-overlay[data-mode=focus] .cl-ambient,.cl-overlay[data-mode=card] .cl-ambient{opacity:0}
+
+/* bottom fade so the controls stay legible over the cloud */
+.cl-fade{position:absolute;left:0;right:0;bottom:0;height:130px;z-index:15;pointer-events:none;transition:height .5s ease-out;
+  background:linear-gradient(to top,#bfbfbf 30%,rgba(191,191,191,.85) 50%,rgba(191,191,191,.55) 68%,rgba(191,191,191,.25) 84%,rgba(191,191,191,0))}
+.cl[data-mode=focus] .cl-fade{height:210px}
+
+/* controls */
+.cl button,.cl a{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-decoration:none}
+.cl button:focus-visible,.cl a:focus-visible{outline:1px solid var(--cl-frame);outline-offset:3px}
+.cl-ctl{font-size:17px;line-height:1;text-transform:lowercase;letter-spacing:-.005em}
+.cl-in{opacity:0;transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1)}
+.cl.is-ready .cl-in{opacity:1;transform:none !important}
+
+.cl-shapes{position:absolute;left:30px;bottom:14px;z-index:20;display:flex;align-items:center;height:36px;transform:translateY(22px)}
+.cl-arrow{display:grid;place-items:center;width:32px;height:32px;color:rgba(0,0,0,.35);transition:color .2s}
+.cl-arrow:hover{color:#000}
+.cl-arrow:first-child{margin-left:-5px}
+.cl-shape{position:relative;display:block;width:64px;height:20px;overflow:hidden;text-align:center;color:rgba(0,0,0,.85)}
+.cl-shape span{position:absolute;inset:0;transition:transform .45s cubic-bezier(.3,1.35,.5,1),opacity .3s}
+.cl-shape span.out-l{transform:translateX(-70%);opacity:0}
+.cl-shape span.out-r{transform:translateX(70%);opacity:0}
+
+.cl-filters{position:absolute;right:30px;bottom:14px;z-index:20;display:flex;align-items:center;gap:24px;height:36px}
+.cl-filters button{color:rgba(0,0,0,.35);transition:color .2s,opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1);transform:translateY(14px)}
+.cl-filters button:hover{color:rgba(0,0,0,.7)}
+.cl-filters button[aria-pressed=true]{color:rgba(0,0,0,.85)}
+.cl-filters button:nth-child(2){transition-delay:0s,.05s,.05s}
+.cl-filters button:nth-child(3){transition-delay:0s,.1s,.1s}
+.cl-filters button:nth-child(4){transition-delay:0s,.15s,.15s}
+
+.cl-about-btn{position:absolute;right:30px;top:30px;z-index:30;white-space:nowrap;color:rgba(0,0,0,.8);transition:color .2s,opacity .6s,transform .6s;transform:translateY(-14px)}
+.cl-about-btn:hover{color:#000}
+.cl-letters{display:inline-flex;overflow:hidden}
+.cl-letters span{display:inline-block;white-space:pre;transition:transform .42s cubic-bezier(.3,1.3,.5,1),opacity .3s}
+.cl-letters span.out{transform:translateY(105%);opacity:0}
+
+.cl[data-mode=about] .cl-shapes,.cl[data-mode=about] .cl-filters{opacity:0 !important;pointer-events:none}
+
+/* focused card caption */
+.cl-caption{position:absolute;left:50%;bottom:64px;z-index:20;width:min(560px,calc(100% - 32px));transform:translate(-50%,10px);
+  text-align:center;opacity:0;pointer-events:none;transition:opacity .35s,transform .45s cubic-bezier(.2,.8,.2,1)}
+.cl[data-mode=focus] .cl-caption{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.cl-caption p{margin:0 0 10px;font-size:15px;line-height:1.4;color:rgba(0,0,0,.72);text-wrap:balance}
+.cl-caption .cl-meta{font:10px/1.3 "IBM Plex Mono",ui-monospace,monospace;text-transform:lowercase;color:rgba(0,0,0,.55);margin-bottom:8px}
+.cl-caption .cl-open{font-size:17px;text-transform:lowercase;color:rgba(0,0,0,.85);border-bottom:1px solid rgba(0,0,0,.25);padding-bottom:1px;transition:border-color .2s}
+.cl-caption .cl-open:hover{border-color:#000}
+.cl-step{position:absolute;bottom:14px;z-index:21;display:grid;place-items:center;width:36px;height:36px;color:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .3s,color .2s}
+.cl-step:hover{color:#000}
+.cl-step.prev{left:calc(50% - 44px)}
+.cl-step.next{left:calc(50% + 8px)}
+.cl[data-mode=focus] .cl-step{opacity:1;pointer-events:auto}
+
+/* about */
+.cl-about{position:absolute;inset:0;z-index:25;display:flex;align-items:center;padding:110px 30px 90px;overflow:auto;
+  opacity:0;visibility:hidden;transition:opacity .45s,visibility 0s .45s}
+.cl[data-mode=about] .cl-about{opacity:1;visibility:visible;transition:opacity .45s .15s,visibility 0s}
+.cl-about-inner{max-width:640px;margin:0 auto;font-size:22px;line-height:1.38;letter-spacing:-.012em;text-transform:lowercase}
+.cl-about-inner p{margin:0 0 .9em;color:rgba(0,0,0,.85);transform:translateY(12px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s}
+.cl[data-mode=about] .cl-about-inner p{transform:none;opacity:1}
+.cl[data-mode=about] .cl-about-inner p:nth-child(2){transition-delay:.06s}
+.cl[data-mode=about] .cl-about-inner p:nth-child(3){transition-delay:.12s}
+.cl[data-mode=about] .cl-about-inner p:nth-child(4){transition-delay:.18s}
+.cl[data-mode=about] .cl-about-inner p:nth-child(5){transition-delay:.24s}
+.cl-about-inner .dim{color:rgba(0,0,0,.45)}
+.cl-about-inner a{border-bottom:1px solid rgba(0,0,0,.25);transition:border-color .2s}
+.cl-about-inner a:hover{border-color:#000}
+.cl-about-inner .links{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:17px}
+
+.cl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+
+@media (max-width:640px){
+  .cl-mark{left:16px;top:16px;height:44px}
+  .cl-about-btn{right:16px;top:28px}
+  .cl-shapes{left:16px;bottom:20px}
+  .cl-filters{right:16px;bottom:20px;gap:16px}
+  .cl-fade{height:176px}
+  .cl[data-mode=focus] .cl-fade{height:260px}
+  .cl-caption{bottom:120px}
+  .cl-step{bottom:70px}
+  .cl-about{padding:96px 16px 80px;align-items:flex-start}
+  .cl-about-inner{font-size:19px}
+}
+@media (max-width:380px){ .cl-filters{gap:12px} .cl-ctl{font-size:16px} }
+@media (prefers-reduced-motion:reduce){
+  .cl *,.cl *::before{transition-duration:.01s !important;transition-delay:0s !important}
+}
