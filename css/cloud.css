@@ -137,6 +137,9 @@ html.cloud-on #cloud{display:block}
 .cl-about-inner a{border-bottom:1px solid rgba(0,0,0,.25);transition:border-color .2s}
 .cl-about-inner a:hover{border-color:#000}
 .cl-about-inner .links{display:flex;flex-wrap:wrap;gap:6px 22px}
+.cl-about-inner a.primary{font-weight:600;border-bottom-color:#000}
+.cl-about-inner .minor a{color:rgba(0,0,0,.45);border-bottom-color:transparent}
+.cl-about-inner .minor a:hover{color:#000;border-bottom-color:#000}
 
 /* white version, for comparison: add ?bg=white to the address */
 html.cl-white.cloud-on,html.cl-white.cloud-on body{background:#fff}

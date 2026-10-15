@@ -64,12 +64,10 @@ async function start() {
   const email = (settings && settings.email) || 'itaiagami@gmail.com';
   const linkedin = (settings && settings.linkedin) || 'https://www.linkedin.com/in/itai-agami-237353189/';
   const cv = (settings && settings.cv) || '/assets/docs/Itai_Agami_CV.pdf';
-  // the one offer, in the "work with me" panel: its headline line, then the details
-  const offerLine = (settings && settings.offerLine) || 'creative direction and launch sites for startups. weeks, not months.';
+  // "let's talk": who (the first about line), the offer in one short paragraph, then how to reach me
+  const offerLine = (settings && settings.offerLine) || 'creative direction and launch sites for startups.';
   const offerLines = settings && Array.isArray(settings.offer) && settings.offer.length ? settings.offer : [
-    'one sprint, one lead: the idea, the identity and the launch site, start to finish.',
-    'two to four weeks. fixed scope, fixed price.',
-    'from $10,000.',
+    'two to four weeks, fixed price, from $10,000.',
   ];
   const booking = (settings && settings.bookingUrl) || 'https://calendar.app.google/qAYhVo928FsVE6PP7';
 
@@ -129,10 +127,10 @@ async function start() {
       </div>
       <section class="cl-about" id="cl-offer" aria-label="Let’s talk">
         <div class="cl-about-inner">
-          ${aboutLines.map((l, i) => `<p${i === aboutLines.length - 1 && i > 1 ? ' class="dim"' : ''}>${esc(l)}</p>`).join('')}
-          ${[offerLine, ...offerLines].map((l, i) => `<p${i === 0 ? ' class="gap"' : ''}>${esc(l)}</p>`).join('')}
-          <p class="links gap"><a href="${esc(booking)}" target="_blank" rel="noopener">book a call ↗</a><a href="/contact.html" data-pop>send a brief</a><a href="mailto:${esc(email)}">email</a></p>
-          <p class="links"><a href="${esc(linkedin)}" target="_blank" rel="noopener">linkedin</a><a href="${esc(cv)}" target="_blank" rel="noopener">cv</a><a href="/notes.html" data-pop>notes</a></p>
+          <p>${esc(aboutLines[0])}</p>
+          <p>${esc([offerLine, ...offerLines].join(' '))}</p>
+          <p class="links gap"><a class="primary" href="${esc(booking)}" target="_blank" rel="noopener">book a call ↗</a><a href="/contact.html" data-pop>send a brief</a><a href="mailto:${esc(email)}">email</a></p>
+          <p class="links minor"><a href="${esc(linkedin)}" target="_blank" rel="noopener">linkedin</a><a href="${esc(cv)}" target="_blank" rel="noopener">cv</a><a href="/notes.html" data-pop>notes</a></p>
         </div>
       </section>
       <div class="cl-case" role="dialog" aria-modal="true" aria-labelledby="cl-case-title" hidden>
