@@ -7,6 +7,7 @@ export default defineCliConfig({
   },
   studioHost: 'itai-agami',
   deployment: {
+    appId: 'wf181esvuvt281w8dcynkap5',
     autoUpdates: true,
   },
   typegen: {
