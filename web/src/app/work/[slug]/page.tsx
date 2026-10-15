@@ -16,7 +16,7 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: PageProps<'/work/[slug]'>): Promise<Metadata> {
   const {slug} = await props.params
   const {data} = await cachedSanity({query: PROJECT_QUERY, params: {slug}, perspective: 'published', stega: false})
-  return data ? {title: data.name ?? undefined, description: data.oneliner ?? undefined} : {}
+  return data ? {title: data.name ?? undefined, description: data.text ?? data.oneliner ?? undefined} : {}
 }
 
 // first sentence only; keeps the paragraph short
@@ -32,11 +32,15 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
   })
   if (!project) notFound()
 
-  const paragraph = [project.oneliner, project.idea, project.outcome]
-    .filter(Boolean)
-    .map(firstSentence)
-    .filter((sentence, i) => i === 0 || sentence.length <= 150)
-    .join(' ')
+  // the project's own text, else the older one-liner, idea and outcome
+  const paragraph =
+    project.text ??
+    [project.oneliner, project.idea, project.outcome]
+      .filter(Boolean)
+      .map(firstSentence)
+      .filter((sentence, i) => i === 0 || sentence.length <= 150)
+      .join(' ')
+  const type = project.type ?? (project.muxPlaybackId || project.vimeoId ? 'video' : 'image')
   const meta = [project.client, project.role].filter(Boolean).join(' · ')
   // the mosaic: hero, then gallery images and video clips in the order set in the CMS
   const media = [
@@ -56,7 +60,7 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
       </Link>
 
       <p className="mt-6 max-w-[62ch]">
-        <strong className="font-semibold">{project.name}</strong> {paragraph}
+        <strong className="font-semibold">{project.name ?? 'untitled'}</strong> {paragraph}
       </p>
       {meta && <p className="text-black/55">{meta}</p>}
       {project.siteUrl && (
@@ -67,7 +71,26 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
       <div className="mb-6" />
 
       <div className="columns-1 gap-1.5 sm:columns-2">
-        {project.muxPlaybackId ? (
+        {project.siteUrl && project.siteEmbed ? (
+          // the live site, interactive (only if it allows being framed)
+          <div className="relative mb-1.5 aspect-video bg-white [column-span:all]">
+            <iframe
+              src={project.siteUrl}
+              title={`${project.name ?? 'project'} site`}
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+              className="absolute inset-0 h-full w-full border-0"
+            />
+          </div>
+        ) : type === 'image' && project.image?.asset ? (
+          <Image
+            src={urlFor(project.image).width(2000).url()}
+            alt={project.name ?? ''}
+            width={2000}
+            height={1250}
+            sizes="100vw"
+            className="mb-1.5 block h-auto w-full [column-span:all]"
+          />
+        ) : project.muxPlaybackId ? (
           <div className="mb-1.5 [column-span:all]">
             <Film playbackId={project.muxPlaybackId} aspect={project.muxAspect} title={project.name} />
           </div>
@@ -80,6 +103,15 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
               className="absolute inset-0 h-full w-full border-0"
             />
           </div>
+        ) : project.image?.asset ? (
+          <Image
+            src={urlFor(project.image).width(2000).url()}
+            alt={project.name ?? ''}
+            width={2000}
+            height={1250}
+            sizes="100vw"
+            className="mb-1.5 block h-auto w-full [column-span:all]"
+          />
         ) : project.loopUrl ? (
           <video src={project.loopUrl} muted loop autoPlay playsInline className="mb-1.5 block w-full" />
         ) : null}

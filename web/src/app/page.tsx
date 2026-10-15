@@ -37,7 +37,7 @@ export default async function Home() {
                       playsInline
                       className="absolute inset-0 h-full w-full object-cover"
                     />
-                  ) : project.muxPlaybackId ? (
+                  ) : project.muxPlaybackId && project.type !== 'image' ? (
                     <Image
                       src={`https://image.mux.com/${project.muxPlaybackId}/thumbnail.webp?time=0&width=900`}
                       alt={project.name ?? ''}
@@ -45,18 +45,23 @@ export default async function Home() {
                       sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
-                  ) : project.thumbnail ? (
+                  ) : project.thumbnail?.asset || project.image?.asset ? (
                     <Image
-                      src={urlFor(project.thumbnail).width(900).url()}
+                      src={urlFor((project.thumbnail?.asset ? project.thumbnail : project.image)!).width(900).url()}
                       alt={project.name ?? ''}
                       fill
                       sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
-                  ) : null}
+                  ) : (
+                    // nothing to show: the project name on the frame colour
+                    <span className="absolute inset-0 grid place-items-center bg-frame p-3 text-center font-mono lowercase text-white">
+                      {project.name ?? 'untitled'}
+                    </span>
+                  )}
                 </div>
                 <div className="mt-1.5 flex justify-between gap-2 lowercase">
-                  <span>{project.name}</span>
+                  <span>{project.name ?? 'untitled'}</span>
                   <span className="text-black/45">{project.category}</span>
                 </div>
               </Link>

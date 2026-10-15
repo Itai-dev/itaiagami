@@ -1,26 +1,32 @@
 import {defineQuery} from 'next-sanity'
 
 export const PROJECTS_QUERY = defineQuery(`
-  *[_type == "project" && defined(slug.current)] | order(coalesce(order, 999) asc, name asc){
+  *[_type == "project"] | order(coalesce(order, 999) asc, name asc){
     _id,
     name,
-    "slug": slug.current,
+    type,
+    "slug": coalesce(slug.current, _id),
     category,
     client,
     thumbnail,
+    image,
     "muxPlaybackId": film.asset->playbackId,
     "loopUrl": loop.asset->url
   }
 `)
 
 export const PROJECT_SLUGS_QUERY = defineQuery(`
-  *[_type == "project" && defined(slug.current)]{"slug": slug.current}
+  *[_type == "project"]{"slug": coalesce(slug.current, _id)}
 `)
 
 export const PROJECT_QUERY = defineQuery(`
-  *[_type == "project" && slug.current == $slug][0]{
+  *[_type == "project" && (slug.current == $slug || _id == $slug)][0]{
     _id,
     name,
+    type,
+    text,
+    image,
+    siteEmbed,
     client,
     role,
     oneliner,

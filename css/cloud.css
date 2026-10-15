@@ -86,11 +86,14 @@ html.cloud-on #cloud{display:block}
 /* focus: the clicked card scaled up, its film laid exactly over it, its tag above */
 .cl-play{position:absolute;z-index:12;background:#000;opacity:0;pointer-events:none;transition:opacity .25s}
 .cl-play.on{opacity:1;pointer-events:auto}
+.cl-play img{display:block;width:100%;height:100%;object-fit:contain;background:transparent}
 .cl-play mux-player,.cl-play iframe{display:block;width:100%;height:100%;border:0;--media-object-fit:contain;--controls-backdrop-color:transparent}
-.cl-focus-tag,.cl-focus-min,.cl-focus-site,.cl-focus-info{z-index:13;opacity:0;pointer-events:none;transition:opacity .2s}
+.cl-focus-tag,.cl-focus-min,.cl-focus-site,.cl-focus-info{z-index:16;opacity:0;pointer-events:none;transition:opacity .2s}
 .cl-focus-tag.on,.cl-focus-info.on{opacity:1}
 .cl-focus-min.on,.cl-focus-site.on{opacity:1;pointer-events:auto}
-.cl .cl-focus-site{display:flex;align-items:center;cursor:pointer}
+.cl .cl-focus-site{display:flex;align-items:center;cursor:pointer;font:15px/1.25 "IBM Plex Mono",ui-monospace,monospace;padding:2px 6px}
+.cl[data-mode=focus] .cl-fade{opacity:0}
+.cl-fade{transition:height .5s ease-out,opacity .3s}
 .cl .cl-focus-site:hover{filter:brightness(.85)}
 .cl-focus-site[hidden]{display:none}
 .cl-play iframe:not([src*="vimeo"]){background:#fff}

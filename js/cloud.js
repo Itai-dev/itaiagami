@@ -42,12 +42,19 @@ function teardown() {
 
 async function start() {
   const { projects, settings } = await loadContent();
-  // a project with a Mux film shows the film's first frame on its card, so the
-  // card can hand over to the playing film without a visible cut
+  // what a project is: video, image or site (older entries are inferred)
   const muxId = p => (p.mux && p.mux.playbackId) || null;
-  const cardImage = p => muxId(p)
-    ? `https://image.mux.com/${encodeURIComponent(muxId(p))}/thumbnail.webp?time=0&width=1024`
-    : sized(p.thumb || p.hero, 1024);
+  const kind = p => p.type || (muxId(p) || p.vimeo ? 'video' : 'image');
+  // name and category are optional in the CMS
+  const tagOf = p => [p.name || 'untitled', p.cat].filter(Boolean).join(' · ').toLowerCase();
+  // card image: a video's first frame (so the card hands over to the playing
+  // video without a cut), else the card image, the image or the hero; without
+  // any of them the card shows the project name
+  const cardImage = p => {
+    if (muxId(p) && kind(p) !== 'image') return `https://image.mux.com/${encodeURIComponent(muxId(p))}/thumbnail.webp?time=0&width=1024`;
+    const src = p.thumb || p.image || p.hero;
+    return src ? sized(src, 1024) : null;
+  };
   const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const aboutLines = settings && Array.isArray(settings.about) && settings.about.length ? settings.about : [
     'itai agami. independent creative director, tel aviv.',
@@ -60,8 +67,7 @@ async function start() {
 
   /* ---------- items: one card per project ---------- */
   const items = projects
-    .map((p, pi) => ({ src: cardImage(p), project: p, accent: ACCENTS[pi % ACCENTS.length] }))
-    .filter(it => it.src);
+    .map((p, pi) => ({ src: cardImage(p), project: p, accent: ACCENTS[pi % ACCENTS.length] }));
   // shuffle so neighbours differ between visits
   for (let i = items.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [items[i], items[j]] = [items[j], items[i]]; }
 
@@ -201,8 +207,40 @@ async function start() {
     v.play().catch(() => {});
   }
 
+  // a card with nothing to show: the project name on its colour
+  function nameCard(it) {
+    const c = document.createElement('canvas');
+    c.width = 1024; c.height = 640;
+    const g = c.getContext('2d');
+    g.fillStyle = it.accent;
+    g.fillRect(0, 0, c.width, c.height);
+    g.fillStyle = isLight(it.accent) ? '#000' : '#fff';
+    g.font = '500 56px "IBM Plex Mono", ui-monospace, monospace';
+    g.textBaseline = 'top';
+    const words = String(it.project.name || 'untitled').toLowerCase().split(/\s+/);
+    let line = '', y = 56;
+    for (const w of words) {
+      const next = line ? `${line} ${w}` : w;
+      if (g.measureText(next).width > c.width - 112 && line) { g.fillText(line, 56, y); line = w; y += 70; }
+      else line = next;
+    }
+    g.fillText(line, 56, y);
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    it.mat.map = tex;
+    it.mat.color.set(0xffffff);
+    it.mat.needsUpdate = true;
+    it.aspect = c.width / c.height;
+  }
+
   // textures are capped at 1024px; with one card per project that stays light
   items.forEach(it => {
+    if (!it.src) {
+      if (document.fonts && document.fonts.load) document.fonts.load('500 56px "IBM Plex Mono"').finally(() => { nameCard(it); layout(); });
+      else nameCard(it);
+      if (it.project.loop && !reduceMotion) attachVideo(it, it.project.loop);
+      return;
+    }
     const img = new Image();
     img.decoding = 'async';
     img.crossOrigin = 'anonymous';
@@ -450,10 +488,11 @@ async function start() {
   let focusTimer = 0;
   function focusRectFor(it) {
     const small = W <= 640;
-    const maxW = W - (small ? 32 : 160), maxH = H - (small ? 220 : 200);
+    // leave room above for the tags and below for the text
+    const maxW = W - (small ? 32 : 160), maxH = H - (small ? 260 : 250);
     let w = maxW, h = w / it.aspect;
     if (h > maxH) { h = maxH; w = h * it.aspect; }
-    return { cx: W / 2, cy: H / 2 - (small ? 20 : 0), w, h };
+    return { cx: W / 2, cy: H / 2 - (small ? 30 : 20), w, h };
   }
   function placeFocus() {
     if (!zoomed) return;
@@ -474,7 +513,7 @@ async function start() {
     zoomed = it;
     openedAt = performance.now();
     setMode('focus');
-    focusTag.textContent = `${p.name.toLowerCase()} · ${String(p.cat || '').toLowerCase()}`;
+    focusTag.textContent = tagOf(p);
     // title, minimise and text tag share the project's colour
     for (const el of [focusTag, focusMin, focusSite, focusInfo]) {
       el.style.background = it.accent;
@@ -482,7 +521,10 @@ async function start() {
     }
     // a few words about the project under the film, in the same tag style
     const firstSentence = t => { const m = String(t || '').match(/^(.{20,}?[.!?])(\s|$)/); return m ? m[1] : String(t || ''); };
-    const info = [firstSentence(p.oneline), [p.client, p.role].filter(Boolean).join(' · ')].filter(Boolean);
+    // the project's own text if it has one, else the older one-liner and credits
+    const info = p.text
+      ? [String(p.text).trim()]
+      : [firstSentence(p.oneline), [p.client, p.role].filter(Boolean).join(' · ')].filter(Boolean);
     focusInfo.innerHTML = info.map(line => `<span>${esc(line.toLowerCase())}</span>`).join('');
     focusInfo.hidden = !info.length;
     // an optional link to the live site, opened in a new tab
@@ -491,14 +533,21 @@ async function start() {
     if (site) focusSite.href = site;
     placeFocus();
     const id = muxId(p);
+    const type = kind(p);
+    const still = p.image || p.thumb || p.hero;
     if (site && p.siteEmbed) {
       // the site itself, live and clickable, in place of the film
       playEl.innerHTML = `<iframe src="${esc(site)}" title="${esc(p.name)} site" loading="eager" referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; autoplay"></iframe>`;
+    } else if (type === 'image' && still) {
+      // the image itself, sharp, over the scaled-up card
+      playEl.innerHTML = `<img src="${esc(sized(still, 2000))}" alt="${esc(p.name || '')}">`;
     } else if (id) {
       loadMuxPlayer();
       playEl.innerHTML = `<mux-player playback-id="${esc(id)}" stream-type="on-demand" thumbnail-time="0" accent-color="#26262b" primary-color="#ffffff" title="${esc(p.name)}" metadata-video-title="${esc(p.name)}"></mux-player>`;
-    } else if (p.vimeo) {
+    } else if (p.vimeo && type !== 'site') {
       playEl.innerHTML = `<iframe src="https://player.vimeo.com/video/${encodeURIComponent(p.vimeo)}?autoplay=1&title=0&byline=0&portrait=0&dnt=1" title="${esc(p.name)} film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    } else if (still) {
+      playEl.innerHTML = `<img src="${esc(sized(still, 2000))}" alt="${esc(p.name || '')}">`;
     } else {
       playEl.innerHTML = '';
     }
@@ -511,7 +560,7 @@ async function start() {
       playEl.classList.add('on');
       playFilm(playEl.querySelector('mux-player'));
     }, reduceMotion ? 30 : 560);
-    say(`${p.name}`);
+    say(p.name || 'untitled');
   }
   focusMin.addEventListener('click', () => closeFocus());
   function closeFocus() {
@@ -897,7 +946,7 @@ async function start() {
     overlay.style.opacity = mode === 'cloud' && readyShown ? '1' : '0';
     let r, text, color = '';
     if (hovered) {
-      r = cardRect(hovered); text = `${hovered.project.name.toLowerCase()} · ${hovered.project.cat.toLowerCase()}`; color = hovered.accent;
+      r = cardRect(hovered); text = tagOf(hovered.project); color = hovered.accent;
     } else if (onCount) {
       const pad = 10;
       r = { x: bounds.x0 - pad, y: bounds.y0 - pad, w: bounds.x1 - bounds.x0 + pad * 2, h: bounds.y1 - bounds.y0 + pad * 2 };
@@ -922,7 +971,7 @@ async function start() {
       if (front.length) {
         const it = front[Math.floor(Math.random() * front.length)];
         slot.it = it; slot.until = now + 2600;
-        slot.el.textContent = it.project.name.toLowerCase();
+        slot.el.textContent = (it.project.name || 'untitled').toLowerCase();
         slot.el.style.background = it.accent;
         slot.el.style.color = isLight(it.accent) ? '#000' : '#fff';
         slot.el.classList.add('on');

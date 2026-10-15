@@ -16,12 +16,13 @@ const LOCAL_LOOPS = {
 };
 
 const QUERY = `{
-  "projects": *[_type == "project" && defined(slug.current)] | order(coalesce(order, 999) asc, name asc) {
-    "slug": slug.current, name, client, "cat": category, role, disciplines,
+  "projects": *[_type == "project" && !(_id in path("drafts.**"))] | order(coalesce(order, 999) asc, name asc) {
+    "slug": coalesce(slug.current, _id), name, type, text, client, "cat": category, role, disciplines,
     "oneline": oneliner, challenge, idea, system, "result": outcome, contribution, credits,
     "vimeo": vimeoId, siteUrl, siteEmbed,
     "mux": film.asset->{ playbackId, "aspect": data.aspect_ratio },
     "thumb": thumbnail.asset->url,
+    "image": image.asset->url,
     "hero": hero.asset->url,
     "gallery": gallery[]{ "src": image.asset->url, half, "mux": video.asset->{ playbackId, "aspect": data.aspect_ratio } },
     "loop": loop.asset->url
@@ -41,7 +42,8 @@ async function fromSanity() {
   const res = await fetch(url, { headers: { Accept: 'application/json' } });
   if (!res.ok) throw new Error(`sanity ${res.status}`);
   const { result } = await res.json();
-  const projects = (result && result.projects || []).filter(p => p.slug && (p.thumb || p.hero));
+  // every published project shows up; missing pieces fall back on the site
+  const projects = (result && result.projects || []).filter(p => p.slug);
   if (!projects.length) throw new Error('sanity: no projects');
   return { source: 'sanity', projects, settings: result.settings || null };
 }
