@@ -419,8 +419,7 @@ async function start() {
       const style = doc.createElement('style');
       style.textContent = 'header.site,footer.site,.mobile-menu,.consent,.grain,.crumb,.c-next,.c-service,.c-contrib,.c-film .note,.c-film .l,figcaption{display:none!important}body{padding-top:0!important}';
       doc.head.appendChild(style);
-      condense(doc);
-      playLeadFilm(doc);
+      if (!rebuildCase(doc)) condense(doc);
       const t = (doc.title || '').split('|')[0].trim().toLowerCase();
       if (t) $('.cl-case-title').textContent = t;
       doc.addEventListener('keydown', e => { if (e.key === 'Escape') closeCase(); });
@@ -446,33 +445,99 @@ async function start() {
       if (m && m[1].length < text.length) el.textContent = m[1];
     }
   }
-  // a case study opens on its film, already playing; pages without one get the
-  // project's Vimeo film from the data
+  // Case studies are re-laid out inside the window: one plain paragraph on top,
+  // then the film and every image together in a single tight mosaic.
+  // Pages without a film get the project's Vimeo film from the data.
   const vimeoBySlug = Object.fromEntries(projects.filter(p => p.vimeo).map(p => [p.slug, p.vimeo]));
-  function playLeadFilm(doc) {
-    const m = doc.location.pathname.match(/^\/work\/([a-z0-9-]+)\.html$/);
-    if (!m) return;
-    const wrap = doc.querySelector('.cwrap') || doc.querySelector('main');
+  const firstSentence = t => { const m = t.match(/^(.{20,}?[.!?])(\s|$)/); return m ? m[1] : t; };
+  const textOf = el => (el ? el.textContent : '').replace(/\s+/g, ' ').trim();
+
+  function findFilm(doc, slug) {
     const firstVideo = doc.querySelector('main video');
-    let lead = doc.querySelector('.c-film--lead') || doc.querySelector('.c-film') ||
-      (firstVideo && (firstVideo.closest('figure, .c-film, .fm') || firstVideo));
-    if (!lead && vimeoBySlug[m[1]]) {
-      lead = doc.createElement('div');
-      lead.className = 'c-film';
-      lead.innerHTML = `<div class="frame"><iframe src="https://player.vimeo.com/video/${vimeoBySlug[m[1]]}?title=0&byline=0&portrait=0&dnt=1" title="Film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+    let film = doc.querySelector('.c-film--lead') || doc.querySelector('.c-film') ||
+      (firstVideo && (firstVideo.closest('figure, .fm') || firstVideo));
+    if (!film && vimeoBySlug[slug]) {
+      film = doc.createElement('div');
+      film.className = 'c-film';
+      film.innerHTML = `<div class="frame"><iframe src="https://player.vimeo.com/video/${vimeoBySlug[slug]}?title=0&byline=0&portrait=0&dnt=1" title="Film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
     }
-    if (!wrap || !lead) return;
-    wrap.prepend(lead);
-    lead.style.marginTop = '0';
-    const play = lead.querySelector('.c-play');
+    return film;
+  }
+  function startFilm(film) {
+    const play = film.querySelector('.c-play');
     if (play) play.click();
-    for (const f of lead.querySelectorAll('iframe[src*="player.vimeo.com"]')) {
+    for (const f of film.querySelectorAll('iframe[src*="player.vimeo.com"]')) {
       if (/[?&]autoplay=1/.test(f.src)) continue;
       f.allow = 'autoplay; fullscreen; picture-in-picture';
       f.src += (f.src.includes('?') ? '&' : '?') + 'autoplay=1';
     }
-    const v = lead.matches('video') ? lead : lead.querySelector('video');
+    const v = film.matches('video') ? film : film.querySelector('video');
     if (v) { v.muted = true; v.preload = 'auto'; v.play().catch(() => {}); }
+  }
+
+  function rebuildCase(doc) {
+    const m = doc.location.pathname.match(/^\/work\/([a-z0-9-]+)\.html$/);
+    const wrap = doc.querySelector('.cwrap');
+    if (!m || !wrap) return false;
+
+    // the text: one paragraph from the one-liner, the idea and the outcome
+    const title = textOf(wrap.querySelector('.c-open h1'));
+    const story = [...wrap.querySelectorAll('.c-story .sb')].map(textOf);
+    const para = [textOf(wrap.querySelector('.oneline')), story[1], story[3]]
+      .filter(Boolean).map(firstSentence).filter((t, i) => i === 0 || t.length <= 150).join(' ');
+    const meta = [...wrap.querySelectorAll('.c-meta .m .v')].slice(0, 2).map(textOf).join(' · ');
+
+    // the media: film first, then every image and video once, in page order
+    const film = findFilm(doc, m[1]);
+    const seen = new Set();
+    const media = [];
+    for (const el of wrap.querySelectorAll('img, video')) {
+      if (film && film.contains(el)) continue;
+      if (el.closest('.c-next, .c-service, .c-open, .c-play')) continue;
+      const src = el.getAttribute('src');
+      if (!src || seen.has(src)) continue;
+      seen.add(src);
+      media.push(el);
+    }
+
+    const box = doc.createElement('div');
+    box.className = 'clc';
+    box.innerHTML = '<p class="clc-text"><strong></strong> <span></span></p><p class="clc-meta"></p><div class="clc-media"></div>';
+    box.querySelector('strong').textContent = title;
+    box.querySelector('.clc-text span').textContent = para;
+    box.querySelector('.clc-meta').textContent = meta;
+    const grid = box.querySelector('.clc-media');
+    if (film) { film.classList.add('clc-film'); grid.appendChild(film); }
+    for (const el of media) {
+      const cell = doc.createElement('div');
+      cell.className = 'clc-m';
+      el.removeAttribute('loading');
+      if (el.tagName === 'VIDEO') {
+        el.muted = true; el.loop = true; el.playsInline = true; el.autoplay = true; el.preload = 'auto';
+        el.removeAttribute('controls');
+      }
+      cell.appendChild(el);
+      grid.appendChild(cell);
+    }
+    wrap.replaceChildren(box);
+
+    const style = doc.createElement('style');
+    style.textContent = `
+      main,.cwrap{padding-top:0!important;margin-top:0!important}
+      .clc{padding:28px 0 64px}
+      .clc-text{max-width:62ch;margin:0 0 6px}
+      .clc-text strong{font-weight:600}
+      .clc-meta{margin:0 0 24px;opacity:.55}
+      .clc-media{columns:2;column-gap:6px}
+      .clc-media>*{break-inside:avoid;margin:0 0 6px!important;opacity:1!important;transform:none!important;filter:none!important}
+      .clc-media .clc-film{column-span:all}
+      .clc-m img,.clc-m video{display:block;width:100%;height:auto;border-radius:0;max-height:none}
+      @media (max-width:640px){.clc-media{columns:1}}`;
+    doc.head.appendChild(style);
+
+    for (const v of grid.querySelectorAll('video')) v.play().catch(() => {});
+    if (film) startFilm(film);
+    return true;
   }
 
   for (const a of root.querySelectorAll('[data-pop]')) {
