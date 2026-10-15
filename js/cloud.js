@@ -287,6 +287,9 @@ async function start() {
   let caseBlend = 0;
   let zoomBlend = 0;
   let gridScroll = 0, gridScrollMax = 0;
+  // on a tall (phone) screen the shapes stretch to fill its height and the
+  // cards grow, so the cloud uses the whole screen instead of a square in the middle
+  let stretchX = 1, stretchY = 1, cardBoost = 1;
   let lastInteract = 0;
   const startTime = performance.now();
 
@@ -372,6 +375,21 @@ async function start() {
       const noise = SHAPE_NOISE[shape] * flatScale;
       if (noise) v.add(new THREE.Vector3(hash(i + 1) * noise, hash(i + 2) * noise, hash(i + 3) * noise));
     });
+
+    const tall = aspect < .8;
+    cardBoost = tall ? 1.25 : 1;
+    const maxX = Math.max(.5, ...vis.map(it => Math.abs(it.target.x)));
+    const maxY = Math.max(.5, ...vis.map(it => Math.abs(it.target.y)));
+    // leave room for the header above, the controls below and a margin at the sides
+    const half = CARD * SHAPE_CARD[shape] * cardBoost / 2;
+    const roomX = halfH * aspect * .94 - half, roomY = halfH * .74 - half;
+    if (!tall) stretchX = stretchY = 1;
+    else if (shape === 'sphere') { stretchX = 1; stretchY = THREE.MathUtils.clamp(roomY / maxY, 1, 3); }
+    else {
+      // flat shapes keep their form: grow evenly to the screen width, stretch only a little
+      stretchX = THREE.MathUtils.clamp(Math.min(roomX / maxX, roomY / maxY), 1, 1.8);
+      stretchY = THREE.MathUtils.clamp(roomY / maxY, stretchX, stretchX * 1.3);
+    }
   }
 
   function resize() {
@@ -922,7 +940,7 @@ async function start() {
         target.y += Math.cos(t * .6 + it.seed * 2.3) * .045;
       }
       if (shape === 'grid') target.y += gridScroll;
-      else target.applyQuaternion(q);
+      else { target.applyQuaternion(q); target.x *= stretchX; target.y *= stretchY; }
       // step back for the about text; recoil from a card that is zooming in
       const spread = 1 + aboutBlend * .25 + (it === zoomed ? 0 : zoomBlend * .45);
       if (spread > 1.001) target.multiplyScalar(spread);
@@ -932,7 +950,7 @@ async function start() {
       it.near += (near - it.near) * k(.1);
       target.z += it.near * .6;
 
-      let len = shape === 'grid' && it.grid ? Math.max(it.grid.w, it.grid.h) : CARD * SHAPE_CARD[shape];
+      let len = shape === 'grid' && it.grid ? Math.max(it.grid.w, it.grid.h) : CARD * SHAPE_CARD[shape] * cardBoost;
       len *= 1 + it.hover * .18 + it.near * .08;
       if (it === zoomed) {
         if (zoomRect) {
