@@ -74,7 +74,6 @@ html.cloud-on #cloud{display:block}
   box-shadow:0 30px 80px -20px rgba(0,0,0,.35);transform:scale(.985);opacity:0;
   transition:transform .45s cubic-bezier(.2,.9,.25,1),opacity .3s}
 .cl-case.open .cl-case-win{transform:none;opacity:1}
-.cl-case.measure .cl-case-win{transform:none;transition:none}
 .cl-case-bar{display:flex;align-items:center;gap:10px;height:40px;padding:0 6px 0 12px;flex:none;
   background:var(--cl-frame);color:#fff;font:15px/1 "IBM Plex Sans",system-ui,sans-serif;text-transform:lowercase}
 .cl-case-dot{width:8px;height:8px;flex:none}
@@ -83,21 +82,13 @@ html.cloud-on #cloud{display:block}
 .cl .cl-case-bar a:hover,.cl .cl-case-bar button:hover{color:#fff}
 .cl .cl-case-bar :focus-visible{outline-color:#fff}
 .cl-case-frame{flex:1;width:100%;border:0;background:#fff}
-.cl-case-frame[hidden],.cl-case-doc[hidden]{display:none}
-/* a case study rendered from the content: one paragraph, then a media mosaic */
-.cl-case-doc{flex:1;overflow:auto;padding:28px 46px 64px;background:#e8e8e3;color:#111;font-size:15px;line-height:1.5;-webkit-overflow-scrolling:touch}
-.clc-text{max-width:62ch;margin:0 0 6px}
-.clc-text strong{font-weight:600}
-.clc-meta{margin:0 0 24px;opacity:.55}
-.clc-media{columns:2;column-gap:6px}
-.clc-media>*{break-inside:avoid;margin:0 0 6px}
-.clc-film{column-span:all;position:relative;aspect-ratio:16/9;background:#111}
-.clc-film iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.clc-clip{position:relative;background:#111}
-.clc-clip mux-player{position:absolute;inset:0;width:100%;height:100%;--controls-backdrop-color:transparent}
-.clc-mux mux-player{position:absolute;inset:0;width:100%;height:100%;--media-object-fit:contain;--controls-backdrop-color:transparent}
-.clc-m img,.clc-m video{display:block;width:100%;height:auto}
-@media (max-width:640px){.cl-case-doc{padding:20px 16px 48px}.clc-media{columns:1}}
+.cl-case-frame[hidden]{display:none}
+/* focus: the clicked card scaled up, its film laid exactly over it, its tag above */
+.cl-play{position:absolute;z-index:12;background:#000;opacity:0;pointer-events:none;transition:opacity .25s}
+.cl-play.on{opacity:1;pointer-events:auto}
+.cl-play mux-player,.cl-play iframe{display:block;width:100%;height:100%;border:0;--media-object-fit:contain;--controls-backdrop-color:transparent}
+.cl-focus-tag{z-index:13;opacity:0;transition:opacity .2s}
+.cl-focus-tag.on{opacity:1}
 
 /* about */
 .cl-about{position:absolute;inset:0;z-index:25;display:flex;align-items:center;padding:110px 30px 90px;overflow:auto;

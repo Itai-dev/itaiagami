@@ -81,6 +81,8 @@ async function start() {
         <span class="cl-chip cl-label"></span>
         ${'<span class="cl-chip cl-ambient"></span>'.repeat(4)}
       </div>
+      <div class="cl-play"></div>
+      <span class="cl-chip cl-focus-tag" aria-hidden="true"></span>
       <div class="cl-fade"></div>
       <div class="cl-shapes cl-in cl-ctl">
         <button class="cl-arrow" type="button" aria-label="Previous shape">${arrow('l')}</button>
@@ -106,7 +108,6 @@ async function start() {
             <button class="cl-case-close" type="button">close</button>
           </div>
           <iframe class="cl-case-frame" title="Page" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-          <article class="cl-case-doc" hidden></article>
         </div>
       </div>
       <div class="cl-sr" aria-live="polite"></div>
@@ -125,7 +126,8 @@ async function start() {
   const caseEl = $('.cl-case');
   const caseWin = $('.cl-case-win');
   const caseFrame = $('.cl-case-frame');
-  const caseDoc = $('.cl-case-doc');
+  const playEl = $('.cl-play');
+  const focusTag = $('.cl-focus-tag');
   const [prevShapeBtn, , nextShapeBtn] = root.querySelectorAll('.cl-shapes button');
 
   // show the cloud before measuring anything; the regular page goes inert underneath
@@ -228,7 +230,7 @@ async function start() {
   let hovered = null;
   let opened = false;
   let zoomed = null;            // the card that grows into the pop-up
-  let zoomRect = null;          // screen rect of the film slot it grows into, if any
+  let zoomRect = null;          // screen rect the focused card grows into
   let px = -1e4, py = -1e4;     // pointer in screen px
   let W = 1, H = 1;
   let rotY = .6, velY = 0, tiltX = 0, velX = 0;
@@ -331,6 +333,7 @@ async function start() {
     camera.aspect = W / H;
     camera.updateProjectionMatrix();
     layout();
+    if (mode === 'focus') placeFocus();
   }
   new ResizeObserver(resize).observe(stage);
   resize();
@@ -396,41 +399,31 @@ async function start() {
   let returnFocus = null;
   let openedAt = 0;
   let winTimer = 0;
-  function openWindow(url, title, accent, it, html) {
+  // the window is only for pages linked from the about panel
+  function openWindow(url, title, accent) {
     opened = true;
     openedAt = performance.now();
-    zoomed = it || null;
     $('.cl-case-title').textContent = title;
     $('.cl-case-dot').style.background = accent || '#fff';
-    // a case study is rendered from the content; any other page loads in the frame
-    caseDoc.hidden = !html;
-    caseFrame.hidden = !!html;
-    if (html) {
-      caseDoc.innerHTML = html;
-      caseDoc.scrollTop = 0;
-      for (const v of caseDoc.querySelectorAll('video')) v.play().catch(() => {});
-    } else caseFrame.src = url;
+    caseFrame.src = url;
     returnFocus = document.activeElement;
     caseEl.hidden = false;
-    // where the film will sit once the window is open: the card zooms exactly there
-    zoomRect = null;
-    const slot = html && it && muxId(it.project) && caseDoc.querySelector('.clc-film');
-    if (slot) {
-      caseEl.classList.add('measure');
-      const r = slot.getBoundingClientRect();
-      caseEl.classList.remove('measure');
-      if (r.width > 0 && r.top < H) zoomRect = { cx: r.left + r.width / 2, cy: r.top + r.height / 2, w: r.width, h: r.height };
-    }
     setMode('case');
     clearTimeout(winTimer);
-    // let the card scale up first, then reveal the page around it and start the film
-    winTimer = setTimeout(() => {
-      caseEl.classList.add('open');
-      if (slot) playFilm(slot.querySelector('mux-player'));
-    }, it && !reduceMotion ? 560 : 30);
+    winTimer = setTimeout(() => caseEl.classList.add('open'), 30);
     $('.cl-case-close').focus({ preventScroll: true });
     say(`${title} opened`);
   }
+  function closeCase() {
+    if (!opened) return;
+    opened = false;
+    clearTimeout(winTimer);
+    caseEl.classList.remove('open');
+    setTimeout(() => { if (!opened) setMode('cloud'); }, reduceMotion ? 0 : 260);
+    setTimeout(() => { if (!opened) { caseEl.hidden = true; caseFrame.src = 'about:blank'; } }, 420);
+    if (returnFocus && returnFocus.focus) returnFocus.focus({ preventScroll: true });
+  }
+
   // try with sound (the click still counts as the user's gesture), else muted
   function playFilm(player) {
     if (!player) return;
@@ -439,7 +432,6 @@ async function start() {
       if (p && p.catch) p.catch(() => { player.muted = true; player.play().catch(() => {}); });
     });
   }
-  const openCase = it => openWindow(null, it.project.name.toLowerCase(), it.accent, it, caseHTML(it.project));
 
   // Mux's player is a web component, loaded the first time a film is shown
   let muxLoading = null;
@@ -448,51 +440,62 @@ async function start() {
     muxLoading = import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs').catch(err => console.warn('mux player failed to load', err));
   }
 
-  // One plain paragraph on top (one-liner, idea, outcome; first sentences), a
-  // client and role line, then the film and every image together in a mosaic.
-  function caseHTML(p) {
-    const firstSentence = t => { const m = String(t || '').match(/^(.{20,}?[.!?])(\s|$)/); return m ? m[1] : String(t || ''); };
-    const para = [p.oneline, p.idea, p.result].filter(Boolean).map(firstSentence)
-      .filter((t, i) => i === 0 || t.length <= 150).join(' ');
-    const meta = [p.client, p.role].filter(Boolean).join(' · ');
-    let film = '';
-    if (p.mux && p.mux.playbackId) {
-      // Mux: unbranded player, adaptive streaming; tries sound, falls back to muted
+  /* ---------- focus: the clicked card scales up and plays its film; only its tag stays ---------- */
+  let focusTimer = 0;
+  function focusRectFor(it) {
+    const small = W <= 640;
+    const maxW = W - (small ? 32 : 160), maxH = H - (small ? 220 : 200);
+    let w = maxW, h = w / it.aspect;
+    if (h > maxH) { h = maxH; w = h * it.aspect; }
+    return { cx: W / 2, cy: H / 2 - (small ? 20 : 0), w, h };
+  }
+  function placeFocus() {
+    if (!zoomed) return;
+    const r = zoomRect = focusRectFor(zoomed);
+    const left = r.cx - r.w / 2, top = r.cy - r.h / 2;
+    Object.assign(playEl.style, { left: `${left}px`, top: `${top}px`, width: `${r.w}px`, height: `${r.h}px` });
+    focusTag.style.transform = `translate3d(${left - 1}px,${top - focusTag.offsetHeight}px,0)`;
+  }
+  function openFocus(it) {
+    const p = it.project;
+    zoomed = it;
+    openedAt = performance.now();
+    setMode('focus');
+    focusTag.textContent = `${p.name.toLowerCase()} · ${String(p.cat || '').toLowerCase()}`;
+    focusTag.style.background = it.accent;
+    focusTag.style.color = isLight(it.accent) ? '#000' : '#fff';
+    placeFocus();
+    const id = muxId(p);
+    if (id) {
       loadMuxPlayer();
-      const ratio = String(p.mux.aspect || '16:9').replace(':', ' / ');
-      film = `<div class="clc-film clc-mux" style="aspect-ratio:${esc(ratio)}"><mux-player playback-id="${esc(p.mux.playbackId)}" stream-type="on-demand" thumbnail-time="0" accent-color="#26262b" primary-color="#ffffff" title="${esc(p.name)}" metadata-video-title="${esc(p.name)}"></mux-player></div>`;
+      playEl.innerHTML = `<mux-player playback-id="${esc(id)}" stream-type="on-demand" thumbnail-time="0" accent-color="#26262b" primary-color="#ffffff" title="${esc(p.name)}" metadata-video-title="${esc(p.name)}"></mux-player>`;
     } else if (p.vimeo) {
-      film = `<div class="clc-film"><iframe src="https://player.vimeo.com/video/${encodeURIComponent(p.vimeo)}?autoplay=1&title=0&byline=0&portrait=0&dnt=1" title="${esc(p.name)} film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
-    } else if (p.loop) {
-      film = `<div class="clc-m"><video src="${esc(p.loop)}" muted loop autoplay playsinline></video></div>`;
+      playEl.innerHTML = `<iframe src="https://player.vimeo.com/video/${encodeURIComponent(p.vimeo)}?autoplay=1&title=0&byline=0&portrait=0&dnt=1" title="${esc(p.name)} film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    } else {
+      playEl.innerHTML = '';
     }
-    // the mosaic: hero, then gallery images and video clips in the order set in the CMS
-    const seen = new Set();
-    const imgs = [{ src: p.hero }, ...(p.gallery || [])].map(g => {
-      if (!g) return '';
-      if (g.mux && g.mux.playbackId) {
-        loadMuxPlayer();
-        const ratio = String(g.mux.aspect || '16:9').replace(':', ' / ');
-        return `<div class="clc-m clc-clip" style="aspect-ratio:${esc(ratio)}"><mux-player playback-id="${esc(g.mux.playbackId)}" stream-type="on-demand" autoplay="muted" muted loop accent-color="#26262b" primary-color="#ffffff"></mux-player></div>`;
-      }
-      if (!g.src || seen.has(g.src)) return '';
-      seen.add(g.src);
-      return `<div class="clc-m"><img src="${esc(sized(g.src, 1600))}" alt=""></div>`;
-    }).join('');
-    return `<p class="clc-text"><strong>${esc(p.name)}</strong> ${esc(para)}</p>
-      ${meta ? `<p class="clc-meta">${esc(meta)}</p>` : ''}
-      <div class="clc-media">${film}${imgs}</div>`;
+    clearTimeout(focusTimer);
+    // let the card scale up first, then lay the playing film exactly over it
+    focusTimer = setTimeout(() => {
+      focusTag.classList.add('on');
+      if (!playEl.firstElementChild) return;
+      playEl.classList.add('on');
+      playFilm(playEl.querySelector('mux-player'));
+    }, reduceMotion ? 30 : 560);
+    say(`${p.name}`);
   }
-  function closeCase() {
-    if (!opened) return;
-    opened = false;
-    clearTimeout(winTimer);
-    caseEl.classList.remove('open');
-    // the page fades, then the card zooms back out to its place
-    setTimeout(() => { if (!opened) { zoomed = null; setMode('cloud'); } }, reduceMotion ? 0 : 260);
-    setTimeout(() => { if (!opened) { caseEl.hidden = true; caseFrame.src = 'about:blank'; caseDoc.innerHTML = ''; } }, 420);
-    if (returnFocus && returnFocus.focus) returnFocus.focus({ preventScroll: true });
+  function closeFocus() {
+    if (mode !== 'focus') return;
+    clearTimeout(focusTimer);
+    playEl.classList.remove('on');
+    focusTag.classList.remove('on');
+    // the film fades, then the card scales back into the cloud
+    setTimeout(() => { if (mode !== 'focus') playEl.innerHTML = ''; }, 260);
+    zoomed = null;
+    zoomRect = null;
+    setMode('cloud');
   }
+
   // inside the window show only the content; internal links stay in the window,
   // external ones open a new tab, and a link home just closes the window
   caseFrame.addEventListener('load', () => {
@@ -627,7 +630,7 @@ async function start() {
     a.addEventListener('click', e => {
       e.preventDefault();
       openAbout(false);
-      openWindow(a.getAttribute('href'), a.textContent, '', null);
+      openWindow(a.getAttribute('href'), a.textContent, '');
     });
   }
   $('.cl-case-close').addEventListener('click', closeCase);
@@ -645,6 +648,7 @@ async function start() {
   addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
     if (mode === 'case') closeCase();
+    else if (mode === 'focus') closeFocus();
     else if (mode === 'about') openAbout(false);
   });
 
@@ -685,10 +689,12 @@ async function start() {
     stage.classList.remove('is-drag');
     const click = drag.moved < 8;
     drag = null;
-    if (!click || mode !== 'cloud') return;
+    if (!click) return;
+    if (mode === 'focus') { closeFocus(); return; }   // a click outside the film closes it
+    if (mode !== 'cloud') return;
     if (e.pointerType !== 'mouse') ndc.set(e.clientX / W * 2 - 1, -(e.clientY / H) * 2 + 1);
     const hit = pick();
-    if (hit) openCase(hit);
+    if (hit) openFocus(hit);
   });
   stage.addEventListener('wheel', e => {
     e.preventDefault();
@@ -760,7 +766,7 @@ async function start() {
 
     shapeBlend += ((flat ? 1 : 0) - shapeBlend) * k(.06);
     aboutBlend += ((mode === 'about' ? 1 : 0) - aboutBlend) * k(.09);
-    caseBlend += ((mode === 'case' ? 1 : 0) - caseBlend) * k(.12);
+    caseBlend += ((mode === 'case' || mode === 'focus' ? 1 : 0) - caseBlend) * k(.12);
     zoomBlend += ((zoomed ? 1 : 0) - zoomBlend) * k(.12);
     // the whole cloud breathes slowly
     const breathe = reduceMotion ? 1 : 1 + Math.sin(t * 1.15) * .022;
