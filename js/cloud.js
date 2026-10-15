@@ -7,6 +7,7 @@ import { loadContent, sized } from './cms.js';
 
 const root = document.getElementById('cloud');
 const ACCENTS = ['#2979ff', '#ff2fae', '#ffd400', '#00c853', '#ff6d00', '#7c4dff', '#00b8d4', '#e53935', '#26262b'];
+const SHAPES = ['sphere', 'grid'];
 const FILTERS = [
   { id: 'all', label: 'all', test: () => true },
   { id: 'brand', label: 'brand', test: p => p.cat === 'Brand' },
@@ -113,9 +114,10 @@ async function start() {
       <span class="cl-chip cl-focus-nav" role="group" aria-label="Media"><button type="button" class="cl-focus-prev" aria-label="Previous">←</button><span class="cl-focus-count" aria-live="polite"></span><button type="button" class="cl-focus-next" aria-label="Next">→</button></span>
       <div class="cl-chip cl-focus-info"><div class="cl-focus-text"></div></div>
       <div class="cl-fade"></div>
-      <div class="cl-shapes cl-in cl-ctl" role="group" aria-label="Layout">
-        <button class="cl-view" type="button" data-shape="sphere" aria-pressed="true" aria-label="Cloud">${icon('cloud')}</button>
-        <button class="cl-view" type="button" data-shape="grid" aria-pressed="false" aria-label="Grid">${icon('grid')}</button>
+      <div class="cl-shapes cl-in cl-ctl">
+        <button class="cl-arrow" type="button" aria-label="Previous layout">${arrow('l')}</button>
+        <button class="cl-shape" type="button" aria-label="Change layout"><span>sphere</span></button>
+        <button class="cl-arrow" type="button" aria-label="Next layout">${arrow('r')}</button>
       </div>
       <div class="cl-filters cl-ctl" role="group" aria-label="Filter work">
         ${FILTERS.map((f, i) => `<button class="cl-in" type="button" data-filter="${f.id}" aria-pressed="${i === 0}">${f.label}</button>`).join('')}
@@ -456,16 +458,28 @@ async function start() {
   resize();
 
   /* ---------- controls ---------- */
-  // two layouts: the cloud (a sphere) and the grid
-  function setShape(next) {
+  // two layouts, the sphere and the grid, named in the middle with arrows either side
+  const shapeBtn = $('.cl-shape');
+  const [prevShapeBtn, , nextShapeBtn] = root.querySelectorAll('.cl-shapes button');
+  function setShape(next, dir) {
     if (next === shape) return;
+    const span = shapeBtn.querySelector('span:last-child');
+    const fresh = document.createElement('span');
+    fresh.textContent = next;
+    fresh.className = dir > 0 ? 'out-r' : 'out-l';
+    shapeBtn.appendChild(fresh);
+    requestAnimationFrame(() => requestAnimationFrame(() => fresh.className = ''));
+    span.className = dir > 0 ? 'out-l' : 'out-r';
+    setTimeout(() => span.remove(), 450);
     shape = next;
     gridScroll = 0;
     layout();
-    for (const b of root.querySelectorAll('[data-shape]')) b.setAttribute('aria-pressed', String(b.dataset.shape === next));
-    say(next === 'grid' ? 'grid' : 'cloud');
+    say(`layout: ${next}`);
   }
-  for (const b of root.querySelectorAll('[data-shape]')) b.addEventListener('click', () => setShape(b.dataset.shape));
+  const stepShape = dir => setShape(SHAPES[(SHAPES.indexOf(shape) + dir + SHAPES.length) % SHAPES.length], dir);
+  prevShapeBtn.addEventListener('click', () => stepShape(-1));
+  nextShapeBtn.addEventListener('click', () => stepShape(1));
+  shapeBtn.addEventListener('click', () => stepShape(1));
 
   for (const b of root.querySelectorAll('[data-filter]')) {
     b.addEventListener('click', () => {
@@ -1173,10 +1187,7 @@ async function start() {
   requestAnimationFrame(frame);
 }
 
-// layout icons: overlapping cards of slightly different sizes, and a tidy grid
-function icon(name) {
-  const paths = name === 'grid'
-    ? '<rect x="2.5" y="2.5" width="6.5" height="6.5"/><rect x="11" y="2.5" width="6.5" height="6.5"/><rect x="2.5" y="11" width="6.5" height="6.5"/><rect x="11" y="11" width="6.5" height="6.5"/>'
-    : '<rect x="2" y="3.5" width="8" height="8"/><rect x="9" y="2" width="7" height="7"/><rect x="6.5" y="9" width="9.5" height="9.5"/>';
-  return `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+function arrow(dir) {
+  const d = dir === 'l' ? 'M10 3 5 8l5 5' : 'M6 3l5 5-5 5';
+  return `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
 }
