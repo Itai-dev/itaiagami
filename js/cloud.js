@@ -1,5 +1,5 @@
 /* Homepage cloud. One card per project (from Sanity, or data/projects.json) floats in 3D and
-   re-forms into a sphere, heart, smiley, star or grid. Drag to spin, scroll to
+   re-forms into a grid and back. Drag to spin, scroll to
    zoom, hover for the project, click to open its case study in a pop-up window.
    If WebGL or the data is unavailable nothing changes: the regular homepage stays. */
 import * as THREE from 'three';
@@ -7,7 +7,6 @@ import { loadContent, sized } from './cms.js';
 
 const root = document.getElementById('cloud');
 const ACCENTS = ['#2979ff', '#ff2fae', '#ffd400', '#00c853', '#ff6d00', '#7c4dff', '#00b8d4', '#e53935', '#26262b'];
-const SHAPES = ['sphere', 'heart', 'smiley', 'star', 'grid'];
 const FILTERS = [
   { id: 'all', label: 'all', test: () => true },
   { id: 'brand', label: 'brand', test: p => p.cat === 'Brand' },
@@ -23,8 +22,6 @@ const SPHERE_SQUASH = .92;
 const ZOOM_D = 6;               // a clicked card zooms to this distance from the camera
 const CAM_Z = 15;
 const FOV = 40;
-const SHAPE_CARD = { sphere: 1, heart: .7, smiley: .58, star: .6 };
-const SHAPE_NOISE = { sphere: 0, heart: .2, smiley: .12, star: .12, grid: 0 };
 const FRAME = 0x26262b;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -117,10 +114,9 @@ async function start() {
       <span class="cl-chip cl-focus-nav" role="group" aria-label="Media"><button type="button" class="cl-focus-prev" aria-label="Previous">←</button><span class="cl-focus-count" aria-live="polite"></span><button type="button" class="cl-focus-next" aria-label="Next">→</button></span>
       <div class="cl-chip cl-focus-info"><div class="cl-focus-text"></div></div>
       <div class="cl-fade"></div>
-      <div class="cl-shapes cl-in cl-ctl">
-        <button class="cl-arrow" type="button" aria-label="Previous shape">${arrow('l')}</button>
-        <button class="cl-shape" type="button" aria-label="Change shape"><span>sphere</span></button>
-        <button class="cl-arrow" type="button" aria-label="Next shape">${arrow('r')}</button>
+      <div class="cl-shapes cl-in cl-ctl" role="group" aria-label="Layout">
+        <button class="cl-view" type="button" data-shape="sphere" aria-pressed="true" aria-label="Cloud">${icon('cloud')}</button>
+        <button class="cl-view" type="button" data-shape="grid" aria-pressed="false" aria-label="Grid">${icon('grid')}</button>
       </div>
       <div class="cl-filters cl-ctl" role="group" aria-label="Filter work">
         ${FILTERS.map((f, i) => `<button class="cl-in" type="button" data-filter="${f.id}" aria-pressed="${i === 0}">${f.label}</button>`).join('')}
@@ -163,7 +159,6 @@ async function start() {
   const label = $('.cl-label');
   const ambientEls = [...root.querySelectorAll('.cl-ambient')];
   const live = $('.cl-sr');
-  const shapeBtn = $('.cl-shape');
   const aboutBtn = $('.cl-about-btn');
   const offerBtn = $('.cl-offer-btn');
   const caseEl = $('.cl-case');
@@ -177,7 +172,6 @@ async function start() {
   const focusInfo = $('.cl-focus-info');
   const focusText = $('.cl-focus-text');
   const focusSite = $('.cl-focus-site');
-  const [prevShapeBtn, , nextShapeBtn] = root.querySelectorAll('.cl-shapes button');
 
   // show the cloud before measuring anything; the regular page goes inert underneath
   document.documentElement.classList.add('cloud-on');
@@ -359,10 +353,7 @@ async function start() {
   const startTime = performance.now();
 
   /* ---------- layouts ---------- */
-  const PHI = (1 + Math.sqrt(5)) / 2;
   const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
-  const frac = x => x - Math.floor(x);
-  const hash = n => frac(Math.sin(n * 127.1 + 311.7) * 43758.5453) * 2 - 1;
 
   function baseCamZ() {
     const aspect = W / H;
@@ -409,7 +400,6 @@ async function start() {
 
     // shapes grow with the number of cards so the spacing stays the same
     const R = Math.max(.7, NEIGHBOUR * Math.sqrt(n) / 1.9);
-    const flatScale = THREE.MathUtils.clamp(Math.sqrt(n / 62), .42, 1);
     // each group takes one point of the shape and its cards sit side by side there
     const groups = [];
     for (const it of vis) {
@@ -419,18 +409,16 @@ async function start() {
     const nu = groups.length;
     const v = new THREE.Vector3(), east = new THREE.Vector3();
     groups.forEach((members, i) => {
-      shapePoint(i, nu, v);
+      spherePoint(i, nu, v);
       const m = members.length;
-      if (shape === 'sphere') {
-        // step along the sphere's latitude, staying on its surface
-        east.set(v.z, 0, -v.x);
-        if (east.lengthSq() < 1e-4) east.set(1, 0, 0);
-        east.normalize();
-      } else east.set(1, 0, 0);
-      const step = shape === 'sphere' ? NEIGHBOUR * 1.15 : CARD * SHAPE_CARD[shape] * 1.04;
+      // a group steps along the sphere's latitude, staying on its surface
+      east.set(v.z, 0, -v.x);
+      if (east.lengthSq() < 1e-4) east.set(1, 0, 0);
+      east.normalize();
+      const step = NEIGHBOUR * 1.15;
       members.forEach((it, k) => {
         it.target.copy(v).addScaledVector(east, (k - (m - 1) / 2) * step);
-        if (shape === 'sphere' && m > 1) {
+        if (m > 1) {
           const y = it.target.y;
           it.target.y = 0;
           it.target.setLength(Math.sqrt(Math.max(0, R * R - (y / SPHERE_SQUASH) ** 2)) || it.target.length());
@@ -439,46 +427,11 @@ async function start() {
       });
     });
 
-    function shapePoint(i, n, v) {
-      if (shape === 'sphere') {
-        const y = 1 - 2 * (n <= 1 ? .5 : i / (n - 1));
-        const r = Math.sqrt(Math.max(0, 1 - y * y));
-        const a = i * GOLDEN_ANGLE;
-        v.set(Math.cos(a) * r * R, y * R * SPHERE_SQUASH, Math.sin(a) * r * R);
-      } else if (shape === 'heart') {
-        const a = frac(i / PHI) * Math.PI * 2;
-        const fill = Math.pow(frac(i * .7548776662 + .31), .4) * .45 + .55;
-        const x = 16 * Math.pow(Math.sin(a), 3);
-        const yy = 13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a);
-        v.set(x * fill * .29, (yy * fill + 2.6 * (1 - fill)) * .29 + .3, hash(i) * .9);
-      } else if (shape === 'smiley') {
-        const eyeN = Math.max(1, Math.round(n * .09));
-        const mouthN = Math.max(3, Math.round(n * .26));
-        const ringN = Math.max(1, n - eyeN * 2 - mouthN);
-        const R = 4.2;
-        if (i < ringN) {
-          const a = (i / ringN) * Math.PI * 2 + Math.PI / 2;
-          v.set(Math.cos(a) * R, Math.sin(a) * R, hash(i + 9) * .4);
-        } else if (i < ringN + eyeN * 2) {
-          const k = i - ringN, side = k < eyeN ? -1 : 1, e = k % eyeN;
-          v.set(side * 1.45 + (eyeN > 1 ? (e - (eyeN - 1) / 2) * .5 : 0), 1.3, hash(i) * .3);
-        } else {
-          const k = i - ringN - eyeN * 2;
-          const a = Math.PI * (1.2 + .6 * (mouthN <= 1 ? .5 : k / (mouthN - 1)));
-          v.set(Math.cos(a) * 2.5, Math.sin(a) * 2.5 + .15, hash(i) * .3);
-        }
-      } else {
-        // star: walk the outline of a five-pointed star, evenly spaced
-        const pts = 10, outer = 4.6, inner = 1.9;
-        const p = j => { const a = Math.PI / 2 + j * Math.PI / 5; const r = j % 2 ? inner : outer; return [Math.cos(a) * r, Math.sin(a) * r]; };
-        const u = (i / n) * pts;
-        const k = Math.floor(u), f = u - k;
-        const [x0, y0] = p(k), [x1, y1] = p((k + 1) % pts);
-        v.set(x0 + (x1 - x0) * f, y0 + (y1 - y0) * f - .25, hash(i) * .4);
-      }
-      if (shape !== 'sphere') v.multiplyScalar(flatScale);
-      const noise = SHAPE_NOISE[shape] * flatScale;
-      if (noise) v.add(new THREE.Vector3(hash(i + 1) * noise, hash(i + 2) * noise, hash(i + 3) * noise));
+    function spherePoint(i, n, v) {
+      const y = 1 - 2 * (n <= 1 ? .5 : i / (n - 1));
+      const r = Math.sqrt(Math.max(0, 1 - y * y));
+      const a = i * GOLDEN_ANGLE;
+      v.set(Math.cos(a) * r * R, y * R * SPHERE_SQUASH, Math.sin(a) * r * R);
     }
 
     const tall = aspect < .8;
@@ -486,15 +439,10 @@ async function start() {
     const maxX = Math.max(.5, ...vis.map(it => Math.abs(it.target.x)));
     const maxY = Math.max(.5, ...vis.map(it => Math.abs(it.target.y)));
     // leave room for the header above, the controls below and a margin at the sides
-    const half = CARD * SHAPE_CARD[shape] * cardBoost / 2;
+    const half = CARD * cardBoost / 2;
     const roomX = halfH * aspect * .94 - half, roomY = halfH * .74 - half;
     if (!tall) stretchX = stretchY = 1;
-    else if (shape === 'sphere') { stretchX = 1; stretchY = THREE.MathUtils.clamp(roomY / maxY, 1, 3); }
-    else {
-      // flat shapes keep their form: grow evenly to the screen width, stretch only a little
-      stretchX = THREE.MathUtils.clamp(Math.min(roomX / maxX, roomY / maxY), 1, 1.8);
-      stretchY = THREE.MathUtils.clamp(roomY / maxY, stretchX, stretchX * 1.3);
-    }
+    else { stretchX = 1; stretchY = THREE.MathUtils.clamp(roomY / maxY, 1, 3); }
   }
 
   function resize() {
@@ -509,25 +457,16 @@ async function start() {
   resize();
 
   /* ---------- controls ---------- */
-  function setShape(next, dir) {
+  // two layouts: the cloud (a sphere) and the grid
+  function setShape(next) {
     if (next === shape) return;
-    const span = shapeBtn.querySelector('span:last-child');
-    const fresh = document.createElement('span');
-    fresh.textContent = next;
-    fresh.className = dir > 0 ? 'out-r' : 'out-l';
-    shapeBtn.appendChild(fresh);
-    requestAnimationFrame(() => requestAnimationFrame(() => fresh.className = ''));
-    span.className = dir > 0 ? 'out-l' : 'out-r';
-    setTimeout(() => span.remove(), 450);
     shape = next;
     gridScroll = 0;
     layout();
-    say(`shape: ${next}`);
+    for (const b of root.querySelectorAll('[data-shape]')) b.setAttribute('aria-pressed', String(b.dataset.shape === next));
+    say(next === 'grid' ? 'grid' : 'cloud');
   }
-  const stepShape = dir => setShape(SHAPES[(SHAPES.indexOf(shape) + dir + SHAPES.length) % SHAPES.length], dir);
-  prevShapeBtn.addEventListener('click', () => stepShape(-1));
-  nextShapeBtn.addEventListener('click', () => stepShape(1));
-  shapeBtn.addEventListener('click', () => stepShape(1));
+  for (const b of root.querySelectorAll('[data-shape]')) b.addEventListener('click', () => setShape(b.dataset.shape));
 
   for (const b of root.querySelectorAll('[data-filter]')) {
     b.addEventListener('click', () => {
@@ -1148,7 +1087,7 @@ async function start() {
       it.near += (near - it.near) * k(.1);
       target.z += it.near * .6;
 
-      let len = shape === 'grid' && it.grid ? Math.max(it.grid.w, it.grid.h) : CARD * SHAPE_CARD[shape] * cardBoost;
+      let len = shape === 'grid' && it.grid ? Math.max(it.grid.w, it.grid.h) : CARD * cardBoost;
       len *= 1 + it.hover * .18 + it.near * .08;
       if (it === zoomed) {
         if (zoomRect) {
@@ -1249,7 +1188,10 @@ async function start() {
   requestAnimationFrame(frame);
 }
 
-function arrow(dir) {
-  const d = dir === 'l' ? 'M10 3 5 8l5 5' : 'M6 3l5 5-5 5';
-  return `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+// layout icons: loose cards tumbling in space, and a tidy grid
+function icon(name) {
+  const paths = name === 'grid'
+    ? '<rect x="2.5" y="2.5" width="6.5" height="6.5"/><rect x="11" y="2.5" width="6.5" height="6.5"/><rect x="2.5" y="11" width="6.5" height="6.5"/><rect x="11" y="11" width="6.5" height="6.5"/>'
+    : '<path d="M2.2 6.8 7.9 4.6l1.5 4.9-5.7 2.2z"/><path d="M10.6 2.4l5.9 1.2-.9 4.6-5.9-1.2z"/><path d="M9.2 11.4l6.3-1.2.9 5.4-6.3 1.2z"/><path d="M2.6 14.2l3.9.9-.8 3.3-3.9-.9z"/>';
+  return `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
 }
