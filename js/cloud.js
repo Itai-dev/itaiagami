@@ -64,6 +64,14 @@ async function start() {
   const email = (settings && settings.email) || 'itaiagami@gmail.com';
   const linkedin = (settings && settings.linkedin) || 'https://www.linkedin.com/in/itai-agami-237353189/';
   const cv = (settings && settings.cv) || '/assets/docs/Itai_Agami_CV.pdf';
+  // the one offer: a line under the mark, and the "work with me" panel
+  const offerLine = (settings && settings.offerLine) || 'creative direction and launch sites for startups. weeks, not months.';
+  const offerLines = settings && Array.isArray(settings.offer) && settings.offer.length ? settings.offer : [
+    'one sprint, one lead: the idea, the identity and the launch site, start to finish.',
+    'two to four weeks. fixed scope, fixed price.',
+    'from $10,000.',
+  ];
+  const booking = (settings && settings.bookingUrl) || 'https://calendar.app.google/qAYhVo928FsVE6PP7';
 
   /* ---------- items: one card per project; a group's projects stay together ---------- */
   const units = [];
@@ -96,6 +104,7 @@ async function start() {
         <path d="M19.5 38.4C24 27 29.2 14.8 33.1 5.6c4 10.4 8.4 21.4 13 32.4"/>
         <path d="M24.6 25.8c5.7-.9 11.6-1 16.6-.3"/>
       </svg>
+      <p class="cl-offer-line cl-in">${esc(offerLine)}</p>
       <div class="cl-overlay" data-mode="cloud">
         <div class="cl-bbox"></div>
         <span class="cl-chip cl-label"></span>
@@ -116,11 +125,20 @@ async function start() {
       <div class="cl-filters cl-ctl" role="group" aria-label="Filter work">
         ${FILTERS.map((f, i) => `<button class="cl-in" type="button" data-filter="${f.id}" aria-pressed="${i === 0}">${f.label}</button>`).join('')}
       </div>
-      <button class="cl-about-btn cl-in cl-ctl" type="button" aria-expanded="false" aria-controls="cl-about"><span class="cl-letters"></span></button>
+      <div class="cl-top">
+        <button class="cl-offer-btn cl-in cl-ctl" type="button" aria-expanded="false" aria-controls="cl-offer"><span class="cl-letters"></span></button>
+        <button class="cl-about-btn cl-in cl-ctl" type="button" aria-expanded="false" aria-controls="cl-about"><span class="cl-letters"></span></button>
+      </div>
+      <section class="cl-about" id="cl-offer" aria-label="Work with Itai Agami">
+        <div class="cl-about-inner">
+          ${offerLines.map(l => `<p>${esc(l)}</p>`).join('')}
+          <p class="links"><a href="${esc(booking)}" target="_blank" rel="noopener">book a call ↗</a><a href="/contact.html" data-pop>send a brief</a><a href="mailto:${esc(email)}">email</a></p>
+        </div>
+      </section>
       <section class="cl-about" id="cl-about" aria-label="About Itai Agami">
         <div class="cl-about-inner">
           ${aboutLines.map((l, i) => `<p${i === aboutLines.length - 1 && i > 1 ? ' class="dim"' : ''}>${esc(l)}</p>`).join('')}
-          <p class="links"><a href="/work.html" data-pop>all work</a><a href="/services.html" data-pop>services</a><a href="/notes.html" data-pop>notes</a><a href="/contact.html" data-pop>contact</a><a href="mailto:${esc(email)}">email</a><a href="${esc(linkedin)}" target="_blank" rel="noopener">linkedin</a><a href="${esc(cv)}" target="_blank" rel="noopener">cv</a></p>
+          <p class="links"><a href="/notes.html" data-pop>notes</a><a href="mailto:${esc(email)}">email</a><a href="${esc(linkedin)}" target="_blank" rel="noopener">linkedin</a><a href="${esc(cv)}" target="_blank" rel="noopener">cv</a></p>
         </div>
       </section>
       <div class="cl-case" role="dialog" aria-modal="true" aria-labelledby="cl-case-title" hidden>
@@ -147,6 +165,7 @@ async function start() {
   const live = $('.cl-sr');
   const shapeBtn = $('.cl-shape');
   const aboutBtn = $('.cl-about-btn');
+  const offerBtn = $('.cl-offer-btn');
   const caseEl = $('.cl-case');
   const caseWin = $('.cl-case-win');
   const caseFrame = $('.cl-case-frame');
@@ -287,7 +306,7 @@ async function start() {
   /* ---------- state ---------- */
   let shape = 'sphere';
   let filter = FILTERS[0];
-  let mode = 'cloud';           // cloud | about | case
+  let mode = 'cloud';           // cloud | about | offer | case | focus
   let hovered = null;
   let opened = false;
   let zoomed = null;            // the card that grows into the pop-up
@@ -488,8 +507,10 @@ async function start() {
     });
   }
 
-  function setLetters(text) {
-    const wrap = aboutBtn.querySelector('.cl-letters');
+  function setLetters(btn, text) {
+    if (btn.dataset.text === text) return;
+    btn.dataset.text = text;
+    const wrap = btn.querySelector('.cl-letters');
     const old = [...wrap.children];
     old.forEach((s, i) => { s.style.transitionDelay = `${i * 14}ms`; s.classList.add('out'); });
     setTimeout(() => {
@@ -498,21 +519,46 @@ async function start() {
       requestAnimationFrame(() => requestAnimationFrame(() => [...wrap.children].forEach(s => s.classList.remove('out'))));
     }, old.length ? 200 : 0);
   }
-  setLetters('about me');
+  setLetters(aboutBtn, 'about me');
+  setLetters(offerBtn, 'work with me');
 
   function setMode(m) {
     mode = m;
     ui.dataset.mode = m;
     if (m !== 'cloud') setHover(null);
   }
-  function openAbout(open) {
-    if (open === (mode === 'about')) return;
-    if (open && opened) closeCase();
-    setMode(open ? 'about' : 'cloud');
-    aboutBtn.setAttribute('aria-expanded', String(open));
-    setLetters(open ? 'close' : 'about me');
+  // the two text panels: 'about', 'offer', or null to close
+  const panelOpen = () => mode === 'about' || mode === 'offer';
+  function openPanel(name) {
+    if (name === (panelOpen() ? mode : null)) return;
+    if (name && opened) closeCase();
+    if (name && mode === 'focus') closeFocus();
+    setMode(name || 'cloud');
+    aboutBtn.setAttribute('aria-expanded', String(name === 'about'));
+    offerBtn.setAttribute('aria-expanded', String(name === 'offer'));
+    setLetters(aboutBtn, name === 'about' ? 'close' : 'about me');
+    setLetters(offerBtn, name === 'offer' ? 'close' : 'work with me');
+    setUrl(name ? { panel: name } : {});
   }
-  aboutBtn.addEventListener('click', () => openAbout(mode !== 'about'));
+  aboutBtn.addEventListener('click', () => openPanel(mode === 'about' ? null : 'about'));
+  offerBtn.addEventListener('click', () => openPanel(mode === 'offer' ? null : 'offer'));
+
+  // an open project or panel has its own address (/?p=slug, /?panel=offer), so it can be shared
+  function setUrl(params) {
+    const u = new URL(location.href);
+    u.searchParams.delete('p');
+    u.searchParams.delete('panel');
+    for (const [key, val] of Object.entries(params)) if (val) u.searchParams.set(key, val);
+    if (u.href !== location.href) history.replaceState(history.state, '', u);
+  }
+  function openFromUrl() {
+    const q = new URLSearchParams(location.search);
+    const slug = q.get('p'), panel = q.get('panel');
+    const it = slug && items.find(x => x.project.slug === slug);
+    if (it) openFocus(it);
+    else if (panel === 'about' || panel === 'offer') openPanel(panel);
+    else setUrl({});
+  }
 
   /* ---------- pop-up: a card zooms in, the case study opens on top of it ---------- */
   let returnFocus = null;
@@ -643,6 +689,7 @@ async function start() {
   function showProject(p) {
     focusShown = p;
     focusTag.textContent = tagOf(p);
+    setUrl({ p: p.slug });
     // its own text, else the group's, else the older one-liner and credits
     const own = p.text || (p.group && p.group.text);
     const info = own
@@ -697,6 +744,7 @@ async function start() {
     zoomed = null;
     zoomRect = null;
     setMode('cloud');
+    setUrl({});
   }
 
   // inside the window show only the content; internal links stay in the window,
@@ -832,7 +880,7 @@ async function start() {
   for (const a of root.querySelectorAll('[data-pop]')) {
     a.addEventListener('click', e => {
       e.preventDefault();
-      openAbout(false);
+      openPanel(null);
       openWindow(a.getAttribute('href'), a.textContent, '');
     });
   }
@@ -853,7 +901,7 @@ async function start() {
     if (e.key !== 'Escape') return;
     if (mode === 'case') closeCase();
     else if (mode === 'focus') closeFocus();
-    else if (mode === 'about') openAbout(false);
+    else if (panelOpen()) openPanel(null);
   });
 
   /* ---------- pointer: drag to spin, click to open ---------- */
@@ -969,7 +1017,7 @@ async function start() {
     const flat = shape !== 'sphere';
 
     shapeBlend += ((flat ? 1 : 0) - shapeBlend) * k(.06);
-    aboutBlend += ((mode === 'about' ? 1 : 0) - aboutBlend) * k(.09);
+    aboutBlend += ((panelOpen() ? 1 : 0) - aboutBlend) * k(.09);
     caseBlend += ((mode === 'case' || mode === 'focus' ? 1 : 0) - caseBlend) * k(.12);
     zoomBlend += ((zoomed ? 1 : 0) - zoomBlend) * k(.12);
     // the whole cloud breathes slowly
@@ -1064,6 +1112,7 @@ async function start() {
     if (!readyShown && now - startTime > 500) {
       readyShown = true;
       ui.classList.add('is-ready');
+      openFromUrl();
     }
   }
 

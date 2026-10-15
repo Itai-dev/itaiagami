@@ -55,14 +55,20 @@ html.cloud-on #cloud{display:block}
 .cl-filters button:nth-child(3){transition-delay:0s,.1s,.1s}
 .cl-filters button:nth-child(4){transition-delay:0s,.15s,.15s}
 
-.cl-about-btn{position:absolute;right:30px;top:30px;z-index:30;white-space:nowrap;color:rgba(0,0,0,.8);transition:color .2s,opacity .6s,transform .6s;transform:translateY(-14px)}
-.cl-about-btn:hover{color:#000}
+.cl-top{position:absolute;right:30px;top:30px;z-index:30;display:flex;gap:24px}
+.cl-about-btn,.cl-offer-btn{white-space:nowrap;color:rgba(0,0,0,.8);transition:color .2s,opacity .6s,transform .6s;transform:translateY(-14px)}
+.cl-about-btn:hover,.cl-offer-btn:hover{color:#000}
+
+/* the offer in one line, under the mark; it steps aside while anything is open */
+.cl-offer-line{position:absolute;left:30px;top:90px;z-index:20;margin:0;max-width:min(340px,calc(100% - 60px));line-height:1.4;
+  color:rgba(0,0,0,.6);text-transform:lowercase;pointer-events:none;transform:translateY(-8px)}
+.cl.is-ready:not([data-mode=cloud]) .cl-offer-line{opacity:0}
 .cl-letters{display:inline-flex;overflow:hidden}
 .cl-letters span{display:inline-block;white-space:pre;transition:transform .42s cubic-bezier(.3,1.3,.5,1),opacity .3s}
 .cl-letters span.out{transform:translateY(105%);opacity:0}
 
-.cl[data-mode=about] .cl-shapes,.cl[data-mode=about] .cl-filters{opacity:0 !important;pointer-events:none}
-.cl[data-mode=case] .cl-shapes,.cl[data-mode=case] .cl-filters,.cl[data-mode=case] .cl-about-btn{pointer-events:none}
+.cl:is([data-mode=about],[data-mode=offer]) :is(.cl-shapes,.cl-filters){opacity:0 !important;pointer-events:none}
+.cl[data-mode=case] :is(.cl-shapes,.cl-filters,.cl-top){pointer-events:none}
 
 /* case study pop-up window */
 .cl-case{position:absolute;inset:0;z-index:40}
@@ -113,14 +119,14 @@ html.cloud-on #cloud{display:block}
 /* about */
 .cl-about{position:absolute;inset:0;z-index:25;display:flex;align-items:center;padding:110px 30px 90px;overflow:auto;
   opacity:0;visibility:hidden;transition:opacity .45s,visibility 0s .45s}
-.cl[data-mode=about] .cl-about{opacity:1;visibility:visible;transition:opacity .45s .15s,visibility 0s}
+.cl[data-mode=about] #cl-about,.cl[data-mode=offer] #cl-offer{opacity:1;visibility:visible;transition:opacity .45s .15s,visibility 0s}
 .cl-about-inner{max-width:640px;margin:0 auto;font-size:15px;line-height:1.5;letter-spacing:-.012em;text-transform:lowercase}
 .cl-about-inner p{margin:0 0 .9em;color:rgba(0,0,0,.85);transform:translateY(12px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s}
-.cl[data-mode=about] .cl-about-inner p{transform:none;opacity:1}
-.cl[data-mode=about] .cl-about-inner p:nth-child(2){transition-delay:.06s}
-.cl[data-mode=about] .cl-about-inner p:nth-child(3){transition-delay:.12s}
-.cl[data-mode=about] .cl-about-inner p:nth-child(4){transition-delay:.18s}
-.cl[data-mode=about] .cl-about-inner p:nth-child(5){transition-delay:.24s}
+.cl[data-mode=about] #cl-about p,.cl[data-mode=offer] #cl-offer p{transform:none;opacity:1}
+.cl-about-inner p:nth-child(2){transition-delay:.06s}
+.cl-about-inner p:nth-child(3){transition-delay:.12s}
+.cl-about-inner p:nth-child(4){transition-delay:.18s}
+.cl-about-inner p:nth-child(5){transition-delay:.24s}
 .cl-about-inner .dim{color:rgba(0,0,0,.45)}
 .cl-about-inner a{border-bottom:1px solid rgba(0,0,0,.25);transition:border-color .2s}
 .cl-about-inner a:hover{border-color:#000}
@@ -130,7 +136,8 @@ html.cloud-on #cloud{display:block}
 
 @media (max-width:640px){
   .cl-mark{left:16px;top:16px;height:44px}
-  .cl-about-btn{right:16px;top:28px}
+  .cl-top{right:16px;top:28px;gap:16px}
+  .cl-offer-line{left:16px;top:auto;bottom:66px;max-width:calc(100% - 32px)}
   .cl-shapes{left:16px;bottom:20px}
   .cl-filters{right:16px;bottom:20px;gap:16px}
   .cl-fade{height:176px}

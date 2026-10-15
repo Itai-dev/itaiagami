@@ -91,7 +91,22 @@ export function route(method, url, accept){
 
 function decodeURIComponentSafe(s){ try{ return decodeURIComponent(s); }catch{ return s; } }
 
+/** The homepage cloud replaces the case study, services and about pages: a browser
+    (or search engine) asking for one is sent permanently to the same project or panel
+    inside the cloud. Requests for Markdown still get the page (route() runs first). */
+export function moved(pathname){
+  const work = /^\/work\/([a-z0-9-]+)\.html$/.exec(pathname);
+  if(work) return '/?p=' + work[1];
+  if(pathname === '/work.html') return '/';
+  if(pathname === '/services.html' || /^\/services\/[a-z0-9-]+\.html$/.test(pathname)) return '/?panel=offer';
+  if(pathname === '/about.html') return '/?panel=about';
+  return null;
+}
+
 export default function middleware(request){
-  const to = route(request.method, new URL(request.url), request.headers.get('accept'));
+  const url = new URL(request.url);
+  const to = route(request.method, url, request.headers.get('accept'));
   if(to) return rewrite(to);
+  const dest = (request.method === 'GET' || request.method === 'HEAD') && moved(url.pathname);
+  if(dest) return new Response(null, { status: 308, headers: { Location: new URL(dest, url).toString() } });
 }

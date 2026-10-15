@@ -30,7 +30,7 @@ const QUERY = `{
     "gallery": gallery[]{ "src": image.asset->url, half, "mux": video.asset->{ playbackId, "aspect": data.aspect_ratio } },
     "loop": loop.asset->url
   },
-  "settings": *[_id == "settings"][0]{ about, email, linkedin, "cv": cv.asset->url }
+  "settings": *[_id == "settings"][0]{ about, offerLine, offer, bookingUrl, email, linkedin, "cv": cv.asset->url }
 }`;
 
 // Sanity's image pipeline: resize and serve the best format for the browser

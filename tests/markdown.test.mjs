@@ -48,7 +48,7 @@ test('resolvePage maps clean URLs and refuses traversal and private pages', () =
 
 test('every page in the sitemap converts to non-empty Markdown', async () => {
   const urls = [...fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').matchAll(/<loc>https:\/\/itaiagami\.com([^<]*)<\/loc>/g)].map(m => m[1]);
-  assert.ok(urls.length > 20);
+  assert.ok(urls.length >= 8);   // project, service and about pages now live inside the homepage cloud
   for(const p of urls){
     const r = await call(handler, { query: { path: p } });
     assert.equal(r.statusCode, 200, p);
