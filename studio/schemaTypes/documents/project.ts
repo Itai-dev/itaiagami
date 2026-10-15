@@ -84,10 +84,11 @@ export const project = defineType({
     defineField({name: 'hero', title: 'Hero image', type: 'image', group: 'media', options: {hotspot: true}}),
     defineField({
       name: 'gallery',
-      title: 'Images',
+      title: 'Images & videos',
       type: 'array',
       group: 'media',
-      of: [defineArrayMember({type: 'galleryImage'})],
+      description: 'Shown together in the mosaic under the film, in this order.',
+      of: [defineArrayMember({type: 'galleryImage'}), defineArrayMember({type: 'galleryVideo'})],
       options: {layout: 'grid'},
     }),
   ],

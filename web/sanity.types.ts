@@ -15,6 +15,12 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type GalleryVideo = {
+  _type: "galleryVideo";
+  video?: MuxVideo;
+  half?: boolean;
+};
+
 export type SanityImageAssetReference = {
   _ref: string;
   _type: "reference";
@@ -100,10 +106,25 @@ export type Project = {
     _type: "image";
   };
   gallery?: Array<
-    {
-      _key: string;
-    } & GalleryImage
+    | ({
+        _key: string;
+      } & GalleryImage)
+    | ({
+        _key: string;
+      } & GalleryVideo)
   >;
+};
+
+export type MuxVideoAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "mux.videoAsset";
+};
+
+export type MuxVideo = {
+  _type: "mux.video";
+  asset?: MuxVideoAssetReference;
 };
 
 export type SanityImageCrop = {
@@ -120,18 +141,6 @@ export type SanityImageHotspot = {
   y?: number;
   height?: number;
   width?: number;
-};
-
-export type MuxVideoAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "mux.videoAsset";
-};
-
-export type MuxVideo = {
-  _type: "mux.video";
-  asset?: MuxVideoAssetReference;
 };
 
 export type Slug = {
@@ -336,15 +345,16 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | GalleryVideo
   | SanityImageAssetReference
   | GalleryImage
   | SanityFileAssetReference
   | Settings
   | Project
-  | SanityImageCrop
-  | SanityImageHotspot
   | MuxVideoAssetReference
   | MuxVideo
+  | SanityImageCrop
+  | SanityImageHotspot
   | Slug
   | MuxVideoAsset
   | MuxAssetData
@@ -390,7 +400,7 @@ export type PROJECT_SLUGS_QUERY_RESULT = Array<{
 
 // Source: ../web/src/sanity/queries.ts
 // Variable: PROJECT_QUERY
-// Query: *[_type == "project" && slug.current == $slug][0]{    _id,    name,    client,    role,    oneliner,    idea,    outcome,    vimeoId,    "muxPlaybackId": film.asset->playbackId,    "muxAspect": film.asset->data.aspect_ratio,    hero,    gallery[]{_key, image, alt, half},    "loopUrl": loop.asset->url  }
+// Query: *[_type == "project" && slug.current == $slug][0]{    _id,    name,    client,    role,    oneliner,    idea,    outcome,    vimeoId,    "muxPlaybackId": film.asset->playbackId,    "muxAspect": film.asset->data.aspect_ratio,    hero,    gallery[]{      _key,      _type,      image,      alt,      half,      "muxPlaybackId": video.asset->playbackId,      "muxAspect": video.asset->data.aspect_ratio    },    "loopUrl": loop.asset->url  }
 export type PROJECT_QUERY_RESULT = {
   _id: string;
   name: string | null;
@@ -409,18 +419,32 @@ export type PROJECT_QUERY_RESULT = {
     crop?: SanityImageCrop;
     _type: "image";
   } | null;
-  gallery: Array<{
-    _key: string;
-    image: {
-      asset?: SanityImageAssetReference;
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: "image";
-    } | null;
-    alt: string | null;
-    half: boolean | null;
-  }> | null;
+  gallery: Array<
+    | {
+        _key: string;
+        _type: "galleryImage";
+        image: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        } | null;
+        alt: string | null;
+        half: boolean | null;
+        muxPlaybackId: null;
+        muxAspect: null;
+      }
+    | {
+        _key: string;
+        _type: "galleryVideo";
+        image: null;
+        alt: null;
+        half: boolean | null;
+        muxPlaybackId: string | null;
+        muxAspect: string | null;
+      }
+  > | null;
   loopUrl: string | null;
 } | null;
 
@@ -447,7 +471,7 @@ declare global {
   interface SanityQueries {
     '\n  *[_type == "project" && defined(slug.current)] | order(coalesce(order, 999) asc, name asc){\n    _id,\n    name,\n    "slug": slug.current,\n    category,\n    client,\n    thumbnail,\n    "loopUrl": loop.asset->url\n  }\n': PROJECTS_QUERY_RESULT;
     '\n  *[_type == "project" && defined(slug.current)]{"slug": slug.current}\n': PROJECT_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    name,\n    client,\n    role,\n    oneliner,\n    idea,\n    outcome,\n    vimeoId,\n    "muxPlaybackId": film.asset->playbackId,\n    "muxAspect": film.asset->data.aspect_ratio,\n    hero,\n    gallery[]{_key, image, alt, half},\n    "loopUrl": loop.asset->url\n  }\n': PROJECT_QUERY_RESULT;
+    '\n  *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    name,\n    client,\n    role,\n    oneliner,\n    idea,\n    outcome,\n    vimeoId,\n    "muxPlaybackId": film.asset->playbackId,\n    "muxAspect": film.asset->data.aspect_ratio,\n    hero,\n    gallery[]{\n      _key,\n      _type,\n      image,\n      alt,\n      half,\n      "muxPlaybackId": video.asset->playbackId,\n      "muxAspect": video.asset->data.aspect_ratio\n    },\n    "loopUrl": loop.asset->url\n  }\n': PROJECT_QUERY_RESULT;
     '\n  *[_id == "settings"][0]{about, email, linkedin, "cvUrl": cv.asset->url}\n': SETTINGS_QUERY_RESULT;
   }
 }

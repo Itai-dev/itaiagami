@@ -23,7 +23,7 @@ const QUERY = `{
     "mux": film.asset->{ playbackId, "aspect": data.aspect_ratio },
     "thumb": thumbnail.asset->url,
     "hero": hero.asset->url,
-    "gallery": gallery[]{ "src": image.asset->url, half },
+    "gallery": gallery[]{ "src": image.asset->url, half, "mux": video.asset->{ playbackId, "aspect": data.aspect_ratio } },
     "loop": loop.asset->url
   },
   "settings": *[_id == "settings"][0]{ about, email, linkedin, "cv": cv.asset->url }

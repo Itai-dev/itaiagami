@@ -29,7 +29,15 @@ export const PROJECT_QUERY = defineQuery(`
     "muxPlaybackId": film.asset->playbackId,
     "muxAspect": film.asset->data.aspect_ratio,
     hero,
-    gallery[]{_key, image, alt, half},
+    gallery[]{
+      _key,
+      _type,
+      image,
+      alt,
+      half,
+      "muxPlaybackId": video.asset->playbackId,
+      "muxAspect": video.asset->data.aspect_ratio
+    },
     "loopUrl": loop.asset->url
   }
 `)

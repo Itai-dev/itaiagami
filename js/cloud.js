@@ -439,8 +439,19 @@ async function start() {
     } else if (p.loop) {
       film = `<div class="clc-m"><video src="${esc(p.loop)}" muted loop autoplay playsinline></video></div>`;
     }
-    const srcs = [...new Set([p.hero, ...(p.gallery || []).map(g => g && g.src)].filter(Boolean))];
-    const imgs = srcs.map(src => `<div class="clc-m"><img src="${esc(sized(src, 1600))}" alt=""></div>`).join('');
+    // the mosaic: hero, then gallery images and video clips in the order set in the CMS
+    const seen = new Set();
+    const imgs = [{ src: p.hero }, ...(p.gallery || [])].map(g => {
+      if (!g) return '';
+      if (g.mux && g.mux.playbackId) {
+        loadMuxPlayer();
+        const ratio = String(g.mux.aspect || '16:9').replace(':', ' / ');
+        return `<div class="clc-m clc-clip" style="aspect-ratio:${esc(ratio)}"><mux-player playback-id="${esc(g.mux.playbackId)}" stream-type="on-demand" autoplay="muted" muted loop accent-color="#26262b" primary-color="#ffffff"></mux-player></div>`;
+      }
+      if (!g.src || seen.has(g.src)) return '';
+      seen.add(g.src);
+      return `<div class="clc-m"><img src="${esc(sized(g.src, 1600))}" alt=""></div>`;
+    }).join('');
     return `<p class="clc-text"><strong>${esc(p.name)}</strong> ${esc(para)}</p>
       ${meta ? `<p class="clc-meta">${esc(meta)}</p>` : ''}
       <div class="clc-media">${film}${imgs}</div>`;

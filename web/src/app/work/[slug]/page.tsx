@@ -38,9 +38,16 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
     .filter((sentence, i) => i === 0 || sentence.length <= 150)
     .join(' ')
   const meta = [project.client, project.role].filter(Boolean).join(' · ')
-  const images = [project.hero, ...(project.gallery ?? []).map((item) => item.image)].filter(
-    (image): image is NonNullable<typeof image> => Boolean(image?.asset),
-  )
+  // the mosaic: hero, then gallery images and video clips in the order set in the CMS
+  const media = [
+    ...(project.hero?.asset ? [{key: 'hero', image: project.hero, playbackId: null, aspect: null}] : []),
+    ...(project.gallery ?? []).map((item) => ({
+      key: item._key,
+      image: item.image?.asset ? item.image : null,
+      playbackId: item.muxPlaybackId ?? null,
+      aspect: item.muxAspect ?? null,
+    })),
+  ].filter((item) => item.image || item.playbackId)
 
   return (
     <main className="mx-auto max-w-6xl bg-paper px-4 pb-16 pt-6 sm:px-10">
@@ -71,17 +78,23 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
           <video src={project.loopUrl} muted loop autoPlay playsInline className="mb-1.5 block w-full" />
         ) : null}
 
-        {images.map((image, i) => (
-          <Image
-            key={i}
-            src={urlFor(image).width(1600).url()}
-            alt=""
-            width={1600}
-            height={1000}
-            sizes="(min-width: 640px) 50vw, 100vw"
-            className="mb-1.5 block h-auto w-full break-inside-avoid"
-          />
-        ))}
+        {media.map((item) =>
+          item.playbackId ? (
+            <div key={item.key} className="mb-1.5 break-inside-avoid">
+              <Film playbackId={item.playbackId} aspect={item.aspect} clip />
+            </div>
+          ) : item.image ? (
+            <Image
+              key={item.key}
+              src={urlFor(item.image).width(1600).url()}
+              alt=""
+              width={1600}
+              height={1000}
+              sizes="(min-width: 640px) 50vw, 100vw"
+              className="mb-1.5 block h-auto w-full break-inside-avoid"
+            />
+          ) : null,
+        )}
       </div>
     </main>
   )
