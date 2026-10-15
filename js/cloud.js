@@ -83,6 +83,8 @@ async function start() {
       </div>
       <div class="cl-play"></div>
       <span class="cl-chip cl-focus-tag" aria-hidden="true"></span>
+      <button class="cl-chip cl-focus-min" type="button" aria-label="Minimise"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1.5V6H1.5M10 1.5V6h4.5M6 14.5V10H1.5M10 14.5V10h4.5"/></svg></button>
+      <p class="cl-chip cl-focus-info"></p>
       <div class="cl-fade"></div>
       <div class="cl-shapes cl-in cl-ctl">
         <button class="cl-arrow" type="button" aria-label="Previous shape">${arrow('l')}</button>
@@ -128,6 +130,8 @@ async function start() {
   const caseFrame = $('.cl-case-frame');
   const playEl = $('.cl-play');
   const focusTag = $('.cl-focus-tag');
+  const focusMin = $('.cl-focus-min');
+  const focusInfo = $('.cl-focus-info');
   const [prevShapeBtn, , nextShapeBtn] = root.querySelectorAll('.cl-shapes button');
 
   // show the cloud before measuring anything; the regular page goes inert underneath
@@ -455,6 +459,9 @@ async function start() {
     const left = r.cx - r.w / 2, top = r.cy - r.h / 2;
     Object.assign(playEl.style, { left: `${left}px`, top: `${top}px`, width: `${r.w}px`, height: `${r.h}px` });
     focusTag.style.transform = `translate3d(${left - 1}px,${top - focusTag.offsetHeight}px,0)`;
+    focusMin.style.transform = `translate3d(${left + r.w - focusMin.offsetWidth + 1}px,${top - focusMin.offsetHeight}px,0)`;
+    focusInfo.style.maxWidth = `${Math.round(r.w) + 2}px`;
+    focusInfo.style.transform = `translate3d(${left - 1}px,${top + r.h}px,0)`;
   }
   function openFocus(it) {
     const p = it.project;
@@ -464,6 +471,11 @@ async function start() {
     focusTag.textContent = `${p.name.toLowerCase()} · ${String(p.cat || '').toLowerCase()}`;
     focusTag.style.background = it.accent;
     focusTag.style.color = isLight(it.accent) ? '#000' : '#fff';
+    // a few words about the project under the film, in the same tag style
+    const firstSentence = t => { const m = String(t || '').match(/^(.{20,}?[.!?])(\s|$)/); return m ? m[1] : String(t || ''); };
+    const info = [firstSentence(p.oneline), [p.client, p.role].filter(Boolean).join(' · ')].filter(Boolean);
+    focusInfo.innerHTML = info.map(line => `<span>${esc(line.toLowerCase())}</span>`).join('');
+    focusInfo.hidden = !info.length;
     placeFocus();
     const id = muxId(p);
     if (id) {
@@ -477,18 +489,20 @@ async function start() {
     clearTimeout(focusTimer);
     // let the card scale up first, then lay the playing film exactly over it
     focusTimer = setTimeout(() => {
-      focusTag.classList.add('on');
+      for (const el of [focusTag, focusMin, focusInfo]) el.classList.add('on');
+      focusMin.focus({ preventScroll: true });
       if (!playEl.firstElementChild) return;
       playEl.classList.add('on');
       playFilm(playEl.querySelector('mux-player'));
     }, reduceMotion ? 30 : 560);
     say(`${p.name}`);
   }
+  focusMin.addEventListener('click', () => closeFocus());
   function closeFocus() {
     if (mode !== 'focus') return;
     clearTimeout(focusTimer);
     playEl.classList.remove('on');
-    focusTag.classList.remove('on');
+    for (const el of [focusTag, focusMin, focusInfo]) el.classList.remove('on');
     // the film fades, then the card scales back into the cloud
     setTimeout(() => { if (mode !== 'focus') playEl.innerHTML = ''; }, 260);
     zoomed = null;

@@ -87,8 +87,14 @@ html.cloud-on #cloud{display:block}
 .cl-play{position:absolute;z-index:12;background:#000;opacity:0;pointer-events:none;transition:opacity .25s}
 .cl-play.on{opacity:1;pointer-events:auto}
 .cl-play mux-player,.cl-play iframe{display:block;width:100%;height:100%;border:0;--media-object-fit:contain;--controls-backdrop-color:transparent}
-.cl-focus-tag{z-index:13;opacity:0;transition:opacity .2s}
-.cl-focus-tag.on{opacity:1}
+.cl-focus-tag,.cl-focus-min,.cl-focus-info{z-index:13;opacity:0;pointer-events:none;transition:opacity .2s}
+.cl-focus-tag.on,.cl-focus-info.on{opacity:1}
+.cl-focus-min.on{opacity:1;pointer-events:auto}
+.cl .cl-focus-min{display:grid;place-items:center;width:26px;height:auto;align-self:stretch;padding:4px 0;background:var(--cl-frame);color:#fff;cursor:pointer}
+.cl .cl-focus-min:hover{background:#000}
+.cl-focus-info{margin:0;white-space:normal;line-height:1.4;display:flex;flex-direction:column}
+.cl-focus-info span+span{opacity:.6}
+.cl-focus-info[hidden]{display:none}
 
 /* about */
 .cl-about{position:absolute;inset:0;z-index:25;display:flex;align-items:center;padding:110px 30px 90px;overflow:auto;
