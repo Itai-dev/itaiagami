@@ -1342,3 +1342,8 @@ footer.site .grid{border-top-width:var(--rule);border-image:var(--bleed) 1 / var
   .mobile-menu > a,.mobile-menu .mm-foot{opacity:1!important;transform:none!important}
   ::view-transition-old(root),::view-transition-new(root){animation:none}
 }
+
+/* One type size everywhere: IBM Plex at a single size, no display headlines */
+:root{--t-one:.9375rem;--t-hero:var(--t-one);--t-display:var(--t-one);--t-h2:var(--t-one);--t-lead:var(--t-one);--t-body:var(--t-one);--t-meta:var(--t-one);--t-micro:var(--t-one)}
+body,body *{font-size:var(--t-one)!important}
+h1,h2,h3,h4,h5,h6{line-height:1.45!important;letter-spacing:0!important}

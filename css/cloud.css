@@ -20,7 +20,7 @@ html.cloud-on #cloud{display:block}
 /* overlay: bounding box + label chips, positioned from the 3D scene each frame */
 .cl-overlay{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;z-index:10}
 .cl-bbox{position:absolute;left:0;top:0;border:1px solid var(--cl-box,var(--cl-frame));will-change:transform;transition:border-color .3s}
-.cl-chip{position:absolute;left:0;top:0;white-space:nowrap;padding:2px 6px;font:10px/1.25 "IBM Plex Mono",ui-monospace,monospace;
+.cl-chip{position:absolute;left:0;top:0;white-space:nowrap;padding:2px 6px;font:15px/1.25 "IBM Plex Mono",ui-monospace,monospace;
   color:#fff;background:var(--cl-frame);will-change:transform;transition:background .3s,color .3s,opacity .18s}
 .cl-label{pointer-events:auto;cursor:default}
 .cl-ambient{opacity:0}
@@ -34,7 +34,7 @@ html.cloud-on #cloud{display:block}
 /* controls */
 .cl button,.cl a{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-decoration:none}
 .cl button:focus-visible,.cl a:focus-visible{outline:1px solid var(--cl-frame);outline-offset:3px}
-.cl-ctl{font-size:17px;line-height:1;text-transform:lowercase;letter-spacing:-.005em}
+.cl-ctl{font-size:15px;line-height:1;text-transform:lowercase;letter-spacing:-.005em}
 .cl-in{opacity:0;transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1)}
 .cl.is-ready .cl-in{opacity:1;transform:none !important}
 
@@ -74,8 +74,8 @@ html.cloud-on #cloud{display:block}
   box-shadow:0 30px 80px -20px rgba(0,0,0,.35);transform:scale(.985);opacity:0;
   transition:transform .45s cubic-bezier(.2,.9,.25,1),opacity .3s}
 .cl-case.open .cl-case-win{transform:none;opacity:1}
-.cl-case-bar{display:flex;align-items:center;gap:10px;height:34px;padding:0 6px 0 12px;flex:none;
-  background:var(--cl-frame);color:#fff;font:11px/1 "IBM Plex Mono",ui-monospace,monospace;text-transform:lowercase}
+.cl-case-bar{display:flex;align-items:center;gap:10px;height:40px;padding:0 6px 0 12px;flex:none;
+  background:var(--cl-frame);color:#fff;font:15px/1 "IBM Plex Sans",system-ui,sans-serif;text-transform:lowercase}
 .cl-case-dot{width:8px;height:8px;flex:none}
 .cl-case-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cl .cl-case-bar a,.cl .cl-case-bar button{padding:6px 8px;color:rgba(255,255,255,.7);transition:color .2s}
@@ -87,7 +87,7 @@ html.cloud-on #cloud{display:block}
 .cl-about{position:absolute;inset:0;z-index:25;display:flex;align-items:center;padding:110px 30px 90px;overflow:auto;
   opacity:0;visibility:hidden;transition:opacity .45s,visibility 0s .45s}
 .cl[data-mode=about] .cl-about{opacity:1;visibility:visible;transition:opacity .45s .15s,visibility 0s}
-.cl-about-inner{max-width:640px;margin:0 auto;font-size:22px;line-height:1.38;letter-spacing:-.012em;text-transform:lowercase}
+.cl-about-inner{max-width:640px;margin:0 auto;font-size:15px;line-height:1.5;letter-spacing:-.012em;text-transform:lowercase}
 .cl-about-inner p{margin:0 0 .9em;color:rgba(0,0,0,.85);transform:translateY(12px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s}
 .cl[data-mode=about] .cl-about-inner p{transform:none;opacity:1}
 .cl[data-mode=about] .cl-about-inner p:nth-child(2){transition-delay:.06s}
@@ -97,7 +97,7 @@ html.cloud-on #cloud{display:block}
 .cl-about-inner .dim{color:rgba(0,0,0,.45)}
 .cl-about-inner a{border-bottom:1px solid rgba(0,0,0,.25);transition:border-color .2s}
 .cl-about-inner a:hover{border-color:#000}
-.cl-about-inner .links{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:17px}
+.cl-about-inner .links{display:flex;flex-wrap:wrap;gap:6px 22px}
 
 .cl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 
@@ -108,10 +108,9 @@ html.cloud-on #cloud{display:block}
   .cl-filters{right:16px;bottom:20px;gap:16px}
   .cl-fade{height:176px}
   .cl-about{padding:96px 16px 80px;align-items:flex-start}
-  .cl-about-inner{font-size:19px}
   .cl-case-win{width:calc(100% - 16px);height:calc(100% - 96px)}
 }
-@media (max-width:380px){ .cl-filters{gap:12px} .cl-ctl{font-size:16px} }
+@media (max-width:380px){ .cl-filters{gap:12px} }
 @media (prefers-reduced-motion:reduce){
   .cl *,.cl *::before{transition-duration:.01s !important;transition-delay:0s !important}
 }

@@ -25,6 +25,12 @@ const FOV = 40;
 const SHAPE_CARD = { sphere: 1, heart: .7, smiley: .58, star: .6 };
 const SHAPE_NOISE = { sphere: 0, heart: .2, smiley: .12, star: .12, grid: 0 };
 const FRAME = 0x26262b;
+// projects with a local film loop: the card plays it instead of a still
+// (Vimeo-hosted films can't be drawn into WebGL; they play when the card opens)
+const VIDEO = {
+  'natural-intelligence': '/assets/opt/ni-ad-home-options.mp4',
+  riddle: '/assets/opt/riddle-logo.mp4',
+};
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function webglOK() {
@@ -77,10 +83,9 @@ async function start() {
       <button class="cl-about-btn cl-in cl-ctl" type="button" aria-expanded="false" aria-controls="cl-about"><span class="cl-letters"></span></button>
       <section class="cl-about" id="cl-about" aria-label="About Itai Agami">
         <div class="cl-about-inner">
-          <p>itai agami — independent creative director in tel aviv, working with brands and teams internationally.</p>
-          <p>companies bring me something they need to launch or change: a product, a brand, a campaign, a place. i define the creative direction and carry it across brand, campaign, content and digital experience.</p>
-          <p class="dim">before going independent: natural intelligence, elements, shortcut playground. media design at shenkar, with honors.</p>
-          <p class="dim">everything floating behind this text is real work — ${items.length} projects.</p>
+          <p>itai agami. independent creative director, tel aviv.</p>
+          <p>i set the creative direction for launches: brand, campaign, digital.</p>
+          <p class="dim">before: natural intelligence, elements, shortcut playground.</p>
           <p class="links"><a href="/work.html" data-pop>all work</a><a href="/services.html" data-pop>services</a><a href="/notes.html" data-pop>notes</a><a href="/contact.html" data-pop>contact</a><a href="mailto:itaiagami@gmail.com">email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">linkedin</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">cv</a></p>
         </div>
       </section>
@@ -92,7 +97,7 @@ async function start() {
             <span class="cl-case-title" id="cl-case-title"></span>
             <button class="cl-case-close" type="button">close</button>
           </div>
-          <iframe class="cl-case-frame" title="Case study"></iframe>
+          <iframe class="cl-case-frame" title="Case study" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
         </div>
       </div>
       <div class="cl-sr" aria-live="polite"></div>
@@ -157,6 +162,26 @@ async function start() {
     it.delay = reduceMotion ? 0 : 150 + Math.random() * 1100;
   });
 
+  // a project with a film loop plays it on its card
+  function attachVideo(it, src) {
+    const v = document.createElement('video');
+    v.src = src;
+    v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
+    v.preload = 'auto';
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+    v.addEventListener('loadeddata', () => {
+      const tex = new THREE.VideoTexture(v);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      it.mat.map = tex;
+      it.mat.color.set(0xffffff);
+      it.mat.needsUpdate = true;
+      it.aspect = v.videoWidth / v.videoHeight || it.aspect;
+      it.video = v;
+      layout();
+    }, { once: true });
+    v.play().catch(() => {});
+  }
+
   // textures are capped at 1024px; with one card per project that stays light
   items.forEach(it => {
     const img = new Image();
@@ -170,6 +195,7 @@ async function start() {
       const tex = new THREE.CanvasTexture(c);
       tex.colorSpace = THREE.SRGBColorSpace;
       tex.anisotropy = Math.min(8, maxAniso);
+      if (it.video) return;      // the film already took over
       it.mat.map = tex;
       it.mat.color.set(0xffffff);
       it.mat.needsUpdate = true;
@@ -177,6 +203,7 @@ async function start() {
       layout();
     };
     img.src = it.src;
+    if (VIDEO[it.project.slug] && !reduceMotion) attachVideo(it, VIDEO[it.project.slug]);
   });
 
   // card width/height for a long side of `len`
@@ -390,8 +417,10 @@ async function start() {
       const doc = caseFrame.contentDocument;
       if (!doc || !doc.head || doc.location.href === 'about:blank') return;
       const style = doc.createElement('style');
-      style.textContent = 'header.site,footer.site,.mobile-menu,.consent,.grain,.crumb,.c-next{display:none!important}body{padding-top:0!important}';
+      style.textContent = 'header.site,footer.site,.mobile-menu,.consent,.grain,.crumb,.c-next,.c-service,.c-contrib,.c-film .note,.c-film .l,figcaption{display:none!important}body{padding-top:0!important}';
       doc.head.appendChild(style);
+      condense(doc);
+      playLeadFilm(doc);
       const t = (doc.title || '').split('|')[0].trim().toLowerCase();
       if (t) $('.cl-case-title').textContent = t;
       doc.addEventListener('keydown', e => { if (e.key === 'Escape') closeCase(); });
@@ -405,6 +434,47 @@ async function start() {
       });
     } catch { /* cross-origin: leave the page as is */ }
   });
+  // keep only the first sentence of long, plain paragraphs
+  function condense(doc) {
+    const main = doc.querySelector('main');
+    if (!main) return;
+    for (const el of main.querySelectorAll('p, .sb, .oneline, li, .body, .sub')) {
+      if (el.children.length) continue;
+      const text = el.textContent.trim();
+      if (text.length < 110) continue;
+      const m = text.match(/^(.{20,}?[.!?])(\s|$)/);
+      if (m && m[1].length < text.length) el.textContent = m[1];
+    }
+  }
+  // a case study opens on its film, already playing; pages without one get the
+  // project's Vimeo film from the data
+  const vimeoBySlug = Object.fromEntries(projects.filter(p => p.vimeo).map(p => [p.slug, p.vimeo]));
+  function playLeadFilm(doc) {
+    const m = doc.location.pathname.match(/^\/work\/([a-z0-9-]+)\.html$/);
+    if (!m) return;
+    const wrap = doc.querySelector('.cwrap') || doc.querySelector('main');
+    const firstVideo = doc.querySelector('main video');
+    let lead = doc.querySelector('.c-film--lead') || doc.querySelector('.c-film') ||
+      (firstVideo && (firstVideo.closest('figure, .c-film, .fm') || firstVideo));
+    if (!lead && vimeoBySlug[m[1]]) {
+      lead = doc.createElement('div');
+      lead.className = 'c-film';
+      lead.innerHTML = `<div class="frame"><iframe src="https://player.vimeo.com/video/${vimeoBySlug[m[1]]}?title=0&byline=0&portrait=0&dnt=1" title="Film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+    }
+    if (!wrap || !lead) return;
+    wrap.prepend(lead);
+    lead.style.marginTop = '0';
+    const play = lead.querySelector('.c-play');
+    if (play) play.click();
+    for (const f of lead.querySelectorAll('iframe[src*="player.vimeo.com"]')) {
+      if (/[?&]autoplay=1/.test(f.src)) continue;
+      f.allow = 'autoplay; fullscreen; picture-in-picture';
+      f.src += (f.src.includes('?') ? '&' : '?') + 'autoplay=1';
+    }
+    const v = lead.matches('video') ? lead : lead.querySelector('video');
+    if (v) { v.muted = true; v.preload = 'auto'; v.play().catch(() => {}); }
+  }
+
   for (const a of root.querySelectorAll('[data-pop]')) {
     a.addEventListener('click', e => {
       e.preventDefault();
