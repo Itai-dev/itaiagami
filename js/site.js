@@ -567,9 +567,9 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 })();
 
 /* ---------- intro loader (home) ----------
-   Types "Hi, I'm Itai. I", then the verb rolls like a watch crown picker
-   (design, develop, ideate...), slow enough to read at first, speeding up until it is too much for one
-   person, settles on "use AI.", and "creatively" is hand-written after it, then
+   Types "Hi, I'm Itai. I", then the verb turns on a drum like a watch crown
+   picker (design, develop, ideate...), slow enough to read at first, then
+   spinning until it is too much for one person, settles on "use AI.", and "creatively" is hand-written after it, then
    bracketed.
    Runs only when the head script set html.intro-on (first visit this session,
    no reduced motion). Any click, tap or key skips it. */
@@ -580,11 +580,12 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   el.style.animation='none';                         /* the script owns the exit now */
   const typed=el.querySelector('.intro-typed'), slot=el.querySelector('.intro-slot');
   const HEAD='Hi, I’m Itai. I';
-  const VERBS=['design','develop','ideate','create','sketch','direct','write','animate','model','code','film','edit','prototype','illustrate','brand','render','build','launch'];
-  /* how long each word holds: the first three are readable, then it runs away */
-  const HOLD=[900,760,620,430,290,190,130,95,75];
-  const FINAL='use AI';                            /* every word ends on a full stop */
-  const EASE='cubic-bezier(.23,1,.32,1)';
+  const VERBS=['design','develop','ideate','create','sketch','direct','animate','model','code','film','edit','prototype','illustrate','brand','build','launch'];
+  const FINAL='use AI';
+  /* the drum's rhythm: time to turn to each word, then how long it rests there.
+     The first three can be read; after that it spins without stopping. */
+  const MOVE=[520,460,420,360,300,240,190,150,120,100,85,75,70,70,70,70];
+  const REST=[850,620,450,220,80];
   let done=false;
   /* watchdog: exits only if the sequence stalls, so a slow device still sees the ending */
   let dog=0;
@@ -601,21 +602,38 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   addEventListener('keydown',finish,{once:true});
   kick();                                            /* never trap the visitor */
 
-  /* one detent of the picker: the old word rolls up and away, the new one rises from below */
-  let cur=null;
-  /* the window is as wide as the widest word still on the drum */
-  const fit=()=>{slot.style.width=Math.max(0,...[...slot.children].map(c=>c.offsetWidth))+'px';};
-  function roll(word,dur,settle){
-    const w=document.createElement('span'); w.className='w'; w.textContent=word+'.';
-    slot.appendChild(w);
-    const old=cur; cur=w;
-    if(old)old.classList.add('leaving');
-    fit();
-    if(old) old.animate([{transform:'none',opacity:1},{transform:'translateY(-62%) rotateX(68deg)',opacity:0}],{duration:dur,easing:EASE,fill:'forwards'})
-      .finished.then(()=>{old.remove();fit();}).catch(()=>{});
-    w.animate([{transform:'translateY(62%) rotateX(-68deg)',opacity:0},{transform:'none',opacity:1}],
-      {duration:settle?dur*1.6:dur,easing:settle?'cubic-bezier(.34,1.4,.64,1)':EASE});
+  /* the drum: every word on one reel, turned by a single position p.
+     Words above and below the window tilt away on a cylinder, like a watch
+     crown picker, so fast turns read as one continuous roll upwards. */
+  const words=[...VERBS,FINAL].map(v=>{const w=document.createElement('span');w.className='w';w.textContent=v+'.';slot.appendChild(w);return w;});
+  const sizer=document.createElement('span'); sizer.className='sizer'; slot.appendChild(sizer);
+  let p=-1;
+  function render(){
+    const near=Math.min(words.length-1,Math.max(0,Math.round(p)));
+    words.forEach((w,i)=>{
+      const d=i-p, ad=Math.abs(d);
+      if(ad>1.6){w.style.visibility='hidden';return;}
+      w.style.visibility='';
+      w.style.transform=`translateY(${(d*1.05).toFixed(3)}em) rotateX(${(-d*48).toFixed(1)}deg)`;
+      w.style.opacity=Math.max(0,1-ad*.7).toFixed(3);
+    });
+    /* the in-flow sizer holds the baseline and the width of whatever is in the window */
+    const lo=words[Math.max(0,Math.floor(p))], hi=words[Math.min(words.length-1,Math.ceil(p))];
+    const wide=(lo&&hi&&hi.offsetWidth>lo.offsetWidth)?hi:(lo||words[near]);
+    if(sizer.textContent!==wide.textContent)sizer.textContent=wide.textContent;
   }
+  const easeOut=k=>1-Math.pow(1-k,3), linear=k=>k;
+  const easeBack=k=>{const c=1.4;return 1+(c+1)*Math.pow(k-1,3)+c*Math.pow(k-1,2);};
+  const turn=(to,dur,ease)=>{kick();return new Promise(res=>{
+    const from=p, t0=performance.now();
+    (function f(now){
+      if(done)return;
+      const k=Math.min(1,(now-t0)/dur);
+      p=from+(to-from)*ease(k); render();
+      k<1?requestAnimationFrame(f):res();
+    })(t0);
+  });};
+  render();
 
   (async()=>{
     el.classList.add('typing');
@@ -632,12 +650,12 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     el.classList.add('rolling');
     for(let i=0;i<VERBS.length;i++){
       if(done)return;
-      const gap=HOLD[Math.min(i,HOLD.length-1)];
-      roll(VERBS[i],Math.min(420,gap*.85));
-      await wait(gap);
+      const rest=REST[i]||0;
+      await turn(i,MOVE[i],rest?easeOut:linear);
+      if(rest) await wait(rest);
     }
-    await wait(120); if(done)return;
-    roll(FINAL,380,true);
+    if(done)return;
+    await turn(VERBS.length,720,easeBack);           /* settles on "use AI." with a small overshoot */
     await wait(900); if(done)return;
     /* the aside, by hand: bracket, word, bracket */
     if(document.fonts&&document.fonts.load) await Promise.race([document.fonts.load('600 1em Caveat','(creatively)'),wait(600)]).catch(()=>{});

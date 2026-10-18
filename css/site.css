@@ -1373,13 +1373,13 @@ white-space:nowrap;
 .intro-slot{
 display:none;position:relative;vertical-align:baseline;margin-left:.26em;
 padding:.3em 0;margin-top:-.3em;margin-bottom:-.3em;
-perspective:400px;
+perspective:600px;
 -webkit-mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);
 mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);
 }
 .intro-loader.rolling .intro-slot{display:inline-block}
-.intro-slot .w{display:inline-block;white-space:nowrap;transform-origin:50% 50% -.6em;backface-visibility:hidden}
-.intro-slot .w.leaving{position:absolute;left:0;top:.3em}
+.intro-slot .sizer{visibility:hidden;white-space:nowrap}
+.intro-slot .w{position:absolute;left:0;top:.3em;white-space:nowrap;transform-origin:50% 50% -.5em;backface-visibility:hidden;will-change:transform,opacity}
 /* the hand-written aside: brackets drawn as pen strokes, the word written between them */
 /* the aside floats over the layout so writing it never moves the line;
    when there is no room to the right it hangs below "use AI" instead */
