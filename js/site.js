@@ -540,9 +540,13 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 (function(){
   const HL=window.HL;
   if(!HL||!document.querySelector('[data-hairline-host]'))return;
+  /* a figure can appear more than once on a page (services shows the same
+     drawing in the offer and in the capabilities); mount every host */
   window.hairline=fig=>{
-    const host=document.querySelector('[data-hairline-host="'+fig.name+'"]');
-    if(!host||host.firstChild)return;
+    document.querySelectorAll('[data-hairline-host="'+fig.name+'"]').forEach(host=>mountIn(host,fig));
+  };
+  function mountIn(host,fig){
+    if(host.firstChild)return;
     HL.inject(document);
     const stage=document.createElement('div');
     stage.setAttribute('data-hairline',fig.name);
@@ -563,13 +567,151 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       send('pointermove',s.left+s.width*(.2+.6*f),s.top+s.height*.5);
     });
     row.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse')send('pointerleave',0,0); });
-  };
+  }
 })();
 
-/* ---------- hero reveal (home) ---------- */
+/* ---------- intro loader (home) ----------
+   Types "Hi, I'm Itai. I design.", then the verb turns on a drum like a watch
+   crown picker (develop, ideate, create...), speeding up exponentially until
+   it is too much for one person, settles on "use AI.", and "creatively" is hand-written after it, then
+   bracketed.
+   Runs only when the head script set html.intro-on (first visit this session,
+   no reduced motion). Any click, tap or key skips it. */
+(function(){
+  const root=document.documentElement, el=document.getElementById('intro');
+  if(!el||!root.classList.contains('intro-on'))return;
+  try{sessionStorage.setItem('intro','1')}catch(e){}
+  el.style.animation='none';                         /* the script owns the exit now */
+  const typed=el.querySelector('.intro-typed'), slot=el.querySelector('.intro-slot');
+  const HEAD='Hi, I’m Itai. I';
+  const VERBS=['design','develop','ideate','create','sketch','direct','animate','model','code','film','edit','prototype','illustrate','brand','build','launch'];
+  const FINAL='use AI';
+  /* the drum's rhythm: each word gets a little less time than the last, on an
+     exponential curve, so the first few can be read and the rest blur. While
+     a step is long the drum eases in and rests; once short it turns non-stop. */
+  const stepTime=i=>Math.max(62,1000*Math.pow(.74,i));
+  const moveTime=T=>Math.min(T,300+.15*T);
+  let done=false;
+  /* watchdog: exits only if the sequence stalls, so a slow device still sees the ending */
+  let dog=0;
+  const kick=()=>{clearTimeout(dog);dog=setTimeout(finish,4000);};
+  const wait=ms=>{kick();return new Promise(r=>setTimeout(r,ms));};
+  function finish(){
+    if(done)return; done=true; clearTimeout(dog);
+    el.classList.add('out');
+    setTimeout(()=>dispatchEvent(new Event('intro:done')),140);
+    setTimeout(()=>{root.classList.remove('intro-on');el.remove();},950);
+  }
+  const hint=el.querySelector('.intro-hint'); if(hint&&matchMedia('(hover:hover)').matches)hint.textContent='Click or press any key to skip';
+  el.addEventListener('pointerdown',finish);
+  addEventListener('keydown',finish,{once:true});
+  kick();                                            /* never trap the visitor */
+
+  /* the drum: every word on one reel, turned by a single position p.
+     Words above and below the window tilt away on a cylinder, like a watch
+     crown picker, so fast turns read as one continuous roll upwards. */
+  const words=[...VERBS,FINAL].map(v=>{const w=document.createElement('span');w.className='w';w.textContent=v+'.';slot.appendChild(w);return w;});
+  const sizer=document.createElement('span'); sizer.className='sizer'; slot.appendChild(sizer);
+  let p=-1;
+  function render(){
+    const near=Math.min(words.length-1,Math.max(0,Math.round(p)));
+    words.forEach((w,i)=>{
+      const d=i-p, ad=Math.abs(d);
+      if(ad>1.6){w.style.visibility='hidden';return;}
+      w.style.visibility='';
+      w.style.transform=`translateY(${(d*1.05).toFixed(3)}em) rotateX(${(-d*48).toFixed(1)}deg)`;
+      w.style.opacity=Math.max(0,1-ad*1.15).toFixed(3);
+    });
+    /* the in-flow sizer holds the baseline and the width of whatever is in the window */
+    const lo=words[Math.max(0,Math.floor(p))], hi=words[Math.min(words.length-1,Math.ceil(p))];
+    const wide=(lo&&hi&&hi.offsetWidth>lo.offsetWidth)?hi:(lo||words[near]);
+    if(sizer.textContent!==wide.textContent)sizer.textContent=wide.textContent;
+  }
+  const easeOut=k=>1-Math.pow(1-k,3), linear=k=>k;
+  const easeBack=k=>{const c=1.4;return 1+(c+1)*Math.pow(k-1,3)+c*Math.pow(k-1,2);};
+  const turn=(to,dur,ease)=>{kick();return new Promise(res=>{
+    const from=p, t0=performance.now();
+    (function f(now){
+      if(done)return;
+      const k=Math.min(1,(now-t0)/dur);
+      p=from+(to-from)*ease(k); render();
+      k<1?requestAnimationFrame(f):res();
+    })(t0);
+  });};
+  render();
+
+  /* centre the finished sentence ("Hi, I'm Itai. I use AI." plus the aside
+     when it fits beside it), then anchor its left edge there so nothing
+     shifts while the words change */
+  const line=el.querySelector('.intro-line'), aside=el.querySelector('.intro-aside');
+  const node=document.createTextNode(''); typed.appendChild(node);
+  function centre(){
+    const was=el.classList.contains('rolling'), keep=node.nodeValue, keepP=p;
+    line.style.paddingLeft='0';
+    node.nodeValue=HEAD; el.classList.add('rolling'); p=words.length-1; render();
+    const box=line.getBoundingClientRect();
+    const left=typed.getBoundingClientRect().left, right=slot.getBoundingClientRect().right;
+    const asideW=aside.offsetWidth+aside.offsetWidth*.08;
+    const beside=right+asideW-left<=box.width;
+    aside.classList.toggle('below',!beside);
+    const w=(right-left)+(beside?asideW:0);
+    line.style.paddingLeft=Math.max(0,(box.width-w)/2)+'px';
+    node.nodeValue=keep; p=keepP; render(); if(!was)el.classList.remove('rolling');
+  }
+  addEventListener('resize',()=>{if(!done)centre();});
+
+  (async()=>{
+    el.classList.add('typing');
+    /* measure with the real fonts, and keep the line hidden until it is centred,
+       so the caret never shows at the left edge first */
+    if(document.fonts&&document.fonts.load) await Promise.race([
+      Promise.all([document.fonts.load('500 1em Inter','Hi, I’m Itai. I use AI.'),document.fonts.load('600 1em Caveat','(creatively)')]),
+      wait(1500)]).catch(()=>{});
+    if(done)return;
+    centre(); el.classList.add('ready');
+    await wait(300);
+    for(let i=0;i<HEAD.length;i++){
+      if(done)return;
+      const p=HEAD[i-1];
+      await wait(50+Math.random()*45+(p==='.'?300:p===','?110:0));
+      node.nodeValue+=HEAD[i];
+    }
+    /* the first verb is typed like the rest of the sentence; then the drum takes it */
+    const caret=el.querySelector('.intro-caret'), first=words[0], firstText=first.textContent;
+    first.textContent=''; p=0; slot.appendChild(caret); el.classList.add('rolling'); render();
+    for(const ch of firstText){
+      await wait(55+Math.random()*40); if(done)return;
+      first.textContent+=ch; render();
+    }
+    el.classList.remove('typing');
+    await wait(750); if(done)return;
+    el.classList.add('spin');
+    for(let i=1;i<VERBS.length;i++){
+      if(done)return;
+      const T=stepTime(i-1), move=moveTime(T), rest=T-move;
+      await turn(i,move,rest>0?easeOut:linear);
+      if(rest>0) await wait(rest);
+    }
+    if(done)return;
+    await turn(VERBS.length,720,easeBack);           /* settles on "use AI." with a small overshoot */
+    await wait(900); if(done)return;
+    /* the aside, by hand: the word, then its brackets */
+    if(document.fonts&&document.fonts.load) await Promise.race([document.fonts.load('600 1em Caveat','(creatively)'),wait(600)]).catch(()=>{});
+    if(done)return;
+    el.classList.add('aside');
+    await wait(2400);
+    finish();
+  })();
+})();
+
+/* ---------- hero reveal (home) ----------
+   Waits for the intro loader when one is playing. */
 (function(){
   const h=document.querySelector('.hero'); if(!h)return;
-  const go=()=>h.classList.add('revealed');
+  let held=document.documentElement.classList.contains('intro-on');
+  const go=()=>{ if(!held)h.classList.add('revealed'); };
+  addEventListener('intro:done',()=>{held=false;go();});
+  setTimeout(()=>{held=false;go();},14000);
   requestAnimationFrame(()=>requestAnimationFrame(go));
   addEventListener('load',go);
   setTimeout(go,120);

@@ -62,3 +62,16 @@ test('work-index preview moves with `translate`, not left/top', () => {
   assert.match(js, /hoverimg\.style\.translate=/);
   assert.match(js, /if\(s!==side\)/, '--hx only written when the side changes');
 });
+
+test('intro loader: home only, once per session, skipped for reduced motion, never traps the page', () => {
+  const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  assert.match(home, /sessionStorage\.getItem\('intro'\)&&!matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches/);
+  assert.match(home, /<div class="intro-loader" id="intro" aria-hidden="true">/);
+  assert.match(rule('.intro-loader'), /display:none/, 'hidden unless the head script opts in');
+  assert.match(css, /html\.intro-on \.intro-loader\{[\s\S]*?animation:intro-failsafe \.01s 15s forwards/);
+  assert.match(css, /html\.intro-on \.intro-loader\.out\{transform:translateY\(-100%\)\}/, 'exits with transform');
+  assert.match(js, /dog=setTimeout\(finish,4000\)/, 'watchdog exits a stalled intro');
+  assert.match(js, /addEventListener\('intro:done'/, 'hero reveal waits for the intro');
+  for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html') && f !== 'index.html'))
+    assert.doesNotMatch(fs.readFileSync(path.join(ROOT, f), 'utf8'), /intro-on/, f + ' has no intro');
+});

@@ -32,6 +32,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="css/site.css" />
+<!-- Intro loader: first home visit per session only, skipped for reduced motion and crawlers.
+     The class is set here so the overlay paints before the page; js/site.js plays it. -->
+<script>try{if(!sessionStorage.getItem('intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent)){document.documentElement.classList.add('intro-on');var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=block&text=(creatively)';document.head.appendChild(l)}}catch(e){}</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -102,6 +105,10 @@
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
+<div class="intro-loader" id="intro" aria-hidden="true">
+  <p class="intro-line"><span class="intro-typed"></span><span class="intro-caret"></span><span class="intro-end"><span class="intro-slot"></span><span class="intro-aside"><svg class="br" viewBox="0 0 12 48" aria-hidden="true"><path pathLength="1" d="M10 3C2 14 2 34 10 45"/></svg><span class="intro-hand">creatively</span><svg class="br" viewBox="0 0 12 48" aria-hidden="true"><path pathLength="1" d="M2 3C10 14 10 34 2 45"/></svg></span></span></p>
+  <span class="intro-hint">Tap to skip</span>
+</div>
 
 <header class="site" id="siteHeader">
   <div class="hwrap">
@@ -139,7 +146,7 @@
     <!-- Hairline figure (Cases, after Riffle), mounted by js/site.js -->
     <div class="hero-system" id="heroSystem" data-hairline-host="cases" aria-hidden="true"></div>
     <h1><span class="reveal-line"><span>Creative direction</span></span> <span class="reveal-line"><span>for your next</span></span> <span class="reveal-line"><span>big move.</span></span></h1>
-    <p class="sub fade d2">Brand, campaign and digital experience for companies launching what’s next.</p>
+    <p class="sub fade d2">I lead brand, campaign and digital experience for companies launching what’s next. AI lets me cover what used to take a studio.</p>
     <div class="cta fade d3">
       <a class="btn solid" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="home" target="_blank" rel="noopener">Book a call with Itai <span class="arw" aria-hidden="true">↗</span></a>
       <a href="contact.html#brief" class="btn ghost">Send a brief <span class="arw" aria-hidden="true">→</span></a>
@@ -214,13 +221,12 @@
   <!-- CAPABILITIES -->
   <section class="obs" aria-label="Services">
     <div class="sec-head"><h2>Services</h2><span class="count"><a href="services.html">All services →</a></span></div>
-    <div class="caps">
-      <div class="cap" data-hairline-row><span class="cap-fig" data-hairline-host="swatches" aria-hidden="true"></span><div class="n">01</div><h3><a href="services/brand-strategy-identity-systems.html">Brand Strategy &amp; Identity Systems</a></h3><p>Positioning, visual identities, brand systems and coherent visual languages built to hold across every channel.</p></div>
-      <div class="cap" data-hairline-row><span class="cap-fig" data-hairline-host="dominoes" aria-hidden="true"></span><div class="n">02</div><h3><a href="services/creative-direction-product-launches.html">Creative Direction for Product &amp; Brand Launches</a></h3><p>The central idea for a launch or campaign, and the direction that carries it through film, motion, design and production.</p></div>
-      <div class="cap" data-hairline-row><span class="cap-fig" data-hairline-host="gallery" aria-hidden="true"></span><div class="n">03</div><h3><a href="services/interactive-immersive-experiences.html">Interactive &amp; Immersive Experiences</a></h3><p>Museum and exhibition experiences, installations, spatial media, XR and real-time systems people walk into and use.</p></div>
-      <div class="cap" data-hairline-row><span class="cap-fig" data-hairline-host="catalogue" aria-hidden="true"></span><div class="n">04</div><h3><a href="services/fractional-creative-direction.html">Fractional Creative Direction &amp; Creative Systems</a></h3><p>Ongoing creative leadership for teams without a Creative Director, and the systems that let them generate, test and scale ideas.</p></div>
+    <div class="caps three">
+      <div class="cap" data-hairline-row><span class="cap-fig" data-hairline-host="dominoes" aria-hidden="true"></span><div class="n">01 · Start here</div><h3><a href="services.html#sprint">Launch Sprint</a></h3><p>Two weeks, fixed price. The idea your launch rests on, explored wide and taken to a visual direction you can show your board.</p></div>
+      <div class="cap" data-hairline-row><span class="cap-fig" data-hairline-host="swatches" aria-hidden="true"></span><div class="n">02</div><h3><a href="services/creative-direction-product-launches.html">Full Launch</a></h3><p>The idea carried through identity, campaign, film, 3D and the launch site, so it looks like one thing everywhere it lands.</p></div>
+      <div class="cap" data-hairline-row><span class="cap-fig" data-hairline-host="catalogue" aria-hidden="true"></span><div class="n">03</div><h3><a href="services/fractional-creative-direction.html">Creative Director on call</a></h3><p>A set number of days a month for teams with good people and no Creative Director.</p></div>
     </div>
-    <p class="caps-note">One senior creative lead from first conversation to launch. I stay accountable for the idea and the quality of the work, stay hands-on in the design, and build the team each project needs: designers, developers, animators, illustrators, 3D artists, film crews.</p>
+    <p class="caps-note">One senior creative from the first idea to launch day, hands-on throughout. When the craft needs more hands, I bring in the specialists and direct them.</p>
   </section>
 
   <!-- QUALIFICATION -->
