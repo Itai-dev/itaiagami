@@ -658,9 +658,13 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 
   (async()=>{
     el.classList.add('typing');
-    if(document.fonts&&document.fonts.ready) await Promise.race([document.fonts.ready,wait(800)]).catch(()=>{});
+    /* measure with the real fonts, and keep the line hidden until it is centred,
+       so the caret never shows at the left edge first */
+    if(document.fonts&&document.fonts.load) await Promise.race([
+      Promise.all([document.fonts.load('500 1em Inter','Hi, I’m Itai. I use AI.'),document.fonts.load('600 1em Caveat','(creatively)')]),
+      wait(1500)]).catch(()=>{});
     if(done)return;
-    centre();
+    centre(); el.classList.add('ready');
     await wait(300);
     for(let i=0;i<HEAD.length;i++){
       if(done)return;
