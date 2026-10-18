@@ -68,9 +68,9 @@ test('intro loader: home only, once per session, skipped for reduced motion, nev
   assert.match(home, /sessionStorage\.getItem\('intro'\)&&!matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches/);
   assert.match(home, /<div class="intro-loader" id="intro" aria-hidden="true">/);
   assert.match(rule('.intro-loader'), /display:none/, 'hidden unless the head script opts in');
-  assert.match(css, /html\.intro-on \.intro-loader\{[\s\S]*?animation:intro-failsafe \.01s 14s forwards/);
+  assert.match(css, /html\.intro-on \.intro-loader\{[\s\S]*?animation:intro-failsafe \.01s 15s forwards/);
   assert.match(css, /html\.intro-on \.intro-loader\.out\{transform:translateY\(-100%\)\}/, 'exits with transform');
-  assert.match(js, /setTimeout\(finish,12000\)/);
+  assert.match(js, /dog=setTimeout\(finish,4000\)/, 'watchdog exits a stalled intro');
   assert.match(js, /addEventListener\('intro:done'/, 'hero reveal waits for the intro');
   for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html') && f !== 'index.html'))
     assert.doesNotMatch(fs.readFileSync(path.join(ROOT, f), 'utf8'), /intro-on/, f + ' has no intro');

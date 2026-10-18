@@ -1347,7 +1347,7 @@ footer.site .grid{border-top-width:var(--rule);border-image:var(--bleed) 1 / var
    Typed "Hi, I'm Itai. I", a rolling verb picker that lands on "use AI",
    then a hand-written "(creatively)".
    Shown only when the head script sets html.intro-on; js/site.js plays it and
-   lifts it away. If the script never runs, the failsafe hides it at 14s. */
+   lifts it away. If the script never runs, the failsafe hides it at 15s. */
 .intro-loader{display:none}
 html.intro-on{overflow:hidden}
 html.intro-on .intro-loader{
@@ -1355,14 +1355,14 @@ display:flex;align-items:center;position:fixed;inset:0;z-index:9500;
 background:var(--bg);color:var(--fg);padding:var(--pad-x);cursor:pointer;
 -webkit-tap-highlight-color:transparent;
 transition:transform .9s var(--ease-drawer);
-animation:intro-failsafe .01s 14s forwards;
+animation:intro-failsafe .01s 15s forwards;
 }
 html.intro-on .intro-loader.out{transform:translateY(-100%)}
 @keyframes intro-failsafe{to{visibility:hidden;opacity:0}}
 .intro-line{
 width:100%;max-width:var(--maxw);margin:0 auto;
-font-weight:500;font-size:clamp(2rem,5vw,4rem);line-height:1.15;letter-spacing:-.025em;
-text-wrap:pretty;
+font-weight:500;font-size:clamp(1.6rem,7.4vw,4rem);line-height:1.15;letter-spacing:-.025em;
+white-space:nowrap;
 }
 .intro-typed{white-space:pre-wrap}
 .intro-caret{display:inline-block;width:.07em;height:1.05em;margin-left:.04em;vertical-align:-.15em;background:var(--fg);animation:intro-blink 1s steps(1) infinite}
@@ -1381,14 +1381,18 @@ mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);
 .intro-slot .w{display:inline-block;white-space:nowrap;transform-origin:50% 50% -.6em;backface-visibility:hidden}
 .intro-slot .w.leaving{position:absolute;left:0;top:.3em}
 /* the hand-written aside: brackets drawn as pen strokes, the word written between them */
-.intro-aside{display:none;white-space:nowrap;margin-left:.3em;color:var(--mark);transform:rotate(-3deg);transform-origin:0 60%}
-.intro-loader.aside .intro-aside{display:inline-block}
+/* the aside floats over the layout so writing it never moves the line;
+   when there is no room to the right it hangs below "use AI" instead */
+.intro-end{position:relative;display:inline-block}
+.intro-aside{position:absolute;left:calc(100% + .3em);top:50%;visibility:hidden;white-space:nowrap;color:var(--mark);transform:translateY(-50%) rotate(-3deg);transform-origin:0 60%;pointer-events:none}
+.intro-loader.aside .intro-aside{visibility:visible}
+.intro-aside.below{left:auto;right:-.1em;top:100%;transform:translateY(-.1em) rotate(-3deg);transform-origin:100% 0}
 .intro-aside .br{display:inline-block;width:.3em;height:1.2em;vertical-align:-.26em;overflow:visible}
-.intro-aside .br path{vector-effect:none;stroke-width:2.8px}
+.intro-aside .br path{vector-effect:none;stroke-width:2.8px;opacity:0}
 .intro-loader svg path{fill:none;stroke:currentColor;stroke-linecap:round;stroke-width:2.6px;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1}
 .intro-loader.aside .br path{animation:intro-ink .35s var(--ease) forwards}
 .intro-loader.aside .br:last-child path{animation-delay:1.05s}
-@keyframes intro-ink{to{stroke-dashoffset:0}}
+@keyframes intro-ink{from{opacity:1}to{stroke-dashoffset:0;opacity:1}}
 .intro-hand{
 display:inline-block;padding:0 .02em;
 font-family:"Caveat","Segoe Print","Bradley Hand",cursive;font-weight:600;font-size:1.25em;line-height:1;letter-spacing:0;

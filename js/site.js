@@ -568,7 +568,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 
 /* ---------- intro loader (home) ----------
    Types "Hi, I'm Itai. I", then the verb rolls like a watch crown picker
-   (create, design, develop...), speeding up until it is too much for one
+   (design, develop, ideate...), slow enough to read at first, speeding up until it is too much for one
    person, settles on "use AI", and "(creatively)" is hand-written after it.
    Runs only when the head script set html.intro-on (first visit this session,
    no reduced motion). Any click, tap or key skips it. */
@@ -579,13 +579,18 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   el.style.animation='none';                         /* the script owns the exit now */
   const typed=el.querySelector('.intro-typed'), slot=el.querySelector('.intro-slot');
   const HEAD='Hi, I’m Itai. I';
-  const VERBS=['create','design','develop','ideate','sketch','direct','write','animate','model','code','film','edit','prototype','illustrate','brand','render','build','launch'];
+  const VERBS=['design','develop','ideate','create','sketch','direct','write','animate','model','code','film','edit','prototype','illustrate','brand','render','build','launch'];
+  /* how long each word holds: the first three are readable, then it runs away */
+  const HOLD=[900,760,620,430,290,190,130,95,75];
   const FINAL='use AI';
   const EASE='cubic-bezier(.23,1,.32,1)';
   let done=false;
-  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  /* watchdog: exits only if the sequence stalls, so a slow device still sees the ending */
+  let dog=0;
+  const kick=()=>{clearTimeout(dog);dog=setTimeout(finish,4000);};
+  const wait=ms=>{kick();return new Promise(r=>setTimeout(r,ms));};
   function finish(){
-    if(done)return; done=true;
+    if(done)return; done=true; clearTimeout(dog);
     el.classList.add('out');
     setTimeout(()=>dispatchEvent(new Event('intro:done')),140);
     setTimeout(()=>{root.classList.remove('intro-on');el.remove();},950);
@@ -593,7 +598,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   const hint=el.querySelector('.intro-hint'); if(hint&&matchMedia('(hover:hover)').matches)hint.textContent='Click or press any key to skip';
   el.addEventListener('pointerdown',finish);
   addEventListener('keydown',finish,{once:true});
-  setTimeout(finish,12000);                          /* never trap the visitor */
+  kick();                                            /* never trap the visitor */
 
   /* one detent of the picker: the old word rolls up and away, the new one rises from below */
   let cur=null;
@@ -622,15 +627,13 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       node.nodeValue+=HEAD[i];
     }
     el.classList.remove('typing');
-    await wait(420); if(done)return;
+    await wait(300); if(done)return;
     el.classList.add('rolling');
-    /* each word stays a little less than the last, until it blurs */
-    let gap=480;
-    for(const v of VERBS){
+    for(let i=0;i<VERBS.length;i++){
       if(done)return;
-      roll(v,Math.min(420,gap*.85));
+      const gap=HOLD[Math.min(i,HOLD.length-1)];
+      roll(VERBS[i],Math.min(420,gap*.85));
       await wait(gap);
-      gap=Math.max(85,gap*.8);
     }
     await wait(120); if(done)return;
     roll(FINAL,380,true);
@@ -638,6 +641,8 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     /* the aside, by hand: bracket, word, bracket */
     if(document.fonts&&document.fonts.load) await Promise.race([document.fonts.load('600 1em Caveat','(creatively)'),wait(600)]).catch(()=>{});
     if(done)return;
+    const aside=el.querySelector('.intro-aside'), line=el.querySelector('.intro-line');
+    if(slot.getBoundingClientRect().right+aside.offsetWidth*1.08>line.getBoundingClientRect().right)aside.classList.add('below');
     el.classList.add('aside');
     await wait(1600);
     finish();
@@ -651,7 +656,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   let held=document.documentElement.classList.contains('intro-on');
   const go=()=>{ if(!held)h.classList.add('revealed'); };
   addEventListener('intro:done',()=>{held=false;go();});
-  setTimeout(()=>{held=false;go();},13000);
+  setTimeout(()=>{held=false;go();},14000);
   requestAnimationFrame(()=>requestAnimationFrame(go));
   addEventListener('load',go);
   setTimeout(go,120);
