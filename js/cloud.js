@@ -47,10 +47,11 @@ async function start() {
   const kind = p => p.type || (muxId(p) || p.vimeo ? 'video' : 'image');
   // name and category are optional in the CMS
   const tagOf = p => [p.name || 'untitled', p.cat].filter(Boolean).join(' · ').toLowerCase();
-  // card image: a video's first frame (so the card hands over to the playing
-  // video without a cut), else the card image, the image or the hero; without
-  // any of them the card shows the project name
+  // card image: the card image if one is set, else a video's first frame (so the
+  // card hands over to the playing video without a cut), else the image or the
+  // hero; without any of them the card shows the project name
   const cardImage = p => {
+    if (p.thumb) return sized(p.thumb, 1024);
     if (muxId(p) && kind(p) !== 'image') return `https://image.mux.com/${encodeURIComponent(muxId(p))}/thumbnail.webp?time=0&width=1024`;
     const src = p.thumb || p.image || p.hero;
     return src ? sized(src, 1024) : null;

@@ -135,7 +135,7 @@ export const project = defineType({
       type: 'image',
       group: 'card',
       options: {hotspot: true},
-      description: 'Used on the card when there is no uploaded video (a video always shows its first frame, so it opens without a cut). Without any image the card shows the project name.',
+      description: 'Shown on the card. Without one, a video shows its first frame (so it opens without a cut), else the image above, else the project name. Set one when a video starts on black.',
     }),
     defineField({
       name: 'loop',
