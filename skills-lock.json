@@ -6,6 +6,12 @@
       "sourceType": "github",
       "skillPath": "skills/hairline-create/SKILL.md",
       "computedHash": "da52054acea8d9153c59bc7e5820ad8ab8ffbb91da3867418741232da38f3fb9"
+    },
+    "sanity-best-practices": {
+      "source": "sanity-io/agent-toolkit",
+      "sourceType": "github",
+      "skillPath": "skills/sanity-best-practices/SKILL.md",
+      "computedHash": "1462e9fc9dd04e1bc7296c3aa3e836749f9b62408c7acf3632a7e996afecd538"
     }
   }
 }

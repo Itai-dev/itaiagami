@@ -52,6 +52,7 @@ export async function createServer(){
 
     let target = url;
     const mwRes = mw.default(new Request(url, { method: req.method, headers: req.headers }));
+    if(mwRes && mwRes.headers.get('location')){ res.writeHead(mwRes.status, { Location: mwRes.headers.get('location') }); return res.end(); }
     if(mwRes) target = new URL(mwRes.headers.get('x-middleware-rewrite'));
 
     if(target.pathname.startsWith('/api/')){
