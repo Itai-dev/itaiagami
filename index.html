@@ -34,7 +34,7 @@
 <link rel="stylesheet" href="css/site.css" />
 <!-- Intro loader: first home visit per session only, skipped for reduced motion and crawlers.
      The class is set here so the overlay paints before the page; js/site.js plays it. -->
-<script>try{if(!sessionStorage.getItem('intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent)){document.documentElement.classList.add('intro-on');var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=block&text=use%20AI.';document.head.appendChild(l)}}catch(e){}</script>
+<script>try{if(!sessionStorage.getItem('intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent)){document.documentElement.classList.add('intro-on');var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=block&text=(creatively)';document.head.appendChild(l)}}catch(e){}</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -106,7 +106,7 @@
 <body>
 <div class="grain" aria-hidden="true"></div>
 <div class="intro-loader" id="intro" aria-hidden="true">
-  <p class="intro-line"><span class="intro-typed"></span><span class="intro-caret"></span><span class="intro-hand">use <span class="intro-ai">AI<svg viewBox="0 0 100 24" preserveAspectRatio="none"><path pathLength="1" d="M3 13C28 7 62 5 97 10"/><path pathLength="1" d="M12 19C40 14 68 14 90 17"/></svg></span>.</span></p>
+  <p class="intro-line"><span class="intro-typed"></span><span class="intro-caret"></span><span class="intro-slot"></span><span class="intro-aside"><svg class="br" viewBox="0 0 12 48" aria-hidden="true"><path pathLength="1" d="M10 3C2 14 2 34 10 45"/></svg><span class="intro-hand">creatively</span><svg class="br" viewBox="0 0 12 48" aria-hidden="true"><path pathLength="1" d="M2 3C10 14 10 34 2 45"/></svg></span></p>
   <span class="intro-hint">Tap to skip</span>
 </div>
 

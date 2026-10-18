@@ -567,8 +567,9 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 })();
 
 /* ---------- intro loader (home) ----------
-   Types an implausibly long list of things one person does, rewinds it to
-   "I", then hand-writes "use AI." and lifts away to reveal the page.
+   Types "Hi, I'm Itai. I", then the verb rolls like a watch crown picker
+   (create, design, develop...), speeding up until it is too much for one
+   person, settles on "use AI", and "(creatively)" is hand-written after it.
    Runs only when the head script set html.intro-on (first visit this session,
    no reduced motion). Any click, tap or key skips it. */
 (function(){
@@ -576,23 +577,13 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   if(!el||!root.classList.contains('intro-on'))return;
   try{sessionStorage.setItem('intro','1')}catch(e){}
   el.style.animation='none';                         /* the script owns the exit now */
-  const typed=el.querySelector('.intro-typed');
-  const HEAD='Hi, I\u2019m Itai. I';
-  const LIST=' create, develop, ideate, design, sketch, direct, write, animate, model, render, code, prototype, film, edit, shoot, illustrate, brand, pitch, storyboard, compose, research, strategize, curate, build, test, launch, iterate, retouch, typeset, light, rig, score, produce, present, consult, mentor, teach, ship, repeat, and\u2026';
-  const node=document.createTextNode(''); typed.appendChild(node);
+  const typed=el.querySelector('.intro-typed'), slot=el.querySelector('.intro-slot');
+  const HEAD='Hi, I’m Itai. I';
+  const VERBS=['create','design','develop','ideate','sketch','direct','write','animate','model','code','film','edit','prototype','illustrate','brand','render','build','launch'];
+  const FINAL='use AI';
+  const EASE='cubic-bezier(.23,1,.32,1)';
   let done=false;
   const wait=ms=>new Promise(r=>setTimeout(r,ms));
-  /* step through n characters; delay(i) is the gap before character i, in ms */
-  const run=(n,delay,step)=>new Promise(res=>{
-    let i=0, acc=0, last=performance.now();
-    (function f(now){
-      if(done)return;
-      acc+=now-last; last=now;
-      while(i<n&&acc>=delay(i)){acc-=delay(i);step(i++);}
-      i<n?requestAnimationFrame(f):res();
-    })(last);
-  });
-  const jit=Array.from({length:LIST.length},()=>Math.random());
   function finish(){
     if(done)return; done=true;
     el.classList.add('out');
@@ -603,28 +594,52 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   el.addEventListener('pointerdown',finish);
   addEventListener('keydown',finish,{once:true});
   setTimeout(finish,12000);                          /* never trap the visitor */
+
+  /* one detent of the picker: the old word rolls up and away, the new one rises from below */
+  let cur=null;
+  /* the window is as wide as the widest word still on the drum */
+  const fit=()=>{slot.style.width=Math.max(0,...[...slot.children].map(c=>c.offsetWidth))+'px';};
+  function roll(word,dur,settle){
+    const w=document.createElement('span'); w.className='w'; w.textContent=word;
+    slot.appendChild(w);
+    const old=cur; cur=w;
+    if(old)old.classList.add('leaving');
+    fit();
+    if(old) old.animate([{transform:'none',opacity:1},{transform:'translateY(-62%) rotateX(68deg)',opacity:0}],{duration:dur,easing:EASE,fill:'forwards'})
+      .finished.then(()=>{old.remove();fit();}).catch(()=>{});
+    w.animate([{transform:'translateY(62%) rotateX(-68deg)',opacity:0},{transform:'none',opacity:1}],
+      {duration:settle?dur*1.6:dur,easing:settle?'cubic-bezier(.34,1.4,.64,1)':EASE});
+  }
+
   (async()=>{
     el.classList.add('typing');
+    const node=document.createTextNode(''); typed.appendChild(node);
     await wait(300);
-    /* a human pace for the greeting */
-    await run(HEAD.length,i=>{const p=HEAD[i-1];return 52+jit[i]*45+(p==='.'?320:p===','?120:0);},i=>{node.nodeValue+=HEAD[i];});
-    /* then the list runs away with itself */
-    await run(LIST.length,i=>Math.max(2,38*Math.pow(.972,i))+(i<40&&LIST[i-1]===','?50:0),i=>{node.nodeValue+=LIST[i];});
+    for(let i=0;i<HEAD.length;i++){
+      if(done)return;
+      const p=HEAD[i-1];
+      await wait(50+Math.random()*45+(p==='.'?300:p===','?110:0));
+      node.nodeValue+=HEAD[i];
+    }
     el.classList.remove('typing');
-    await wait(650); if(done)return;
-    el.classList.add('typing');
-    const len=node.nodeValue.length-HEAD.length;
-    await run(len,k=>Math.max(1,45*Math.pow(.86,k)),()=>{node.nodeValue=node.nodeValue.slice(0,-1);});
-    el.classList.remove('typing');
-    await wait(350); if(done)return;
-    /* swap the typed apostrophe for a pen stroke, then hand-write the rest */
-    typed.innerHTML='Hi, I<span class="intro-apos"><span class="ch">\u2019</span><svg viewBox="0 0 10 16" aria-hidden="true"><path pathLength="1" d="M6.5 1.5C8 5 7 9.5 2.5 14"/></svg></span>m Itai. I';
-    const go=()=>{ if(done)return; el.classList.add('hand'); requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('write'))); };
-    if(document.fonts&&document.fonts.load) await Promise.race([document.fonts.load('600 1em Caveat','use AI.'),wait(700)]).catch(()=>{});
-    go();
-    await wait(1050); if(done)return;
-    el.classList.add('ink');
-    await wait(1300);
+    await wait(420); if(done)return;
+    el.classList.add('rolling');
+    /* each word stays a little less than the last, until it blurs */
+    let gap=480;
+    for(const v of VERBS){
+      if(done)return;
+      roll(v,Math.min(420,gap*.85));
+      await wait(gap);
+      gap=Math.max(85,gap*.8);
+    }
+    await wait(120); if(done)return;
+    roll(FINAL,380,true);
+    await wait(900); if(done)return;
+    /* the aside, by hand: bracket, word, bracket */
+    if(document.fonts&&document.fonts.load) await Promise.race([document.fonts.load('600 1em Caveat','(creatively)'),wait(600)]).catch(()=>{});
+    if(done)return;
+    el.classList.add('aside');
+    await wait(1600);
     finish();
   })();
 })();
