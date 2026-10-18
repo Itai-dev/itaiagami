@@ -70,7 +70,7 @@ function project(p){
     url: SITE + '/work/' + p.slug + '.html',
     image: absUrl(p.hero),
     thumbnail: absUrl(p.thumb),
-    video: p.vimeo ? 'https://vimeo.com/' + p.vimeo : null
+    video: p.mux && p.mux.playbackId ? 'https://player.mux.com/' + p.mux.playbackId : p.vimeo ? 'https://vimeo.com/' + p.vimeo : null
   };
 }
 
