@@ -150,6 +150,11 @@ function blocks(node, ctx, out){
     if(node.tag === 'form') out.push('*This page has a form. Agents can submit the same enquiry with `POST ' + abs('/api/enquiry', ctx.base) + '`, documented in [the OpenAPI description](' + abs('/openapi.json', ctx.base) + ').*');
     return out;
   }
+  if(a['data-mux']){
+    const title = a['data-title'] || 'Film';
+    out.push('[' + escMd(title) + '](https://player.mux.com/' + encodeURIComponent(a['data-mux']) + ')');
+    return out;
+  }
   if(a['data-vimeo']){
     const title = a['data-title'] || 'Film';
     out.push('[' + escMd(title) + '](https://vimeo.com/' + encodeURIComponent(a['data-vimeo']) + ')');
@@ -216,7 +221,7 @@ function blocks(node, ctx, out){
     run = [];
   };
   for(const c of node.children || []){
-    if(c.tag && (BLOCK.has(c.tag) || hasBlockChild(c) || c.attrs['data-vimeo'])){ flush(); blocks(c, ctx, out); }
+    if(c.tag && (BLOCK.has(c.tag) || hasBlockChild(c) || c.attrs['data-vimeo'] || c.attrs['data-mux'])){ flush(); blocks(c, ctx, out); }
     else run.push(c);
   }
   flush();

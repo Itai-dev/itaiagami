@@ -816,8 +816,9 @@ async function start() {
   }
   // Case studies are re-laid out inside the window: one plain paragraph on top,
   // then the film and every image together in a single tight mosaic.
-  // Pages without a film get the project's Vimeo film from the data.
-  const vimeoBySlug = Object.fromEntries(projects.filter(p => p.vimeo).map(p => [p.slug, p.vimeo]));
+  // Pages without a film get the project's film from the data (Mux, else Vimeo).
+  const filmBySlug = Object.fromEntries(projects.filter(p => muxId(p) || p.vimeo).map(p => [p.slug,
+    muxId(p) ? `https://player.mux.com/${encodeURIComponent(muxId(p))}` : `https://player.vimeo.com/video/${p.vimeo}?title=0&byline=0&portrait=0&dnt=1`]));
   const firstSentence = t => { const m = t.match(/^(.{20,}?[.!?])(\s|$)/); return m ? m[1] : t; };
   const textOf = el => (el ? el.textContent : '').replace(/\s+/g, ' ').trim();
 
@@ -825,20 +826,20 @@ async function start() {
     const firstVideo = doc.querySelector('main video');
     let film = doc.querySelector('.c-film--lead') || doc.querySelector('.c-film') ||
       (firstVideo && (firstVideo.closest('figure, .fm') || firstVideo));
-    if (!film && vimeoBySlug[slug]) {
+    if (!film && filmBySlug[slug]) {
       film = doc.createElement('div');
       film.className = 'c-film';
-      film.innerHTML = `<div class="frame"><iframe src="https://player.vimeo.com/video/${vimeoBySlug[slug]}?title=0&byline=0&portrait=0&dnt=1" title="Film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+      film.innerHTML = `<div class="frame"><iframe src="${filmBySlug[slug]}" title="Film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
     }
     return film;
   }
   function startFilm(film) {
     const play = film.querySelector('.c-play');
     if (play) play.click();
-    for (const f of film.querySelectorAll('iframe[src*="player.vimeo.com"]')) {
-      if (/[?&]autoplay=1/.test(f.src)) continue;
+    for (const f of film.querySelectorAll('iframe[src*="player.vimeo.com"], iframe[src*="player.mux.com"]')) {
+      if (/[?&]autoplay=(1|true)/.test(f.src)) continue;
       f.allow = 'autoplay; fullscreen; picture-in-picture';
-      f.src += (f.src.includes('?') ? '&' : '?') + 'autoplay=1';
+      f.src += (f.src.includes('?') ? '&' : '?') + (f.src.includes('mux.com') ? 'autoplay=true' : 'autoplay=1');
     }
     const v = film.matches('video') ? film : film.querySelector('video');
     if (v) { v.muted = true; v.preload = 'auto'; v.play().catch(() => {}); }
