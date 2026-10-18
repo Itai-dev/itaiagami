@@ -567,9 +567,9 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 })();
 
 /* ---------- intro loader (home) ----------
-   Types "Hi, I'm Itai. I", then the verb turns on a drum like a watch crown
-   picker (design, develop, ideate...), slow enough to read at first, then
-   spinning until it is too much for one person, settles on "use AI.", and "creatively" is hand-written after it, then
+   Types "Hi, I'm Itai. I design.", then the verb turns on a drum like a watch
+   crown picker (develop, ideate, create...), speeding up exponentially until
+   it is too much for one person, settles on "use AI.", and "creatively" is hand-written after it, then
    bracketed.
    Runs only when the head script set html.intro-on (first visit this session,
    no reduced motion). Any click, tap or key skips it. */
@@ -582,10 +582,11 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   const HEAD='Hi, I’m Itai. I';
   const VERBS=['design','develop','ideate','create','sketch','direct','animate','model','code','film','edit','prototype','illustrate','brand','build','launch'];
   const FINAL='use AI';
-  /* the drum's rhythm: time to turn to each word, then how long it rests there.
-     The first three can be read; after that it spins without stopping. */
-  const MOVE=[520,460,420,360,300,240,190,150,120,100,85,75,70,70,70,70];
-  const REST=[850,620,450,220,80];
+  /* the drum's rhythm: each word gets a little less time than the last, on an
+     exponential curve, so the first few can be read and the rest blur. While
+     a step is long the drum eases in and rests; once short it turns non-stop. */
+  const stepTime=i=>Math.max(62,1000*Math.pow(.74,i));
+  const moveTime=T=>Math.min(T,300+.15*T);
   let done=false;
   /* watchdog: exits only if the sequence stalls, so a slow device still sees the ending */
   let dog=0;
@@ -667,14 +668,21 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       await wait(50+Math.random()*45+(p==='.'?300:p===','?110:0));
       node.nodeValue+=HEAD[i];
     }
+    /* the first verb is typed like the rest of the sentence; then the drum takes it */
+    const caret=el.querySelector('.intro-caret'), first=words[0], firstText=first.textContent;
+    first.textContent=''; p=0; slot.appendChild(caret); el.classList.add('rolling'); render();
+    for(const ch of firstText){
+      await wait(55+Math.random()*40); if(done)return;
+      first.textContent+=ch; render();
+    }
     el.classList.remove('typing');
-    await wait(300); if(done)return;
-    el.classList.add('rolling');
-    for(let i=0;i<VERBS.length;i++){
+    await wait(750); if(done)return;
+    el.classList.add('spin');
+    for(let i=1;i<VERBS.length;i++){
       if(done)return;
-      const rest=REST[i]||0;
-      await turn(i,MOVE[i],rest?easeOut:linear);
-      if(rest) await wait(rest);
+      const T=stepTime(i-1), move=moveTime(T), rest=T-move;
+      await turn(i,move,rest>0?easeOut:linear);
+      if(rest>0) await wait(rest);
     }
     if(done)return;
     await turn(VERBS.length,720,easeBack);           /* settles on "use AI." with a small overshoot */

@@ -1327,12 +1327,16 @@ header.site,header.site.scrolled{border-bottom:var(--rule) solid var(--line)}
 .band{border-top-width:var(--rule);border-image:var(--bleed) 1 / var(--rule) 0 0 / 0 100vw}
 footer.site .grid{border-top-width:var(--rule);border-image:var(--bleed) 1 / var(--rule) 0 0 / 0 100vw}
 :root[data-theme="light"] .selected .swork::before{inset:0 calc(-1 * var(--pad-x));border-radius:0}
+/* the logo strip runs the full width of the grid: to the screen edge on phones,
+   to the frame rules on desktop */
+.hero .clients-strip{margin-inline:calc(-1 * var(--pad-x))}
 @media (min-width:900px){
   body{position:relative}
   body::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;margin:0 auto;
     width:min(calc(var(--maxw) - 2 * var(--pad-x) + 2 * var(--frame-in)),calc(100% - 2 * var(--pad-x) + 2 * var(--frame-in)));
     border-inline:var(--rule) solid var(--line)}
   :root[data-theme="light"] .selected .swork::before{inset:0 calc(var(--rule) - var(--frame-in))}
+  .hero .clients-strip{margin-inline:calc(var(--rule) - var(--frame-in))}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1367,7 +1371,7 @@ white-space:nowrap;
 .intro-typed{white-space:pre-wrap}
 .intro-caret{display:inline-block;width:.07em;height:1.05em;margin-left:.04em;vertical-align:-.15em;background:var(--fg);animation:intro-blink 1s steps(1) infinite}
 .intro-loader.typing .intro-caret{animation:none}
-.intro-loader.rolling .intro-caret{display:none}
+.intro-loader.spin .intro-caret{display:none}
 @keyframes intro-blink{50%{opacity:0}}
 /* the verb picker: a short window onto a rolling drum, edges fading out */
 .intro-slot{
