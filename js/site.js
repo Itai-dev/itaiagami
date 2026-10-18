@@ -540,9 +540,13 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 (function(){
   const HL=window.HL;
   if(!HL||!document.querySelector('[data-hairline-host]'))return;
+  /* a figure can appear more than once on a page (services shows the same
+     drawing in the offer and in the capabilities); mount every host */
   window.hairline=fig=>{
-    const host=document.querySelector('[data-hairline-host="'+fig.name+'"]');
-    if(!host||host.firstChild)return;
+    document.querySelectorAll('[data-hairline-host="'+fig.name+'"]').forEach(host=>mountIn(host,fig));
+  };
+  function mountIn(host,fig){
+    if(host.firstChild)return;
     HL.inject(document);
     const stage=document.createElement('div');
     stage.setAttribute('data-hairline',fig.name);
@@ -563,7 +567,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       send('pointermove',s.left+s.width*(.2+.6*f),s.top+s.height*.5);
     });
     row.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse')send('pointerleave',0,0); });
-  };
+  }
 })();
 
 /* ---------- intro loader (home) ----------
