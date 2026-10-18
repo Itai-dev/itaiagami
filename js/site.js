@@ -566,10 +566,77 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   };
 })();
 
-/* ---------- hero reveal (home) ---------- */
+/* ---------- intro loader (home) ----------
+   Types an implausibly long list of things one person does, rewinds it to
+   "I", then hand-writes "use AI." and lifts away to reveal the page.
+   Runs only when the head script set html.intro-on (first visit this session,
+   no reduced motion). Any click, tap or key skips it. */
+(function(){
+  const root=document.documentElement, el=document.getElementById('intro');
+  if(!el||!root.classList.contains('intro-on'))return;
+  try{sessionStorage.setItem('intro','1')}catch(e){}
+  el.style.animation='none';                         /* the script owns the exit now */
+  const typed=el.querySelector('.intro-typed');
+  const HEAD='Hi, I\u2019m Itai. I';
+  const LIST=' create, develop, ideate, design, sketch, direct, write, animate, model, render, code, prototype, film, edit, shoot, illustrate, brand, pitch, storyboard, compose, research, strategize, curate, build, test, launch, iterate, retouch, typeset, light, rig, score, produce, present, consult, mentor, teach, ship, repeat, and\u2026';
+  const node=document.createTextNode(''); typed.appendChild(node);
+  let done=false;
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  /* step through n characters; delay(i) is the gap before character i, in ms */
+  const run=(n,delay,step)=>new Promise(res=>{
+    let i=0, acc=0, last=performance.now();
+    (function f(now){
+      if(done)return;
+      acc+=now-last; last=now;
+      while(i<n&&acc>=delay(i)){acc-=delay(i);step(i++);}
+      i<n?requestAnimationFrame(f):res();
+    })(last);
+  });
+  const jit=Array.from({length:LIST.length},()=>Math.random());
+  function finish(){
+    if(done)return; done=true;
+    el.classList.add('out');
+    setTimeout(()=>dispatchEvent(new Event('intro:done')),140);
+    setTimeout(()=>{root.classList.remove('intro-on');el.remove();},950);
+  }
+  const hint=el.querySelector('.intro-hint'); if(hint&&matchMedia('(hover:hover)').matches)hint.textContent='Click or press any key to skip';
+  el.addEventListener('pointerdown',finish);
+  addEventListener('keydown',finish,{once:true});
+  setTimeout(finish,12000);                          /* never trap the visitor */
+  (async()=>{
+    el.classList.add('typing');
+    await wait(300);
+    /* a human pace for the greeting */
+    await run(HEAD.length,i=>{const p=HEAD[i-1];return 52+jit[i]*45+(p==='.'?320:p===','?120:0);},i=>{node.nodeValue+=HEAD[i];});
+    /* then the list runs away with itself */
+    await run(LIST.length,i=>Math.max(2,38*Math.pow(.972,i))+(i<40&&LIST[i-1]===','?50:0),i=>{node.nodeValue+=LIST[i];});
+    el.classList.remove('typing');
+    await wait(650); if(done)return;
+    el.classList.add('typing');
+    const len=node.nodeValue.length-HEAD.length;
+    await run(len,k=>Math.max(1,45*Math.pow(.86,k)),()=>{node.nodeValue=node.nodeValue.slice(0,-1);});
+    el.classList.remove('typing');
+    await wait(350); if(done)return;
+    /* swap the typed apostrophe for a pen stroke, then hand-write the rest */
+    typed.innerHTML='Hi, I<span class="intro-apos"><span class="ch">\u2019</span><svg viewBox="0 0 10 16" aria-hidden="true"><path pathLength="1" d="M6.5 1.5C8 5 7 9.5 2.5 14"/></svg></span>m Itai. I';
+    const go=()=>{ if(done)return; el.classList.add('hand'); requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('write'))); };
+    if(document.fonts&&document.fonts.load) await Promise.race([document.fonts.load('600 1em Caveat','use AI.'),wait(700)]).catch(()=>{});
+    go();
+    await wait(1050); if(done)return;
+    el.classList.add('ink');
+    await wait(1300);
+    finish();
+  })();
+})();
+
+/* ---------- hero reveal (home) ----------
+   Waits for the intro loader when one is playing. */
 (function(){
   const h=document.querySelector('.hero'); if(!h)return;
-  const go=()=>h.classList.add('revealed');
+  let held=document.documentElement.classList.contains('intro-on');
+  const go=()=>{ if(!held)h.classList.add('revealed'); };
+  addEventListener('intro:done',()=>{held=false;go();});
+  setTimeout(()=>{held=false;go();},13000);
   requestAnimationFrame(()=>requestAnimationFrame(go));
   addEventListener('load',go);
   setTimeout(go,120);
