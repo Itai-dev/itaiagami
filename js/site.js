@@ -569,7 +569,8 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 /* ---------- intro loader (home) ----------
    Types "Hi, I'm Itai. I", then the verb rolls like a watch crown picker
    (design, develop, ideate...), slow enough to read at first, speeding up until it is too much for one
-   person, settles on "use AI", and "(creatively)" is hand-written after it.
+   person, settles on "use AI.", and "creatively" is hand-written after it, then
+   bracketed.
    Runs only when the head script set html.intro-on (first visit this session,
    no reduced motion). Any click, tap or key skips it. */
 (function(){
@@ -582,7 +583,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   const VERBS=['design','develop','ideate','create','sketch','direct','write','animate','model','code','film','edit','prototype','illustrate','brand','render','build','launch'];
   /* how long each word holds: the first three are readable, then it runs away */
   const HOLD=[900,760,620,430,290,190,130,95,75];
-  const FINAL='use AI';
+  const FINAL='use AI';                            /* every word ends on a full stop */
   const EASE='cubic-bezier(.23,1,.32,1)';
   let done=false;
   /* watchdog: exits only if the sequence stalls, so a slow device still sees the ending */
@@ -605,7 +606,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   /* the window is as wide as the widest word still on the drum */
   const fit=()=>{slot.style.width=Math.max(0,...[...slot.children].map(c=>c.offsetWidth))+'px';};
   function roll(word,dur,settle){
-    const w=document.createElement('span'); w.className='w'; w.textContent=word;
+    const w=document.createElement('span'); w.className='w'; w.textContent=word+'.';
     slot.appendChild(w);
     const old=cur; cur=w;
     if(old)old.classList.add('leaving');
@@ -644,7 +645,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     const aside=el.querySelector('.intro-aside'), line=el.querySelector('.intro-line');
     if(slot.getBoundingClientRect().right+aside.offsetWidth*1.08>line.getBoundingClientRect().right)aside.classList.add('below');
     el.classList.add('aside');
-    await wait(1600);
+    await wait(2400);
     finish();
   })();
 })();
