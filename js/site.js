@@ -615,7 +615,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       if(ad>1.6){w.style.visibility='hidden';return;}
       w.style.visibility='';
       w.style.transform=`translateY(${(d*1.05).toFixed(3)}em) rotateX(${(-d*48).toFixed(1)}deg)`;
-      w.style.opacity=Math.max(0,1-ad*.7).toFixed(3);
+      w.style.opacity=Math.max(0,1-ad*1.15).toFixed(3);
     });
     /* the in-flow sizer holds the baseline and the width of whatever is in the window */
     const lo=words[Math.max(0,Math.floor(p))], hi=words[Math.min(words.length-1,Math.ceil(p))];
@@ -635,9 +635,31 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   });};
   render();
 
+  /* centre the finished sentence ("Hi, I'm Itai. I use AI." plus the aside
+     when it fits beside it), then anchor its left edge there so nothing
+     shifts while the words change */
+  const line=el.querySelector('.intro-line'), aside=el.querySelector('.intro-aside');
+  const node=document.createTextNode(''); typed.appendChild(node);
+  function centre(){
+    const was=el.classList.contains('rolling'), keep=node.nodeValue, keepP=p;
+    line.style.paddingLeft='0';
+    node.nodeValue=HEAD; el.classList.add('rolling'); p=words.length-1; render();
+    const box=line.getBoundingClientRect();
+    const left=typed.getBoundingClientRect().left, right=slot.getBoundingClientRect().right;
+    const asideW=aside.offsetWidth+aside.offsetWidth*.08;
+    const beside=right+asideW-left<=box.width;
+    aside.classList.toggle('below',!beside);
+    const w=(right-left)+(beside?asideW:0);
+    line.style.paddingLeft=Math.max(0,(box.width-w)/2)+'px';
+    node.nodeValue=keep; p=keepP; render(); if(!was)el.classList.remove('rolling');
+  }
+  addEventListener('resize',()=>{if(!done)centre();});
+
   (async()=>{
     el.classList.add('typing');
-    const node=document.createTextNode(''); typed.appendChild(node);
+    if(document.fonts&&document.fonts.ready) await Promise.race([document.fonts.ready,wait(800)]).catch(()=>{});
+    if(done)return;
+    centre();
     await wait(300);
     for(let i=0;i<HEAD.length;i++){
       if(done)return;
@@ -657,11 +679,9 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     if(done)return;
     await turn(VERBS.length,720,easeBack);           /* settles on "use AI." with a small overshoot */
     await wait(900); if(done)return;
-    /* the aside, by hand: bracket, word, bracket */
+    /* the aside, by hand: the word, then its brackets */
     if(document.fonts&&document.fonts.load) await Promise.race([document.fonts.load('600 1em Caveat','(creatively)'),wait(600)]).catch(()=>{});
     if(done)return;
-    const aside=el.querySelector('.intro-aside'), line=el.querySelector('.intro-line');
-    if(slot.getBoundingClientRect().right+aside.offsetWidth*1.08>line.getBoundingClientRect().right)aside.classList.add('below');
     el.classList.add('aside');
     await wait(2400);
     finish();

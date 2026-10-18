@@ -1372,14 +1372,15 @@ white-space:nowrap;
 /* the verb picker: a short window onto a rolling drum, edges fading out */
 .intro-slot{
 display:none;position:relative;vertical-align:baseline;margin-left:.26em;
-padding:.3em 0;margin-top:-.3em;margin-bottom:-.3em;
+padding:.6em 0;margin-top:-.6em;margin-bottom:-.6em;
 perspective:600px;
--webkit-mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);
-mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);
+/* the fade lives only in the padding, so tall letters and descenders stay crisp */
+-webkit-mask-image:linear-gradient(transparent,#000 .5em,#000 calc(100% - .5em),transparent);
+mask-image:linear-gradient(transparent,#000 .5em,#000 calc(100% - .5em),transparent);
 }
 .intro-loader.rolling .intro-slot{display:inline-block}
 .intro-slot .sizer{visibility:hidden;white-space:nowrap}
-.intro-slot .w{position:absolute;left:0;top:.3em;white-space:nowrap;transform-origin:50% 50% -.5em;backface-visibility:hidden;will-change:transform,opacity}
+.intro-slot .w{position:absolute;left:0;top:.6em;white-space:nowrap;transform-origin:50% 50% -.5em;backface-visibility:hidden;will-change:transform,opacity}
 /* the hand-written aside: brackets drawn as pen strokes, the word written between them */
 /* the aside floats over the layout so writing it never moves the line;
    when there is no room to the right it hangs below "use AI" instead */
@@ -1390,8 +1391,9 @@ mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);
 .intro-aside .br{display:inline-block;width:.3em;height:1.2em;vertical-align:-.26em;overflow:visible}
 .intro-aside .br path{vector-effect:none;stroke-width:2.8px;opacity:0}
 .intro-loader svg path{fill:none;stroke:currentColor;stroke-linecap:round;stroke-width:2.6px;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1}
-/* the word first, then both brackets close around it */
-.intro-loader.aside .br path{animation:intro-ink .4s var(--ease) .95s forwards}
+/* the word first, then the left bracket, then the right */
+.intro-loader.aside .br path{animation:intro-ink .35s var(--ease) .95s forwards}
+.intro-loader.aside .br:last-child path{animation-delay:1.35s}
 @keyframes intro-ink{from{opacity:1}to{stroke-dashoffset:0;opacity:1}}
 .intro-hand{
 display:inline-block;padding:0 .02em;
