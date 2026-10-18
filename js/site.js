@@ -550,7 +550,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     const svg=HL.mk('svg',{viewBox:'0 0 400 320','aria-hidden':'true'},stage);
     let text='';
     const read={get textContent(){return text;},set textContent(v){text=v==null?'':String(v);}};
-    fig.mount({stage,svg,read},fig.range[1]);
+    host.hairline=fig.mount({stage,svg,read},fig.range[1]);   /* kept so the hero cloud can retire it */
     requestAnimationFrame(()=>host.classList.add('ready'));
 
     const row=host.closest('a,[data-hairline-row]');
@@ -712,6 +712,31 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   addEventListener('load',go);
   setTimeout(go,120);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)go();});
+})();
+
+/* ---------- hero cloud (home) ----------
+   The project stills on a turning sphere (js/hero-cloud.js, three.js from the
+   import map in index.html) take the folders figure's place. Fetched only once
+   the page has loaded and the intro is gone, so the first screen never waits
+   on it; skipped under reduced motion, where the folders stay. Any failure
+   leaves the folders as they are. */
+(function(){
+  const host=document.getElementById('heroSystem');
+  if(!host||!document.querySelector('script[type="importmap"]'))return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  let intro=!document.documentElement.classList.contains('intro-on');
+  let loaded=document.readyState==='complete', started=false;
+  const go=()=>{
+    if(started||!intro||!loaded)return; started=true;
+    /* no WebGL: keep the folders without fetching three.js at all */
+    try{const c=document.createElement('canvas'),g=c.getContext('webgl2')||c.getContext('webgl');if(!g)return;const x=g.getExtension('WEBGL_lose_context');if(x)x.loseContext();}catch(e){return;}
+    const idle=window.requestIdleCallback||(fn=>setTimeout(fn,200));
+    idle(()=>import('/js/hero-cloud.js').then(m=>m.mount(host)).catch(err=>console.info('hero cloud: keeping the folders',err&&err.message||err)),{timeout:1500});
+  };
+  addEventListener('intro:done',()=>{intro=true;go();},{once:true});
+  setTimeout(()=>{intro=true;go();},16000);
+  if(!loaded)addEventListener('load',()=>{loaded=true;go();},{once:true});
+  go();
 })();
 
 /* ---------- scroll reveals ----------

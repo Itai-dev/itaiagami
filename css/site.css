@@ -1410,3 +1410,37 @@ clip-path:inset(-30% 100% -40% 0);
 @keyframes intro-write{to{clip-path:inset(-30% -5% -40% 0)}}
 .intro-hint{position:absolute;left:var(--pad-x);bottom:var(--pad-x);font-size:var(--t-micro);color:var(--dim);opacity:0;animation:intro-hint .6s ease 1.2s forwards}
 @keyframes intro-hint{to{opacity:1}}
+
+/* ---------- hero cloud (home) ----------
+   The project stills on a turning sphere (js/hero-cloud.js) in the folders
+   figure's place. The box takes the folders' exact footprint, so nothing moves
+   when it swaps in; the canvas bleeds a little past the box so cards swinging
+   out at the edges are never cut. It sits over the folders while it fades in
+   (.cloud-in), then takes their place in the flow (.has-cloud). */
+.hero-cloud{
+position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+width:100%;aspect-ratio:5/4;--bx:8%;--by:8%;
+opacity:0;transition:opacity 1.6s var(--ease);
+}
+.hero-cloud.ready{opacity:1}
+.hero-system.cloud-in [data-hairline]{opacity:0;transition:opacity .8s var(--ease);pointer-events:none}
+.hero-system.has-cloud .hero-cloud{position:relative;left:auto;top:auto;transform:none}
+.hero-cloud .hc-canvas{
+position:absolute;display:block;
+left:calc(-1 * var(--bx));top:calc(-1 * var(--by));
+width:calc(100% + 2 * var(--bx));height:calc(100% + 2 * var(--by));
+pointer-events:auto;cursor:grab;touch-action:pan-y;
+-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;
+}
+.hero-cloud .hc-canvas.is-card{cursor:pointer}
+.hero-cloud .hc-canvas.is-drag{cursor:grabbing}
+.hero-cloud .hc-label{
+position:absolute;left:0;top:0;z-index:1;pointer-events:none;white-space:nowrap;
+font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-micro);line-height:1.2;letter-spacing:var(--track-micro);
+color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:5px 8px;
+opacity:0;transition:opacity var(--dur-fast) ease;
+}
+.hero-cloud .hc-label.on{opacity:1}
+@media(max-width:900px){.hero-cloud{max-width:min(100%,460px)}}
+@media(max-width:600px){.hero-cloud{max-width:min(100%,420px);--bx:var(--pad-x);--by:10%}}
+@media(min-width:901px){.hero-cloud{aspect-ratio:100/76;max-width:none;--bx:6%;--by:9%}}
