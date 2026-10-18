@@ -52,8 +52,10 @@ async function start() {
   // hero; without any of them the card shows the project name
   const cardImage = p => {
     if (p.thumb) return sized(p.thumb, 1024);
-    if (muxId(p) && kind(p) !== 'image') return `https://image.mux.com/${encodeURIComponent(muxId(p))}/thumbnail.webp?time=0&width=1024`;
-    const src = p.thumb || p.image || p.hero;
+    // the main video, or the first of "more videos" when only those are filled in
+    const vid = muxId(p) || ((p.moreMux || []).find(m => m && m.playbackId) || {}).playbackId;
+    if (vid && kind(p) !== 'image') return `https://image.mux.com/${encodeURIComponent(vid)}/thumbnail.webp?time=0&width=1024`;
+    const src = p.image || p.hero;
     return src ? sized(src, 1024) : null;
   };
   const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -402,23 +404,29 @@ async function start() {
       const last = groups[groups.length - 1];
       if (last && last[0].unit === it.unit) last.push(it); else groups.push([it]);
     }
-    const nu = groups.length;
-    const v = new THREE.Vector3(), east = new THREE.Vector3();
-    groups.forEach((members, i) => {
-      spherePoint(i, nu, v);
+    const v = new THREE.Vector3(), east = new THREE.Vector3(), north = new THREE.Vector3(), unit = new THREE.Vector3();
+    let slot = 0;
+    groups.forEach(members => {
       const m = members.length;
-      // a group steps along the sphere's latitude, staying on its surface
+      // a group takes as much of the sphere as its cards would, centred on its middle slot
+      spherePoint(slot + (m - 1) / 2, n, v);
+      slot += m;
+      // its cards sit in a tight block of tiles on the sphere's surface
       east.set(v.z, 0, -v.x);
       if (east.lengthSq() < 1e-4) east.set(1, 0, 0);
       east.normalize();
-      const step = NEIGHBOUR * 1.15;
+      north.crossVectors(v, east).normalize();
+      const cols = m <= 2 ? m : m <= 4 ? 2 : 3, rows = Math.ceil(m / cols);
       members.forEach((it, k) => {
-        it.target.copy(v).addScaledVector(east, (k - (m - 1) / 2) * step);
+        const c = k % cols, r = Math.floor(k / cols);
+        const inRow = r === rows - 1 ? m - r * cols : cols;      // centre a shorter last row
+        it.target.copy(v)
+          .addScaledVector(east, (c - (inRow - 1) / 2) * NEIGHBOUR * 1.15)
+          .addScaledVector(north, ((rows - 1) / 2 - r) * NEIGHBOUR * .8);
         if (m > 1) {
-          const y = it.target.y;
-          it.target.y = 0;
-          it.target.setLength(Math.sqrt(Math.max(0, R * R - (y / SPHERE_SQUASH) ** 2)) || it.target.length());
-          it.target.y = y;
+          // back onto the (slightly squashed) sphere
+          unit.set(it.target.x, it.target.y / SPHERE_SQUASH, it.target.z).setLength(R);
+          it.target.set(unit.x, unit.y * SPHERE_SQUASH, unit.z);
         }
       });
     });
