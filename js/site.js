@@ -290,7 +290,7 @@ const Analytics = (function(){
       banner.className = 'consent';
       banner.setAttribute('role', 'region');
       banner.setAttribute('aria-label', 'Analytics preferences');
-      banner.innerHTML = '<p>May I use Google Analytics and Microsoft Clarity to see how this site is found and used? '
+      banner.innerHTML = '<p>May I use Google Analytics and Microsoft Clarity to see how the site is used? '
         + 'Nothing loads unless you accept. <a href="' + priv + '">Privacy</a></p>'
         + '<div class="consent-actions">'
         + '<button type="button" class="btn" data-consent="denied">Reject</button>'
@@ -313,7 +313,22 @@ const Analytics = (function(){
   const c = readConsent();
   if(c === 'granted') load();
   else if(c === 'denied') log('consent: denied — GA4 and Clarity not loaded');
-  else showBanner();
+  else {
+    /* first visit: nothing loads before a choice (Consent Mode defaults to denied),
+       so the banner waits until the visitor scrolls past 200px or 6 s pass,
+       keeping the first screen clear. [data-consent-open] still opens it at once. */
+    let shown = false, timer = 0;
+    const later = () => {
+      if(shown) return;
+      shown = true;
+      clearTimeout(timer);
+      removeEventListener('scroll', onScroll);
+      if(!readConsent() && (!banner || banner.hidden)) showBanner();
+    };
+    const onScroll = () => { if(scrollY > 200) later(); };
+    addEventListener('scroll', onScroll, { passive: true });
+    timer = setTimeout(later, 6000);
+  }
 
   return { track, debug: () => debug };
 })();
