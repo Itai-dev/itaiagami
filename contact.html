@@ -43,7 +43,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="css/site.css" />
-<noscript><style>.c-cal-card{display:none!important}.c-cal{padding:0!important;display:block!important;background:#fff!important}</style></noscript>
+<noscript><style>.c-cal-card{display:none!important}.c-cal{padding:0!important;display:block!important;background:#fff!important}#panel-brief[hidden]{display:block}</style></noscript>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -87,22 +87,18 @@
       <div class="c-intro">
         <h1>Tell me what’s <em>launching</em>.</h1>
         <p class="c-paths">Book 20 minutes, or write first if you prefer. Here’s what happens next:</p>
-        <ol class="c-steps"><li>A 20-minute call about the problem: what’s launching, who it’s for and what’s still undecided. No brief needed.</li><li>If it’s a fit, I send a short proposal for a Launch Sprint within a few days.</li><li>You decide. Larger launches are scoped with the team they need.</li></ol>
-        <p class="c-qual">Not sure where your project sits? Say what you know. The <a href="services.html">services page</a> and <a href="services.html#faq">common questions</a> cover the usual cases.</p>
-        <p class="c-direct">Prefer email? Write to me at <a href="mailto:itaiagami@gmail.com">itaiagami@gmail.com</a>.</p>
-        <p class="cap-proof svc-proof">Brands I’ve made work for, with agencies, studios and in-house teams: Google, Simply, MAX, Channel 13. <a href="work.html">See the work <span class="arw" aria-hidden="true">→</span></a></p>
-        <div class="c-fig" data-hairline-host="tray" aria-hidden="true"></div>
       </div>
 
       <!-- 2 — book a call (default) or send a brief -->
       <div class="c-form">
+        <span id="brief" aria-hidden="true"></span>
         <div class="c-tabs" role="tablist" aria-label="How to get in touch">
           <button type="button" role="tab" id="tab-call" aria-controls="panel-call" aria-selected="true">Book a call</button>
           <button type="button" role="tab" id="tab-brief" aria-controls="panel-brief" aria-selected="false" tabindex="-1">Write to me</button>
         </div>
         <div class="c-panel" id="panel-call" role="tabpanel" aria-labelledby="tab-call">
           <div class="c-cal">
-            <div class="c-cal-card" id="cCalCard"><p class="c-cal-l">A 20-minute intro call</p><p class="c-cal-t">About what’s launching, who it’s for and what’s still undecided. No brief needed.</p><button type="button" class="btn solid" id="cCalLoad">Show available times <span class="arw" aria-hidden="true">→</span></button></div>
+            <div class="c-cal-card" id="cCalCard"><p class="c-cal-l">A 20-minute intro call</p><p class="c-cal-t">Pick a time that suits you; the calendar opens right here.</p><button type="button" class="btn solid" id="cCalLoad">Show available times <span class="arw" aria-hidden="true">→</span></button></div>
             <template id="cCalTpl"><iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3bYwrvw_MjttEYUre5hr2ZM3mY01ugJrljyWaM5u6vosSYTjzCyrnmt8rraXGODIz3hMC0QhUg?gv=true" title="Book a 20-minute intro call with Itai Agami"></iframe></template>
             <noscript><iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3bYwrvw_MjttEYUre5hr2ZM3mY01ugJrljyWaM5u6vosSYTjzCyrnmt8rraXGODIz3hMC0QhUg?gv=true" title="Book a 20-minute intro call with Itai Agami"></iframe></noscript>
           </div>
@@ -205,6 +201,14 @@
         </div>
       </div>
 
+      <!-- 3 — what happens next, after the form on phones -->
+      <div class="c-more">
+        <ol class="c-steps"><li>A 20-minute call about the problem: what’s launching, who it’s for and what’s still undecided. No brief needed.</li><li>If it’s a fit, I send a short proposal within a few days, usually for a Launch Sprint to start.</li><li>You decide. If the launch is bigger than a Sprint, we scope the rest together.</li></ol>
+        <p class="c-direct">Prefer email? Write to me at <a href="mailto:itaiagami@gmail.com">itaiagami@gmail.com</a>.</p>
+        <p class="cap-proof svc-proof">Brands I’ve made work for, with agencies, studios and in-house teams: Google, Simply, MAX, Channel 13. <a href="work.html">See the work <span class="arw" aria-hidden="true">→</span></a></p>
+        <div class="c-fig" data-hairline-host="tray" aria-hidden="true"></div>
+      </div>
+
     </div>
   </section>
 
@@ -216,7 +220,7 @@
     <div class="grid">
       <div class="col"><p class="fh">Menu</p><a href="work.html">Work</a><a href="services.html">Services</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
       <div class="col"><p class="fh">Connect</p><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>
-      <div class="col"><p class="fh">Studio</p><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
+      <div class="col"><p class="fh">Based</p><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
     </div>
     <div class="base">
       <span>© 2026 Itai Agami. All rights reserved.</span>

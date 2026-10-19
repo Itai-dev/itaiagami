@@ -82,7 +82,7 @@
 
         <h2 id="quickstart">Quickstart</h2>
         <p>No sign-up and no API key. Every endpoint is public and returns JSON.</p>
-<pre><code># services and starting prices
+<pre tabindex="0" aria-label="Example: services and starting prices"><code># services and starting prices
 curl https://itaiagami.com/api/v1/services
 
 # case studies, optionally by category (Brand, Culture, Technology)
@@ -99,7 +99,7 @@ curl -X POST https://itaiagami.com/api/v1/enquiry \
 
         <h2 id="endpoints">Endpoints</h2>
         <!-- The prose says "inquiry"; the API names (/api/v1/enquiry, /api/enquiry, submitEnquiry, the CLI's "enquire" command) keep their original spelling for contract stability. -->
-        <div class="tbl"><table>
+        <div class="tbl" tabindex="0" role="region" aria-label="Endpoints table"><table>
           <thead><tr><th>Request</th><th>operationId</th><th>What it returns</th></tr></thead>
           <tbody>
             <tr><td><code>GET /api/v1/services</code></td><td><code>listServices</code></td><td>The three offer sizes (Launch Sprint, Full Launch, Creative Director on call), the Launch Sprint’s starting price in each market, and the ways to get in touch</td></tr>
@@ -119,7 +119,7 @@ curl -X POST https://itaiagami.com/api/v1/enquiry \
 
         <h2 id="cli">Command-line tool</h2>
         <p>A small CLI with no dependencies (Node 18 or later) wraps the API:</p>
-<pre><code>curl -fsSLO https://itaiagami.com/cli/itaiagami.mjs
+<pre tabindex="0" aria-label="Example: installing and running the CLI"><code>curl -fsSLO https://itaiagami.com/cli/itaiagami.mjs
 node itaiagami.mjs services
 node itaiagami.mjs projects --category Brand
 node itaiagami.mjs project tower-of-david --json
@@ -130,7 +130,7 @@ node itaiagami.mjs enquire --name "Ada" --email ada@example.com \
 
         <h2 id="errors">Errors</h2>
         <p>Every error is JSON with the same shape. Branch on <code>code</code>, show <code>error</code> to people, and follow <code>hint</code> to fix the request:</p>
-<pre><code>{ "ok": false,
+<pre tabindex="0" aria-label="Example: an error response"><code>{ "ok": false,
   "error": "That email address does not look right.",
   "code": "invalid_email",
   "hint": "Set \"email\" to a full address such as name@company.com.",
@@ -139,7 +139,7 @@ node itaiagami.mjs enquire --name "Ada" --email ada@example.com \
         <p>Unknown paths under <code>/api</code> return <code>404 endpoint_not_found</code>. A version that doesn’t exist returns <code>404 unsupported_api_version</code>.</p>
 
         <h2 id="rate-limits">Rate limits</h2>
-        <div class="tbl"><table>
+        <div class="tbl" tabindex="0" role="region" aria-label="Rate limits table"><table>
           <thead><tr><th>Policy</th><th>Applies to</th><th>Quota</th></tr></thead>
           <tbody>
             <tr><td><code>read</code></td><td><code>GET /services</code>, <code>/projects</code></td><td>60 requests per 60 seconds per client</td></tr>
@@ -147,7 +147,7 @@ node itaiagami.mjs enquire --name "Ada" --email ada@example.com \
           </tbody>
         </table></div>
         <p>Responses carry the IETF RateLimit header fields (<a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/">draft-ietf-httpapi-ratelimit-headers</a>), so you can slow down before you hit the limit:</p>
-<pre><code>RateLimit-Policy: "read";q=60;w=60
+<pre tabindex="0" aria-label="Example: rate limit headers"><code>RateLimit-Policy: "read";q=60;w=60
 RateLimit: "read";r=57;t=41
 X-RateLimit-Limit: 60
 X-RateLimit-Remaining: 57
@@ -187,7 +187,7 @@ X-RateLimit-Reset: 41</code></pre>
     <div class="grid">
       <div class="col"><p class="fh">Menu</p><a href="work.html">Work</a><a href="services.html">Services</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
       <div class="col"><p class="fh">Connect</p><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>
-      <div class="col"><p class="fh">Studio</p><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
+      <div class="col"><p class="fh">Based</p><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
     </div>
     <div class="base">
       <span>© 2026 Itai Agami. All rights reserved.</span>

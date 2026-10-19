@@ -112,7 +112,7 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .hero .eyebrow{margin-bottom:clamp(24px,4vw,44px);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .hero .eyebrow .name{color:var(--fg);letter-spacing:0}
 .hero .eyebrow > span + span::before{content:"·";margin-right:14px}
-.hero h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-hero);line-height:1.15;letter-spacing:-.02em;max-width:26ch;text-wrap:balance}
+.hero h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-hero);line-height:1.15;letter-spacing:-.02em;text-wrap:balance}
 .hero h1 em{font-style:italic}
 .hero .sub{margin-top:clamp(22px,3vw,34px);max-width:46ch;font-size:var(--t-lead);line-height:1.45;font-family:"Inter",system-ui,sans-serif;font-weight:400;color:var(--dim)}
 
@@ -165,6 +165,7 @@ display:flex;align-items:center;justify-content:center;
 .swork .info{display:flex;flex-direction:column;gap:16px}
 .swork .info .kmeta{display:flex;gap:16px;flex-wrap:wrap;font-size:var(--t-meta);letter-spacing:0;color:var(--dim)}
 .swork .info .kmeta span+span::before{content:"·";margin-right:16px;color:var(--dim)}
+.kmeta span{white-space:nowrap}
 .swork .info h3{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:clamp(1.375rem,1.8vw,1.625rem);line-height:1.25;letter-spacing:-.01em}
 .swork .info h3 a{transition:opacity var(--dur-fast)}
 .swork .info h3 a:hover{opacity:.75}
@@ -208,14 +209,14 @@ display:flex;align-items:center;justify-content:center;
 .offer .cap-meta{margin-top:8px;margin-bottom:10px}
 .caps.three.offer .cap-fig{margin-bottom:-12px} /* trims the drawing's empty foot, not its size */
 .cap-cta{margin-top:auto;padding-top:26px}
-.caps.three.offer .cap,#capabilities{scroll-margin-top:96px}
+.caps.three.offer .cap,#capabilities,#how,#system,#elements,#brief{scroll-margin-top:96px}
 .svc-proof{margin-top:18px;max-width:60ch}
 @media(max-width:600px){.caps.three.offer .cap-fig{display:none}}
 .clients-list{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px 36px}
 .clients-list a{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:1.125rem;letter-spacing:0;line-height:1.3;color:var(--dim);transition:color var(--dur-fast)}
 .clients-list a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
 .band{border-top:1px solid var(--line);padding-top:clamp(40px,6vw,64px)}
-.band h2{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;max-width:16ch;margin-bottom:clamp(24px,3vw,36px)}
+.band h2{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;max-width:10.48em;margin-bottom:clamp(24px,3vw,36px)}
 .band h2 em{font-style:italic}
 /* the closing band's Hairline figure (Clay, js/site.js): right of the copy on
    wide screens, under the buttons on narrower ones; the copy's layout is untouched */
@@ -226,6 +227,8 @@ display:flex;align-items:center;justify-content:center;
 .band-fig [data-hairline]{width:100%;--hairline-plate:var(--bg);--hairline-hi:#d0d6e0;--hairline-edge:#5b5d64;--hairline-mid:#3e3e44;--hairline-lo:#29292d}
 :root[data-theme="light"] .band-fig [data-hairline]{--hairline-hi:#232327;--hairline-edge:#a4a4ac;--hairline-mid:#c3c3c9;--hairline-lo:#e0e0e4}
 @media(max-width:1100px){.band-fig{position:static;transform:none;width:min(86vw,340px);margin:28px auto -12px}}
+/* phones: the band ends on its buttons, full width, with no figure trailing after them */
+@media(max-width:600px){.band-fig{display:none}.band .cta .btn{flex:1 1 100%;justify-content:center}}
 .index-controls{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:clamp(28px,4vw,44px)}
 .filters{display:flex;gap:8px;flex-wrap:wrap}
 .filters button{background:none;border:1px solid var(--line);color:var(--dim);font-family:inherit;font-size:var(--t-meta);letter-spacing:0;padding:7px 14px;border-radius:9999px;cursor:pointer;transition:color var(--dur-fast),border-color var(--dur-fast),background var(--dur-fast)}
@@ -254,7 +257,6 @@ display:flex;align-items:center;justify-content:center;
 .index-list.grid .prow>a{display:block;padding:0}
 .index-list.grid .p-thumb{display:block;aspect-ratio:4/3;overflow:hidden;background:var(--faint);border-radius:var(--r-media);margin-bottom:14px}
 .index-list.grid .p-thumb img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
-.index-list.grid .p-thumb img.pos-top{object-position:50% 0}
 .index-list.grid .prow>a:hover .p-thumb img{transform:scale(1.05)}
 .index-list.grid .p-name{font-size:clamp(1.2rem,1.8vw,1.5rem)}
 .index-list.grid .p-idx,.index-list.grid .p-cat{display:none}
@@ -265,7 +267,7 @@ display:flex;align-items:center;justify-content:center;
 .about-grid .lead p+p{margin-top:1.1em}
 .about-grid .lead a{color:var(--fg);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-strong)}
 .about-grid .lead a:hover{text-decoration-color:var(--fg)}
-.sec-head h1.about-title{font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;max-width:22ch;text-wrap:balance}
+.sec-head h1.about-title{font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;max-width:13.9em;text-wrap:balance}
 .sec-head h1.about-title::before{display:none}
 .about-side .blk{border-top:1px solid var(--line);padding:20px 0}
 .about-side .blk h2{font-family:inherit;font-size:var(--t-meta);line-height:inherit;letter-spacing:0;color:var(--dim);margin-bottom:12px;font-weight:500;text-wrap:wrap}
@@ -287,9 +289,16 @@ gap:clamp(44px,5vw,72px) clamp(40px,6vw,96px);align-items:start}
 .c-page h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-display);
 line-height:1.14;letter-spacing:-.02em;max-width:17ch;text-wrap:balance;margin-bottom:clamp(24px,3vw,34px)}
 .c-page h1 em{font-style:normal;font-weight:600}
-.c-intro p{max-width:48ch;color:var(--dim);line-height:1.6;margin-bottom:15px}
-.c-intro p.close{color:var(--fg)}
-@media(max-width:900px){.c-layout{grid-template-columns:1fr}}
+.c-intro p,.c-more p{max-width:48ch;color:var(--dim);line-height:1.6;margin-bottom:15px}
+.c-intro p.close,.c-more p.close{color:var(--fg)}
+/* the invitation and the steps share the left column; the form spans both rows on
+   the right. On phones the form comes straight after the invitation, the steps after it. */
+.c-layout{grid-template-areas:"intro form" "more form";grid-template-rows:auto 1fr}
+@media(min-width:901px){.c-layout{row-gap:0}}
+.c-intro{grid-area:intro}
+.c-form{grid-area:form;align-self:start}
+.c-more{grid-area:more}
+@media(max-width:900px){.c-layout{grid-template-columns:1fr;grid-template-rows:none;grid-template-areas:"intro" "form" "more"}}
 /* the contact page's Hairline figure (Tray, js/site.js): shown only in the
    confirmation once an enquiry is sent, where the card drops into the tray */
 .c-fig{width:min(100%,420px);margin:clamp(20px,3vw,36px) 0 0 -3%;opacity:0;transition:opacity 1.2s var(--ease)}
@@ -372,7 +381,7 @@ transform:translateY(-75%) rotate(45deg);pointer-events:none}
 /* Spacing lives on the tile, not as a flex gap: every tile then carries an
    identical trailing margin, so the two runs are exactly equal in width and
    -50% lands precisely on the start of the second one. A flex gap would sit
-   only between items (17 gaps for 18 tiles) and the loop would jump. */
+   only between items (15 gaps for 16 tiles) and the loop would jump. */
 .track{display:flex;width:max-content;animation:ni-marquee 34s linear infinite}
 .marquee:hover .track{animation-play-state:paused}
 .tile{flex:0 0 auto;height:clamp(260px,32vw,400px);margin-right:clamp(12px,1.4vw,20px);border-radius:var(--r-media);overflow:hidden;background:var(--faint)}
@@ -484,7 +493,7 @@ h2,h3{text-wrap:balance}
 .notes-list .nd{grid-column:2;color:var(--dim);font-size:var(--t-body);line-height:1.55;margin-top:4px;max-width:60ch}
 .article{max-width:680px;margin:0 auto;padding-top:clamp(30px,5vw,60px)}
 .article .a-meta{font-size:var(--t-meta);color:var(--dim);display:flex;gap:16px;font-variant-numeric:tabular-nums;margin-bottom:18px}
-.article h1{font-weight:500;font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;margin-bottom:18px;text-wrap:balance}
+.article h1{font-weight:600;font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;margin-bottom:18px;text-wrap:balance}
 .article .dek{font-size:var(--t-lead);line-height:1.5;color:var(--dim);margin-bottom:clamp(36px,5vw,56px);text-wrap:pretty}
 .article-body{font-size:1.125rem;line-height:1.75}
 .article-body p{margin-bottom:1.4em;text-wrap:pretty}
@@ -539,9 +548,18 @@ h2,h3{text-wrap:balance}
 .fit-link .arw{transition:transform var(--dur-fast) var(--ease)}
 .fit-link:hover .arw{transform:translateX(4px)}
 /* the closing band's rule sits midway between this block and the band's heading */
-:is(.fit, section:has(> .caps-note:last-child)) + .band{margin-top:clamp(40px,6vw,64px)}
+:is(.fit, #faq, section:has(> .caps-note:last-child), section:has(> .caps.three:last-child)) + .band{margin-top:clamp(40px,6vw,64px)}
 /* Work and Notes indexes close on the same booking band */
 section:has(> .index-list, > .notes-list) + .band{margin-top:var(--sp-section)}
+/* Work: the smaller roles, as a text-only list under the grid */
+.also-list{list-style:none;padding:0;margin:0}
+.also-list a{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:14px 0;border-bottom:1px solid var(--line);color:var(--fg)}
+.also-list .a-name{color:var(--fg);text-underline-offset:4px;text-decoration-thickness:1px}
+.also-list .a-cat{color:var(--dim);text-align:right}
+.also-list a:hover .a-name{text-decoration:underline}
+.also-list a:focus-visible{outline:2px solid var(--fg);outline-offset:3px;border-radius:2px}
+@media(max-width:600px){.also-list a{flex-direction:column;align-items:flex-start;gap:4px}.also-list .a-cat{text-align:left}}
+.also + .band{margin-top:clamp(40px,6vw,64px)}
 .cap h3 a{transition:opacity var(--dur-fast)}
 .cap h3 a:hover{opacity:.7;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line-strong)}
 .sec-head .count a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
@@ -590,6 +608,8 @@ transition:background var(--dur-fast)}
    selected-work cards need the extra room */
 .svc-body{display:flex;flex-direction:column;gap:clamp(40px,6vw,72px);max-width:1180px;
 margin:clamp(44px,6vw,80px) 0 clamp(50px,8vw,90px)}
+/* How it works is followed by another section: its padding is the gap, so the body adds none */
+#how .svc-body{margin-bottom:0}
 .svc-sec{display:grid;grid-template-columns:180px 1fr;gap:clamp(20px,4vw,48px);align-items:start}
 .svc-sec .st{font-size:var(--t-meta);font-weight:500;color:var(--dim);padding-top:5px}
 .svc-sec .sb{max-width:58ch;line-height:1.65}
@@ -634,20 +654,17 @@ font-size:clamp(1.0625rem,1.4vw,1.25rem);line-height:1.35;transition:color var(-
 .about-side .blk ul li a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
 .about-side .blk ul li a[href^="services.html#"]{color:var(--fg)}
 
-/* ---------- contact qualification note ---------- */
-.c-intro .c-qual{border-top:1px solid var(--line);margin-top:26px;padding-top:18px;
-font-size:var(--t-meta);color:var(--dim);line-height:1.65;max-width:48ch}
-.c-intro .c-steps{list-style:none;counter-reset:s;margin:0 0 4px;padding:0;display:grid;gap:10px;font-size:var(--t-meta);color:var(--dim)}
-.c-intro .c-steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr}
-.c-intro .c-steps li::before{content:counter(s,decimal-leading-zero);color:var(--fg);font-variant-numeric:tabular-nums}
-.c-intro .c-qual strong{color:var(--fg);font-weight:500}
-.c-intro .c-qual a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
-.c-intro .c-qual a:hover{border-bottom-color:var(--fg)}
-.c-intro .c-direct{margin-top:12px;font-size:var(--t-meta);color:var(--dim);line-height:1.65;max-width:48ch}
-.c-intro .c-direct a{color:var(--fg);border-bottom:0;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+/* ---------- contact: what happens next ---------- */
+.c-intro .c-steps,.c-more .c-steps{list-style:none;counter-reset:s;margin:0 0 4px;padding:0;display:grid;gap:10px;font-size:var(--t-meta);color:var(--dim)}
+.c-intro .c-steps li,.c-more .c-steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr}
+.c-intro .c-steps li::before,.c-more .c-steps li::before{content:counter(s,decimal-leading-zero);color:var(--fg);font-variant-numeric:tabular-nums}
+.c-intro .c-direct,.c-more .c-direct{margin-top:12px;font-size:var(--t-meta);color:var(--dim);line-height:1.65;max-width:48ch}
+.c-intro .c-direct a,.c-more .c-direct a{color:var(--fg);border-bottom:0;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 
 /* ---------- case study → booking close ---------- */
 .c-close{margin:clamp(48px,7vw,88px) 0 clamp(40px,5vw,56px)}
+.c-close > p:first-of-type{max-width:52ch;margin-bottom:0;color:inherit;opacity:.7}
+.c-close .cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
 .c-close-more{margin-top:22px;font-size:var(--t-meta);color:var(--dim)}
 .c-close-more a{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 .c-close-more a:hover{color:var(--fg)}
@@ -1245,8 +1262,10 @@ border-bottom:1px solid var(--line-strong);transition:border-color var(--dur-fas
 .swork .info h3,.cap h3,.mobile-menu a,.brand,.article-head h1{font-family:var(--display)}
 .hero h1{font-weight:700;font-size:var(--t-hero);line-height:.98;letter-spacing:-.045em;max-width:none;text-wrap:balance}
 .hero h1 em,.pov h2 em,.band h2 em{font-style:normal}
-.pov h2,.band h2,.c-page h1{font-weight:700;line-height:1.02;letter-spacing:-.04em}
-.c-open h1,.svc-open h1{font-weight:700;letter-spacing:-.04em;line-height:1.02}
+.pov h2,.band h2{font-weight:700;line-height:1.02;letter-spacing:-.04em}
+/* interior page titles: one tier, lighter than the display tier above */
+.c-page h1{font-weight:600;letter-spacing:-.02em;line-height:1.05}
+.c-open h1,.svc-open h1{font-weight:600;letter-spacing:-.02em;line-height:1.02}
 .sec-head h1,.sec-head h2{font-weight:600;letter-spacing:-.02em}
 .swork .info h3,.cap h3{font-weight:600;letter-spacing:-.025em}
 .brand{font-weight:700;letter-spacing:-.03em}
@@ -1257,7 +1276,7 @@ border-bottom:1px solid var(--line-strong);transition:border-color var(--dur-fas
 /* mono micro-labels */
 .swork .info .kmeta,.swork .media .num,.cap .n,.sec-head .count,.c-meta .m .l,.c-sec .st,.svc-sec .st,
 .c-open .crumb,.prow .p-idx,.prow .p-cat,.p-metaline,footer.site .grid .col .fh,.c-contrib .l,.c-film .l,
-.c-next .l,.c-credits h3,.svc-cases-note,.cta-note,.c-cal-l{
+.c-next .l,.c-credits h3,.svc-cases-note,.cta-note,.c-cal-l,.also-list .a-cat{
   font-family:var(--mono);font-size:.75rem;font-weight:400;letter-spacing:.04em;text-transform:uppercase}
 /* one-line expectation under the band booking buttons */
 .cta-note{margin:12px 0 0;font-size:var(--t-micro);color:var(--dim)}

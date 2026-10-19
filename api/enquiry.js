@@ -155,6 +155,7 @@ module.exports = handler;
 module.exports.BUDGETS = BUDGETS;
 module.exports.TIMELINES = TIMELINES;
 module.exports.SOURCES = SOURCES;
+module.exports.nextStep = nextStep;
 
 /* ---------- helpers ---------- */
 
@@ -243,6 +244,15 @@ async function notify(l){
   }
 }
 
+/* The next-step promise in the receipt, matched to the size they chose (the
+   same three sentences as the success screen in js/site.js). */
+function nextStep(type){
+  const t = String(type || '');
+  if(/^Full Launch/.test(t)) return 'If it’s a fit, a short proposal follows within a few days, usually starting with a Launch Sprint.';
+  if(/^Creative Director on call/.test(t)) return 'If it’s a fit, a short proposal for your on-call days follows within a few days.';
+  return 'If it’s a fit, a short proposal for a Launch Sprint follows within a few days.';
+}
+
 /* A short receipt. Deliberately carries none of what they typed except a
    cleaned first name, so the form cannot be used to send arbitrary text to
    arbitrary addresses. */
@@ -251,12 +261,13 @@ async function confirm(l){
   const first = (l.name.split(/\s+/)[0] || '').replace(/[^\p{L}'-]/gu, '').slice(0, 30);
   const hi = 'Hi ' + (first || 'there') + ',';
   const booking = CONTACT.bookingEnabled() ? CONTACT.BOOKING_URL : '';
-  const text = hi + '\n\nThanks for reaching out. I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. If it’s a fit, a short proposal for a Launch Sprint follows within a few days.'
+  const next = nextStep(l.type);
+  const text = hi + '\n\nThanks for reaching out. I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. ' + next
     + (booking ? '\n\nIf you prefer, you can also book a short intro call here:\n' + booking : '')
     + '\n\nItai';
   const html = '<div style="font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#111;max-width:560px">'
     + '<p>' + esc(hi) + '</p>'
-    + '<p>Thanks for reaching out. I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. If it’s a fit, a short proposal for a Launch Sprint follows within a few days.</p>'
+    + '<p>Thanks for reaching out. I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. ' + esc(next) + '</p>'
     + (booking ? '<p>If you prefer, you can also <a href="' + esc(booking) + '" style="color:#111">book a short intro call here</a>.</p>' : '')
     + '<p>Itai</p></div>';
   await sendMail({ to:[l.email], reply_to: TO, subject:'Thanks, I’ve got your message', text, html }, 5000);

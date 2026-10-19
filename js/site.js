@@ -61,7 +61,7 @@ const ANALYTICS_DEBUG     = false;
   +'<footer class="site"><div class="wrap"><div class="grid">'
   +'<div class="col"><p class="fh">Menu</p><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></div>'
   +'<div class="col"><p class="fh">Connect</p><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>'
-  +'<div class="col"><p class="fh">Studio</p><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div>'
+  +'<div class="col"><p class="fh">Based</p><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div>'
   +'</div><div class="base">'
   +'<span>© 2026 Itai Agami. All rights reserved.</span>'
   +'<span class="legal"><a href="../privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span>'
@@ -910,10 +910,15 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 
   /* Only reached after the server confirmed it holds the enquiry. */
   function showSuccess(){
+    /* the next-step promise matches the size they chose */
+    const t=((form.querySelector('#f-type')||{}).value||'');
+    const next=/^Full Launch/.test(t)?'If it’s a fit, a short proposal follows within a few days, usually starting with a Launch Sprint.'
+      :/^Creative Director on call/.test(t)?'If it’s a fit, a short proposal for your on-call days follows within a few days.'
+      :'If it’s a fit, a short proposal for a Launch Sprint follows within a few days.';
     const done=document.createElement('div');
     done.className='f-success'; done.tabIndex=-1;
     done.innerHTML='<h2>Thanks, I’ve got it.</h2>'
-      +'<p>I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. If it’s a fit, a short proposal for a Launch Sprint follows within a few days.</p>'
+      +'<p>I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. '+next+'</p>'
       +(BOOKING?'<div class="f-book"><p>Want to skip the email back-and-forth? Book a 20-minute call.</p>'
         +'<a class="btn solid" data-booking="after_submission">Book a call <span class="arw" aria-hidden="true">↗</span></a></div>':'')
       ;

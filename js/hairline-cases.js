@@ -6,7 +6,7 @@
  * is punched on its tab in a 4 × 2 grid, and goes to the read-out when the
  * card is pulled. The slider is the stagger, in ms.
  *
- * Left alone, it riffles through the cards by itself, back to front and back.
+ * Left alone, it riffles through the cards by itself, front to back and back.
  *
  * Each card holds a still from one case study (WORK, card 01 at the front). It
  * shows only while the card is pulled, in a window under the card's head rule,
@@ -30,13 +30,13 @@ const HOLD = 2.2, AWAY = 1.6;
 // the still's window on a card, in the card's own units measured down from its top edge
 const PX = 5, PT = 15, PB = H - 5, PR = 2.6;
 const WORK = [
-  ["amdocs-make-it-amazing", "amdocs", "Amdocs: Make It Amazing"],
   ["simply-vision-pro", "simply", "Simply Vision Pro"],
   ["sky-max", "sky-max", "SkyMax"],
-  ["national-library-of-israel", "national-library", "National Library of Israel"],
-  ["channel-13", "channel-13", "Channel 13"],
+  ["google-shopping-il", "google", "Google Shopping IL"],
+  ["museum-of-natural-history", "museum", "Museum of Natural History"],
   ["tower-of-david", "tower-of-david", "Tower of David"],
   ["partner-tv", "partner-tv", "Partner TV"],
+  ["taormina-sicily", "taormina", "Taormina Sicily"],
 ];
 const X0 = -5, X1 = W + 5, Y0 = -9, Y1 = (N - 1) * G + 9, WH = 20, WR = 6, WT = 2.4;
 
@@ -162,7 +162,8 @@ function mount({ stage, svg, read }, value) {
   const later = window.requestIdleCallback || ((fn) => setTimeout(fn, 300));
   if (document.readyState === "complete") later(load); else addEventListener("load", () => later(load), { once: true });
 
-  let over = false, idle = 0, step = -1, dir = 1;
+  // the riffle starts at the front card, 01, and walks back to 07 before it turns
+  let over = false, idle = 0, step = N, dir = -1;
   const B = register(stage, (dt, now) => {
     let moving = false;
     cards.forEach((cd, i) => { draw(i, tval(cd.a, now), tval(cd.z, now)); if (!tdone(cd.a, now) || !tdone(cd.z, now)) moving = true; });

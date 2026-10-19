@@ -36,7 +36,7 @@ body{background:#ffffff;color:#000;font-family:Inter,sans-serif;position:relativ
 <div class="role">Independent Creative Director · Tel Aviv</div>
 <div class="low">
   <div class="line">One creative director, from first idea to launch day.</div>
-  <div class="jobs">Brand refreshes · Launch campaigns · Launch websites</div>
+  <div class="jobs">Launch campaigns · Brand refreshes · Launch websites</div>
 </div>
 <div class="pic"><img src="${frame}" alt=""></div>
 </body></html>`;

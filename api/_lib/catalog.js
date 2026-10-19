@@ -23,7 +23,7 @@ const PRICING = [
 
 const SERVICES = [
   { slug:'launch-sprint', name:'Launch Sprint', format:'Fixed price, about 2 weeks',
-    summary:'Two weeks to find the idea a launch rests on, and to see it: the central idea, two or three creative routes with one chosen, the look and key visuals, and a plan for the full launch.',
+    summary:'Two weeks to find the idea a launch rests on, and to see it: many routes explored with AI, two or three developed and one chosen, then the look and key visuals and a plan for the full launch.',
     bestFor:'Marketing and brand leaders with a launch, refresh or campaign whose central idea is still open.',
     url: SITE + '/services.html#sprint' },
   { slug:'full-launch', name:'Full Launch', format:'Scoped per project, usually after a Sprint',

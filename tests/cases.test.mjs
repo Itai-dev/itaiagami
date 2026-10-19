@@ -1,6 +1,7 @@
 /* Case studies: one ownership order everywhere (data, work index, crumbs,
-   Next chain), one honest header and one booking close per case. The pages
-   in work/ are the source of truth; data/projects.json must stay in sync. */
+   Next chain; the selected cases first, then the Also list), one honest
+   header and one booking close per case. The pages in work/ are the source
+   of truth; data/projects.json must stay in sync. */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -20,9 +21,18 @@ test('every case page has a projects.json entry and vice versa', () => {
   assert.deepEqual([...caseFiles].sort(), slugs.map(s => s + '.html').sort());
 });
 
-test('projects.json order equals the work.html rows and its ItemList', () => {
+const selected = projects.filter(p => p.selected === true).map(p => p.slug);
+const also = projects.filter(p => p.selected === false).map(p => p.slug);
+
+test('every project is either selected or Also, selected first', () => {
+  assert.equal(selected.length + also.length, slugs.length, 'each entry has selected: true or false');
+  assert.deepEqual([...selected, ...also], slugs, 'the selected entries come first, in projects.json order');
+  for(const p of projects) if(!p.selected) assert.equal(p.flagship, false, p.slug + ' is Also, so not flagship');
+});
+
+test('work.html grid rows and ItemList are the selected projects; the Also list is the rest', () => {
   const rows = [...workHtml.matchAll(/<li class="prow"[^>]*>\s*<a href="work\/([a-z0-9-]+)\.html">/g)].map(m => m[1]);
-  assert.deepEqual(rows, slugs);
+  assert.deepEqual(rows, selected);
   const ld = [...workHtml.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(m => JSON.parse(m[1]));
   const findList = o => {
     if(!o || typeof o !== 'object') return null;
@@ -33,19 +43,35 @@ test('projects.json order equals the work.html rows and its ItemList', () => {
   const list = ld.map(findList).find(Boolean);
   assert.ok(list, 'work.html has an ItemList');
   const items = [...list.itemListElement].sort((a, b) => a.position - b.position);
-  assert.deepEqual(items.map(i => /\/work\/([a-z0-9-]+)\.html$/.exec(i.url)[1]), slugs);
+  assert.deepEqual(items.map(i => i.position), selected.map((_, i) => i + 1));
+  assert.deepEqual(items.map(i => /\/work\/([a-z0-9-]+)\.html$/.exec(i.url)[1]), selected);
+  const alsoList = /<ul class="also-list">([\s\S]*?)<\/ul>/.exec(workHtml);
+  assert.ok(alsoList, 'work.html has an Also list');
+  assert.deepEqual([...alsoList[1].matchAll(/href="work\/([a-z0-9-]+)\.html"/g)].map(m => m[1]), also);
+  assert.ok(!/<img/.test(alsoList[1]), 'the Also list has no thumbnails');
 });
 
-test('crumbs count the same order and Next walks it, wrapping to the first', () => {
-  slugs.forEach((slug, i) => {
+test('crumbs count the selected order and Next walks it, wrapping to the first; Also cases point back to the first', () => {
+  slugs.forEach(slug => {
     const h = page(slug);
-    const crumb = /<p class="crumb">[\s\S]*?<span>(\d\d \/ \d\d)<\/span><\/p>/.exec(h);
+    const crumb = /<p class="crumb">[\s\S]*?<span>([^<]+)<\/span><\/p>/.exec(h);
     assert.ok(crumb, slug + ' has a crumb');
-    assert.equal(crumb[1], pad(i + 1) + ' / ' + slugs.length, slug);
     const next = /<div class="c-next">[\s\S]*?<a href="([^"]+)"/.exec(h);
     assert.ok(next, slug + ' has a Next link');
-    assert.equal(next[1], slugs[(i + 1) % slugs.length] + '.html', slug);
+    const i = selected.indexOf(slug);
+    if(i >= 0){
+      assert.equal(crumb[1], pad(i + 1) + ' / ' + selected.length, slug);
+      assert.equal(next[1], selected[(i + 1) % selected.length] + '.html', slug);
+    }else{
+      assert.equal(crumb[1], 'Also', slug);
+      assert.equal(next[1], selected[0] + '.html', slug);
+    }
   });
+});
+
+test('all case pages stay in the sitemap', () => {
+  const sitemap = read('sitemap.xml');
+  for(const slug of slugs) assert.ok(sitemap.includes('<loc>https://itaiagami.com/work/' + slug + '.html</loc>'), slug);
 });
 
 test('no case links to the retired service pages', () => {

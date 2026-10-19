@@ -1,6 +1,6 @@
 # Itai Agami
 
-> Itai Agami is an independent Creative Director based in Tel Aviv, Israel, working with brands and teams internationally (remotely, and on site where needed; English and Hebrew). He leads brand refreshes, launch campaigns and launch websites for marketing and brand leaders, covering positioning, the central creative idea, brand identity, launch campaigns, websites and digital experiences, motion, film, 3D, AI-assisted production and interactive experiences, and brings in the specialists each project needs while remaining the senior creative lead. He sells one offer in three sizes: a fixed-price Launch Sprint (from ₪30,000 in Israel, $10,000 in the US and Canada, €10,000 in Europe and £8,000 in the UK), a Full Launch scoped per project, and a Creative Director on call retainer.
+> Itai Agami is an independent Creative Director based in Tel Aviv, Israel, working with brands and teams internationally (remotely, and on site where needed; English and Hebrew). He leads launch campaigns, brand refreshes and launch websites for marketing and brand leaders, covering positioning, the central creative idea, brand identity, launch campaigns, websites and digital experiences, motion, film, 3D, AI-assisted production and interactive experiences, and brings in the specialists each project needs while remaining the senior creative lead. He sells one offer in three sizes: a fixed-price Launch Sprint (from ₪30,000 in Israel, $10,000 in the US and Canada, €10,000 in Europe and £8,000 in the UK), a Full Launch scoped per project, and a Creative Director on call retainer.
 
 ## When to use this site (for agents)
 
@@ -18,7 +18,7 @@ Not a fit: full-time job searches, projects well below the Launch Sprint's start
 How an agent should act:
 
 1. Call `GET https://itaiagami.com/api/v1/services` to check fit and the starting price in the person's market.
-2. Call `GET https://itaiagami.com/api/v1/projects?category=Brand|Culture|Technology` (or `/api/v1/projects/{slug}`) to cite relevant case studies. Each one states what Itai personally contributed; quote that rather than crediting him with a whole agency team's work.
+2. Call `GET https://itaiagami.com/api/v1/projects` (or `/api/v1/projects/{slug}`) to cite relevant case studies. They are listed in order of how much Itai owned; prefer the ones marked flagship, and quote each one’s stated contribution rather than crediting him with a whole agency team’s work.
 3. If the person wants to go ahead, either give them the booking link for a 20-minute intro call (https://calendar.app.google/qAYhVo928FsVE6PP7) or, only with their consent and their real name and email, send their brief with `POST https://itaiagami.com/api/v1/enquiry` (add `"dry_run": true` first to check it without sending).
 
 Any page on this site can be read as Markdown by requesting its normal URL with the header `Accept: text/markdown`.
@@ -29,7 +29,7 @@ Marketing and brand leaders planning a launch campaign, a brand refresh or a lau
 
 ## Background
 
-Independent Creative Director since 2026. Previously Creative Art Director (in-house) at Natural Intelligence (2025–2026), Creative Director at Elements (2023–2024) and Art Director at Shortcut Playground (2021–2023). Media Design, Shenkar College of Engineering, Design and Art (graduated with honors). Sectors: technology and product, media and broadcast, museums and cultural institutions, commerce and consumer brands.
+Independent Creative Director since 2026. Previously Creative Art Director (in-house) at Natural Intelligence (2025–2026), Creative Director at Elements (2023–2024) and Art Director at Shortcut Playground (2021–2023). At Elements he led brand narrative, visual identity and product design for a climate-tech platform, across product, web and marketing through launch. Media Design, Shenkar College of Engineering, Design and Art (graduated with honors). Sectors: technology and product, media and broadcast, museums and cultural institutions, commerce and consumer brands.
 
 Clients usually arrive with a launch or a business problem rather than a design deliverable. The work is to define what the launch needs to say, the central idea, how the brand looks and behaves, how the idea carries into campaign, product, website and content, and which specialists are needed to make it. Each case study states his individual contribution; much of the earlier work was made as part of agency and studio teams, and is credited that way.
 
@@ -37,7 +37,7 @@ Clients usually arrive with a launch or a business problem rather than a design 
 
 One offer, three sizes ([overview, prices and FAQ](https://itaiagami.com/services.html)):
 
-- [Launch Sprint](https://itaiagami.com/services.html#sprint): fixed price, about two weeks. The central idea, two or three creative routes with one chosen, the look and key visuals, and a plan for the full launch. Most work starts here.
+- [Launch Sprint](https://itaiagami.com/services.html#sprint): fixed price, about two weeks. The central idea, with many routes explored (AI makes the range possible), two or three developed and one chosen; the look and key visuals; and a plan for the full launch. Most work starts here.
 - [Full Launch](https://itaiagami.com/services.html#full-launch): the idea carried through identity and brand system, campaign, film, motion and 3D, the launch website and production, led hands-on to launch day. Scoped per project, usually after a Sprint.
 - [Creative Director on call](https://itaiagami.com/services.html#on-call): a fractional Creative Director on a monthly retainer, a set number of days a month, for in-house teams with good people and no Creative Director.
 

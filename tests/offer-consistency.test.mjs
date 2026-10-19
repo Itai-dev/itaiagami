@@ -71,7 +71,7 @@ test('offer names are the same three sizes everywhere', () => {
 });
 
 test('every services.html anchor link has a target', () => {
-  for(const id of ['sprint', 'full-launch', 'on-call', 'capabilities']) assert.ok(ids.has(id), 'services.html#' + id);
+  for(const id of ['sprint', 'full-launch', 'on-call', 'capabilities', 'how']) assert.ok(ids.has(id), 'services.html#' + id);
   for(const s of SERVICES){
     const frag = s.url.split('#')[1];
     assert.ok(frag && ids.has(frag), s.name + ' url ' + s.url);

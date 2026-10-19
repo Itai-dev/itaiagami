@@ -157,3 +157,112 @@ test('no footer uses h4', () => {
   const js = read('js/site.js');
   for(const m of js.matchAll(/<footer[\s\S]*?<\/footer>/g)) assert.ok(!/<h4[\s>]/.test(m[0]), 'js/site.js footer template');
 });
+
+/* ---------- Round 5 ---------- */
+
+/* every text file we ship or build from, outside .git, .claude and node_modules */
+const TEXT = /\.(html|js|mjs|cjs|json|txt|xml|md|css)$/;
+const walk = dir => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap(e => {
+  const rel = dir === '.' ? e.name : dir + '/' + e.name;
+  if(e.isDirectory()) return ['.git', '.claude', 'node_modules'].includes(e.name) ? [] : walk(rel);
+  return TEXT.test(e.name) ? [rel] : [];
+});
+
+test('one job order everywhere: launch campaigns first', () => {
+  const old = ['brand refreshes', 'launch campaigns'].join(', ');
+  for(const f of walk('.')) assert.ok(!read(f).toLowerCase().includes(old), f + ' still says "' + old + '"');
+});
+
+test('the hero folders riffle the home picks first, and every still exists', () => {
+  const src = read('js/hairline-cases.js');
+  const m = /const WORK = \[([\s\S]*?)\n\];/.exec(src);
+  assert.ok(m, 'js/hairline-cases.js declares WORK');
+  const work = [...m[1].matchAll(/\["([a-z0-9-]+)", "([a-z0-9-]+)", "[^"]+"\]/g)].map(x => ({ slug: x[1], still: x[2] }));
+  assert.equal(work.length, 7, 'seven cards');
+  const projects = JSON.parse(read('data/projects.json'));
+  const picks = projects.filter(p => p.homeRank >= 1 && p.homeRank <= 4).sort((a, b) => a.homeRank - b.homeRank).map(p => p.slug);
+  assert.equal(picks.length, 4);
+  assert.deepEqual(work.slice(0, 4).map(w => w.slug), picks, 'the home picks lead, in homeRank order');
+  for(const w of work){
+    assert.ok(exists('work/' + w.slug + '.html'), w.slug + ' case exists');
+    assert.ok(exists('assets/opt/hero/' + w.still + '.webp'), 'assets/opt/hero/' + w.still + '.webp');
+  }
+});
+
+test('the first row of the Work grid loads eagerly, the first image with high priority', () => {
+  const imgs = [...read('work.html').matchAll(/<div class="p-thumb"><img ([^>]*)>/g)].map(m => m[1]);
+  assert.ok(imgs.length >= 3);
+  imgs.slice(0, 3).forEach((a, i) => {
+    assert.match(a, /loading="eager"/, 'grid image ' + (i + 1));
+    assert.match(a, /decoding="async"/, 'grid image ' + (i + 1));
+    assert.equal(/fetchpriority="high"/.test(a), i === 0, 'only the first has fetchpriority=high');
+  });
+});
+
+test('one CTA voice and one footer: no "Book a call with Itai", no "Studio" heading', () => {
+  const sources = [...ALL, 'js/site.js'];
+  for(const f of sources){
+    const h = read(f);
+    assert.ok(!h.includes('Book a call with Itai'), f);
+    assert.ok(!/<p class="fh">\s*Studio\s*<\/p>/.test(h), f + ' footer heading reads Studio');
+  }
+});
+
+test('every booking band carries the one-line expectation', () => {
+  for(const f of ALL){
+    for(const m of read(f).matchAll(/<section class="[^"]*\bband\b[^"]*"[\s\S]*?<\/section>/g)){
+      if(!m[0].includes('data-booking')) continue;
+      assert.match(m[0], /<p class="cta-note">/, f + ': a booking band without p.cta-note');
+      if(/\bc-close\b/.test(m[0].slice(0, 80))) assert.ok(!/\sstyle="/.test(m[0]), f + ': c-close uses inline styles');
+    }
+  }
+});
+
+test('the one-owner promise is said once on Services', () => {
+  const n = (visibleText(read('services.html')).match(/one point of accountability/gi) || []).length;
+  assert.equal(n, 1);
+});
+
+test('US spelling: no "personalisation" in visible text', () => {
+  for(const f of PAGES) assert.ok(!/personalis/i.test(visibleText(read(f))), f);
+});
+
+test('display titles size by em, not ch, so they do not reflow when the font swaps', () => {
+  const css = read('css/site.css');
+  for(const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)){
+    const sel = m[1], body = m[2];
+    if(!/\.about-title|\.hero h1|\.band h2/.test(sel)) continue;
+    assert.ok(!/max-width:\s*[\d.]+ch/.test(body), sel.trim() + ' uses a ch max-width');
+  }
+});
+
+test('every internal #fragment link resolves to an id in its target', () => {
+  const ids = new Map();
+  const idsOf = f => {
+    if(!ids.has(f)) ids.set(f, new Set([...read(f).matchAll(/\sid="([^"]+)"/g)].map(m => m[1])));
+    return ids.get(f);
+  };
+  for(const f of ALL){
+    const h = read(f).replace(/<!--[\s\S]*?-->/g, '');
+    for(const m of h.matchAll(/\shref="([^"]*#[^"]*)"/g)){
+      let [url, frag] = m[1].split('#');
+      if(!frag) continue;
+      if(/^https?:\/\//.test(url)){
+        if(!url.startsWith('https://itaiagami.com/')) continue;
+        url = '/' + url.slice('https://itaiagami.com/'.length);
+      }
+      if(/^[a-z]+:/i.test(url)) continue;
+      let target = !url ? f : url.startsWith('/') ? url.slice(1) : path.posix.join(path.posix.dirname(f), url);
+      target = target.split('?')[0];
+      if(target === '' || target.endsWith('/')) target += 'index.html';
+      assert.ok(exists(target), f + ' → ' + m[1] + ': no such file');
+      assert.ok(idsOf(target).has(decodeURIComponent(frag)), f + ' → ' + m[1] + ': no id="' + frag + '" in ' + target);
+    }
+  }
+});
+
+test('every code block on developers.html can take keyboard focus', () => {
+  const pres = [...read('developers.html').matchAll(/<pre\b([^>]*)>/g)];
+  assert.ok(pres.length > 0);
+  for(const p of pres) assert.match(p[1], /tabindex="0"/, '<pre' + p[1] + '>');
+});
