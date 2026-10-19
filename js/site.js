@@ -976,7 +976,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   const hideHover=()=>{if(hoverimg)hoverimg.classList.remove('show')};
 
   /* filters */
-  const FILTERS=['All','Brand','Technology','Culture','Interactive'];
+  const FILTERS=['All','Brand & identity','Campaigns & film','Interactive & spaces'];
   let activeFilter='All'; try{activeFilter=localStorage.getItem('filter')||'All'}catch(e){}
   if(!FILTERS.includes(activeFilter))activeFilter='All';
   FILTERS.forEach(f=>{

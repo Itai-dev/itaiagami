@@ -1,7 +1,9 @@
-﻿# ============================================================
+﻿# DEPRECATED: do not run. The case pages in work/ are the source of truth; edit work/*.html and keep data/projects.json in sync (tests/cases.test.mjs checks it).
+# ============================================================
 # build-cases.ps1 — generates work/<slug>.html from data/projects.json
 # Run from anywhere:  powershell -File tools/build-cases.ps1
 # ============================================================
+throw 'Deprecated: the case pages in work/ are the source of truth and this template is stale (it would remove nav, footer, JSON-LD and role lines). Edit work/*.html and keep data/projects.json in sync; tests/cases.test.mjs checks it.'
 $root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 $dataPath = Join-Path $root "data\projects.json"
 $outDir = Join-Path $root "work"
