@@ -826,7 +826,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     filled:PROGRESS.filter(n=>{const el=form.elements[n]; return el&&String(el.value||'').trim()!=='';}).length }}));
   form.addEventListener('input',progress); form.addEventListener('change',progress);
 
-  /* contact tabs: "Book a call" (default) and "Send a brief" (the form) */
+  /* contact tabs: "Book a call" (default) and "Write to me" (the form) */
   const tabs=[...document.querySelectorAll('.c-tabs [role="tab"]')];
   function selectTab(id,focus){
     tabs.forEach(t=>{
@@ -843,8 +843,12 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length]; selectTab(n.id,true);
     });
   });
-  /* arriving with #brief (e.g. "Send a brief" links) opens the form */
+  /* arriving with #brief (e.g. "Write to me" links) opens the form */
   if(tabs.length&&(location.hash==='#brief'||location.hash==='#enquiryForm')) selectTab('tab-brief');
+  /* ?start=sprint|full-launch|on-call (offer card links) preselects "What do you need?" */
+  const start=new URLSearchParams(location.search).get('start');
+  const opt=start&&document.querySelector('#f-type option[data-start="'+start.replace(/[^a-z-]/g,'')+'"]');
+  if(opt){ opt.selected=true; if(tabs.length) selectTab('tab-brief'); }
 
   /* "Start a project" — bring the form into view and put the cursor in it */
   document.querySelectorAll('[data-start-project]').forEach(a=>a.addEventListener('click',e=>{
@@ -892,9 +896,9 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   function showSuccess(){
     const done=document.createElement('div');
     done.className='f-success'; done.tabIndex=-1;
-    done.innerHTML='<h2>Thanks, I got it.</h2>'
-      +'<p>I’ll get back to you shortly.</p>'
-      +(BOOKING?'<div class="f-book"><p>Want to skip the email back-and-forth? Book a 20 min intro call.</p>'
+    done.innerHTML='<h2>Thanks, I’ve got it.</h2>'
+      +'<p>I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. If it’s a fit, a short proposal for a Launch Sprint follows within a few days.</p>'
+      +(BOOKING?'<div class="f-book"><p>Want to skip the email back-and-forth? Book a 20-minute call.</p>'
         +'<a class="btn solid" data-booking="after_submission">Book a call <span class="arw" aria-hidden="true">↗</span></a></div>':'')
       ;
     form.replaceWith(done);

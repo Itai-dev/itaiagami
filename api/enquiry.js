@@ -43,7 +43,7 @@ const BUDGETS   = [
   '£8,000 – £16,000',  '£16,000 – £32,000',  '£32,000+',
   'Not sure yet'
 ];
-const TIMELINES = ['As soon as possible','1–3 months','3–6 months','Not defined yet'];
+const TIMELINES = ['As soon as possible','1–3 months','3–6 months','More than 6 months','Not defined yet'];
 const SOURCES   = ['ChatGPT','Gemini','Google Search','LinkedIn','Referral','Other'];
 
 /* Best-effort throttle (api/_lib/ratelimit.js, policy "enquiry"). Serverless
@@ -251,12 +251,12 @@ async function confirm(l){
   const first = (l.name.split(/\s+/)[0] || '').replace(/[^\p{L}'-]/gu, '').slice(0, 30);
   const hi = 'Hi ' + (first || 'there') + ',';
   const booking = CONTACT.bookingEnabled() ? CONTACT.BOOKING_URL : '';
-  const text = hi + '\n\nThanks for reaching out. I received your enquiry and will get back to you shortly.'
+  const text = hi + '\n\nThanks for reaching out. I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. If it’s a fit, a short proposal for a Launch Sprint follows within a few days.'
     + (booking ? '\n\nIf you prefer, you can also book a short intro call here:\n' + booking : '')
     + '\n\nItai';
   const html = '<div style="font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#111;max-width:560px">'
     + '<p>' + esc(hi) + '</p>'
-    + '<p>Thanks for reaching out. I received your enquiry and will get back to you shortly.</p>'
+    + '<p>Thanks for reaching out. I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. If it’s a fit, a short proposal for a Launch Sprint follows within a few days.</p>'
     + (booking ? '<p>If you prefer, you can also <a href="' + esc(booking) + '" style="color:#111">book a short intro call here</a>.</p>' : '')
     + '<p>Itai</p></div>';
   await sendMail({ to:[l.email], reply_to: TO, subject:'Thanks, I received your enquiry', text, html }, 5000);

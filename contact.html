@@ -87,6 +87,7 @@
         <p class="c-paths">Book 20 minutes, or write first if you prefer. Here’s what happens next:</p>
         <ol class="c-steps"><li>A 20-minute call about the problem: what’s launching, who it’s for and what’s still undecided. No brief needed.</li><li>If it’s a fit, I send a short proposal for a Launch Sprint within a few days.</li><li>You decide. Larger launches are scoped with the team they need.</li></ol>
         <p class="c-qual">Not sure where your project sits? Say what you know. The <a href="services.html">services page</a> and <a href="services.html#faq">common questions</a> cover the usual cases.</p>
+        <p class="c-direct">Prefer email? Write to me at <a href="mailto:itaiagami@gmail.com">itaiagami@gmail.com</a>.</p>
         <div class="c-fig" data-hairline-host="tray" aria-hidden="true"></div>
       </div>
 
@@ -94,10 +95,11 @@
       <div class="c-form">
         <div class="c-tabs" role="tablist" aria-label="How to get in touch">
           <button type="button" role="tab" id="tab-call" aria-controls="panel-call" aria-selected="true">Book a call</button>
-          <button type="button" role="tab" id="tab-brief" aria-controls="panel-brief" aria-selected="false" tabindex="-1">Send a brief</button>
+          <button type="button" role="tab" id="tab-brief" aria-controls="panel-brief" aria-selected="false" tabindex="-1">Write to me</button>
         </div>
         <div class="c-panel" id="panel-call" role="tabpanel" aria-labelledby="tab-call">
           <div class="c-cal">
+            <p class="c-cal-wait">Loading available times… <a href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="contact" target="_blank" rel="noopener">or open the booking page <span class="arw" aria-hidden="true">↗</span></a></p>
             <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3bYwrvw_MjttEYUre5hr2ZM3mY01ugJrljyWaM5u6vosSYTjzCyrnmt8rraXGODIz3hMC0QhUg?gv=true" title="Book a 20-minute intro call with Itai Agami" loading="lazy"></iframe>
           </div>
           <p class="c-cal-alt">Calendar not loading? <a href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="contact" target="_blank" rel="noopener">Open the booking page <span class="arw" aria-hidden="true">↗</span></a></p>
@@ -113,29 +115,25 @@
             <input id="f-email" name="email" type="email" autocomplete="email" maxlength="200" required />
           </div>
           <div class="fld f-full">
-            <label for="f-org">Company or institution</label>
+            <label for="f-org">Company</label>
             <input id="f-org" name="org" type="text" autocomplete="organization" maxlength="160" />
           </div>
           <div class="fld f-full">
-            <label for="f-type">Project type</label>
+            <label for="f-type">What do you need?</label>
             <div class="sel">
               <select id="f-type" name="type">
                 <option value="">Select</option>
-                <option>Brand or product launch</option>
-                <option>Brand strategy and identity</option>
-                <option>Campaign or creative concept</option>
-                <option>Website or digital experience</option>
-                <option>Interactive or immersive experience</option>
-                <option>Film, motion or 3D</option>
-                <option>Ongoing creative direction or in-house role</option>
-                <option>Other</option>
+                <option data-start="sprint">Launch Sprint: find the idea (about 2 weeks)</option>
+                <option data-start="full-launch">Full Launch: identity, campaign, film or site</option>
+                <option data-start="on-call">Creative Director on call</option>
+                <option>Not sure yet</option>
               </select>
             </div>
           </div>
           <div class="fld f-full">
-            <label for="f-project">What are you creating?</label>
+            <label for="f-project">What’s launching, and when?</label>
             <textarea id="f-project" name="project" rows="6" maxlength="5000" required
-              placeholder="Tell me about the idea, the current stage and what the work needs to achieve."></textarea>
+              placeholder="What it is, who it’s for, the date you’re working to and what’s still undecided: a launch campaign, a brand refresh, a launch website… A few lines is plenty."></textarea>
           </div>
           <div class="fld">
             <label for="f-budget">Approximate budget</label>
@@ -157,6 +155,7 @@
                 <option>As soon as possible</option>
                 <option>1–3 months</option>
                 <option>3–6 months</option>
+                <option>More than 6 months</option>
                 <option>Not defined yet</option>
               </select>
             </div>
@@ -193,7 +192,7 @@
           <input type="hidden" name="pages_viewed" id="f-pages" />
           <p class="f-note">Scope, budget or timing not yet defined? Include what you know and leave the rest open.</p>
           <div class="f-actions">
-            <button type="submit" class="btn solid">Tell me about the project <span class="arw" aria-hidden="true">→</span></button>
+            <button type="submit" class="btn solid">Send it <span class="arw" aria-hidden="true">→</span></button>
             <p class="f-status" id="formStatus" role="status" aria-live="polite"></p>
           </div>
         </form>

@@ -1,13 +1,13 @@
 /* ============================================================
-   GET /api/v1/services (alias: /api/services) — the four engagement
-   types and where pricing starts in each market. Public, read-only,
-   rate limited (policy "read"). Described in /openapi.json
+   GET /api/v1/services (alias: /api/services) — the three offer sizes,
+   the capabilities, and the Launch Sprint's starting price per market.
+   Public, read-only, rate limited (policy "read"). Described in /openapi.json
    (operationId listServices).
    ============================================================ */
 
 const { sendError, setApiHeaders } = require('./_lib/errors.js');
 const { guardRead } = require('./_lib/ratelimit.js');
-const { SITE, SERVICES, PRICING } = require('./_lib/catalog.js');
+const { SITE, SERVICES, CAPABILITIES, PRICING } = require('./_lib/catalog.js');
 
 module.exports = (req, res) => {
   setApiHeaders(res);
@@ -22,8 +22,9 @@ module.exports = (req, res) => {
   res.setHeader('Cache-Control', 'public, max-age=60');
   return res.status(200).json({
     services: SERVICES,
+    capabilities: CAPABILITIES,
     pricing: {
-      note: 'Independent engagements typically begin at these amounts. Larger multidisciplinary projects are scoped separately.',
+      note: 'The Launch Sprint is a fixed price starting at these amounts, set per market rather than converted. A Full Launch is scoped per project, usually after a Sprint; Creative Director on call is a monthly retainer.',
       startingAt: PRICING
     },
     contact: {

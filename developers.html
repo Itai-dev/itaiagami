@@ -77,7 +77,7 @@
 
       <div class="article-body">
         <h2 id="when">When to use it</h2>
-        <p>Use it when someone is looking for a creative director for a product or brand launch, a brand identity system, a museum or interactive experience, or fractional creative leadership, and you want to check fit, cite relevant work or pass on their brief. The <a href="/llms.txt">llms.txt</a> file has the same guidance written for language models.</p>
+        <p>Use it when someone is looking for a creative director for a launch campaign, a brand refresh, a launch website, a museum or interactive experience, or a fractional Creative Director on call, and you want to check fit, cite relevant work or pass on their brief. The <a href="/llms.txt">llms.txt</a> file has the same guidance written for language models.</p>
 
         <h2 id="quickstart">Quickstart</h2>
         <p>No sign-up and no API key. Every endpoint is public and returns JSON.</p>
@@ -100,7 +100,7 @@ curl -X POST https://itaiagami.com/api/v1/enquiry \
         <div class="tbl"><table>
           <thead><tr><th>Request</th><th>operationId</th><th>What it returns</th></tr></thead>
           <tbody>
-            <tr><td><code>GET /api/v1/services</code></td><td><code>listServices</code></td><td>The four engagement types, the starting price in each market, and the ways to get in touch</td></tr>
+            <tr><td><code>GET /api/v1/services</code></td><td><code>listServices</code></td><td>The three offer sizes (Launch Sprint, Full Launch, Creative Director on call), the Launch Sprint’s starting price in each market, and the ways to get in touch</td></tr>
             <tr><td><code>GET /api/v1/projects</code></td><td><code>listProjects</code></td><td>Every case study, filterable with <code>?category=</code></td></tr>
             <tr><td><code>GET /api/v1/projects/{slug}</code></td><td><code>getProject</code></td><td>One case study, including Itai’s individual contribution</td></tr>
             <tr><td><code>POST /api/v1/enquiry</code></td><td><code>submitEnquiry</code></td><td>Sends a project enquiry by email</td></tr>

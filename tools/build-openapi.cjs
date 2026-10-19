@@ -33,7 +33,7 @@ function build(){
       description: [
         'The public API of itaiagami.com, the site of Itai Agami, an independent Creative Director based in Tel Aviv and working internationally.',
         '',
-        "Use it when a person is looking for a creative director for a brand identity, a product or brand launch, an interactive or museum experience, or fractional creative leadership: list the services and starting prices, read case studies for relevant precedent, and send a project enquiry on the person's behalf.",
+        "Use it when a person is looking for a creative director for a launch campaign, a brand refresh or identity, a launch website, an interactive or museum experience, or a fractional Creative Director on call: list the three offer sizes and the Launch Sprint's starting prices, read case studies for relevant precedent, and send a project enquiry on the person's behalf.",
         '',
         'No authentication. All responses are JSON. Every error has the same shape (the Error schema): a human-readable `error`, a stable machine-readable `code`, a `hint` saying how to fix the request, the HTTP `status` and a `docs` link.',
         '',
@@ -57,7 +57,7 @@ function build(){
     security: [],                                  /* public: no authentication */
     externalDocs: { description: 'Itai Agami developer portal', url: 'https://itaiagami.com/developers.html' },
     tags: [
-      { name: 'Services', description: 'Engagement types and starting prices.' },
+      { name: 'Services', description: "The three offer sizes and the Launch Sprint's starting prices." },
       { name: 'Projects', description: 'Case studies.' },
       { name: 'Contact', description: 'Project enquiries.' },
       { name: 'Utility', description: 'Helpers the website itself uses.' }
@@ -69,7 +69,7 @@ function build(){
           'x-rateLimitPolicy': 'read',
           tags: ['Services'],
           summary: 'List services and starting prices',
-          description: 'Returns the four engagement types Itai Agami offers (summary, who each is best for, link to its page), the amount independent engagements typically start at in each market, and the ways to get in touch. Call this first to judge whether a request is a fit.',
+          description: "Returns the three sizes of Itai Agami's one offer (Launch Sprint, Full Launch, Creative Director on call: format, summary, who each suits, link), the capabilities a launch can include, the Launch Sprint's starting price in each market, and the ways to get in touch. Call this first to judge whether a request is a fit.",
           responses: {
             200: { description: 'Services, pricing and contact routes.', content: json(ref('ServiceCatalog')) },
             405: err('Method not allowed (code: method_not_allowed).')
@@ -172,13 +172,14 @@ function build(){
         },
         Service: {
           type: 'object',
-          required: ['slug', 'name', 'summary', 'bestFor', 'url'],
+          required: ['slug', 'name', 'format', 'summary', 'bestFor', 'url'],
           properties: {
             slug: { type: 'string' },
             name: { type: 'string' },
+            format: { type: 'string', description: 'Fixed price, scoped, or retainer, and typical duration.' },
             summary: { type: 'string' },
-            bestFor: { type: 'string', description: 'Who the engagement suits.' },
-            url: { type: 'string', format: 'uri' }
+            bestFor: { type: 'string', description: 'Who this size suits.' },
+            url: { type: 'string', format: 'uri', description: "Link to this offer's anchor on the Services page." }
           }
         },
         Price: {
@@ -187,7 +188,7 @@ function build(){
           properties: {
             market: { type: 'string' },
             currency: { type: 'string', description: 'ISO 4217 code.' },
-            from: { type: 'integer', description: 'Typical minimum for an independent engagement, in whole currency units.' },
+            from: { type: 'integer', description: 'Starting price of a Launch Sprint in this market, in whole currency units.' },
             display: { type: 'string' }
           }
         },
@@ -196,6 +197,7 @@ function build(){
           required: ['services', 'pricing', 'contact'],
           properties: {
             services: { type: 'array', items: ref('Service') },
+            capabilities: { type: 'array', items: { type: 'string' }, description: 'What a launch can include.' },
             pricing: {
               type: 'object', required: ['note', 'startingAt'],
               properties: { note: { type: 'string' }, startingAt: { type: 'array', items: ref('Price') } }
@@ -253,7 +255,7 @@ function build(){
             name: { type: 'string', maxLength: 120, description: "The sender's name." },
             email: { type: 'string', format: 'email', maxLength: 200, description: 'Where Itai should reply.' },
             org: { type: 'string', maxLength: 160, description: 'Company or organisation.' },
-            type: { type: 'string', maxLength: 80, description: 'Kind of project, for example "Brand launch".' },
+            type: { type: 'string', maxLength: 80, description: 'What the sender needs, for example "Launch Sprint" or "Not sure yet".' },
             project: { type: 'string', minLength: 10, maxLength: 5000, description: 'What is launching or changing, who it is for, and what is still undecided.' },
             budget: { type: 'string', enum: enquiry.BUDGETS },
             timeline: { type: 'string', enum: enquiry.TIMELINES },

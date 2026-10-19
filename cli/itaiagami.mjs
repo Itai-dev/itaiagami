@@ -26,7 +26,7 @@ const HELP = `itaiagami ${VERSION} — Itai Agami, independent Creative Director
 Usage: itaiagami <command> [options]
 
 Commands
-  services                     Services and starting prices per market
+  services                     The three offer sizes and Launch Sprint prices per market
   projects [--category <c>]    Case studies (Brand, Culture or Technology)
   project <slug>               One case study, e.g. channel-13
   page [path]                  Any page of the site as Markdown (default /)
@@ -78,7 +78,8 @@ async function request(base, path, opts = {}){
   return body;
 }
 
-const fmtServices = j => j.services.map(s => `${s.name}\n  ${s.summary}\n  Best for: ${s.bestFor}\n  ${s.url}`).join('\n\n')
+const fmtServices = j => j.services.map(s => `${s.name} (${s.format})\n  ${s.summary}\n  Best for: ${s.bestFor}\n  ${s.url}`).join('\n\n')
+  + (j.capabilities ? '\n\nA launch can include: ' + j.capabilities.join(', ') : '')
   + '\n\nStarting at: ' + j.pricing.startingAt.map(p => `${p.display} (${p.market})`).join(', ')
   + `\nEnquire: itaiagami enquire …   Book a call: ${j.contact.bookCall}`;
 

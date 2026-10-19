@@ -195,6 +195,14 @@ display:flex;align-items:center;justify-content:center;
 .cap-proof{font-size:var(--t-meta);color:var(--dim);margin-top:14px}
 .cap-proof a{color:var(--fg);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 .caps-note{margin-top:clamp(30px,4vw,48px);max-width:60ch;font-family:"Inter",system-ui,sans-serif;font-weight:400;font-size:var(--t-lead);line-height:1.55;color:var(--dim)}
+/* offer cards (services + home): terms under the h3, a CTA row at the foot */
+.caps.three.offer .cap{display:flex;flex-direction:column}
+.offer .cap-meta{margin-top:8px;margin-bottom:10px}
+.caps.three.offer .cap-fig{margin-bottom:-12px} /* trims the drawing's empty foot, not its size */
+.cap-cta{margin-top:auto;padding-top:26px}
+.caps.three.offer .cap,#capabilities{scroll-margin-top:96px}
+.svc-proof{margin-top:18px;max-width:60ch}
+@media(max-width:600px){.caps.three.offer .cap-fig{display:none}}
 .clients-list{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px 36px}
 .clients-list a{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:1.125rem;letter-spacing:0;line-height:1.3;color:var(--dim);transition:color var(--dur-fast)}
 .clients-list a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
@@ -549,6 +557,11 @@ transition:background var(--dur-fast)}
 .svc-list > a:hover .svc-fig [data-hairline]{--hairline-plate:var(--faint)}
 @media(max-width:900px){.svc-list > a{grid-template-columns:52px 1fr clamp(160px,30vw,220px)}.svc-list .go{display:none}.svc-fig{grid-column:3}}
 @media(max-width:700px){.svc-list > a{grid-template-columns:30px 1fr;grid-template-rows:auto;gap:12px}.svc-fig{grid-column:2;grid-row:3;justify-self:start;width:min(100%,260px);margin:0 0 -12px -4%}.svc-list .go{display:none}}
+/* capability rows: plain rows (not links) with a "Seen in" proof line */
+.svc-list > .svc-row{display:grid;grid-template-columns:52px 1fr;gap:0 clamp(16px,3vw,32px);align-items:baseline;padding:clamp(24px,3vw,34px) 16px;border-bottom:1px solid var(--line)}
+.svc-list .seen{grid-column:2;margin-top:10px;font-size:var(--t-meta);color:var(--dim)}
+.svc-list .seen a{color:var(--fg);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+@media(max-width:700px){.svc-list > .svc-row{grid-template-columns:30px 1fr;gap:0 12px}}
 
 .svc-open{padding-top:clamp(30px,5vw,60px);max-width:760px}
 /* service pages: the service's Hairline figure beside the opening (js/site.js) */
@@ -616,10 +629,13 @@ font-size:var(--t-meta);color:var(--dim);line-height:1.65;max-width:48ch}
 .c-intro .c-qual strong{color:var(--fg);font-weight:500}
 .c-intro .c-qual a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
 .c-intro .c-qual a:hover{border-bottom-color:var(--fg)}
+.c-intro .c-direct{margin-top:12px;font-size:var(--t-meta);color:var(--dim);line-height:1.65;max-width:48ch}
+.c-intro .c-direct a{color:var(--fg);border-bottom:0;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 
 /* ---------- case study → booking close ---------- */
 .c-close{margin:clamp(48px,7vw,88px) 0 clamp(40px,5vw,56px)}
 .c-close-more{margin-top:22px;font-size:var(--t-meta);color:var(--dim)}
+.c-close-more a{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 .c-close-more a:hover{color:var(--fg)}
 .a-rel{font-size:var(--t-meta);color:var(--dim);margin-top:clamp(30px,4vw,44px)}
 .a-rel a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
@@ -1270,6 +1286,11 @@ nav.primary a{color:var(--fg)}
 .c-tabs [role="tab"][aria-selected="true"]{background:var(--fg);color:var(--bg)}
 .c-cal{border:1px solid var(--line);border-radius:var(--r-media);overflow:hidden;background:#fff}
 .c-cal iframe{display:block;width:100%;height:min(760px,calc(100svh - 160px));min-height:560px;border:0}
+/* shown until the Google page paints over it (or if it never loads) */
+.c-cal{position:relative}
+.c-cal-wait{position:absolute;left:0;right:0;top:38%;text-align:center;font-size:var(--t-meta);color:#555;z-index:0;margin:0}
+.c-cal-wait a{color:#111;border-bottom:1px solid #bbb}
+.c-cal iframe{position:relative;z-index:1}
 .c-cal-alt{margin-top:12px;font-size:var(--t-micro);color:var(--dim)}
 .c-cal-alt a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
 .prow .p-name{font-family:var(--display);font-weight:600;letter-spacing:-.03em}

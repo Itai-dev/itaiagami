@@ -57,8 +57,11 @@ test('GET /api/services', async () => {
   const r = await call(services);
   assert.equal(r.statusCode, 200);
   const j = parse(r);
-  assert.equal(j.services.length, 4);
-  for(const s of j.services) assert.match(s.url, /^https:\/\/itaiagami\.com\/services\/[a-z-]+\.html$/);
+  assert.equal(j.services.length, 3);
+  assert.deepEqual(j.services.map(s => s.name), ['Launch Sprint', 'Full Launch', 'Creative Director on call']);
+  for(const s of j.services) assert.match(s.url, /^https:\/\/itaiagami\.com\/services\.html#[a-z-]+$/);
+  for(const s of j.services) assert.ok(s.format);
+  assert.equal(j.capabilities.length, 4);
   assert.deepEqual(j.pricing.startingAt.map(p => p.currency), ['ILS', 'USD', 'EUR', 'GBP']);
 });
 

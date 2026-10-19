@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Creative Direction Services: Brand, Launch &amp; Fractional | Itai Agami</title>
-<meta name="description" content="One offer, three sizes: a fixed-price Launch Sprint to find the idea, a Full Launch carried through identity, campaign, film and site, or a Creative Director on call. From $10,000 / ₪30,000." />
+<title>Creative Direction for Launches, Refreshes &amp; Campaigns | Itai Agami</title>
+<meta name="description" content="One senior creative director for your launch, refresh or campaign: a fixed-price two-week Launch Sprint, a Full Launch to launch day, or a Creative Director on call." />
 <link rel="canonical" href="https://itaiagami.com/services.html" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <meta name="theme-color" content="#e8e8e3" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Creative Direction Services: Brand, Launch &amp; Fractional | Itai Agami" />
-<meta property="og:description" content="One offer, three sizes: a fixed-price Launch Sprint to find the idea, a Full Launch carried through identity, campaign, film and site, or a Creative Director on call. From $10,000 / ₪30,000." />
+<meta property="og:title" content="Creative Direction for Launches, Refreshes &amp; Campaigns | Itai Agami" />
+<meta property="og:description" content="One senior creative director for your launch, refresh or campaign: a fixed-price two-week Launch Sprint, a Full Launch to launch day, or a Creative Director on call." />
 <meta property="og:url" content="https://itaiagami.com/services.html" />
 <meta property="og:image" content="https://itaiagami.com/assets/og/8cfebe82ae8c.jpg" />
 <meta property="og:image:type" content="image/jpeg" />
@@ -33,38 +33,33 @@
         { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://itaiagami.com/services.html" }
       ]
     },
-    {
-      "@type": "ItemList",
-      "name": "Creative direction engagements",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Brand Strategy & Identity Systems", "url": "https://itaiagami.com/services/brand-strategy-identity-systems.html" },
-        { "@type": "ListItem", "position": 2, "name": "Creative Direction for Product & Brand Launches", "url": "https://itaiagami.com/services/creative-direction-product-launches.html" },
-        { "@type": "ListItem", "position": 3, "name": "Interactive & Immersive Experiences", "url": "https://itaiagami.com/services/interactive-immersive-experiences.html" },
-        { "@type": "ListItem", "position": 4, "name": "Fractional Creative Direction & Creative Systems", "url": "https://itaiagami.com/services/fractional-creative-direction.html" }
-      ]
-    },
+    { "@type":"OfferCatalog", "@id":"https://itaiagami.com/services.html#offers", "name":"One offer, three sizes", "itemListElement":[
+      { "@type":"Offer", "name":"Launch Sprint", "url":"https://itaiagami.com/services.html#sprint", "description":"Fixed price, about 2 weeks",
+        "itemOffered":{ "@type":"Service", "name":"Launch Sprint", "provider":{ "@id":"https://itaiagami.com/#practice" } },
+        "priceSpecification":[
+          { "@type":"PriceSpecification", "minPrice":30000, "priceCurrency":"ILS", "eligibleRegion":{ "@type":"Country", "name":"IL" } },
+          { "@type":"PriceSpecification", "minPrice":10000, "priceCurrency":"USD", "eligibleRegion":[{ "@type":"Country", "name":"US" },{ "@type":"Country", "name":"CA" }] },
+          { "@type":"PriceSpecification", "minPrice":10000, "priceCurrency":"EUR", "eligibleRegion":{ "@type":"Place", "name":"Europe" } },
+          { "@type":"PriceSpecification", "minPrice":8000, "priceCurrency":"GBP", "eligibleRegion":{ "@type":"Country", "name":"GB" } } ] },
+      { "@type":"Offer", "name":"Full Launch", "url":"https://itaiagami.com/services.html#full-launch", "description":"Scoped per project, usually after a Sprint", "itemOffered":{ "@type":"Service", "name":"Full Launch", "provider":{ "@id":"https://itaiagami.com/#practice" } } },
+      { "@type":"Offer", "name":"Creative Director on call", "url":"https://itaiagami.com/services.html#on-call", "description":"Monthly retainer", "itemOffered":{ "@type":"Service", "name":"Creative Director on call", "provider":{ "@id":"https://itaiagami.com/#practice" } } } ] },
     {
       "@type": "FAQPage",
       "mainEntity": [
         {
           "@type": "Question",
           "name": "Do I need a finished brief before we talk?",
-          "acceptedAnswer": { "@type": "Answer", "text": "No. Most projects start with a launch or a business problem rather than a list of deliverables. Defining what the work needs to say, the central idea, and which specialists are needed to make it is usually the first phase of the engagement." }
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Most people come with a launch and a problem, not a list of deliverables. Working out what the launch has to say, and who we need to make it, is the first thing we do together." }
         },
         {
           "@type": "Question",
-          "name": "Who do you usually work with?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Marketing and brand leaders (CMOs, heads of brand and marketing, founders) with a launch, a brand refresh or a campaign ahead, and teams with good people but no Creative Director. I work with them directly." }
+          "name": "Who is this for?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Marketing and brand leaders (CMOs, heads of brand and marketing, founders) with a launch campaign, a brand refresh or a launch website ahead, where the central idea still has to be found. Past work spans technology products, national broadcast and consumer campaigns, and museums and cultural institutions. You work with me directly, not through an account team." }
         },
         {
           "@type": "Question",
-          "name": "What kinds of projects are the best fit?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Projects where a company or institution is shaping a new brand, launching or repositioning a product, or building an experience people walk into, and where the central idea still has to be found. In practice that has meant technology companies and ambitious products, media and broadcast organisations, museums and cultural institutions, and organisations that need to explain something genuinely complex." }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the typical starting budget?",
-          "acceptedAnswer": { "@type": "Answer", "text": "A Launch Sprint starts at ₪30,000 in Israel, $10,000 in the US and Canada, €10,000 in Europe and £8,000 in the UK. Prices are set per market rather than converted. A Full Launch is scoped after the Sprint, with the team the work needs." }
+          "name": "What does it cost?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A Launch Sprint is a fixed price, starting at ₪30,000 in Israel, $10,000 in the US and Canada, €10,000 in Europe and £8,000 in the UK. Prices are set per market rather than converted. A Full Launch is priced after the Sprint, once we both know what the launch needs: the formats, the team and the production. Creative Director on call is a monthly retainer, priced by the days you need." }
         },
         {
           "@type": "Question",
@@ -78,8 +73,8 @@
         },
         {
           "@type": "Question",
-          "name": "Can you work with a larger creative team?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. I bring in designers, developers, animators, illustrators, 3D artists and other specialists when a project requires them. When I lead, I keep the central idea coherent across everything the team makes; when I join an established team, I work within its direction." }
+          "name": "Can you work alongside our agency or in-house team?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. If you already have an agency or an in-house team, I can lead the idea and direct the work, or work within an established direction. When the work needs more hands, I bring in designers, developers, animators, illustrators, 3D artists and film crews, and direct them." }
         },
         {
           "@type": "Question",
@@ -127,63 +122,32 @@
 <div class="wrap">
 
   <section aria-label="Services">
-    <div class="sec-head"><h1>Services</h1><span class="count">One offer, three sizes</span></div>
+    <div class="sec-head"><h1 class="about-title">Creative direction for your launch, refresh or campaign.</h1><span class="count">One offer, three sizes</span></div>
 
     <div class="svc-open" style="padding-top:0">
-      <p class="oneline">I take your launch from the first idea to everything it ships in: the identity, the campaign, the film, the site. One senior creative, with the range of a studio. You can start small, with a fixed-price sprint, and grow from there.</p>
+      <p class="oneline">I lead your launch from the first idea to everything it ships in: the identity, the campaign, the film, the site. You work with me directly, with the range of a studio. Most launches start with a fixed-price Sprint to find the idea; I lead the rest through to launch day.</p>
+      <p class="cap-proof svc-proof">Brands I’ve made work for, with agencies, studios and in-house teams: Google, Simply, MAX, Channel 13. <a href="work.html">See the work <span class="arw" aria-hidden="true">→</span></a></p>
     </div>
 
-    <div class="caps three" style="margin-top:clamp(40px,5vw,64px)">
+    <div class="caps three offer" style="margin-top:clamp(32px,4vw,40px)">
       <div class="cap" id="sprint"><span class="cap-fig" data-hairline-host="dominoes" aria-hidden="true"></span><div class="n">01 · Start here</div><h3>Launch Sprint</h3>
-        <p>Two weeks to find the idea your launch rests on, and to see it. I explore many directions fast (AI makes that possible), we choose one together, and I take it to a visual direction you can show your board.</p>
+        <p class="cap-meta">Fixed price · about 2 weeks · from <strong data-floor>₪30,000</strong></p>
+        <p>Two weeks to find the idea your launch rests on, and to see it. AI lets me take many more routes further in week one; we choose one together, and I take it to a visual direction you can show your board.</p>
         <ul class="cap-list"><li>The central idea and the line it lives on</li><li>Two or three creative routes, one chosen</li><li>Look and key visuals for the chosen route</li><li>A plan for the full launch: formats, team, budget</li></ul>
         <p class="cap-proof">Closest past work: <a href="work/simply-vision-pro.html">the launch visualization for Simply Piano on Apple Vision Pro <span class="arw" aria-hidden="true">→</span></a></p>
-        <p class="cap-meta">Fixed price · about 2 weeks · from <strong data-floor>₪30,000</strong></p></div>
-      <div class="cap"><span class="cap-fig" data-hairline-host="swatches" aria-hidden="true"></span><div class="n">02</div><h3><a href="services/creative-direction-product-launches.html">Full Launch</a></h3>
-        <p>The idea carried all the way through, so the launch looks like one thing everywhere it lands. I lead it hands-on and bring in the specialists it needs.</p>
+        <div class="cap-cta"><a class="btn solid" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="services_sprint" target="_blank" rel="noopener">Book a Sprint call <span class="arw" aria-hidden="true">↗</span></a></div></div>
+      <div class="cap" id="full-launch"><span class="cap-fig" data-hairline-host="swatches" aria-hidden="true"></span><div class="n">02</div><h3>Full Launch</h3>
+        <p class="cap-meta">Scoped per project, usually after a Sprint</p>
+        <p>The idea carried all the way through, so the launch looks like one thing everywhere it lands. I lead it hands-on from the chosen idea to launch day, bring in the specialists it needs and direct them, and stay your one point of accountability.</p>
         <ul class="cap-list"><li>Identity and brand system</li><li>Campaign, film, motion and 3D</li><li>Launch website and digital touchpoints</li><li>Direction through production</li></ul>
-        <p class="cap-proof">Closest past work: <a href="work/museum-of-natural-history.html">the Museum of Natural History exhibit, led from first concept to installed <span class="arw" aria-hidden="true">→</span></a></p>
-        <p class="cap-meta">Scoped per project, usually after a Sprint</p></div>
-      <div class="cap"><span class="cap-fig" data-hairline-host="catalogue" aria-hidden="true"></span><div class="n">03</div><h3><a href="services/fractional-creative-direction.html">Creative Director on call</a></h3>
-        <p>For teams with good people and no Creative Director. A set number of days a month to own the idea, hold one standard and keep the work coherent after launch.</p>
+        <p class="cap-proof">Closest past work: <a href="work/museum-of-natural-history.html">the Museum of Natural History exhibit, where I led the team from first concept to the installed exhibit <span class="arw" aria-hidden="true">→</span></a></p>
+        <div class="cap-cta"><a class="btn ghost" href="contact.html?start=full-launch#brief">Scope a Full Launch <span class="arw" aria-hidden="true">→</span></a></div></div>
+      <div class="cap" id="on-call"><span class="cap-fig" data-hairline-host="catalogue" aria-hidden="true"></span><div class="n">03</div><h3>Creative Director on call</h3>
+        <p class="cap-meta">Monthly retainer</p>
+        <p>A fractional Creative Director for in-house teams with good people and no Creative Director. A set number of days a month to own the idea, hold one standard and keep the work coherent after launch.</p>
         <ul class="cap-list"><li>Creative leadership for your in-house team</li><li>Reviews, direction and hands-on design</li><li>AI-assisted workflows your team can run</li></ul>
         <p class="cap-proof">Closest past work: <a href="work/natural-intelligence.html">18 months as in-house Creative Art Director at Natural Intelligence <span class="arw" aria-hidden="true">→</span></a></p>
-        <p class="cap-meta">Monthly retainer</p></div>
-    </div>
-  </section>
-
-  <!-- WHAT A LAUNCH CAN INCLUDE -->
-  <section class="obs" aria-label="What a launch can include" style="margin-top:var(--sp-section)">
-    <div class="sec-head"><h2>What a launch can include</h2><span class="count">Capabilities</span></div>
-    <div class="svc-list" style="margin-top:0">
-      <a href="services/brand-strategy-identity-systems.html">
-        <span class="svc-fig" data-hairline-host="swatches" aria-hidden="true"></span>
-        <span class="n">A</span>
-        <span class="t">Brand, identity &amp; refresh</span>
-        <span class="go">Read more →</span>
-        <span class="d">A new brand or a refresh of the one you have: positioning, the central idea, the visual language and the system your team applies every day.</span>
-      </a>
-      <a href="services/creative-direction-product-launches.html">
-        <span class="svc-fig" data-hairline-host="dominoes" aria-hidden="true"></span>
-        <span class="n">B</span>
-        <span class="t">Campaign, film &amp; 3D</span>
-        <span class="go">Read more →</span>
-        <span class="d">The launch idea carried through film, motion, 3D and design, from the hero film to the smallest cutdown.</span>
-      </a>
-      <a href="services/creative-direction-product-launches.html">
-        <span class="svc-fig" data-hairline-host="site" aria-hidden="true"></span>
-        <span class="n">C</span>
-        <span class="t">Website &amp; digital</span>
-        <span class="go">Read more →</span>
-        <span class="d">The launch site and the digital touchpoints around it, designed so the product and the campaign tell the same story.</span>
-      </a>
-      <a href="services/interactive-immersive-experiences.html">
-        <span class="svc-fig" data-hairline-host="gallery" aria-hidden="true"></span>
-        <span class="n">D</span>
-        <span class="t">Interactive &amp; spaces</span>
-        <span class="go">Read more →</span>
-        <span class="d">Exhibitions, installations and digital experiences people walk into and use. Often for museums and cultural institutions.</span>
-      </a>
+        <div class="cap-cta"><a class="btn ghost" href="contact.html?start=on-call#brief">Ask about on-call days <span class="arw" aria-hidden="true">→</span></a></div></div>
     </div>
   </section>
 
@@ -206,25 +170,51 @@
     </div>
   </section>
 
+  <!-- WHAT A LAUNCH CAN INCLUDE -->
+  <section class="obs" id="capabilities" aria-label="What a launch can include" style="margin-top:var(--sp-section)">
+    <div class="sec-head"><h2>What a launch can include</h2><span class="count">Capabilities</span></div>
+    <div class="svc-list" style="margin-top:0">
+      <div class="svc-row">
+        <span class="n">A</span>
+        <span class="t">Brand, identity &amp; refresh</span>
+        <span class="d">A new brand or a refresh of the one you have: positioning, the central idea, the visual language and the system your team applies every day.</span>
+        <p class="seen">Seen in: <a href="work/partner-tv.html">Partner TV</a>, <a href="work/channel-13.html">Channel 13</a> (team contribution)</p>
+      </div>
+      <div class="svc-row">
+        <span class="n">B</span>
+        <span class="t">Campaign, film &amp; 3D</span>
+        <span class="d">The launch idea carried through film, motion, 3D and design, from the hero film to the smallest cutdown.</span>
+        <p class="seen">Seen in: <a href="work/sky-max.html">SkyMax</a>, <a href="work/google-shopping-il.html">Google Shopping IL</a></p>
+      </div>
+      <div class="svc-row">
+        <span class="n">C</span>
+        <span class="t">Website &amp; digital</span>
+        <span class="d">The launch site and the digital touchpoints around it, designed so the product and the campaign tell the same story.</span>
+      </div>
+      <div class="svc-row">
+        <span class="n">D</span>
+        <span class="t">Interactive &amp; spaces</span>
+        <span class="d">Exhibitions, installations and digital experiences people walk into and use. Often for museums and cultural institutions.</span>
+        <p class="seen">Seen in: <a href="work/museum-of-natural-history.html">Museum of Natural History</a>, <a href="work/tower-of-david.html">Tower of David</a></p>
+      </div>
+    </div>
+  </section>
+
   <!-- FAQ -->
   <section class="obs" id="faq" aria-label="Frequently asked questions">
     <div class="sec-head"><h2>Common questions</h2><span class="count">Before you write</span></div>
     <div class="faq">
       <details>
         <summary>Do I need a finished brief before we talk?</summary>
-        <div class="a"><p>No. Most projects start with a launch or a business problem rather than a list of deliverables. Defining what the work needs to say, the central idea, and which specialists are needed to make it is usually the first phase of the engagement.</p></div>
+        <div class="a"><p>No. Most people come with a launch and a problem, not a list of deliverables. Working out what the launch has to say, and who we need to make it, is the first thing we do together.</p></div>
       </details>
       <details>
-        <summary>Who do you usually work with?</summary>
-        <div class="a"><p>Marketing and brand leaders (CMOs, heads of brand and marketing, founders) with a launch, a brand refresh or a campaign ahead, and teams with good people but no Creative Director. I work with them directly.</p></div>
+        <summary>Who is this for?</summary>
+        <div class="a"><p>Marketing and brand leaders (CMOs, heads of brand and marketing, founders) with a launch campaign, a brand refresh or a launch website ahead, where the central idea still has to be found. Past work spans technology products, national broadcast and consumer campaigns, and museums and cultural institutions. You work with me directly, not through an account team.</p></div>
       </details>
       <details>
-        <summary>What kinds of projects are the best fit?</summary>
-        <div class="a"><p>Projects where a company or institution is shaping a new brand, launching or repositioning a product, or building an experience people walk into, and where the central idea still has to be found. In practice that has meant technology companies and ambitious products, media and broadcast organisations, museums and cultural institutions, and organisations that need to explain something genuinely complex.</p></div>
-      </details>
-      <details>
-        <summary>What is the typical starting budget?</summary>
-        <div class="a"><p>A Launch Sprint starts at ₪30,000 in Israel, $10,000 in the US and Canada, €10,000 in Europe and £8,000 in the UK. Prices are set per market rather than converted. A Full Launch is scoped after the Sprint, with the team the work needs.</p></div>
+        <summary>What does it cost?</summary>
+        <div class="a"><p>A Launch Sprint is a fixed price, starting at ₪30,000 in Israel, $10,000 in the US and Canada, €10,000 in Europe and £8,000 in the UK. Prices are set per market rather than converted. A Full Launch is priced after the Sprint, once we both know what the launch needs: the formats, the team and the production. Creative Director on call is a monthly retainer, priced by the days you need.</p></div>
       </details>
       <details>
         <summary>Why start with a Sprint?</summary>
@@ -235,8 +225,8 @@
         <div class="a"><p>As part of the craft. It lets me explore far more directions in the same time, prototype visuals and motion early, and carry an idea across more formats. The ideas, the taste and the final call are mine; where the work needs real hands, I bring in the specialists. At Natural Intelligence I initiated and developed an AI-assisted resizing MVP, so the team could adapt creative across formats without redoing it by hand. <a href="work/natural-intelligence.html">See the case →</a></p></div>
       </details>
       <details>
-        <summary>Can you work with a larger creative team?</summary>
-        <div class="a"><p>Yes. I bring in designers, developers, animators, illustrators, 3D artists and other specialists when a project requires them. When I lead, I keep the central idea coherent across everything the team makes; when I join an established team, I work within its direction.</p></div>
+        <summary>Can you work alongside our agency or in-house team?</summary>
+        <div class="a"><p>Yes. If you already have an agency or an in-house team, I can lead the idea and direct the work, or work within an established direction. When the work needs more hands, I bring in designers, developers, animators, illustrators, 3D artists and film crews, and direct them.</p></div>
       </details>
       <details>
         <summary>Do you work internationally?</summary>
@@ -248,10 +238,10 @@
   <!-- CONTACT BAND -->
   <section class="band obs" aria-label="Contact" style="margin-top:var(--sp-section)">
     <h2>Not sure which size fits? Start with a <em>call</em>.</h2>
-    <p style="max-width:52ch;margin-bottom:0;color:inherit;opacity:0.7;">Tell me what is launching, what stage it is in and what is still undecided. A clear problem is enough to start; a finished brief is not required.</p>
+    <p style="max-width:52ch;margin-bottom:0;color:inherit;opacity:0.7;">Most people don’t know yet. That’s what the first call is for: we work out which size fits, and you leave with a clear next step.</p>
     <div class="cta" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:28px">
       <a class="btn solid" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="services" target="_blank" rel="noopener">Book a call with Itai <span class="arw" aria-hidden="true">↗</span></a>
-      <a href="contact.html#brief" class="btn ghost">Send a brief <span class="arw" aria-hidden="true">→</span></a>
+      <a href="contact.html#brief" class="btn ghost">Write to me <span class="arw" aria-hidden="true">→</span></a>
     </div>
     <div class="band-fig" data-hairline-host="clay" aria-hidden="true"></div>
   </section>
@@ -280,8 +270,6 @@
 <script type="module" src="js/hairline-clay.js"></script>
 <script type="module" src="js/hairline-swatches.js"></script>
 <script type="module" src="js/hairline-dominoes.js"></script>
-<script type="module" src="js/hairline-gallery.js"></script>
 <script type="module" src="js/hairline-catalogue.js"></script>
-<script type="module" src="js/hairline-site.js"></script>
 </body>
 </html>
