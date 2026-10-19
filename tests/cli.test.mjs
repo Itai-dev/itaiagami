@@ -33,7 +33,7 @@ test('help, version and usage errors', async () => {
 });
 
 test('services, projects and project', async () => {
-  assert.match(await run('services'), /Brand Strategy & Identity Systems[\s\S]*Starting at: ₪30,000 \(IL\)/);
+  assert.match(await run('services'), /Launch Sprint[\s\S]*Starting at: ₪30,000 \(IL\)/);
   const list = await run('projects', '--category', 'Culture');
   assert.match(list, /tower-of-david\s+Tower of David \(Culture\)/);
   assert.doesNotMatch(list, /\(Brand\)/);
@@ -64,7 +64,7 @@ test('enquire asks before sending, and sends nothing on no', async () => {
 
 test('as a process: exit codes 0, 1 and 2', async () => {
   const ok = await exec(process.execPath, [BIN, 'services', '--json', '--base', base]);
-  assert.equal(JSON.parse(ok.stdout).services.length, 4);
+  assert.equal(JSON.parse(ok.stdout).services.length, 3);
   const apiErr = await exec(process.execPath, [BIN, 'project', 'nope', '--base', base]).catch(e => e);
   assert.equal(apiErr.code, 1);
   assert.match(apiErr.stderr, /project_not_found/);

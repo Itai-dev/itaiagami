@@ -4,20 +4,20 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Itai Agami API: Developer Portal | Itai Agami</title>
-<meta name="description" content="The Itai Agami API for developers and AI agents: a public JSON API for Itai Agami's creative direction services, case studies and project enquiries, with a quickstart, CLI, sandbox mode, rate limits and versioning policy." />
+<meta name="description" content="A public JSON API, CLI and agent guide for Itai Agami’s creative direction services, case studies and project inquiries, with quickstart, sandbox mode and rate limits." />
 <link rel="canonical" href="https://itaiagami.com/developers.html" />
 <link rel="service-desc" type="application/vnd.oai.openapi+json" href="https://itaiagami.com/openapi.json" />
 <link rel="api-catalog" href="https://itaiagami.com/.well-known/api-catalog" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Itai Agami API: Developer Portal" />
-<meta property="og:description" content="Public JSON API, CLI and agent guide for itaiagami.com." />
+<meta property="og:description" content="A public JSON API, CLI and agent guide for Itai Agami’s creative direction services, case studies and project inquiries, with quickstart, sandbox mode and rate limits." />
 <meta property="og:url" content="https://itaiagami.com/developers.html" />
-<meta property="og:image" content="https://itaiagami.com/assets/og/itai-agami.jpg" />
+<meta property="og:image" content="https://itaiagami.com/assets/og/itai-agami-cd.jpg" />
 <meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Itai Agami" />
+<meta property="og:image:alt" content="Itai Agami, Independent Creative Director in Tel Aviv: one creative director, from first idea to launch day." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,7 +29,7 @@
   "@type": "WebAPI",
   "@id": "https://itaiagami.com/developers.html#api",
   "name": "Itai Agami API",
-  "description": "Public JSON API for Itai Agami's creative direction services, case studies and project enquiries.",
+  "description": "Public JSON API for Itai Agami's creative direction services, case studies and project inquiries.",
   "documentation": "https://itaiagami.com/developers.html",
   "url": "https://itaiagami.com/api/v1",
   "provider": { "@type": "Person", "@id": "https://itaiagami.com/#itai", "name": "Itai Agami" },
@@ -38,6 +38,7 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="site" id="siteHeader">
@@ -49,7 +50,7 @@
       <a href="notes.html">Notes</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
-      <button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>
+      <button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><svg class="tgl" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
     </nav>
     <a class="btn solid nav-cta" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
@@ -63,25 +64,25 @@
   <a href="about.html">About</a>
   <a href="contact.html">Contact</a>
   <div class="mm-foot">
-    <button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button>
+    <button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><svg class="tgl" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg> <span class="tlm">Light</span></button>
     <span>Tel Aviv, IL · Worldwide</span>
   </div>
 </nav>
 
-<main>
+<main id="main">
   <div class="cwrap">
     <article class="article dev">
       <p class="a-meta"><span>Developer portal</span> <span>API v1</span></p>
       <h1>Itai Agami API</h1>
-      <p class="dek">A public JSON API for developers and AI agents: Itai Agami’s creative direction services, case studies and project enquiries, plus every page of this site as Markdown.</p>
+      <p class="dek">A public JSON API for developers and AI agents: Itai Agami’s creative direction services, case studies and project inquiries, plus every page of this site as Markdown.</p>
 
       <div class="article-body">
         <h2 id="when">When to use it</h2>
-        <p>Use it when someone is looking for a creative director for a product or brand launch, a brand identity system, a museum or interactive experience, or fractional creative leadership, and you want to check fit, cite relevant work or pass on their brief. The <a href="/llms.txt">llms.txt</a> file has the same guidance written for language models.</p>
+        <p>Use it when someone is looking for a creative director for a launch campaign, a brand refresh, a launch website, a museum or interactive experience, or a fractional Creative Director on call, and you want to check fit, cite relevant work or pass on their brief. The <a href="/llms.txt">llms.txt</a> file has the same guidance written for language models.</p>
 
         <h2 id="quickstart">Quickstart</h2>
         <p>No sign-up and no API key. Every endpoint is public and returns JSON.</p>
-<pre><code># services and starting prices
+<pre tabindex="0" aria-label="Example: services and starting prices"><code># services and starting prices
 curl https://itaiagami.com/api/v1/services
 
 # case studies, optionally by category (Brand, Culture, Technology)
@@ -97,27 +98,28 @@ curl -X POST https://itaiagami.com/api/v1/enquiry \
   -d '{"name":"Ada","email":"ada@example.com","project":"A product launch in March","dry_run":true}'</code></pre>
 
         <h2 id="endpoints">Endpoints</h2>
-        <div class="tbl"><table>
+        <!-- The prose says "inquiry"; the API names (/api/v1/enquiry, /api/enquiry, submitEnquiry, the CLI's "enquire" command) keep their original spelling for contract stability. -->
+        <div class="tbl" tabindex="0" role="region" aria-label="Endpoints table"><table>
           <thead><tr><th>Request</th><th>operationId</th><th>What it returns</th></tr></thead>
           <tbody>
-            <tr><td><code>GET /api/v1/services</code></td><td><code>listServices</code></td><td>The four engagement types, the starting price in each market, and the ways to get in touch</td></tr>
+            <tr><td><code>GET /api/v1/services</code></td><td><code>listServices</code></td><td>The three offer sizes (Launch Sprint, Full Launch, Creative Director on call), the Launch Sprint’s starting price in each market, and the ways to get in touch</td></tr>
             <tr><td><code>GET /api/v1/projects</code></td><td><code>listProjects</code></td><td>Every case study, filterable with <code>?category=</code></td></tr>
             <tr><td><code>GET /api/v1/projects/{slug}</code></td><td><code>getProject</code></td><td>One case study, including Itai’s individual contribution</td></tr>
-            <tr><td><code>POST /api/v1/enquiry</code></td><td><code>submitEnquiry</code></td><td>Sends a project enquiry by email</td></tr>
+            <tr><td><code>POST /api/v1/enquiry</code></td><td><code>submitEnquiry</code></td><td>Sends a project inquiry by email</td></tr>
             <tr><td><code>GET /api/v1/geo</code></td><td><code>getVisitorCountry</code></td><td>The caller’s country code (used by the site for local pricing)</td></tr>
           </tbody>
         </table></div>
         <p>The full description, with every parameter, schema and error, is the <a href="/openapi.json">OpenAPI 3.1 document</a>. You can import it into Postman, Insomnia or any OpenAPI client, or use it to generate function-calling tools. The <a href="/.well-known/api-catalog">API catalog</a> (RFC 9727) points to it too.</p>
 
         <h2 id="auth">Authentication and API keys</h2>
-        <p>None. The API exposes only information that is already public on this site, plus the enquiry form, so there are no keys to request or rotate. Please only send an enquiry when the person you are acting for has asked you to, using their real name and email address. Itai replies to that address.</p>
+        <p>None. The API exposes only information that is already public on this site, plus the inquiry form, so there are no keys to request or rotate. Please only send an inquiry when the person you are acting for has asked you to, using their real name and email address. Itai replies to that address.</p>
 
         <h2 id="sandbox">Sandbox</h2>
-        <p>There is no separate sandbox host. Instead, add <code>"dry_run": true</code> to an enquiry (or <code>?dry_run=1</code> to the URL). A dry run goes through every validation and returns the same errors a real request would, but sends nothing and doesn’t count against the rate limit. A valid dry run returns <code>{"ok":true,"dryRun":true}</code>. The read endpoints have no side effects, so you can call them freely.</p>
+        <p>There is no separate sandbox host. Instead, add <code>"dry_run": true</code> to an inquiry (or <code>?dry_run=1</code> to the URL). A dry run goes through every validation and returns the same errors a real request would, but sends nothing and doesn’t count against the rate limit. A valid dry run returns <code>{"ok":true,"dryRun":true}</code>. The read endpoints have no side effects, so you can call them freely.</p>
 
         <h2 id="cli">Command-line tool</h2>
         <p>A small CLI with no dependencies (Node 18 or later) wraps the API:</p>
-<pre><code>curl -fsSLO https://itaiagami.com/cli/itaiagami.mjs
+<pre tabindex="0" aria-label="Example: installing and running the CLI"><code>curl -fsSLO https://itaiagami.com/cli/itaiagami.mjs
 node itaiagami.mjs services
 node itaiagami.mjs projects --category Brand
 node itaiagami.mjs project tower-of-david --json
@@ -128,7 +130,7 @@ node itaiagami.mjs enquire --name "Ada" --email ada@example.com \
 
         <h2 id="errors">Errors</h2>
         <p>Every error is JSON with the same shape. Branch on <code>code</code>, show <code>error</code> to people, and follow <code>hint</code> to fix the request:</p>
-<pre><code>{ "ok": false,
+<pre tabindex="0" aria-label="Example: an error response"><code>{ "ok": false,
   "error": "That email address does not look right.",
   "code": "invalid_email",
   "hint": "Set \"email\" to a full address such as name@company.com.",
@@ -137,15 +139,15 @@ node itaiagami.mjs enquire --name "Ada" --email ada@example.com \
         <p>Unknown paths under <code>/api</code> return <code>404 endpoint_not_found</code>. A version that doesn’t exist returns <code>404 unsupported_api_version</code>.</p>
 
         <h2 id="rate-limits">Rate limits</h2>
-        <div class="tbl"><table>
+        <div class="tbl" tabindex="0" role="region" aria-label="Rate limits table"><table>
           <thead><tr><th>Policy</th><th>Applies to</th><th>Quota</th></tr></thead>
           <tbody>
             <tr><td><code>read</code></td><td><code>GET /services</code>, <code>/projects</code></td><td>60 requests per 60 seconds per client</td></tr>
-            <tr><td><code>enquiry</code></td><td><code>POST /enquiry</code></td><td>5 accepted enquiries per 10 minutes per client (dry runs and rejected requests don’t count)</td></tr>
+            <tr><td><code>enquiry</code></td><td><code>POST /enquiry</code></td><td>5 accepted inquiries per 10 minutes per client (dry runs and rejected requests don’t count)</td></tr>
           </tbody>
         </table></div>
         <p>Responses carry the IETF RateLimit header fields (<a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/">draft-ietf-httpapi-ratelimit-headers</a>), so you can slow down before you hit the limit:</p>
-<pre><code>RateLimit-Policy: "read";q=60;w=60
+<pre tabindex="0" aria-label="Example: rate limit headers"><code>RateLimit-Policy: "read";q=60;w=60
 RateLimit: "read";r=57;t=41
 X-RateLimit-Limit: 60
 X-RateLimit-Remaining: 57
@@ -155,7 +157,7 @@ X-RateLimit-Reset: 41</code></pre>
         <h2 id="versioning">Versioning and deprecation</h2>
         <ul>
           <li><strong>The version is in the path.</strong> The current and only version is <code>/api/v1</code>. Every response carries an <code>API-Version: 1</code> header.</li>
-          <li><strong>v1 only grows.</strong> New endpoints, new optional parameters and new response fields can appear, so ignore fields you don’t recognise. Nothing in v1 is removed or renamed, and no field changes meaning.</li>
+          <li><strong>v1 only grows.</strong> New endpoints, new optional parameters and new response fields can appear, so ignore fields you don’t recognize. Nothing in v1 is removed or renamed, and no field changes meaning.</li>
           <li><strong>Breaking changes get a new version.</strong> A breaking change ships as <code>/api/v2</code> alongside v1. It never replaces v1 in place.</li>
           <li><strong>Deprecation is announced in the headers.</strong> A deprecated version or endpoint responds with a <code>Deprecation</code> header (<a href="https://www.rfc-editor.org/rfc/rfc9745">RFC 9745</a>), a <code>Sunset</code> header (<a href="https://www.rfc-editor.org/rfc/rfc8594">RFC 8594</a>) giving the date it stops working, and <code>Link: &lt;https://itaiagami.com/developers.html#versioning&gt;; rel="deprecation"</code>. The sunset date is at least six months after the deprecation is announced, and the change is listed in the changelog below.</li>
           <li><strong>Unversioned aliases.</strong> <code>/api/services</code>, <code>/api/projects</code>, <code>/api/enquiry</code> and <code>/api/geo</code> serve the current version and are what this website calls. Integrations should pin <code>/api/v1</code>.</li>
@@ -163,7 +165,7 @@ X-RateLimit-Reset: 41</code></pre>
 
         <h2 id="changelog">Changelog</h2>
         <ul>
-          <li><strong>v1</strong>: <code>/api/v1</code> paths, the <code>API-Version</code> header, RateLimit headers, enquiry dry runs and the CLI. Nothing is deprecated.</li>
+          <li><strong>v1</strong>: <code>/api/v1</code> paths, the <code>API-Version</code> header, RateLimit headers, inquiry dry runs and the CLI. Nothing is deprecated.</li>
         </ul>
 
         <h2 id="resources">Resources</h2>
@@ -183,9 +185,9 @@ X-RateLimit-Reset: 41</code></pre>
 <footer class="site">
   <div class="wrap">
     <div class="grid">
-      <div class="col"><h4>Menu</h4><a href="work.html">Work</a><a href="services.html">Services</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
-      <div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>
-      <div class="col"><h4>Studio</h4><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
+      <div class="col"><p class="fh">Menu</p><a href="work.html">Work</a><a href="services.html">Services</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+      <div class="col"><p class="fh">Connect</p><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>
+      <div class="col"><p class="fh">Based</p><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
     </div>
     <div class="base">
       <span>© 2026 Itai Agami. All rights reserved.</span>

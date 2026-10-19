@@ -1,57 +1,136 @@
 [
   {
-    "slug": "channel-13",
-    "name": "Channel 13",
-    "client": "Channel 13",
+    "slug": "simply-vision-pro",
+    "name": "Simply Vision Pro",
+    "client": "Simply (Simply Piano)",
+    "cat": "Technology",
+    "tags": [
+      "Technology",
+      "Interactive"
+    ],
+    "role": "Launch visualization: creative direction and 3D",
+    "disciplines": "Creative Direction / 3D / Emerging Technology",
+    "collab": "",
+    "engagement": "",
+    "flagship": true,
+    "selected": true,
+    "homeRank": 1,
+    "oneline": "Showing how it would feel to learn piano on Apple Vision Pro, before people could try it themselves.",
+    "challenge": "For the new version of Simply Piano on Apple Vision Pro, the team needed to show how it would feel to play in a spatial environment that most people had never experienced.",
+    "idea": "Let the room change and keep the piano still. Each environment changes the atmosphere around the instrument, while the notation stays exactly where the player expects it and hand tracking is used as guidance, not spectacle.",
+    "system": "3D tracking, modeling and simulation were used to visualize the full experience of playing in spatial computing, from environment to interface.",
+    "result": "The visualization fronted Simply Piano’s Apple Vision Pro launch — how the experience was seen before most people could try it.",
+    "contribution": "I led the launch visualization from concept and look development through hands-on 3D tracking, modeling and simulation, on a platform with no established visual conventions to borrow from. My scope was the visualization, not the wider product launch or product development.",
+    "thumb": "/assets/opt/a37dc5da108c.webp",
+    "hero": "/assets/opt/15b0b9d98c42.webp",
+    "gallery": [
+      {
+        "src": "/assets/opt/3b579f9de0c2.webp",
+        "half": false
+      },
+      {
+        "src": "/assets/opt/71b6d1071f0c.webp",
+        "half": false
+      },
+      {
+        "src": "/assets/opt/2157078e68f1.webp",
+        "half": false
+      }
+    ],
+    "vimeo": "1008541846",
+    "credits": []
+  },
+  {
+    "slug": "sky-max",
+    "name": "SkyMax",
+    "client": "MAX",
     "cat": "Brand",
     "tags": [
       "Brand"
     ],
-    "role": "Brand strategy and broadcast identity",
-    "disciplines": "Brand Strategy / Identity / Broadcast",
-    "collab": "Shortcut Playground (creative agency)",
+    "role": "Art Direction, Concept Art",
+    "disciplines": "Art Direction / Concept Art / 3D",
+    "collab": "Roy Kafri, Shortcut Playground, McCann Erickson",
     "engagement": "agency",
     "flagship": true,
-    "homeRank": 1,
-    "oneline": "An identity bold enough to hold together everything a national network broadcasts.",
-    "challenge": "Give a national channel one identity strong enough to carry news, prime-time and promotion without breaking character.",
-    "idea": "A bold logo for a bold brand: basic shapes and a confident, pastel-led palette form a flexible visual identity.",
-    "system": "A full brand book and channel kit: logo usage, color, typography and on-air functionality — to keep the identity consistent everywhere it appears.",
-    "result": "Rolled out as a complete national broadcast system: logo, brand book and channel kit covering news graphics, promotion and continuity, built so the network’s own teams could keep applying it long after the design work ended.",
-    "contribution": "I was part of the Shortcut Playground team throughout the rebrand, contributing from brand strategy through design and execution. The logo, identity, brand book, channel kit and on-air motion are the output of that team.",
-    "thumb": "/assets/opt/5cae1f47edc2.webp",
-    "hero": "/assets/opt/77bb87005dfc.webp",
+    "selected": true,
+    "homeRank": 2,
+    "oneline": "The visual world of MAX’s SkyMax commercial, from concept art to national TV.",
+    "challenge": "Position the SkyMax card as a magical card that makes flying abroad possible with every purchase.",
+    "idea": "Every purchase releases a piece of a holiday into the room. The surreal, puffy vacation world was developed from sketch into detailed concept art.",
+    "system": "Final concept-art elements modeled, textured and animated in 3D for the commercial.",
+    "result": "Aired nationally for MAX. The world defined in the concept art carried through into the final modeled, textured and animated 3D elements of the commercial.",
+    "contribution": "I art-directed the commercial’s world and drew the concept art that defined it, then guided its translation into the final 3D elements.",
+    "thumb": "/assets/opt/2e26b5168c46.webp",
+    "hero": "/assets/opt/8cfebe82ae8c.webp",
     "gallery": [
       {
-        "src": "/assets/opt/aefbadcae172.webp",
+        "src": "/assets/opt/3e85491fb3b7.webp",
         "half": false
       },
       {
-        "src": "/assets/opt/d7fd4e53769b.webp",
+        "src": "/assets/opt/cb7c6843d06b.webp",
         "half": false
       },
       {
-        "src": "/assets/opt/eac93ab3583a.webp",
-        "half": true
-      },
-      {
-        "src": "/assets/opt/e89149e4b990.webp",
-        "half": true
-      },
-      {
-        "src": "/assets/opt/15a84e7eac60.webp",
+        "src": "/assets/opt/460ec7b3ef67.webp",
         "half": false
       }
     ],
-    "vimeo": "1000322316",
+    "vimeo": "793822652",
     "credits": [
-      "Creative Agency: Shortcut Playground"
+      "Director: Roy Kafri",
+      "Creative Agency: Shortcut Playground",
+      "Ad Agency: McCann Erickson"
+    ]
+  },
+  {
+    "slug": "google-shopping-il",
+    "name": "Google Shopping IL",
+    "client": "Google",
+    "cat": "Technology",
+    "tags": [
+      "Technology"
+    ],
+    "role": "Art Direction, Concept Art",
+    "disciplines": "Art Direction / Concept Art / 2D+3D",
+    "collab": "Shortcut Playground, McCann Tech",
+    "engagement": "agency",
+    "flagship": true,
+    "selected": true,
+    "homeRank": 3,
+    "oneline": "Films for ShoppingIL, Google’s national shopping event for local businesses, set in a layered 2D-and-3D world.",
+    "challenge": "Show the growth of local businesses through ShoppingIL and encourage Israeli consumers to support them.",
+    "idea": "Put the real owners in the frame. Local businesses are rebuilt as 2D-and-3D sets around the people who run them, so each one gets the care usually reserved for a national brand.",
+    "system": "A set of films built to drive visibility and sales through the event and beyond it.",
+    "result": "The films ran as part of ShoppingIL, Google’s national shopping event for local businesses.",
+    "contribution": "I art-directed the films and created the concept art behind their layered 2D-and-3D world.",
+    "thumb": "/assets/opt/c8dee9c7622e.webp",
+    "hero": "/assets/opt/e65b2bbb101d.webp",
+    "gallery": [
+      {
+        "src": "/assets/opt/63cc54cfb49f.webp",
+        "half": false
+      },
+      {
+        "src": "/assets/opt/bf3066df08b8.webp",
+        "half": false
+      },
+      {
+        "src": "/assets/opt/95b3a5ee73e6.webp",
+        "half": false
+      }
+    ],
+    "vimeo": "1025724795",
+    "credits": [
+      "Creative Agency: Shortcut Playground",
+      "Ad Agency: McCann Tech"
     ]
   },
   {
     "slug": "museum-of-natural-history",
     "name": "Museum of Natural History",
-    "client": "Museum of Natural History",
+    "client": "Steinhardt Museum of Natural History",
     "cat": "Culture",
     "tags": [
       "Culture",
@@ -62,10 +141,11 @@
     "collab": "Shortcut Playground",
     "engagement": "agency",
     "flagship": true,
-    "homeRank": 2,
+    "selected": true,
+    "homeRank": 4,
     "oneline": "Turning dense science into an experience visitors explore rather than read.",
     "challenge": "Create an interactive experience that educates visitors of all ages on the true value of natural environments, without simplifying the science into decoration.",
-    "idea": "Working with environmental-science experts, design environments that fit the museum’s world, feel natural, and invite people to interact rather than observe.",
+    "idea": "Make looking the interface. Each topic is entered by looking closer at a scene instead of reading a panel, and the same interface runs in three languages. Developed with environmental-science experts to fit the museum’s world.",
     "system": "Leading a multidisciplinary team of illustrators, designers, animators and developers to build an immersive experience that inspires positive interaction with nature.",
     "result": "Installed and running inside the museum: a physical and digital experience built with environmental-science experts and a team of illustrators, designers, animators and developers, explored hands-on by visitors of every age.",
     "contribution": "I art-directed the experience and led the multidisciplinary team of illustrators, designers, animators and developers from first concept through the installed exhibit.",
@@ -95,127 +175,44 @@
     ]
   },
   {
-    "slug": "partner-tv",
-    "name": "Partner TV",
-    "client": "Partner",
-    "cat": "Brand",
-    "tags": [
-      "Brand"
-    ],
-    "role": "Art Direction",
-    "disciplines": "Art Direction / Identity / Broadcast",
-    "collab": "Studio Adam Fineberg",
-    "engagement": "studio",
-    "flagship": false,
-    "homeRank": 3,
-    "oneline": "A channel-ID system for Partner TV across series, kids and movies.",
-    "challenge": "Design a channel-ID system for Partner TV spanning series, kids and movies, each with its own energy but one clear identity.",
-    "idea": "Vibrant color reflecting the channel’s diverse content, with fluid animation adding movement and excitement.",
-    "system": "From concept sketches through palette, animation and visual-effects exploration into a working on-air language.",
-    "result": "Went on air as one ID system across Partner TV’s three channels (series, kids and movies), each with its own energy inside a single identity, carried from concept sketches through palette, animation and visual effects.",
-    "contribution": "I art-directed the channel IDs: the concept, color language and motion direction across all three channels.",
-    "thumb": "/assets/opt/124320697c88.webp",
-    "hero": "/assets/opt/a01fae312ee1.webp",
-    "gallery": [
-      {
-        "src": "/assets/opt/6db50b3c756e.webp",
-        "half": false
-      },
-      {
-        "src": "/assets/opt/048b113c1f3b.webp",
-        "half": false
-      },
-      {
-        "src": "/assets/opt/660aebc41328.webp",
-        "half": false
-      }
-    ],
-    "vimeo": "636475751",
-    "credits": [
-      "Studio Adam Fineberg"
-    ]
-  },
-  {
-    "slug": "sky-max",
-    "name": "SkyMax",
-    "client": "MAX",
-    "cat": "Brand",
-    "tags": [
-      "Brand"
-    ],
-    "role": "Art Direction, Concept Art",
-    "disciplines": "Art Direction / Concept Art / 3D",
-    "collab": "Roy Kafri, Shortcut Playground, McCann Erickson",
-    "engagement": "agency",
-    "flagship": false,
-    "homeRank": 4,
-    "oneline": "Positioning a credit card as the one that makes travel happen with every purchase.",
-    "challenge": "Position the SkyMax card as a magical card that makes flying abroad possible with every purchase.",
-    "idea": "Surreal scenes of puffy vacation elements taking flight with each purchase, developed from sketch into detailed concept art.",
-    "system": "Final concept-art elements modeled, textured and animated in 3D for the commercial.",
-    "result": "Aired nationally for MAX. The world defined in the concept art carried through into the final modeled, textured and animated 3D elements of the commercial.",
-    "contribution": "I art-directed the commercial’s world and drew the concept art that defined it, then guided its translation into the final 3D elements.",
-    "thumb": "/assets/opt/2e26b5168c46.webp",
-    "hero": "/assets/opt/8cfebe82ae8c.webp",
-    "gallery": [
-      {
-        "src": "/assets/opt/3e85491fb3b7.webp",
-        "half": false
-      },
-      {
-        "src": "/assets/opt/cb7c6843d06b.webp",
-        "half": false
-      },
-      {
-        "src": "/assets/opt/460ec7b3ef67.webp",
-        "half": false
-      }
-    ],
-    "vimeo": "793822652",
-    "credits": [
-      "Director: Roy Kafri",
-      "Creative Agency: Shortcut Playground",
-      "Ad Agency: McCann Erickson"
-    ]
-  },
-  {
-    "slug": "simply-vision-pro",
-    "name": "Simply Vision Pro",
-    "client": "Simply (Simply Piano)",
+    "slug": "natural-intelligence",
+    "name": "Natural Intelligence",
+    "client": "Natural Intelligence",
     "cat": "Technology",
     "tags": [
       "Technology",
-      "Interactive"
+      "Brand"
     ],
-    "role": "Creative direction and 3D",
-    "disciplines": "Creative Direction / 3D / Emerging Technology",
-    "collab": "",
-    "engagement": "",
+    "role": "Creative Art Director (in-house), Jan 2025–Jun 2026",
+    "disciplines": "Creative Systems / Concept Development / Art Direction / AI-assisted Workflow / Motion & Video",
+    "collab": "In-house copy, growth, data and creative teams",
+    "engagement": "in-house",
     "flagship": true,
-    "homeRank": 5,
-    "oneline": "Showing how it would feel to learn an instrument in augmented reality, before the platform to try it existed.",
-    "challenge": "For the new version of Simply Piano on Apple Vision Pro, the team needed to show how it would feel to play in an augmented-reality environment that most people had never experienced.",
-    "idea": "Design immersive 3D spaces with atmosphere: environments that make learning feel present and physical without pulling focus from the instrument.",
-    "system": "3D tracking, modeling and simulation were used to visualize the full experience of playing in augmented reality, from environment to interface.",
-    "result": "The visualization fronted Simply Piano’s Apple Vision Pro launch — how the experience was seen before most people could try it.",
-    "contribution": "I led the launch visualization from concept and look development through hands-on 3D tracking, modeling and simulation. My scope was the visualization, not the wider product launch or product development.",
-    "thumb": "/assets/opt/a37dc5da108c.webp",
-    "hero": "/assets/opt/15b0b9d98c42.webp",
+    "selected": true,
+    "homeRank": null,
+    "oneline": "Turning creative production into a system that generates, tests and scales ideas.",
+    "challenge": "Natural Intelligence runs digital comparison platforms across some of the most competitive consumer categories in the US market: car insurance, pet insurance, mortgage, home equity, business loans and home security. Every creative decision lived inside a measurable acquisition system: the work had to stop attention in crowded feeds, explain complex products quickly, build trust around high-consideration decisions and still produce enough variation to learn from. The challenge was never to produce more assets. It was to create conditions in which creative thinking could generate repeatable learning.",
+    "idea": "Treat creative as a system rather than a run of campaigns. Build distinct creative territories, each with its own point of view, tone and visual language, then translate them into testable variables, so every execution answers a question instead of decorating one. A variation should test an idea, not the color of a button.",
+    "system": "A repeatable loop: audience tension → hypothesis → creative territory → concept → variation → test and learn → scale, with the performance signal feeding the next round of concepts. The process stayed constant while each category was entered through its own human tension: urgency and savings in car insurance, care and trust in pet insurance, opportunity and complexity in mortgage and lending. As volume grew, I initiated an AI-assisted resizing MVP to take repetitive format adaptation out of the workflow while keeping composition, hierarchy and creative intent under a designer’s judgment.",
+    "result": "Creative directions used across several competitive US consumer categories, including leading work in the car insurance and pet insurance verticals; creative support for the launch and development of mortgage-related verticals; a repeatable experimentation process connecting concept, variation and learning; and a production prototype that reduced repetitive adaptation work without loss of creative intent.",
+    "contribution": "My title was Creative Art Director; the work spanned concept development, art direction, design, motion and video. I developed concepts and produced static, motion and video assets for US insurance and finance campaigns, and partnered with copy, growth and data teams to test narrative hooks and refine creative using performance insights. I also initiated and developed an AI-assisted resizing MVP for creative adaptation across formats.",
+    "thumb": "/assets/opt/ni-logo-thumb.webp",
+    "hero": "/assets/opt/ni-hero.webp",
     "gallery": [
       {
-        "src": "/assets/opt/3b579f9de0c2.webp",
+        "src": "/assets/opt/ni-g1.webp",
         "half": false
       },
       {
-        "src": "/assets/opt/71b6d1071f0c.webp",
+        "src": "/assets/opt/ni-g3.webp",
         "half": false
       },
       {
-        "src": "/assets/opt/2157078e68f1.webp",
+        "src": "/assets/opt/ni-g2.webp",
         "half": false
       }
     ],
-    "vimeo": "1008541846",
+    "vimeo": null,
     "credits": []
   },
   {
@@ -232,7 +229,8 @@
     "collab": "Yoav Cohen, Shortcut Playground",
     "engagement": "agency",
     "flagship": true,
-    "homeRank": 6,
+    "selected": true,
+    "homeRank": null,
     "oneline": "Turning the history of Jerusalem into exhibitions you walk through, with projection, touch and sound.",
     "challenge": "Educate visitors of every age and background on the rich history of Jerusalem through interactive exhibitions inside a historic landmark.",
     "idea": "Transform history into an interactive experience: illustration, graphic design and animation working within the museum’s brand and its architecture.",
@@ -272,129 +270,46 @@
     ]
   },
   {
-    "slug": "interactive-elections-kan-11",
-    "name": "Kan 11 Interactive Elections",
-    "client": "Kan 11, Israeli Public Broadcasting Corporation",
-    "cat": "Technology",
-    "tags": [
-      "Technology",
-      "Interactive"
-    ],
-    "role": "Art Direction, Design",
-    "disciplines": "Art Direction / Data Visualisation / Broadcast Graphics",
-    "collab": "",
-    "engagement": "",
-    "flagship": false,
-    "homeRank": null,
-    "oneline": "Election night as a live interface: results, polls and coalition maths readable at a glance.",
-    "challenge": "Election night gives a broadcast no second takes. Exit polls, real counts, seat projections and coalition blocs all arrive at once, keep changing for hours, and have to stay legible to a viewer who has just switched the television on.",
-    "idea": "Treat the whole broadcast as one interface rather than a run of separate slides. Every screen shares the same geometry, glow and hierarchy, so the audience learns to read the system once and then follows the numbers instead of the graphics.",
-    "system": "A touch-driven screen set for the 25th Knesset election: title sequence, exit polls, real results against the counted-ballot percentage, per-party seat counts carrying candidate portraits, regional breakdowns mapped over territory, and live windows to reporters in the field.",
-    "result": "Produced for Kan 11’s coverage of Israel’s 25th Knesset election, November 2022: one touch-driven screen set spanning title sequence, exit polls, real results, seat counts, regional maps and live field windows.",
-    "contribution": "",
-    "thumb": "/assets/opt/elections-thumb.webp",
-    "hero": "/assets/opt/elections-hero.webp",
-    "gallery": [
-      {
-        "src": "/assets/opt/elections-g1.webp",
-        "half": false
-      },
-      {
-        "src": "/assets/opt/elections-g2.webp",
-        "half": false
-      },
-      {
-        "src": "/assets/opt/elections-g3.webp",
-        "half": true
-      },
-      {
-        "src": "/assets/opt/elections-g4.webp",
-        "half": true
-      }
-    ],
-    "vimeo": "797380111",
-    "credits": []
-  },
-  {
-    "slug": "mako-12",
-    "name": "Mako 12+",
-    "client": "Channel 12 / Mako",
+    "slug": "partner-tv",
+    "name": "Partner TV",
+    "client": "Partner",
     "cat": "Brand",
     "tags": [
       "Brand"
     ],
-    "role": "Design",
-    "disciplines": "Design / Motion / Broadcast",
-    "collab": "Shortcut Playground",
-    "engagement": "agency",
+    "role": "Art Direction",
+    "disciplines": "Art Direction / Identity / Broadcast",
+    "collab": "Studio Adam Fineberg",
+    "engagement": "studio",
     "flagship": false,
+    "selected": true,
     "homeRank": null,
-    "oneline": "Positioning 12+ as the home of Israel’s most-loved streaming content.",
-    "challenge": "Position 12+ as the best streaming service in Israel: the home of the content viewers already know and love.",
-    "idea": "The ’+’ as visual and conceptual anchor, its placement, scale and movement built to spark curiosity.",
-    "system": "Design, editing, animation and compositing combined into one cohesive campaign.",
-    "result": "The campaign launched the 12+ streaming service to the public, on one visual language carried through design, edit, animation and compositing.",
-    "contribution": "I designed the campaign’s visual language and carried it through edit, animation and compositing to keep the whole coherent.",
-    "thumb": "/assets/opt/4e1270e2a154.webp",
-    "hero": "/assets/opt/b8d3756151eb.webp",
+    "oneline": "A channel-ID system for Partner TV across series, kids and movies.",
+    "challenge": "Design a channel-ID system for Partner TV spanning series, kids and movies, each with its own energy but one clear identity.",
+    "idea": "Vibrant color reflecting the channel’s diverse content, with fluid animation adding movement and excitement.",
+    "system": "From concept sketches through palette, animation and visual-effects exploration into a working on-air language.",
+    "result": "Went on air as one ID system across Partner TV’s three channels (series, kids and movies), each with its own energy inside a single identity, carried from concept sketches through palette, animation and visual effects.",
+    "contribution": "I art-directed the channel IDs: the concept, color language and motion direction across all three channels.",
+    "thumb": "/assets/opt/124320697c88.webp",
+    "hero": "/assets/opt/a01fae312ee1.webp",
     "gallery": [
       {
-        "src": "/assets/opt/f369f17b2c36.webp",
+        "src": "/assets/opt/6db50b3c756e.webp",
         "half": false
       },
       {
-        "src": "/assets/opt/fe595f9b0c1e.webp",
+        "src": "/assets/opt/048b113c1f3b.webp",
         "half": false
       },
       {
-        "src": "/assets/opt/e5c3fc05828d.webp",
+        "src": "/assets/opt/660aebc41328.webp",
         "half": false
       }
     ],
-    "vimeo": "1000327434",
+    "vimeo": "636475751",
     "credits": [
-      "Creative Agency: Shortcut Playground"
+      "Studio Adam Fineberg"
     ]
-  },
-  {
-    "slug": "natural-intelligence",
-    "name": "Natural Intelligence",
-    "client": "Natural Intelligence",
-    "cat": "Technology",
-    "tags": [
-      "Technology",
-      "Brand"
-    ],
-    "role": "Creative Art Director (in-house), Jan 2025 - Jun 2026",
-    "disciplines": "Creative Systems / Concept Development / Art Direction / AI-assisted Workflow / Motion & Video",
-    "collab": "In-house copy, growth, data and creative teams",
-    "engagement": "in-house",
-    "flagship": true,
-    "homeRank": null,
-    "oneline": "Turning creative production into a system that generates, tests and scales ideas.",
-    "challenge": "Natural Intelligence runs digital comparison platforms across some of the most competitive consumer categories in the US market: car insurance, pet insurance, mortgage, home equity, business loans and home security. Every creative decision lived inside a measurable acquisition system: the work had to stop attention in crowded feeds, explain complex products quickly, build trust around high-consideration decisions and still produce enough variation to learn from. The challenge was never to produce more assets. It was to create conditions in which creative thinking could generate repeatable learning.",
-    "idea": "Treat creative as a system rather than a run of campaigns. Build distinct creative territories, each with its own point of view, tone and visual language, then translate them into testable variables, so every execution answers a question instead of decorating one. A variation should test an idea, not the colour of a button.",
-    "system": "A repeatable loop: audience tension → hypothesis → creative territory → concept → variation → test and learn → scale, with the performance signal feeding the next round of concepts. The process stayed constant while each category was entered through its own human tension: urgency and savings in car insurance, care and trust in pet insurance, opportunity and complexity in mortgage and lending. As volume grew, I initiated an AI-assisted resizing MVP to take repetitive format adaptation out of the workflow while keeping composition, hierarchy and creative intent under a designer’s judgment.",
-    "result": "Creative directions used across several competitive US consumer categories, including leading work in the car insurance and pet insurance verticals; creative support for the launch and development of mortgage-related verticals; a repeatable experimentation process connecting concept, variation and learning; and a production prototype that reduced repetitive adaptation work without loss of creative intent.",
-    "contribution": "My title was Creative Art Director; the work spanned concept development, art direction, design, motion and video. I developed concepts and produced static, motion and video assets for global insurance and finance campaigns, and partnered with copy, growth and data teams to test narrative hooks and refine creative using performance insights. I also initiated and developed an AI-assisted resizing MVP for creative adaptation across formats.",
-    "thumb": "/assets/opt/ni-logo-thumb.webp",
-    "hero": "/assets/opt/ni-hero.webp",
-    "gallery": [
-      {
-        "src": "/assets/opt/ni-g1.webp",
-        "half": false
-      },
-      {
-        "src": "/assets/opt/ni-g3.webp",
-        "half": false
-      },
-      {
-        "src": "/assets/opt/ni-g2.webp",
-        "half": false
-      }
-    ],
-    "vimeo": null,
-    "credits": []
   },
   {
     "slug": "taormina-sicily",
@@ -411,6 +326,7 @@
     "collab": "Yoav Cohen, Shortcut Playground",
     "engagement": "agency",
     "flagship": true,
+    "selected": true,
     "homeRank": null,
     "oneline": "Projecting Greek mythology onto a Sicilian landmark using 3D scanning and real-time video mapping.",
     "challenge": "Transform Taormina’s architecture into a platform for immersive storytelling using new technology, without losing the character of the place.",
@@ -449,6 +365,150 @@
     ]
   },
   {
+    "slug": "mako-12",
+    "name": "Mako 12+",
+    "client": "Channel 12 / Mako",
+    "cat": "Brand",
+    "tags": [
+      "Brand"
+    ],
+    "role": "Design",
+    "disciplines": "Design / Motion / Broadcast",
+    "collab": "Shortcut Playground",
+    "engagement": "agency",
+    "flagship": false,
+    "selected": true,
+    "homeRank": null,
+    "oneline": "Positioning 12+ as the home of Israel’s most-loved streaming content.",
+    "challenge": "Position 12+ as the best streaming service in Israel: the home of the content viewers already know and love.",
+    "idea": "The ’+’ as visual and conceptual anchor, its placement, scale and movement built to spark curiosity.",
+    "system": "Design, editing, animation and compositing combined into one cohesive campaign.",
+    "result": "The campaign launched the 12+ streaming service to the public, on one visual language carried through design, edit, animation and compositing.",
+    "contribution": "I designed the campaign’s visual language and carried it through edit, animation and compositing to keep the whole coherent.",
+    "thumb": "/assets/opt/4e1270e2a154.webp",
+    "hero": "/assets/opt/b8d3756151eb.webp",
+    "gallery": [
+      {
+        "src": "/assets/opt/f369f17b2c36.webp",
+        "half": false
+      },
+      {
+        "src": "/assets/opt/fe595f9b0c1e.webp",
+        "half": false
+      },
+      {
+        "src": "/assets/opt/e5c3fc05828d.webp",
+        "half": false
+      }
+    ],
+    "vimeo": "1000327434",
+    "credits": [
+      "Creative Agency: Shortcut Playground"
+    ]
+  },
+  {
+    "slug": "community-lights",
+    "name": "Community Lights",
+    "client": "Ramat Gan / Electra Target",
+    "cat": "Culture",
+    "tags": [
+      "Culture",
+      "Interactive"
+    ],
+    "role": "Art Direction",
+    "disciplines": "Art Direction / Interactive Installation",
+    "collab": "Electra Target, Shortcut Playground",
+    "engagement": "agency",
+    "flagship": false,
+    "selected": true,
+    "homeRank": null,
+    "oneline": "A public interactive installation turning a tradition into a collaborative experience.",
+    "challenge": "Create a public interactive installation to engage and inspire the people of Ramat Gan on Hanukkah.",
+    "idea": "Bright color, playful animation and intuitive layouts built for usability, creativity and fun in public space.",
+    "system": "Custom brushes, visual effects and animated stickers for the public to use in their own original ways.",
+    "result": "The installation stood in public space in Ramat Gan, open for anyone to create with.",
+    "contribution": "I art-directed the installation: its visual language, animation style and the toolkit of brushes and stickers the public created with.",
+    "thumb": "/assets/opt/ecd2547ec24c.webp",
+    "hero": "/assets/opt/9f1ad0b7dfd2.webp",
+    "gallery": [
+      {
+        "src": "/assets/opt/1e1be1e2ccf1.webp",
+        "half": false
+      },
+      {
+        "src": "/assets/opt/7ba772d40edb.webp",
+        "half": false
+      },
+      {
+        "src": "/assets/opt/b1b91494d1e0.webp",
+        "half": true
+      },
+      {
+        "src": "/assets/opt/4d39005800b5.webp",
+        "half": true
+      },
+      {
+        "src": "/assets/opt/c787258f2ecb.webp",
+        "half": false
+      }
+    ],
+    "vimeo": null,
+    "credits": [
+      "Project Management: Electra Target",
+      "Creative Agency: Shortcut Playground"
+    ]
+  },
+  {
+    "slug": "channel-13",
+    "name": "Channel 13",
+    "client": "Channel 13",
+    "cat": "Brand",
+    "tags": [
+      "Brand"
+    ],
+    "role": "Part of the Shortcut Playground team: brand strategy through execution",
+    "disciplines": "Brand Strategy / Identity / Broadcast",
+    "collab": "Shortcut Playground (creative agency)",
+    "engagement": "agency",
+    "flagship": false,
+    "selected": true,
+    "homeRank": null,
+    "oneline": "An identity bold enough to hold together everything a national network broadcasts.",
+    "challenge": "Give a national channel one identity strong enough to carry news, prime-time and promotion without breaking character.",
+    "idea": "A bold logo for a bold brand: basic shapes and a confident, pastel-led palette form a flexible visual identity.",
+    "system": "A full brand book and channel kit: logo usage, color, typography and on-air functionality — to keep the identity consistent everywhere it appears.",
+    "result": "Rolled out as a complete national broadcast system: logo, brand book and channel kit covering news graphics, promotion and continuity, built so the network’s own teams could keep applying it long after the design work ended.",
+    "contribution": "Contributed as part of the Shortcut Playground team throughout the rebrand, from brand strategy through design and execution. The logo, identity, brand book, channel kit and on-air motion shown on this page are the output of that team.",
+    "thumb": "/assets/opt/5cae1f47edc2.webp",
+    "hero": "/assets/opt/77bb87005dfc.webp",
+    "gallery": [
+      {
+        "src": "/assets/opt/aefbadcae172.webp",
+        "half": false
+      },
+      {
+        "src": "/assets/opt/d7fd4e53769b.webp",
+        "half": false
+      },
+      {
+        "src": "/assets/opt/eac93ab3583a.webp",
+        "half": true
+      },
+      {
+        "src": "/assets/opt/e89149e4b990.webp",
+        "half": true
+      },
+      {
+        "src": "/assets/opt/15a84e7eac60.webp",
+        "half": false
+      }
+    ],
+    "vimeo": "1000322316",
+    "credits": [
+      "Creative Agency: Shortcut Playground"
+    ]
+  },
+  {
     "slug": "national-library-of-israel",
     "name": "National Library of Israel",
     "client": "National Library of Israel",
@@ -461,7 +521,8 @@
     "disciplines": "Design / Narrative / Experience Design",
     "collab": "Shortcut Playground",
     "engagement": "agency",
-    "flagship": true,
+    "flagship": false,
+    "selected": true,
     "homeRank": null,
     "oneline": "Making a national archive personal: a country’s history told through the people who lived it.",
     "challenge": "Tell the nation’s rich history through the personal stories of its people, drawing on an archive of letters, diaries, photographs and art.",
@@ -503,14 +564,15 @@
     "disciplines": "Concept Development / Brand Film",
     "collab": "Roy Raz (director), Shortcut Playground, Rabel Films, McCann, Noga Erez & RUSSO",
     "engagement": "agency",
-    "flagship": true,
-    "homeRank": 7,
-    "oneline": "A music-led film at the center of a global tech company’s rebrand - and the early concept work behind it.",
+    "flagship": false,
+    "selected": false,
+    "homeRank": null,
+    "oneline": "A music-led film at the center of a global tech company’s rebrand, and the early concept work behind it.",
     "challenge": "Give Amdocs’ ‘Make It Amazing’ rebrand a centerpiece: a story about innovation that a technology audience would actually want to watch.",
     "idea": "A pinball machine as narrative device: the complex, rewarding path of innovation — navigating challenges, finding solutions, achieving breakthroughs — told through play.",
     "system": "Blending pinball-machine aesthetics with a precise, nostalgic visual language, the concept scaled into a music clip featuring Noga Erez at the center of the campaign.",
     "result": "The film launched as the centerpiece of the rebrand, with Noga Erez fronting the campaign.",
-    "contribution": "I contributed to the early concept-development stage, translating the director’s vision into visual concepts for the film. The film was directed by Roy Raz and produced by Rabel Films, with Shortcut Playground as creative agency and McCann as advertising agency.",
+    "contribution": "Contributed to early concept development, translating the director’s vision into visual concepts for the film.",
     "thumb": "/assets/opt/8a3076389acb.webp",
     "hero": "/assets/opt/317245433f10.webp",
     "gallery": [
@@ -537,97 +599,49 @@
     ]
   },
   {
-    "slug": "google-shopping-il",
-    "name": "Google Shopping IL",
-    "client": "Google",
+    "slug": "interactive-elections-kan-11",
+    "name": "Kan 11 Interactive Elections",
+    "client": "Kan 11, Israeli Public Broadcasting Corporation",
     "cat": "Technology",
     "tags": [
-      "Technology"
-    ],
-    "role": "Art Direction, Concept Art",
-    "disciplines": "Art Direction / Concept Art / 2D+3D",
-    "collab": "Shortcut Playground, McCann Tech",
-    "engagement": "agency",
-    "flagship": false,
-    "homeRank": null,
-    "oneline": "Helping local businesses grow through Google’s ShoppingIL event.",
-    "challenge": "Show the growth of local businesses through ShoppingIL and encourage Israeli consumers to support them.",
-    "idea": "A layered 2D-and-3D storytelling approach that makes the platform feel engaging and memorable.",
-    "system": "A set of films built to drive visibility and sales through the event and beyond it.",
-    "result": "The films ran as part of ShoppingIL, Google’s national shopping event for local businesses.",
-    "contribution": "I art-directed the films and created the concept art behind their layered 2D-and-3D world.",
-    "thumb": "/assets/opt/c8dee9c7622e.webp",
-    "hero": "/assets/opt/e65b2bbb101d.webp",
-    "gallery": [
-      {
-        "src": "/assets/opt/63cc54cfb49f.webp",
-        "half": false
-      },
-      {
-        "src": "/assets/opt/bf3066df08b8.webp",
-        "half": false
-      },
-      {
-        "src": "/assets/opt/95b3a5ee73e6.webp",
-        "half": false
-      }
-    ],
-    "vimeo": "1025724795",
-    "credits": [
-      "Creative Agency: Shortcut Playground",
-      "Ad Agency: McCann Tech"
-    ]
-  },
-  {
-    "slug": "community-lights",
-    "name": "Community Lights",
-    "client": "Ramat Gan / Electra Target",
-    "cat": "Culture",
-    "tags": [
-      "Culture",
+      "Technology",
       "Interactive"
     ],
-    "role": "Art Direction",
-    "disciplines": "Art Direction / Interactive Installation",
-    "collab": "Electra Target, Shortcut Playground",
-    "engagement": "agency",
+    "role": "Art Direction, Design",
+    "disciplines": "Art Direction / Data Visualization / Broadcast Graphics",
+    "collab": "",
+    "engagement": "",
     "flagship": false,
+    "selected": false,
     "homeRank": null,
-    "oneline": "A public interactive installation turning a tradition into a collaborative experience.",
-    "challenge": "Create a public interactive installation to engage and inspire the people of Ramat Gan on Hanukkah.",
-    "idea": "Bright color, playful animation and intuitive layouts built for usability, creativity and fun in public space.",
-    "system": "Custom brushes, visual effects and animated stickers for the public to use in their own original ways.",
-    "result": "The installation stood in public space in Ramat Gan, open for anyone to create with.",
-    "contribution": "I art-directed the installation: its visual language, animation style and the toolkit of brushes and stickers the public created with.",
-    "thumb": "/assets/opt/ecd2547ec24c.webp",
-    "hero": "/assets/opt/9f1ad0b7dfd2.webp",
+    "oneline": "Election night as a live interface: results, polls and coalition math readable at a glance.",
+    "challenge": "Election night gives a broadcast no second takes. Exit polls, real counts, seat projections and coalition blocs all arrive at once, keep changing for hours, and have to stay legible to a viewer who has just switched the television on.",
+    "idea": "Treat the whole broadcast as one interface rather than a run of separate slides. Every screen shares the same geometry, glow and hierarchy, so the audience learns to read the system once and then follows the numbers instead of the graphics.",
+    "system": "A touch-driven screen set for the 25th Knesset election: title sequence, exit polls, real results against the counted-ballot percentage, per-party seat counts carrying candidate portraits, regional breakdowns mapped over territory, and live windows to reporters in the field.",
+    "result": "Produced for Kan 11’s coverage of Israel’s 25th Knesset election, November 2022: one touch-driven screen set spanning title sequence, exit polls, real results, seat counts, regional maps and live field windows.",
+    "contribution": "",
+    "thumb": "/assets/opt/elections-thumb.webp",
+    "hero": "/assets/opt/elections-hero.webp",
     "gallery": [
       {
-        "src": "/assets/opt/1e1be1e2ccf1.webp",
+        "src": "/assets/opt/elections-g1.webp",
         "half": false
       },
       {
-        "src": "/assets/opt/7ba772d40edb.webp",
+        "src": "/assets/opt/elections-g2.webp",
         "half": false
       },
       {
-        "src": "/assets/opt/b1b91494d1e0.webp",
+        "src": "/assets/opt/elections-g3.webp",
         "half": true
       },
       {
-        "src": "/assets/opt/4d39005800b5.webp",
+        "src": "/assets/opt/elections-g4.webp",
         "half": true
-      },
-      {
-        "src": "/assets/opt/c787258f2ecb.webp",
-        "half": false
       }
     ],
-    "vimeo": null,
-    "credits": [
-      "Project Management: Electra Target",
-      "Creative Agency: Shortcut Playground"
-    ]
+    "vimeo": "797380111",
+    "credits": []
   },
   {
     "slug": "ten-facts-kan-11",
@@ -643,11 +657,12 @@
     "collab": "",
     "engagement": "",
     "flagship": false,
+    "selected": false,
     "homeRank": null,
     "oneline": "A history explainer series built out of the archive itself: photographs, posters and maps cut into motion.",
     "challenge": "Turn dense historical subjects into short episodes that hold attention on a feed, without flattening the history into decoration or losing the weight of the source material.",
     "idea": "Build each episode from the archive rather than around it. Period photographs, propaganda posters, maps and postcards are cut against flat graphic shapes and heavy Hebrew type, so the original material carries the story and the design only sets its pace.",
-    "system": "A consistent kit across episodes: paper-grain grounds, a cyan-and-black accent palette, hard-edged colour blocks, numbered markers and typographic call-outs that hold a collage together while it moves.",
+    "system": "A consistent kit across episodes: paper-grain grounds, a cyan-and-black accent palette, hard-edged color blocks, numbered markers and typographic call-outs that hold a collage together while it moves.",
     "result": "Produced as an episodic explainer series for Kan 11, every episode built on the same kit so the series reads as one while each subject differs.",
     "contribution": "",
     "thumb": "/assets/opt/tenfacts-thumb.webp",
@@ -687,12 +702,13 @@
       "Technology"
     ],
     "role": "Art Direction, Design",
-    "disciplines": "Art Direction / Motion / Architectural Visualisation",
+    "disciplines": "Art Direction / Motion / Architectural Visualization",
     "collab": "",
     "engagement": "",
     "flagship": false,
+    "selected": false,
     "homeRank": null,
-    "oneline": "Making the thinking behind a development visible: architecture with its reasoning drawn back on top.",
+    "oneline": "Making the thinking behind a real-estate project visible: architecture with its reasoning drawn back on top.",
     "challenge": "Most of a developer’s work disappears into the finished building. The planning, the light studies, the green space and the density decisions are all invisible by the time anyone walks through a completed apartment.",
     "idea": "Draw the reasoning back on. Keep the aerial photography and interior CGI real, then overlay the language of the drawing board (dashed setbacks, sun angles, flow arrows, measured spans and highlighted volumes) so the audience sees the decisions and not only the result.",
     "system": "A short film moving between scales: an aerial masterplan with the park read as a single green figure, tower elevations with units and circulation called out, and interiors annotated for light, orientation and materials.",
@@ -726,6 +742,7 @@
     "collab": "",
     "engagement": "",
     "flagship": false,
+    "selected": false,
     "homeRank": null,
     "oneline": "Push for Better: the brand line played straight, with one guest nobody in the room acknowledges.",
     "challenge": "Carry the Push for Better platform in a spot short enough to run as pre-roll, without spending its few seconds explaining the product.",
@@ -752,6 +769,7 @@
     "collab": "",
     "engagement": "self-initiated",
     "flagship": false,
+    "selected": false,
     "homeRank": null,
     "oneline": "Simply smart. A brand and product world for a new generation of thinking games: physical puzzles that bridge the table and the screen.",
     "challenge": "Classic thinking games are quietly becoming a thing of the past. The young audience grew up inside screens and lives at a different pace, and boxed puzzle games, for all their depth, read as something their parents played. The opportunity isn’t to fight the screen. It’s to meet this generation where their curiosity already lives, and give analog thinking games a reason to feel current again.",

@@ -3,9 +3,12 @@
 
    Case studies come straight from data/projects.json, the same file
    tools/build-cases.ps1 builds work/<slug>.html from, so the API and
-   the pages never disagree. Services and engagement floors are short
-   enough to live here; the floors mirror MARKETS in js/site.js and the
-   budget bands in api/enquiry.js — change one, change all three.
+   the pages never disagree. Services are the three sizes of the one
+   offer (Launch Sprint, Full Launch, Creative Director on call), each
+   linking to its anchor on services.html, plus the capabilities a launch
+   can include. The floors are the Launch Sprint's starting prices; they
+   mirror MARKETS in js/site.js and the budget bands in api/enquiry.js —
+   change one, change all three.
    ============================================================ */
 
 const SITE = 'https://itaiagami.com';
@@ -19,31 +22,20 @@ const PRICING = [
 ];
 
 const SERVICES = [
-  {
-    slug:'brand-strategy-identity-systems',
-    name:'Brand Strategy & Identity Systems',
-    summary:'Positioning, the central idea, visual language and the brand system that keeps it coherent across every channel.',
-    bestFor:'Startups, technology companies and organisations launching, rebuilding or unifying a brand.'
-  },
-  {
-    slug:'creative-direction-product-launches',
-    name:'Creative Direction for Product & Brand Launches',
-    summary:'The idea a product, app or brand launch rests on, carried through identity, campaign, film, website and production.',
-    bestFor:'Founders and marketing leads with one launch moment to make something land.'
-  },
-  {
-    slug:'interactive-immersive-experiences',
-    name:'Interactive & Immersive Experiences',
-    summary:'Museum exhibitions, interactive installations, projection mapping, spatial media and branded digital experiences, from concept to installed experience.',
-    bestFor:'Museums, cultural institutions and technology companies building something people walk into and use.'
-  },
-  {
-    slug:'fractional-creative-direction',
-    name:'Fractional Creative Direction & Creative Systems',
-    summary:'Ongoing creative leadership and creative systems, including AI-assisted workflows, that let a team generate, test and scale ideas.',
-    bestFor:'Companies with strong in-house teams and no Creative Director.'
-  }
-].map(s => Object.assign(s, { url: SITE + '/services/' + s.slug + '.html' }));
+  { slug:'launch-sprint', name:'Launch Sprint', format:'Fixed price, about 2 weeks',
+    summary:'Two weeks to find the idea a launch rests on, and to see it: many routes explored with AI, two or three developed and one chosen, then the look and key visuals and a plan for the full launch.',
+    bestFor:'Marketing and brand leaders with a launch, refresh or campaign whose central idea is still open.',
+    url: SITE + '/services.html#sprint' },
+  { slug:'full-launch', name:'Full Launch', format:'Scoped per project, usually after a Sprint',
+    summary:'The idea carried through identity and brand system, campaign, film, motion and 3D, the launch website and production, led hands-on with the specialists it needs and one point of accountability to launch day.',
+    bestFor:'Launches, refreshes and campaigns that need one senior creative director accountable from first idea to launch day.',
+    url: SITE + '/services.html#full-launch' },
+  { slug:'creative-director-on-call', name:'Creative Director on call', format:'Monthly retainer',
+    summary:'A fractional Creative Director: a set number of days a month to own the idea, hold one standard and keep the work coherent, including AI-assisted workflows the team can run.',
+    bestFor:'In-house teams with good people and no Creative Director.',
+    url: SITE + '/services.html#on-call' }
+];
+const CAPABILITIES = ['Brand, identity & refresh','Campaign, film & 3D','Website & digital','Interactive & spaces'];
 
 const absUrl = p => (p ? (/^https?:/.test(p) ? p : SITE + p) : null);
 
@@ -76,4 +68,4 @@ function project(p){
 
 const CATEGORIES = Array.from(new Set(projects.map(p => p.cat))).sort();
 
-module.exports = { SITE, PRICING, SERVICES, CATEGORIES, projects: projects.map(project) };
+module.exports = { SITE, PRICING, SERVICES, CAPABILITIES, CATEGORIES, projects: projects.map(project) };

@@ -10,7 +10,7 @@
       "maxDuration": 30
     },
     "api/markdown.js": {
-      "includeFiles": "{*.html,work/*.html,services/*.html,notes/*.html}"
+      "includeFiles": "{*.html,work/*.html,notes/*.html}"
     }
   },
   "redirects": [
@@ -71,8 +71,43 @@
       "permanent": true
     },
     {
-      "source": "/services/:slug([a-z0-9-]+)",
-      "destination": "/services/:slug.html",
+      "source": "/services/creative-direction-product-launches",
+      "destination": "/services.html#full-launch",
+      "permanent": true
+    },
+    {
+      "source": "/services/creative-direction-product-launches.html",
+      "destination": "/services.html#full-launch",
+      "permanent": true
+    },
+    {
+      "source": "/services/fractional-creative-direction",
+      "destination": "/services.html#on-call",
+      "permanent": true
+    },
+    {
+      "source": "/services/fractional-creative-direction.html",
+      "destination": "/services.html#on-call",
+      "permanent": true
+    },
+    {
+      "source": "/services/brand-strategy-identity-systems",
+      "destination": "/services.html#capabilities",
+      "permanent": true
+    },
+    {
+      "source": "/services/brand-strategy-identity-systems.html",
+      "destination": "/services.html#capabilities",
+      "permanent": true
+    },
+    {
+      "source": "/services/interactive-immersive-experiences",
+      "destination": "/services.html#capabilities",
+      "permanent": true
+    },
+    {
+      "source": "/services/interactive-immersive-experiences.html",
+      "destination": "/services.html#capabilities",
       "permanent": true
     },
     {

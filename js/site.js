@@ -43,7 +43,7 @@ const ANALYTICS_DEBUG     = false;
   +'<a href="../notes.html"'+on('notes')+'>Notes</a>'
   +'<a href="../about.html">About</a>'
   +'<a href="../contact.html">Contact</a>'
-  +'<button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>'
+  +'<button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><svg class="tgl" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>'
   +'</nav>'
   +'<a class="btn solid nav-cta" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>'
   +'<button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>'
@@ -54,20 +54,22 @@ const ANALYTICS_DEBUG     = false;
   +'<a href="../notes.html">Notes</a>'
   +'<a href="../about.html">About</a>'
   +'<a href="../contact.html">Contact</a>'
-  +'<div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button>'
+  +'<div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><svg class="tgl" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg> <span class="tlm">Light</span></button>'
   +'<span>Tel Aviv, IL · Worldwide</span></div>'
   +'</nav>';
   var ftr = ''
   +'<footer class="site"><div class="wrap"><div class="grid">'
-  +'<div class="col"><h4>Menu</h4><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></div>'
-  +'<div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>'
-  +'<div class="col"><h4>Studio</h4><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div>'
+  +'<div class="col"><p class="fh">Menu</p><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a></div>'
+  +'<div class="col"><p class="fh">Connect</p><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>'
+  +'<div class="col"><p class="fh">Based</p><a href="../about.html">Tel Aviv, IL</a><a href="../about.html">Working worldwide</a></div>'
   +'</div><div class="base">'
   +'<span>© 2026 Itai Agami. All rights reserved.</span>'
   +'<span class="legal"><a href="../privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span>'
   +'<span>Independent Creative Director</span>'
   +'</div></div></footer>';
-  document.body.insertAdjacentHTML('afterbegin', hdr);
+  /* the skip link stays the first element in <body> */
+  var skip = document.body.querySelector(':scope > a.skip');
+  if(skip) skip.insertAdjacentHTML('afterend', hdr); else document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
 })();
 
@@ -290,7 +292,7 @@ const Analytics = (function(){
       banner.className = 'consent';
       banner.setAttribute('role', 'region');
       banner.setAttribute('aria-label', 'Analytics preferences');
-      banner.innerHTML = '<p>May I use Google Analytics and Microsoft Clarity to see how this site is found and used? '
+      banner.innerHTML = '<p>May I use Google Analytics and Microsoft Clarity to see how the site is used? '
         + 'Nothing loads unless you accept. <a href="' + priv + '">Privacy</a></p>'
         + '<div class="consent-actions">'
         + '<button type="button" class="btn" data-consent="denied">Reject</button>'
@@ -313,7 +315,22 @@ const Analytics = (function(){
   const c = readConsent();
   if(c === 'granted') load();
   else if(c === 'denied') log('consent: denied — GA4 and Clarity not loaded');
-  else showBanner();
+  else {
+    /* first visit: nothing loads before a choice (Consent Mode defaults to denied),
+       so the banner waits until the visitor scrolls past 200px or 6 s pass,
+       keeping the first screen clear. [data-consent-open] still opens it at once. */
+    let shown = false, timer = 0;
+    const later = () => {
+      if(shown) return;
+      shown = true;
+      clearTimeout(timer);
+      removeEventListener('scroll', onScroll);
+      if(!readConsent() && (!banner || banner.hidden)) showBanner();
+    };
+    const onScroll = () => { if(scrollY > 200) later(); };
+    addEventListener('scroll', onScroll, { passive: true });
+    timer = setTimeout(later, 6000);
+  }
 
   return { track, debug: () => debug };
 })();
@@ -791,6 +808,20 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     if(ctx==='contact'||ctx==='after_submission') track(ctx==='contact'?'book_call_click_from_contact':'book_call_click_after_submission',p);
   });
 
+  /* contact: the Google calendar loads only when the visitor asks for it */
+  const calLoad=document.getElementById('cCalLoad');
+  const calTpl=document.getElementById('cCalTpl');
+  if(calLoad&&calTpl){
+    calLoad.addEventListener('click',()=>{
+      const cal=calLoad.closest('.c-cal'); if(!cal)return;
+      cal.appendChild(calTpl.content.cloneNode(true));
+      const card=document.getElementById('cCalCard'); if(card) card.remove();
+      cal.classList.add('loaded');
+      const frame=cal.querySelector('iframe'); if(frame) frame.focus();
+      track('calendar_open',Object.assign({ page_path:location.pathname, booking_context:'contact_calendar' },attributionParams()));
+    });
+  }
+
   /* optional direct line — only when a phone number is configured */
   const direct=document.getElementById('directContact');
   if(direct&&DIGITS){
@@ -811,7 +842,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     filled:PROGRESS.filter(n=>{const el=form.elements[n]; return el&&String(el.value||'').trim()!=='';}).length }}));
   form.addEventListener('input',progress); form.addEventListener('change',progress);
 
-  /* contact tabs: "Book a call" (default) and "Send a brief" (the form) */
+  /* contact tabs: "Book a call" (default) and "Write to me" (the form) */
   const tabs=[...document.querySelectorAll('.c-tabs [role="tab"]')];
   function selectTab(id,focus){
     tabs.forEach(t=>{
@@ -828,8 +859,12 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length]; selectTab(n.id,true);
     });
   });
-  /* arriving with #brief (e.g. "Send a brief" links) opens the form */
+  /* arriving with #brief (e.g. "Write to me" links) opens the form */
   if(tabs.length&&(location.hash==='#brief'||location.hash==='#enquiryForm')) selectTab('tab-brief');
+  /* ?start=sprint|full-launch|on-call (offer card links) preselects "What do you need?" */
+  const start=new URLSearchParams(location.search).get('start');
+  const opt=start&&document.querySelector('#f-type option[data-start="'+start.replace(/[^a-z-]/g,'')+'"]');
+  if(opt){ opt.selected=true; if(tabs.length) selectTab('tab-brief'); }
 
   /* "Start a project" — bring the form into view and put the cursor in it */
   document.querySelectorAll('[data-start-project]').forEach(a=>a.addEventListener('click',e=>{
@@ -875,11 +910,16 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 
   /* Only reached after the server confirmed it holds the enquiry. */
   function showSuccess(){
+    /* the next-step promise matches the size they chose */
+    const t=((form.querySelector('#f-type')||{}).value||'');
+    const next=/^Full Launch/.test(t)?'If it’s a fit, a short proposal follows within a few days, usually starting with a Launch Sprint.'
+      :/^Creative Director on call/.test(t)?'If it’s a fit, a short proposal for your on-call days follows within a few days.'
+      :'If it’s a fit, a short proposal for a Launch Sprint follows within a few days.';
     const done=document.createElement('div');
     done.className='f-success'; done.tabIndex=-1;
-    done.innerHTML='<h2>Thanks, I got it.</h2>'
-      +'<p>I’ll get back to you shortly.</p>'
-      +(BOOKING?'<div class="f-book"><p>Want to skip the email back-and-forth? Book a 20 min intro call.</p>'
+    done.innerHTML='<h2>Thanks, I’ve got it.</h2>'
+      +'<p>I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. '+next+'</p>'
+      +(BOOKING?'<div class="f-book"><p>Want to skip the email back-and-forth? Book a 20-minute call.</p>'
         +'<a class="btn solid" data-booking="after_submission">Book a call <span class="arw" aria-hidden="true">↗</span></a></div>':'')
       ;
     form.replaceWith(done);
@@ -961,15 +1001,11 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   const hideHover=()=>{if(hoverimg)hoverimg.classList.remove('show')};
 
   /* filters */
-  const FILTERS=['All','Brand','Technology','Culture','Interactive'];
+  const FILTERS=['All','Brand & identity','Campaigns & film','Interactive & spaces'];
   let activeFilter='All'; try{activeFilter=localStorage.getItem('filter')||'All'}catch(e){}
   if(!FILTERS.includes(activeFilter))activeFilter='All';
-  FILTERS.forEach(f=>{
-    const b=document.createElement('button');b.textContent=f;b.dataset.f=f;
-    b.setAttribute('aria-pressed',String(f===activeFilter));
-    b.addEventListener('click',()=>setFilter(f));
-    filtersEl.appendChild(b);
-  });
+  /* buttons are written into the HTML (no layout shift); bind to them */
+  filtersEl.querySelectorAll('button').forEach(b=>{b.addEventListener('click',()=>setFilter(b.dataset.f))});
   function setFilter(f){
     activeFilter=f; try{localStorage.setItem('filter',f)}catch(e){}
     filtersEl.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.f===f)));
@@ -983,9 +1019,9 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   }
 
   /* views */
-  let activeView='vertical'; try{activeView=localStorage.getItem('view')||'vertical'}catch(e){}
+  let activeView='grid'; try{activeView=localStorage.getItem('view')||'grid'}catch(e){}
   const validViews=Array.from(viewsEl.querySelectorAll('button')).map(b=>b.dataset.view);
-  if(!validViews.includes(activeView))activeView='vertical';
+  if(!validViews.includes(activeView))activeView='grid';
   function setView(v){
     activeView=v; try{localStorage.setItem('view',v)}catch(e){}
     indexList.className='index-list'+(v==='vertical'?'':' '+v);

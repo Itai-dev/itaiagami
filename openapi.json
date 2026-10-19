@@ -4,7 +4,7 @@
     "title": "Itai Agami API",
     "version": "1.0.0",
     "summary": "Public data about Itai Agami's creative direction services and case studies, plus project enquiries.",
-    "description": "The public API of itaiagami.com, the site of Itai Agami, an independent Creative Director based in Tel Aviv and working internationally.\n\nUse it when a person is looking for a creative director for a brand identity, a product or brand launch, an interactive or museum experience, or fractional creative leadership: list the services and starting prices, read case studies for relevant precedent, and send a project enquiry on the person's behalf.\n\nNo authentication. All responses are JSON. Every error has the same shape (the Error schema): a human-readable `error`, a stable machine-readable `code`, a `hint` saying how to fix the request, the HTTP `status` and a `docs` link.\n\nEvery HTML page on the site is also available as Markdown at the same URL: send `Accept: text/markdown`. A site summary for language models, with when-to-use guidance, is at https://itaiagami.com/llms.txt. The developer portal, with a quickstart, the CLI and a sandbox mode, is at https://itaiagami.com/developers.html.\n\n## Versioning\n\nThe version is in the URL path: `/api/v1/...`. Every response carries an `API-Version` header naming the major version that answered it. Within v1, changes are additive only (new endpoints, new optional parameters, new response fields), so ignore fields you do not recognise. A breaking change ships as `/api/v2/...` alongside v1. The unversioned paths (`/api/services`, `/api/projects`, `/api/enquiry`, `/api/geo`) are aliases of the current version and are what the website itself calls; integrations should use `/api/v1`. Requests to a version that does not exist get a 404 with code `unsupported_api_version`.\n\n## Deprecation\n\nNothing is deprecated today. When a version or endpoint is deprecated, its responses will carry a `Deprecation` header (RFC 9745) with the date it was deprecated, a `Sunset` header (RFC 8594) with the date it stops working, and a `Link: <https://itaiagami.com/developers.html#versioning>; rel=\"deprecation\"` header. The sunset date will be at least 6 months after the deprecation date, and the change will be listed on the developer portal and in this document.\n\n## Rate limits\n\nResponses carry the IETF RateLimit header fields (draft-ietf-httpapi-ratelimit-headers): `RateLimit-Policy` describes the quota and `RateLimit` reports what is left (`r`) and the seconds until the window resets (`t`). The same values are also sent as `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset` (seconds). Policy \"read\": 60 requests per 60 seconds per client on GET /services and /projects. Policy \"enquiry\": 5 accepted enquiries per 10 minutes per client. Over the limit the API answers 429 with code `rate_limited` and a `Retry-After` header in seconds.",
+    "description": "The public API of itaiagami.com, the site of Itai Agami, an independent Creative Director based in Tel Aviv and working internationally.\n\nUse it when a person is looking for a creative director for a launch campaign, a brand refresh or identity, a launch website, an interactive or museum experience, or a fractional Creative Director on call: list the three offer sizes and the Launch Sprint's starting prices, read case studies for relevant precedent, and send a project enquiry on the person's behalf.\n\nNo authentication. All responses are JSON. Every error has the same shape (the Error schema): a human-readable `error`, a stable machine-readable `code`, a `hint` saying how to fix the request, the HTTP `status` and a `docs` link.\n\nEvery HTML page on the site is also available as Markdown at the same URL: send `Accept: text/markdown`. A site summary for language models, with when-to-use guidance, is at https://itaiagami.com/llms.txt. The developer portal, with a quickstart, the CLI and a sandbox mode, is at https://itaiagami.com/developers.html.\n\n## Versioning\n\nThe version is in the URL path: `/api/v1/...`. Every response carries an `API-Version` header naming the major version that answered it. Within v1, changes are additive only (new endpoints, new optional parameters, new response fields), so ignore fields you do not recognise. A breaking change ships as `/api/v2/...` alongside v1. The unversioned paths (`/api/services`, `/api/projects`, `/api/enquiry`, `/api/geo`) are aliases of the current version and are what the website itself calls; integrations should use `/api/v1`. Requests to a version that does not exist get a 404 with code `unsupported_api_version`.\n\n## Deprecation\n\nNothing is deprecated today. When a version or endpoint is deprecated, its responses will carry a `Deprecation` header (RFC 9745) with the date it was deprecated, a `Sunset` header (RFC 8594) with the date it stops working, and a `Link: <https://itaiagami.com/developers.html#versioning>; rel=\"deprecation\"` header. The sunset date will be at least 6 months after the deprecation date, and the change will be listed on the developer portal and in this document.\n\n## Rate limits\n\nResponses carry the IETF RateLimit header fields (draft-ietf-httpapi-ratelimit-headers): `RateLimit-Policy` describes the quota and `RateLimit` reports what is left (`r`) and the seconds until the window resets (`t`). The same values are also sent as `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset` (seconds). Policy \"read\": 60 requests per 60 seconds per client on GET /services and /projects. Policy \"enquiry\": 5 accepted enquiries per 10 minutes per client. Over the limit the API answers 429 with code `rate_limited` and a `Retry-After` header in seconds.",
     "contact": {
       "name": "Itai Agami",
       "email": "itaiagami@gmail.com",
@@ -25,7 +25,7 @@
   "tags": [
     {
       "name": "Services",
-      "description": "Engagement types and starting prices."
+      "description": "The three offer sizes and the Launch Sprint's starting prices."
     },
     {
       "name": "Projects",
@@ -49,7 +49,7 @@
           "Services"
         ],
         "summary": "List services and starting prices",
-        "description": "Returns the four engagement types Itai Agami offers (summary, who each is best for, link to its page), the amount independent engagements typically start at in each market, and the ways to get in touch. Call this first to judge whether a request is a fit.",
+        "description": "Returns the three sizes of Itai Agami's one offer (Launch Sprint, Full Launch, Creative Director on call: format, summary, who each suits, link), the capabilities a launch can include, the Launch Sprint's starting price in each market, and the ways to get in touch. Call this first to judge whether a request is a fit.",
         "responses": {
           "200": {
             "description": "Services, pricing and contact routes.",
@@ -686,6 +686,7 @@
         "required": [
           "slug",
           "name",
+          "format",
           "summary",
           "bestFor",
           "url"
@@ -697,16 +698,21 @@
           "name": {
             "type": "string"
           },
+          "format": {
+            "type": "string",
+            "description": "Fixed price, scoped, or retainer, and typical duration."
+          },
           "summary": {
             "type": "string"
           },
           "bestFor": {
             "type": "string",
-            "description": "Who the engagement suits."
+            "description": "Who this size suits."
           },
           "url": {
             "type": "string",
-            "format": "uri"
+            "format": "uri",
+            "description": "Link to this offer's anchor on the Services page."
           }
         }
       },
@@ -728,7 +734,7 @@
           },
           "from": {
             "type": "integer",
-            "description": "Typical minimum for an independent engagement, in whole currency units."
+            "description": "Starting price of a Launch Sprint in this market, in whole currency units."
           },
           "display": {
             "type": "string"
@@ -748,6 +754,13 @@
             "items": {
               "$ref": "#/components/schemas/Service"
             }
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What a launch can include."
           },
           "pricing": {
             "type": "object",
@@ -955,7 +968,7 @@
           "type": {
             "type": "string",
             "maxLength": 80,
-            "description": "Kind of project, for example \"Brand launch\"."
+            "description": "What the sender needs, for example \"Launch Sprint\" or \"Not sure yet\"."
           },
           "project": {
             "type": "string",
@@ -987,6 +1000,7 @@
               "As soon as possible",
               "1–3 months",
               "3–6 months",
+              "More than 6 months",
               "Not defined yet"
             ]
           },
