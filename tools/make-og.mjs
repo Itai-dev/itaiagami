@@ -9,7 +9,7 @@ import { join, basename } from 'node:path';
 const root = new URL('..', import.meta.url).pathname;
 const pages = [
   ...readdirSync(root).filter(f => f.endsWith('.html')),
-  ...['work', 'services', 'notes'].flatMap(d => readdirSync(join(root, d)).filter(f => f.endsWith('.html')).map(f => `${d}/${f}`)),
+  ...['work', 'notes'].flatMap(d => readdirSync(join(root, d)).filter(f => f.endsWith('.html')).map(f => `${d}/${f}`)),
 ];
 // logos and type-led images are letterboxed rather than cropped
 const CONTAIN = new Map([['ni-logo', '#ffffff']]); // name → letterbox colour

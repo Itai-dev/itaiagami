@@ -53,6 +53,12 @@ img{display:block;max-width:100%}
 :focus-visible{outline:2px solid var(--fg);outline-offset:3px;border-radius:2px}
 .wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad-x);padding-right:var(--pad-x)}
 .eyebrow{font-size:var(--t-meta);letter-spacing:0;color:var(--dim)}
+/* skip link: first focusable element on every page */
+.skip{position:absolute;left:16px;top:-60px;z-index:1000;padding:10px 14px;background:var(--fg);color:var(--bg);border-radius:6px;font-size:var(--t-meta);text-decoration:none}
+.skip:focus{top:12px}
+/* visually hidden, still read by assistive tech */
+.vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.work-intro a{text-decoration:underline;text-underline-offset:3px}
 .serif{font-family:"Inter",system-ui,-apple-system,sans-serif;font-weight:500}
 .grain{
 position:fixed;inset:-50%;z-index:9000;pointer-events:none;opacity:var(--grain-opacity);
@@ -75,6 +81,7 @@ nav.primary a:hover,nav.primary a.active{color:var(--fg)}
 nav.primary a.active::after{transform:scaleX(1)}
 .toggle{background:none;border:1px solid var(--line);color:var(--fg);font-family:inherit;font-size:var(--t-micro);letter-spacing:0;cursor:pointer;padding:6px 11px;border-radius:9999px;display:inline-flex;align-items:center;gap:6px;transition:border-color var(--dur-fast)}
 .toggle:hover{border-color:var(--fg)}
+.toggle .tgl{display:block;flex:none}
 .menu-btn{display:none;background:none;border:none;color:var(--fg);cursor:pointer;font-family:inherit;font-size:var(--t-meta);letter-spacing:0;padding:6px 0}
 .mobile-menu{position:fixed;inset:0;z-index:8500;background:var(--bg);transform:translateY(-100%);visibility:hidden;transition:transform .45s var(--ease-drawer),visibility 0s linear .45s;display:flex;flex-direction:column;justify-content:center;padding:var(--pad-x);gap:8px}
 .mobile-menu.open{transform:translateY(0);visibility:visible;transition:transform .45s var(--ease-drawer),visibility 0s}
@@ -157,6 +164,7 @@ display:flex;align-items:center;justify-content:center;
 .swork .media .num{position:absolute;top:14px;left:16px;font-size:var(--t-meta);letter-spacing:0;color:#fff;mix-blend-mode:difference;z-index:2}
 .swork .info{display:flex;flex-direction:column;gap:16px}
 .swork .info .kmeta{display:flex;gap:16px;flex-wrap:wrap;font-size:var(--t-meta);letter-spacing:0;color:var(--dim)}
+.swork .info .kmeta span+span::before{content:"·";margin-right:16px;color:var(--dim)}
 .swork .info h3{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:clamp(1.375rem,1.8vw,1.625rem);line-height:1.25;letter-spacing:-.01em}
 .swork .info h3 a{transition:opacity var(--dur-fast)}
 .swork .info h3 a:hover{opacity:.75}
@@ -246,6 +254,7 @@ display:flex;align-items:center;justify-content:center;
 .index-list.grid .prow>a{display:block;padding:0}
 .index-list.grid .p-thumb{display:block;aspect-ratio:4/3;overflow:hidden;background:var(--faint);border-radius:var(--r-media);margin-bottom:14px}
 .index-list.grid .p-thumb img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.index-list.grid .p-thumb img.pos-top{object-position:50% 0}
 .index-list.grid .prow>a:hover .p-thumb img{transform:scale(1.05)}
 .index-list.grid .p-name{font-size:clamp(1.2rem,1.8vw,1.5rem)}
 .index-list.grid .p-idx,.index-list.grid .p-cat{display:none}
@@ -259,7 +268,7 @@ display:flex;align-items:center;justify-content:center;
 .sec-head h1.about-title{font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;max-width:22ch;text-wrap:balance}
 .sec-head h1.about-title::before{display:none}
 .about-side .blk{border-top:1px solid var(--line);padding:20px 0}
-.about-side .blk h4{font-size:var(--t-meta);letter-spacing:0;color:var(--dim);margin-bottom:12px;font-weight:500}
+.about-side .blk h2{font-family:inherit;font-size:var(--t-meta);line-height:inherit;letter-spacing:0;color:var(--dim);margin-bottom:12px;font-weight:500;text-wrap:wrap}
 .about-side .blk ul{list-style:none;display:flex;flex-direction:column;gap:6px}
 .contact h2{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;max-width:16ch;margin-bottom:clamp(24px,3vw,36px)}
 .contact h2 em{font-style:italic}
@@ -400,7 +409,7 @@ transform:translateY(-75%) rotate(45deg);pointer-events:none}
 .c-next a:hover .thumb img{transform:scale(1.06)}
 footer.site{padding:clamp(50px,7vw,90px) 0 40px;margin-top:var(--sp-section)}
 footer.site .grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;border-top:1px solid var(--line);padding-top:28px}
-footer.site .grid .col h4{font-size:var(--t-meta);letter-spacing:0;color:var(--dim);margin-bottom:12px;font-weight:500}
+footer.site .grid .col .fh{font-size:var(--t-meta);letter-spacing:0;color:var(--dim);margin-bottom:12px;font-weight:500}
 footer.site .grid .col a{display:block;padding:3px 0;opacity:.8;transition:opacity var(--dur-fast)}
 footer.site .grid .col a:hover{opacity:1}
 footer.site .base{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:clamp(40px,6vw,72px);font-size:var(--t-micro);letter-spacing:0;color:var(--dim)}
@@ -497,9 +506,11 @@ h2,h3{text-wrap:balance}
 @media(max-width:600px){.notes-list a{grid-template-columns:1fr;gap:6px}.notes-list .nd{grid-column:1}}
 
 /* ---------- clients strip (marquee under hero) ---------- */
-.clients-strip{padding:20px 0;margin-top:var(--sp-section);overflow:hidden;position:relative}
-.cs-label{font-size:var(--t-micro);letter-spacing:0;color:var(--dim);margin:0 0 12px;padding-inline:var(--pad-x)}
-.cs-track{display:flex;align-items:center;gap:44px;width:max-content;animation:cs-scroll 45s linear infinite}
+/* the strip (not the track) carries the start gutter, so the first logo lines up with the label
+   and the marquee seam stays seamless; the track holds still for 4s so the first logos can be read */
+.clients-strip{padding:20px 0;padding-inline-start:var(--pad-x);margin-top:var(--sp-section);overflow:hidden;position:relative}
+.cs-label{font-size:var(--t-micro);letter-spacing:0;color:var(--dim);margin:0 0 12px;padding-inline:0 var(--pad-x)}
+.cs-track{display:flex;align-items:center;gap:44px;width:max-content;animation:cs-scroll 45s linear infinite;animation-delay:4s}
 .clients-strip:hover .cs-track{animation-play-state:paused}
 .cs-track a{font-size:var(--t-meta);font-weight:500;color:var(--dim);white-space:nowrap;display:flex;align-items:center;gap:44px;transition:color var(--dur-fast) var(--ease)}
 .cs-track a:hover{color:var(--fg)}
@@ -529,6 +540,8 @@ h2,h3{text-wrap:balance}
 .fit-link:hover .arw{transform:translateX(4px)}
 /* the closing band's rule sits midway between this block and the band's heading */
 :is(.fit, section:has(> .caps-note:last-child)) + .band{margin-top:clamp(40px,6vw,64px)}
+/* Work and Notes indexes close on the same booking band */
+section:has(> .index-list, > .notes-list) + .band{margin-top:var(--sp-section)}
 .cap h3 a{transition:opacity var(--dur-fast)}
 .cap h3 a:hover{opacity:.7;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line-strong)}
 .sec-head .count a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
@@ -619,6 +632,7 @@ font-size:clamp(1.0625rem,1.4vw,1.25rem);line-height:1.35;transition:color var(-
 .c-film .note{font-size:var(--t-meta);color:var(--dim);line-height:1.6;max-width:64ch;margin-bottom:16px}
 .about-side .blk ul li a{color:var(--dim);transition:color var(--dur-fast)}
 .about-side .blk ul li a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
+.about-side .blk ul li a[href^="services.html#"]{color:var(--fg)}
 
 /* ---------- contact qualification note ---------- */
 .c-intro .c-qual{border-top:1px solid var(--line);margin-top:26px;padding-top:18px;
@@ -1155,7 +1169,7 @@ font-size:var(--t-meta);line-height:1.5;color:var(--fg);display:flex;flex-direct
 .consent-actions .btn{flex:1 1 0;min-height:0;padding:9px 10px;white-space:nowrap}
 }
 footer.site .base .legal{display:flex;gap:16px}
-footer.site .base .legal a,footer.site .base .legal button{color:inherit;opacity:.8;transition:opacity var(--dur-fast)}
+footer.site .base .legal a,footer.site .base .legal button{color:inherit;opacity:1;transition:opacity var(--dur-fast)}
 footer.site .base .legal button{background:none;border:0;padding:0;font:inherit;letter-spacing:inherit;cursor:pointer}
 footer.site .base .legal a:hover,footer.site .base .legal button:hover{opacity:1}
 .linkish{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
@@ -1196,8 +1210,11 @@ border-bottom:1px solid var(--line-strong);transition:border-color var(--dur-fas
    an asymmetric hero and squared buttons. Everything below overrides the
    rules above; delete this block to return to the previous look.
    ========================================================================== */
+/* a local face sized to Inter Tight's metrics, so display headlines keep their
+   line breaks while the web font loads (no reflow when it swaps in) */
+@font-face{font-family:"Inter Tight Fallback";src:local("Arial"),local("Helvetica Neue"),local("Helvetica"),local("Liberation Sans");size-adjust:94.5%;ascent-override:102.5%;descent-override:25.6%;line-gap-override:0%}
 :root{
-  --display:"Inter Tight","Inter",system-ui,sans-serif;
+  --display:"Inter Tight","Inter Tight Fallback","Inter",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --t-hero:clamp(2.6rem,6.8vw,6.5rem);
   --t-display:clamp(2.25rem,4.6vw,4rem);
@@ -1239,9 +1256,11 @@ border-bottom:1px solid var(--line-strong);transition:border-color var(--dur-fas
 
 /* mono micro-labels */
 .swork .info .kmeta,.swork .media .num,.cap .n,.sec-head .count,.c-meta .m .l,.c-sec .st,.svc-sec .st,
-.c-open .crumb,.prow .p-idx,.prow .p-cat,.p-metaline,footer.site .grid .col h4,.c-contrib .l,.c-film .l,
-.c-next .l,.c-credits h3,.svc-cases-note{
+.c-open .crumb,.prow .p-idx,.prow .p-cat,.p-metaline,footer.site .grid .col .fh,.c-contrib .l,.c-film .l,
+.c-next .l,.c-credits h3,.svc-cases-note,.cta-note,.c-cal-l{
   font-family:var(--mono);font-size:.75rem;font-weight:400;letter-spacing:.04em;text-transform:uppercase}
+/* one-line expectation under the band booking buttons */
+.cta-note{margin:12px 0 0;font-size:var(--t-micro);color:var(--dim)}
 .sec-head .count a{text-transform:uppercase}
 
 /* buttons: squared, ink */
@@ -1284,13 +1303,16 @@ nav.primary a{color:var(--fg)}
 .c-tabs{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:calc(var(--r-btn) + 4px);margin-bottom:18px}
 .c-tabs [role="tab"]{font:inherit;font-size:var(--t-meta);font-weight:500;color:var(--dim);background:none;border:0;border-radius:var(--r-btn);padding:9px 16px;cursor:pointer}
 .c-tabs [role="tab"][aria-selected="true"]{background:var(--fg);color:var(--bg)}
-.c-cal{border:1px solid var(--line);border-radius:var(--r-media);overflow:hidden;background:#fff}
+/* the calendar is a themed card until the visitor asks for times; Google's page loads on click */
+.c-cal{position:relative;background:var(--faint);border:1px solid var(--line);border-radius:var(--r-media);overflow:hidden;min-height:320px;display:flex;align-items:center;padding:clamp(24px,4vw,40px)}
+.c-cal-card{max-width:34ch}
+.c-cal-l{color:var(--dim)}
+.c-cal-t{font-size:var(--t-body);color:var(--dim);margin:10px 0 22px}
+.c-cal.loaded{padding:0;display:block;background:#fff}
 .c-cal iframe{display:block;width:100%;height:min(760px,calc(100svh - 160px));min-height:560px;border:0}
-/* shown until the Google page paints over it (or if it never loads) */
-.c-cal{position:relative}
-.c-cal-wait{position:absolute;left:0;right:0;top:38%;text-align:center;font-size:var(--t-meta);color:#555;z-index:0;margin:0}
-.c-cal-wait a{color:#111;border-bottom:1px solid #bbb}
-.c-cal iframe{position:relative;z-index:1}
+/* dark theme: the white Google sheet sits inset in a dark frame, not full-bleed */
+:root:not([data-theme="light"]) .c-cal.loaded{padding:8px;background:var(--faint)}
+:root:not([data-theme="light"]) .c-cal.loaded iframe{border-radius:calc(var(--r-media) - 4px)}
 .c-cal-alt{margin-top:12px;font-size:var(--t-micro);color:var(--dim)}
 .c-cal-alt a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
 .prow .p-name{font-family:var(--display);font-weight:600;letter-spacing:-.03em}
@@ -1387,7 +1409,8 @@ footer.site .grid{border-top-width:var(--rule);border-image:var(--bleed) 1 / var
   :root[data-theme="light"] .selected .swork::before{inset:0 calc(var(--rule) - var(--frame-in))}
   .hero .clients-strip{margin-inline:calc(var(--rule) - var(--frame-in))}
   /* the strip bleeds to the frame rules; its label lines up with the page gutter (the h1's left edge) */
-  .hero .cs-label{padding-inline:calc(var(--frame-in) - var(--rule))}
+  .hero .clients-strip{padding-inline-start:calc(var(--frame-in) - var(--rule))}
+  .hero .cs-label{padding-inline:0 calc(var(--frame-in) - var(--rule))}
 }
 
 @media (prefers-reduced-motion:reduce){

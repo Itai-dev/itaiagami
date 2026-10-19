@@ -4,18 +4,18 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Privacy | Itai Agami</title>
-<meta name="description" content="How itaiagami.com uses Google Analytics, Microsoft Clarity and the contact form, what information is collected, and how to change your analytics choice." />
+<meta name="description" content="How itaiagami.com uses Google Analytics, Microsoft Clarity, Google Fonts and the contact form, what information is collected, and how to change your analytics choice." />
 <link rel="canonical" href="https://itaiagami.com/privacy.html" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Privacy | Itai Agami" />
-<meta property="og:description" content="How itaiagami.com uses analytics and the contact form." />
+<meta property="og:description" content="How itaiagami.com uses Google Analytics, Microsoft Clarity, Google Fonts and the contact form, what information is collected, and how to change your analytics choice." />
 <meta property="og:url" content="https://itaiagami.com/privacy.html" />
-<meta property="og:image" content="https://itaiagami.com/assets/og/itai-agami.jpg" />
+<meta property="og:image" content="https://itaiagami.com/assets/og/itai-agami-cd.jpg" />
 <meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Itai Agami" />
+<meta property="og:image:alt" content="Itai Agami, Independent Creative Director in Tel Aviv: one creative director, from first idea to launch day." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="css/site.css" />
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="site" id="siteHeader">
@@ -34,7 +35,7 @@
       <a href="notes.html">Notes</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
-      <button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>
+      <button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><svg class="tgl" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
     </nav>
     <a class="btn solid nav-cta" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
@@ -48,12 +49,12 @@
   <a href="about.html">About</a>
   <a href="contact.html">Contact</a>
   <div class="mm-foot">
-    <button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button>
+    <button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><svg class="tgl" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg> <span class="tlm">Light</span></button>
     <span>Tel Aviv, IL · Worldwide</span>
   </div>
 </nav>
 
-<main>
+<main id="main">
   <div class="cwrap">
     <!-- LAWYER REVIEW: this page is a plain-language draft written for a one-person
          portfolio site. It has not been reviewed by a lawyer. Sections marked
@@ -72,9 +73,9 @@
         <p>With your permission, the site uses two free analytics tools to understand how people find it and which work they look at:</p>
         <ul>
           <li><strong>Google Analytics 4</strong> (Google): pages viewed, how you arrived (for example a search engine, LinkedIn, ChatGPT or a campaign link), approximate location at country/city level, device and browser type, and a few events such as opening a project, reaching the contact page or sending the form. Google Analytics uses first-party cookies (<code>_ga</code>, <code>_ga_*</code>). Google signals and ad personalisation are switched off.</li>
-          <li><strong>Microsoft Clarity</strong> (Microsoft): how pages are used: clicks, scrolling and anonymised session replays and heatmaps. Clarity masks text you type into forms. It uses cookies such as <code>_clck</code> and <code>_clsk</code>.</li>
+          <li><strong>Microsoft Clarity</strong> (Microsoft): how pages are used: clicks, scrolling and anonymized session replays and heatmaps. Clarity masks text you type into forms. It uses cookies such as <code>_clck</code> and <code>_clsk</code>.</li>
         </ul>
-        <p>Neither tool loads until you press <strong>Accept analytics</strong>. If you press <strong>Reject</strong>, neither is loaded at all. The purpose is to understand which pages are useful and where enquiries come from, not advertising, and not identifying you personally.</p>
+        <p>Neither tool loads until you press <strong>Accept analytics</strong>. If you press <strong>Reject</strong>, neither is loaded at all. The purpose is to understand which pages are useful and where inquiries come from, not advertising, and not identifying you personally.</p>
         <!-- LAWYER REVIEW: legal basis (consent), international transfers to Google/Microsoft
              (US), retention periods set in each tool, and whether a data-processing
              agreement with each provider needs to be referenced here. -->
@@ -87,12 +88,13 @@
         <!-- LAWYER REVIEW: confirm that cookieless Vercel Web Analytics and the session
              storage below can run without consent in the jurisdictions you care about. -->
         <p>The site is hosted on Vercel, which also provides basic, cookieless page-view statistics (Vercel Web Analytics) that do not identify individual visitors. To show prices in your currency, the site asks the host for your country code; your IP address is not stored by this site.</p>
+        <p>Fonts: pages load the Inter, Inter Tight and IBM Plex Mono typefaces (and, on the home page’s intro, Caveat) from Google Fonts, so your browser connects to Google’s font servers, which receive your IP address.</p>
 
         <h2>Where you came from: referral and campaign information</h2>
-        <p>When you arrive, your browser remembers, for that tab session only, the page you landed on, the website that linked to you (the referrer), any campaign tags in the link (<code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, <code>utm_content</code>, <code>utm_term</code>) and the list of pages you visit on this site. This stays in your browser and is only sent if you submit the contact form. If you accept analytics, the original source of your visit is also kept in your browser for up to 30 days, so a later enquiry can be credited to it; rejecting analytics deletes it.</p>
+        <p>When you arrive, your browser remembers, for that tab session only, the page you landed on, the website that linked to you (the referrer), any campaign tags in the link (<code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, <code>utm_content</code>, <code>utm_term</code>) and the list of pages you visit on this site. This stays in your browser and is only sent if you submit the contact form. If you accept analytics, the original source of your visit is also kept in your browser for up to 30 days, so a later inquiry can be credited to it; rejecting analytics deletes it.</p>
 
         <h2>The contact form</h2>
-        <p>If you send an enquiry, what you enter (name, email, organisation and the details of your project) is emailed to me through Resend, an email delivery service, together with the referral and campaign information above, and a backup copy may be kept in a private Google Sheet so no enquiry is lost. You receive a short automatic confirmation by email. It is used only to reply to you and to discuss your project, and it is not sold or shared for marketing. Analytics never records what you type.</p>
+        <p>If you send an inquiry, what you enter (name, email, organization and the details of your project) is emailed to me through Resend, an email delivery service, together with the referral and campaign information above, and a backup copy may be kept in a private Google Sheet so no inquiry is lost. You receive a short automatic confirmation by email. It is used only to reply to you and to discuss your project, and it is not sold or shared for marketing. Analytics never records what you type.</p>
         <h2>Booking a call</h2>
         <p>The contact page shows my Google Calendar booking page inside the site, and the "Book a call" buttons open the same page. It is provided by Google: the calendar loads from Google's servers, and the name, email and any notes you enter when you book go to Google Calendar under <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>. I use them only to hold the call.</p>
         <!-- LAWYER REVIEW: how long enquiry emails are kept, and the legal basis
@@ -111,9 +113,9 @@
 <footer class="site">
   <div class="wrap">
     <div class="grid">
-      <div class="col"><h4>Menu</h4><a href="work.html">Work</a><a href="services.html">Services</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
-      <div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>
-      <div class="col"><h4>Studio</h4><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
+      <div class="col"><p class="fh">Menu</p><a href="work.html">Work</a><a href="services.html">Services</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+      <div class="col"><p class="fh">Connect</p><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>
+      <div class="col"><p class="fh">Studio</p><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
     </div>
     <div class="base">
       <span>© 2026 Itai Agami. All rights reserved.</span>

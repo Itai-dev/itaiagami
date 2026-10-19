@@ -65,8 +65,10 @@
   ]
 }
 </script>
+<noscript><style>.fade,.obs,.reveal-line>*,.split .w>span,.swork.obs .info>*,.mo .obs .caps>*{opacity:1!important;transform:none!important}.swork.obs .media{clip-path:none!important;transform:none!important}</style></noscript>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="site" id="siteHeader">
@@ -78,7 +80,7 @@
       <a href="notes.html">Notes</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
-      <button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>
+      <button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><svg class="tgl" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
     </nav>
     <a class="btn solid nav-cta" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
@@ -92,29 +94,29 @@
   <a href="about.html">About</a>
   <a href="contact.html">Contact</a>
   <div class="mm-foot">
-    <button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button>
+    <button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><svg class="tgl" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg> <span class="tlm">Light</span></button>
     <span>Tel Aviv, IL · Worldwide</span>
   </div>
 </nav>
 
-<main>
+<main id="main">
 <div class="wrap">
 
   <section aria-label="Project index">
-    <div class="sec-head"><h1>Work</h1><span class="count" id="indexCount">All work</span></div>
-    <p class="work-intro">Campaigns, brands and experiences for companies, broadcasters and museums. Each row says who it was for and what my part was. <a href="services.html">How I work with clients →</a></p>
+    <div class="sec-head"><h1 class="about-title">The work, and exactly what my part was.</h1><span class="count" id="indexCount">All work</span></div>
+    <p class="work-intro">Campaigns, brands and experiences for Google, MAX, Simply, broadcasters and museums. Some I led; on others I was part of an agency team. Each project says which. <a href="services.html">How I work with clients →</a></p>
     <div class="index-controls">
-      <div class="filters" id="filters" role="group" aria-label="Filter projects by type of work"></div>
+      <div class="filters" id="filters" role="group" aria-label="Filter projects by type of work"><button type="button" data-f="All" aria-pressed="true">All</button><button type="button" data-f="Brand &amp; identity" aria-pressed="false">Brand &amp; identity</button><button type="button" data-f="Campaigns &amp; film" aria-pressed="false">Campaigns &amp; film</button><button type="button" data-f="Interactive &amp; spaces" aria-pressed="false">Interactive &amp; spaces</button></div>
       <div class="views" id="views" role="group" aria-label="Choose project layout">
-        <button data-view="vertical" aria-pressed="true" aria-label="List view" title="List">
+        <button data-view="vertical" aria-pressed="false" aria-label="List view" title="List">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </button>
-        <button data-view="grid" aria-pressed="false" aria-label="Grid view" title="Grid">
+        <button data-view="grid" aria-pressed="true" aria-label="Grid view" title="Grid">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
         </button>
       </div>
     </div>
-    <ul class="index-list" id="indexList">
+    <ul class="index-list grid" id="indexList">
 
       <li class="prow" data-tags="Campaigns &amp; film,Interactive &amp; spaces" data-img="/assets/opt/127e28df8c39.webp">
         <a href="work/simply-vision-pro.html">
@@ -158,7 +160,7 @@
 
       <li class="prow" data-tags="Campaigns &amp; film" data-img="/assets/opt/ni-ad-cards-balance.webp">
         <a href="work/natural-intelligence.html">
-          <div class="p-thumb"><img src="/assets/opt/ni-ad-cards-balance.webp" loading="lazy" alt=""></div>
+          <div class="p-thumb"><img class="pos-top" src="/assets/opt/ni-ad-cards-balance.webp" loading="lazy" alt=""></div>
           <span class="p-idx">05</span>
           <span class="p-name">Natural Intelligence</span>
           <span class="p-cat">Natural Intelligence · Creative Art Director, in-house</span>
@@ -299,6 +301,17 @@
     </ul>
   </section>
 
+  <!-- CONTACT BAND -->
+  <section class="band obs" aria-label="Contact">
+    <h2>Seen something close to what you’re <em>launching</em>?</h2>
+    <p style="max-width:52ch;margin-bottom:0;color:inherit;opacity:0.7;">Twenty minutes is enough to tell if it’s a fit. No brief needed.</p>
+    <div class="cta" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:28px">
+      <a class="btn solid" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="work_band" target="_blank" rel="noopener">Book a call with Itai <span class="arw" aria-hidden="true">↗</span></a>
+      <a href="contact.html#brief" class="btn ghost">Write to me <span class="arw" aria-hidden="true">→</span></a>
+    </div>
+    <p class="cta-note">20 minutes · no brief needed · opens Google Calendar</p>
+  </section>
+
 </div>
 </main>
 
@@ -307,9 +320,9 @@
 <footer class="site">
   <div class="wrap">
     <div class="grid">
-      <div class="col"><h4>Menu</h4><a href="work.html">Work</a><a href="services.html">Services</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
-      <div class="col"><h4>Connect</h4><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>
-      <div class="col"><h4>Studio</h4><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
+      <div class="col"><p class="fh">Menu</p><a href="work.html">Work</a><a href="services.html">Services</a><a href="notes.html">Notes</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+      <div class="col"><p class="fh">Connect</p><a href="mailto:itaiagami@gmail.com">Email</a><a href="https://www.linkedin.com/in/itai-agami-237353189/" target="_blank" rel="noopener">LinkedIn</a><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">CV</a></div>
+      <div class="col"><p class="fh">Studio</p><a href="about.html">Tel Aviv, IL</a><a href="about.html">Working worldwide</a></div>
     </div>
     <div class="base">
       <span>© 2026 Itai Agami. All rights reserved.</span>

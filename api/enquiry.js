@@ -198,7 +198,7 @@ async function sendMail(payload, ms){
 async function notify(l){
   if(!process.env.RESEND_API_KEY){ console.error('enquiry: RESEND_API_KEY is not set'); return false; }
   const enquiry = [
-    ['Name', l.name], ['Email', l.email], ['Organisation', l.org || '—'],
+    ['Name', l.name], ['Email', l.email], ['Organization', l.org || '—'],
     ['Project type', l.type || '—'], ['Budget', l.budget || '—'], ['Timeline', l.timeline || '—']
   ];
   const origin = [
@@ -234,7 +234,7 @@ async function notify(l){
     return await sendMail({
       to: [TO],
       reply_to: l.email,                         /* replying in your inbox goes straight to them */
-      subject: 'New enquiry - ' + l.name + (l.type ? ' - ' + l.type : ''),
+      subject: 'New inquiry: ' + l.name + (l.type ? ' · ' + l.type : ''),
       text, html
     }, 7000);
   }catch(err){
@@ -259,5 +259,5 @@ async function confirm(l){
     + '<p>Thanks for reaching out. I read every message myself and will reply personally to set up a 20-minute call or ask a question or two. If it’s a fit, a short proposal for a Launch Sprint follows within a few days.</p>'
     + (booking ? '<p>If you prefer, you can also <a href="' + esc(booking) + '" style="color:#111">book a short intro call here</a>.</p>' : '')
     + '<p>Itai</p></div>';
-  await sendMail({ to:[l.email], reply_to: TO, subject:'Thanks, I received your enquiry', text, html }, 5000);
+  await sendMail({ to:[l.email], reply_to: TO, subject:'Thanks, I’ve got your message', text, html }, 5000);
 }
