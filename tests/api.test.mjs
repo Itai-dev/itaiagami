@@ -33,7 +33,7 @@ test('GET /api/projects lists every case study', async () => {
   assert.deepEqual(j.categories, ['Brand', 'Culture', 'Technology']);
   const c13 = j.projects.find(p => p.slug === 'channel-13');
   assert.equal(c13.url, 'https://itaiagami.com/work/channel-13.html');
-  assert.equal(c13.video, 'https://vimeo.com/1000322316');
+  assert.equal(c13.video, 'https://player.mux.com/LQ00EDO2tkIv3CyLnni5j9Wc01Dj2ldqmMtPKR3BIntzY');
   assert.match(c13.image, /^https:\/\/itaiagami\.com\/assets\//);
   assert.ok(!('homeRank' in c13));
   assert.equal(r.headers['access-control-allow-origin'], '*');

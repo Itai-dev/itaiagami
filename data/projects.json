@@ -43,10 +43,14 @@
         "half": false
       }
     ],
-    "vimeo": "1000322316",
+    "vimeo": null,
     "credits": [
       "Creative Agency: Shortcut Playground"
-    ]
+    ],
+    "mux": {
+      "playbackId": "LQ00EDO2tkIv3CyLnni5j9Wc01Dj2ldqmMtPKR3BIntzY",
+      "aspect": "16:9"
+    }
   },
   {
     "slug": "museum-of-natural-history",
@@ -130,10 +134,14 @@
         "half": false
       }
     ],
-    "vimeo": "636475751",
+    "vimeo": null,
     "credits": [
       "Studio Adam Fineberg"
-    ]
+    ],
+    "mux": {
+      "playbackId": "PzxNlUg9sFLvi3Rc016y7TRWuhvKCYCDk01WhAQndt00sE",
+      "aspect": "16:9"
+    }
   },
   {
     "slug": "sky-max",
@@ -171,12 +179,16 @@
         "half": false
       }
     ],
-    "vimeo": "793822652",
+    "vimeo": null,
     "credits": [
       "Director: Roy Kafri",
       "Creative Agency: Shortcut Playground",
       "Ad Agency: McCann Erickson"
-    ]
+    ],
+    "mux": {
+      "playbackId": "FB02gRTOTJ00H9Pr2jFhDBDTVBQT9mAOZbwNcOZrDinYQ",
+      "aspect": "16:9"
+    }
   },
   {
     "slug": "simply-vision-pro",
@@ -215,8 +227,12 @@
         "half": false
       }
     ],
-    "vimeo": "1008541846",
-    "credits": []
+    "vimeo": null,
+    "credits": [],
+    "mux": {
+      "playbackId": "hJe7HlmS4O6SXdJ00jpvUC34s6FyumQJZpMpgtl4TWNo",
+      "aspect": "16:9"
+    }
   },
   {
     "slug": "tower-of-david",
@@ -351,10 +367,14 @@
         "half": false
       }
     ],
-    "vimeo": "1000327434",
+    "vimeo": null,
     "credits": [
       "Creative Agency: Shortcut Playground"
-    ]
+    ],
+    "mux": {
+      "playbackId": "rlva01X3E88XRklbSon6ZQhLRTEgO01JTh02PILi8uYnVo",
+      "aspect": "16:9"
+    }
   },
   {
     "slug": "natural-intelligence",
@@ -485,10 +505,14 @@
         "half": false
       }
     ],
-    "vimeo": "1002878904",
+    "vimeo": null,
     "credits": [
       "Creative Agency: Shortcut Playground"
-    ]
+    ],
+    "mux": {
+      "playbackId": "8pZhZoqn7dWvQEsIb53V9pIbK1qhzmpSJ4rNYVvT6S00",
+      "aspect": "80:13"
+    }
   },
   {
     "slug": "amdocs-make-it-amazing",
@@ -527,14 +551,18 @@
         "half": false
       }
     ],
-    "vimeo": "1032659398",
+    "vimeo": null,
     "credits": [
       "Creative Agency: Shortcut Playground",
       "Director: Roy Raz",
       "Production: Rabel Films",
       "Advertising Agency: McCann",
       "Music: Noga Erez & RUSSO"
-    ]
+    ],
+    "mux": {
+      "playbackId": "gcZB8xsrU2d01hntcxhoOCCBe01nLIPLlKWNQCoT4O7d8",
+      "aspect": "480:181"
+    }
   },
   {
     "slug": "google-shopping-il",
@@ -572,11 +600,15 @@
         "half": false
       }
     ],
-    "vimeo": "1025724795",
+    "vimeo": null,
     "credits": [
       "Creative Agency: Shortcut Playground",
       "Ad Agency: McCann Tech"
-    ]
+    ],
+    "mux": {
+      "playbackId": "aThm4mmV7qF1NNxU9NfEMXc4Da6ZB3KcHgEdEDhVDhU",
+      "aspect": "16:9"
+    }
   },
   {
     "slug": "community-lights",
@@ -674,8 +706,12 @@
         "half": false
       }
     ],
-    "vimeo": "802381495",
-    "credits": []
+    "vimeo": null,
+    "credits": [],
+    "mux": {
+      "playbackId": "nAGWrohDvxm3NZSvb6YGQzsfmiAMyxZ4YFktGc5gqDU",
+      "aspect": "16:9"
+    }
   },
   {
     "slug": "tidhar",
@@ -710,8 +746,12 @@
         "half": false
       }
     ],
-    "vimeo": "800267589",
-    "credits": []
+    "vimeo": null,
+    "credits": [],
+    "mux": {
+      "playbackId": "IT4eMT3SbGgTK2m9Z5F9Zen8xLcHqGD00p1yjXSFl6QE",
+      "aspect": "16:9"
+    }
   },
   {
     "slug": "sodastream",
@@ -736,8 +776,12 @@
     "thumb": "/assets/opt/sodastream-thumb.webp",
     "hero": "/assets/opt/sodastream-hero.webp",
     "gallery": [],
-    "vimeo": "794136290",
-    "credits": []
+    "vimeo": null,
+    "credits": [],
+    "mux": {
+      "playbackId": "U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c",
+      "aspect": "16:9"
+    }
   },
   {
     "slug": "riddle",

@@ -1122,6 +1122,37 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   vids.forEach(v=>io.observe(v));
 })();
 
+/* ---------- click-to-load film (Mux) ----------
+   .frame[data-mux] holds a poster button; Mux's player is only fetched when
+   someone asks for it, then starts with sound and its own controls. */
+(function(){
+  const frames=document.querySelectorAll('.frame[data-mux]');
+  if(!frames.length)return;
+  let loading=null;
+  const load=()=>loading||(loading=import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs').catch(()=>{}));
+  frames.forEach(f=>{
+    const btn=f.querySelector('.c-play');
+    if(!btn)return;
+    btn.addEventListener('pointerenter',load,{once:true});
+    btn.addEventListener('focus',load,{once:true});
+    btn.addEventListener('click',()=>{
+      load();
+      const pl=document.createElement('mux-player');
+      pl.setAttribute('playback-id',f.dataset.mux);
+      pl.setAttribute('stream-type','on-demand');
+      pl.setAttribute('accent-color','#0d0d0d');
+      pl.setAttribute('metadata-video-title',f.dataset.title||'Film');
+      pl.setAttribute('title',f.dataset.title||'Film');
+      pl.setAttribute('autoplay','');
+      btn.replaceWith(pl);
+      customElements.whenDefined('mux-player').then(()=>{
+        const p=pl.play&&pl.play();
+        if(p&&p.catch)p.catch(()=>{pl.muted=true;pl.play().catch(()=>{});});
+      });
+    });
+  });
+})();
+
 /* ---------- click-to-load film ----------
    .frame[data-vimeo] holds a poster button; the player is only fetched when
    someone asks for it, then starts with sound and Vimeo's own controls. */
