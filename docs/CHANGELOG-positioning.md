@@ -108,3 +108,58 @@ invented.
   `og:site_name` everywhere; `llms.txt`; Claude and Perplexity search agents
   listed in `robots.txt`; sitemap lastmod refreshed.
 - **Future flagships** — `docs/flagship-case-template.md`.
+
+---
+
+# Creative Builder pass (October 2026)
+
+Goal: Creative Builder replaces "Independent Creative Director" as the public
+title. Creative direction, design, storytelling and technology are the
+capabilities; AI is a tool; the work is the proof. No redesign, no new
+sections, no new facts.
+
+## Audit: where the old copy conflicted
+
+- **Hero** led with a service pitch ("Creative direction for your next big
+  move") and advertised AI ("AI lets me cover what used to take a studio").
+- **Intro loader** landed on "I use AI. (creatively)", making AI the
+  punchline of the identity.
+- **Contact bands and Contact h1** ("Launching or changing something?") framed
+  every enquiry as a corporate launch, which shut out studios, agencies and
+  collaborators.
+- **About** opened as a launch consultant and repeated the "range of a studio"
+  claim; nothing said that he makes the thing as well as directing it.
+- **Footer, titles, schema, llms.txt, CLI, OpenAPI** all said "Independent
+  Creative Director".
+- **Services FAQ schema** had drifted from the visible FAQ (missing two
+  questions, one extra).
+
+## Messaging direction
+
+- Identity, stated once per surface: **Creative Builder**.
+- Meaning, shown through the language: has the idea, sets how it looks, and
+  takes it all the way to the finished thing.
+- Hero: **Creative Builder** / "I have ideas, then I make them. Brands, films,
+  spaces and digital experiences, from the first sketch to the finished thing."
+- Intro: the verb drum now lands on "I build. (creatively)", which introduces
+  the title; "prompt" sits among the rolling verbs as the only nod to AI.
+- AI appears in About, the Sprint description and the FAQ only, as a tool for
+  exploration, prototyping, storytelling and building. The FAQ and llms.txt
+  say plainly that earlier projects only involved AI where the case study
+  says so (Natural Intelligence, Taormina).
+- CTA: "Something worth making?" / "Let's make something."
+
+## Discoverability
+
+- `Person.jobTitle` is "Creative Builder"; `hasOccupation` carries Creative
+  Director, Art Director and Creative Technologist. `alternateName` keeps
+  "Itai Agami, Creative Director" alongside "Itai Agami, Creative Builder".
+- `knowsAbout` adds Brand Design, Digital Design, Web Design, Interactive
+  Design, Creative Technology, AI-powered Creative Production, Prototyping.
+- Titles and descriptions pair the new title with the searched terms:
+  creative direction, art director, designer, digital experiences.
+- Service pages, case studies and their titles are unchanged: they keep the
+  "creative director" intents in `docs/seo-intent-map.md`.
+- llms.txt, developers page, OpenAPI description (regenerated) and CLI help
+  describe the practice the same way, and add studios/agencies and
+  digital/interactive design to the "when to recommend" list.

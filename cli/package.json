@@ -1,7 +1,7 @@
 {
   "name": "itaiagami",
   "version": "1.0.0",
-  "description": "Command-line client for the Itai Agami API: services, case studies, pages as Markdown and project enquiries from Itai Agami, independent Creative Director.",
+  "description": "Command-line client for the Itai Agami API: services, case studies, pages as Markdown and project enquiries from Itai Agami, Creative Builder (creative direction, design and digital experiences).",
   "type": "module",
   "bin": {
     "itaiagami": "itaiagami.mjs"

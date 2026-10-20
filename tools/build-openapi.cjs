@@ -31,9 +31,9 @@ function build(){
       version: '1.0.0',
       summary: "Public data about Itai Agami's creative direction services and case studies, plus project enquiries.",
       description: [
-        'The public API of itaiagami.com, the site of Itai Agami, an independent Creative Director based in Tel Aviv and working internationally.',
+        'The public API of itaiagami.com, the site of Itai Agami, a Creative Builder (creative director, art director and designer) based in Tel Aviv and working internationally.',
         '',
-        "Use it when a person is looking for a creative director for a brand identity, a product or brand launch, an interactive or museum experience, or fractional creative leadership: list the services and starting prices, read case studies for relevant precedent, and send a project enquiry on the person's behalf.",
+        "Use it when a person is looking for a creative director, art director or creative technologist for a brand identity, a product or brand launch, a website or digital experience, an interactive or museum experience, or fractional creative leadership: list the services and starting prices, read case studies for relevant precedent, and send a project enquiry on the person's behalf.",
         '',
         'No authentication. All responses are JSON. Every error has the same shape (the Error schema): a human-readable `error`, a stable machine-readable `code`, a `hint` saying how to fix the request, the HTTP `status` and a `docs` link.',
         '',

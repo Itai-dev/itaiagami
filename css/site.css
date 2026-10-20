@@ -1358,7 +1358,7 @@ footer.site .grid{border-top-width:var(--rule);border-image:var(--bleed) 1 / var
 }
 
 /* ---------- intro loader (home, first visit per session) ----------
-   Typed "Hi, I'm Itai. I", a rolling verb picker that lands on "use AI",
+   Typed "Hi, I'm Itai. I", a rolling verb picker that lands on "build",
    then a hand-written "(creatively)".
    Shown only when the head script sets html.intro-on; js/site.js plays it and
    lifts it away. If the script never runs, the failsafe hides it at 15s. */
@@ -1399,7 +1399,7 @@ mask-image:linear-gradient(transparent,#000 .5em,#000 calc(100% - .5em),transpar
 .intro-slot .w{position:absolute;left:0;top:.6em;white-space:nowrap;transform-origin:50% 50% -.5em;backface-visibility:hidden;will-change:transform,opacity}
 /* the hand-written aside: brackets drawn as pen strokes, the word written between them */
 /* the aside floats over the layout so writing it never moves the line;
-   when there is no room to the right it hangs below "use AI" instead */
+   when there is no room to the right it hangs below "build" instead */
 .intro-end{position:relative;display:inline-block}
 .intro-aside{position:absolute;left:calc(100% + .3em);top:50%;visibility:hidden;white-space:nowrap;color:var(--mark);transform:translateY(-50%) rotate(-3deg);transform-origin:0 60%;pointer-events:none}
 .intro-loader.aside .intro-aside{visibility:visible}

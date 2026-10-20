@@ -52,7 +52,7 @@ function notFoundMarkdown(urlPath){
     '',
     '- [llms.txt](' + SITE + '/llms.txt): a summary of the site and links to every important page, with guidance for agents',
     '- [Sitemap](' + SITE + '/sitemap.xml): every public page',
-    '- [Home](' + SITE + '/): Itai Agami, independent Creative Director',
+    '- [Home](' + SITE + '/): Itai Agami, Creative Builder: creative direction, design and digital experiences',
     '- [Work](' + SITE + '/work.html), [Services](' + SITE + '/services.html), [Contact](' + SITE + '/contact.html)',
     '- [OpenAPI description](' + SITE + '/openapi.json): the public JSON API',
     ''

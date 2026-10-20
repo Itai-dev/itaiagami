@@ -65,7 +65,7 @@ const ANALYTICS_DEBUG     = false;
   +'</div><div class="base">'
   +'<span>© 2026 Itai Agami. All rights reserved.</span>'
   +'<span class="legal"><a href="../privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span>'
-  +'<span>Independent Creative Director</span>'
+  +'<span>Creative Builder</span>'
   +'</div></div></footer>';
   document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
@@ -573,8 +573,8 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 /* ---------- intro loader (home) ----------
    Types "Hi, I'm Itai. I design.", then the verb turns on a drum like a watch
    crown picker (develop, ideate, create...), speeding up exponentially until
-   it is too much for one person, settles on "use AI.", and "creatively" is hand-written after it, then
-   bracketed.
+   it is too much for one person, settles on "build.", and "creatively" is
+   hand-written after it, then bracketed: a Creative Builder, introduced.
    Runs only when the head script set html.intro-on (first visit this session,
    no reduced motion). Any click, tap or key skips it. */
 (function(){
@@ -584,8 +584,8 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   el.style.animation='none';                         /* the script owns the exit now */
   const typed=el.querySelector('.intro-typed'), slot=el.querySelector('.intro-slot');
   const HEAD='Hi, I’m Itai. I';
-  const VERBS=['design','develop','ideate','create','sketch','direct','animate','model','code','film','edit','prototype','illustrate','brand','build','launch'];
-  const FINAL='use AI';
+  const VERBS=['design','develop','ideate','create','sketch','direct','animate','model','code','film','edit','prompt','prototype','illustrate','brand','launch'];
+  const FINAL='build';
   /* the drum's rhythm: each word gets a little less time than the last, on an
      exponential curve, so the first few can be read and the rest blur. While
      a step is long the drum eases in and rests; once short it turns non-stop. */
@@ -640,7 +640,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   });};
   render();
 
-  /* centre the finished sentence ("Hi, I'm Itai. I use AI." plus the aside
+  /* centre the finished sentence ("Hi, I'm Itai. I build." plus the aside
      when it fits beside it), then anchor its left edge there so nothing
      shifts while the words change */
   const line=el.querySelector('.intro-line'), aside=el.querySelector('.intro-aside');
@@ -665,7 +665,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     /* measure with the real fonts, and keep the line hidden until it is centred,
        so the caret never shows at the left edge first */
     if(document.fonts&&document.fonts.load) await Promise.race([
-      Promise.all([document.fonts.load('500 1em Inter','Hi, I’m Itai. I use AI.'),document.fonts.load('600 1em Caveat','(creatively)')]),
+      Promise.all([document.fonts.load('500 1em Inter','Hi, I’m Itai. I build.'),document.fonts.load('600 1em Caveat','(creatively)')]),
       wait(1500)]).catch(()=>{});
     if(done)return;
     centre(); el.classList.add('ready');
@@ -693,7 +693,7 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       if(rest>0) await wait(rest);
     }
     if(done)return;
-    await turn(VERBS.length,720,easeBack);           /* settles on "use AI." with a small overshoot */
+    await turn(VERBS.length,720,easeBack);           /* settles on "build." with a small overshoot */
     await wait(900); if(done)return;
     /* the aside, by hand: the word, then its brackets */
     if(document.fonts&&document.fonts.load) await Promise.race([document.fonts.load('600 1em Caveat','(creatively)'),wait(600)]).catch(()=>{});
