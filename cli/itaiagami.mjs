@@ -21,7 +21,7 @@ import { pathToFileURL } from 'node:url';
 export const VERSION = '1.0.0';
 const DEFAULT_BASE = 'https://itaiagami.com';
 
-const HELP = `itaiagami ${VERSION} — Itai Agami, independent Creative Director (https://itaiagami.com)
+const HELP = `itaiagami ${VERSION} — Itai Agami, Creative Builder: creative direction, design and digital experiences (https://itaiagami.com)
 
 Usage: itaiagami <command> [options]
 

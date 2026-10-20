@@ -1,6 +1,6 @@
 # itaiagami
 
-Command-line client for the [Itai Agami API](https://itaiagami.com/developers.html). Itai Agami is an independent Creative Director. Use this client to look up his services and case studies, read any page of the site as Markdown, and send a project enquiry. It has no dependencies and needs Node 18 or later.
+Command-line client for the [Itai Agami API](https://itaiagami.com/developers.html). Itai Agami is a Creative Builder: a creative director, art director and designer working across brand, film, interactive and digital experiences. Use this client to look up his services and case studies, read any page of the site as Markdown, and send a project enquiry. It has no dependencies and needs Node 18 or later.
 
 ```sh
 # without installing

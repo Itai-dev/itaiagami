@@ -117,6 +117,9 @@ test('developer portal: page, clean URL, sitemap, discovery links', () => {
 test('homepage structured data names the site for brand searches', () => {
   const graph = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(read('index.html'))[1])['@graph'];
   const site = graph.find(n => n['@type'] === 'WebSite');
-  assert.ok(site.alternateName.includes('Itai Agami, Creative Director'));
-  assert.equal(graph.find(n => n['@type'] === 'Person').jobTitle, 'Creative Director');
+  assert.ok(site.alternateName.includes('Itai Agami, Creative Builder'));
+  assert.ok(site.alternateName.includes('Itai Agami, Creative Director'), 'keeps the established search term');
+  const person = graph.find(n => n['@type'] === 'Person');
+  assert.equal(person.jobTitle, 'Creative Builder');
+  assert.deepEqual(person.hasOccupation.map(o => o.name), ['Creative Director', 'Art Director', 'Creative Technologist']);
 });

@@ -65,7 +65,7 @@ const ANALYTICS_DEBUG     = false;
   +'</div><div class="base">'
   +'<span>© 2026 Itai Agami. All rights reserved.</span>'
   +'<span class="legal"><a href="../privacy.html">Privacy</a><button type="button" data-consent-open>Privacy settings</button></span>'
-  +'<span>Independent Creative Director</span>'
+  +'<span>Creative Builder</span>'
   +'</div></div></footer>';
   document.body.insertAdjacentHTML('afterbegin', hdr);
   document.body.insertAdjacentHTML('beforeend', ftr);
@@ -573,8 +573,8 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
 /* ---------- intro loader (home) ----------
    Types "Hi, I'm Itai. I design.", then the verb turns on a drum like a watch
    crown picker (develop, ideate, create...), speeding up exponentially until
-   it is too much for one person, settles on "use AI.", and "creatively" is hand-written after it, then
-   bracketed.
+   it is too much for one person, settles on "build.", then "(creatively)" is
+   hand-written after it, bracket, letters, bracket: a Creative Builder, introduced.
    Runs only when the head script set html.intro-on (first visit this session,
    no reduced motion). Any click, tap or key skips it. */
 (function(){
@@ -584,8 +584,8 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   el.style.animation='none';                         /* the script owns the exit now */
   const typed=el.querySelector('.intro-typed'), slot=el.querySelector('.intro-slot');
   const HEAD='Hi, I’m Itai. I';
-  const VERBS=['design','develop','ideate','create','sketch','direct','animate','model','code','film','edit','prototype','illustrate','brand','build','launch'];
-  const FINAL='use AI';
+  const VERBS=['design','develop','ideate','create','sketch','direct','animate','model','code','film','edit','prompt','prototype','illustrate','brand','launch'];
+  const FINAL='build';
   /* the drum's rhythm: each word gets a little less time than the last, on an
      exponential curve, so the first few can be read and the rest blur. While
      a step is long the drum eases in and rests; once short it turns non-stop. */
@@ -640,32 +640,55 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   });};
   render();
 
-  /* centre the finished sentence ("Hi, I'm Itai. I use AI." plus the aside
-     when it fits beside it), then anchor its left edge there so nothing
-     shifts while the words change */
+  /* two layouts for one line. While the drum turns, the line is centred on
+     its widest word, so a long verb never runs off a phone screen (the type
+     shrinks if even that cannot fit). Once it lands, the line glides to centre
+     the finished sentence: "Hi, I'm Itai. I build." plus the aside when it
+     fits beside it, otherwise the aside hangs below. */
   const line=el.querySelector('.intro-line'), aside=el.querySelector('.intro-aside');
   const node=document.createTextNode(''); typed.appendChild(node);
+  let shift=0, landed=false;
   function centre(){
     const was=el.classList.contains('rolling'), keep=node.nodeValue, keepP=p;
-    line.style.paddingLeft='0';
-    node.nodeValue=HEAD; el.classList.add('rolling'); p=words.length-1; render();
-    const box=line.getBoundingClientRect();
-    const left=typed.getBoundingClientRect().left, right=slot.getBoundingClientRect().right;
+    line.style.paddingLeft='0'; line.style.transform='none'; line.style.fontSize='';
+    node.nodeValue=HEAD; el.classList.add('rolling');
+    const widest=words.reduce((a,w)=>w.offsetWidth>a.offsetWidth?w:a,words[0]);
+    const measure=()=>{
+      p=words.indexOf(widest); render();
+      const left=typed.getBoundingClientRect().left;
+      const roll=slot.getBoundingClientRect().right-left;
+      p=words.length-1; render();
+      return {left,roll,end:slot.getBoundingClientRect().right-left};
+    };
+    let box=line.getBoundingClientRect().width, m=measure();
+    if(m.roll>box){                                    /* too wide even when centred: scale the type to fit */
+      line.style.fontSize=parseFloat(getComputedStyle(line).fontSize)*box/m.roll*.97+'px';
+      box=line.getBoundingClientRect().width; m=measure();
+    }
     const asideW=aside.offsetWidth+aside.offsetWidth*.08;
-    const beside=right+asideW-left<=box.width;
+    const beside=m.end+asideW<=box;
     aside.classList.toggle('below',!beside);
-    const w=(right-left)+(beside?asideW:0);
-    line.style.paddingLeft=Math.max(0,(box.width-w)/2)+'px';
+    const fin=m.end+(beside?asideW:0);
+    const padRoll=Math.max(0,(box-m.roll)/2), padFin=Math.max(0,(box-fin)/2);
+    line.style.paddingLeft=padRoll+'px';
+    shift=padFin-padRoll;
+    line.style.transform=landed?`translateX(${shift}px)`:'none';
     node.nodeValue=keep; p=keepP; render(); if(!was)el.classList.remove('rolling');
   }
   addEventListener('resize',()=>{if(!done)centre();});
+
+  /* "(creatively)" is written by hand: the left bracket, each letter in turn,
+     then the right bracket, and all of it stays on the page */
+  const hand=el.querySelector('.intro-hand'), [brL,brR]=el.querySelectorAll('.intro-aside .br');
+  const letters=[...hand.textContent].map(c=>{const s=document.createElement('span');s.className='ch';s.textContent=c;return s;});
+  hand.textContent=''; letters.forEach(s=>hand.appendChild(s));
 
   (async()=>{
     el.classList.add('typing');
     /* measure with the real fonts, and keep the line hidden until it is centred,
        so the caret never shows at the left edge first */
     if(document.fonts&&document.fonts.load) await Promise.race([
-      Promise.all([document.fonts.load('500 1em Inter','Hi, I’m Itai. I use AI.'),document.fonts.load('600 1em Caveat','(creatively)')]),
+      Promise.all([document.fonts.load('500 1em Inter','Hi, I’m Itai. I illustrate.'),document.fonts.load('600 1em Caveat','(creatively)')]),
       wait(1500)]).catch(()=>{});
     if(done)return;
     centre(); el.classList.add('ready');
@@ -693,13 +716,23 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       if(rest>0) await wait(rest);
     }
     if(done)return;
-    await turn(VERBS.length,720,easeBack);           /* settles on "use AI." with a small overshoot */
-    await wait(900); if(done)return;
-    /* the aside, by hand: the word, then its brackets */
+    await turn(VERBS.length,720,easeBack);           /* settles on "build." with a small overshoot */
+    /* the hand font may arrive late: measure the aside with it before gliding */
     if(document.fonts&&document.fonts.load) await Promise.race([document.fonts.load('600 1em Caveat','(creatively)'),wait(600)]).catch(()=>{});
-    if(done)return;
+    await wait(200); if(done)return;
+    centre();
+    landed=true; el.classList.add('landed');         /* glide to centre the finished sentence */
+    line.style.transform=`translateX(${shift}px)`;
+    await wait(shift?750:200); if(done)return;
     el.classList.add('aside');
-    await wait(2400);
+    brL.classList.add('on'); await wait(300); if(done)return;
+    for(const s of letters){
+      s.classList.add('on');
+      await wait(70+Math.random()*45); if(done)return;
+    }
+    await wait(90); if(done)return;
+    brR.classList.add('on');
+    await wait(2000);
     finish();
   })();
 })();
