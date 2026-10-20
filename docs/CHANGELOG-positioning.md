@@ -139,8 +139,10 @@ sections, no new facts.
 - Identity, stated once per surface: **Creative Builder**.
 - Meaning, shown through the language: has the idea, sets how it looks, and
   takes it all the way to the finished thing.
-- Hero: **Creative Builder** / "I have ideas, then I make them. Brands, films,
-  spaces and digital experiences, from the first sketch to the finished thing."
+- Hero speaks to the client, not about Itai. Label: **Creative Builder** ·
+  Creative direction, design & technology. Headline: "Your idea, built."
+  Lead: "Bring the idea, or just the problem. Get back the brand, the film, the
+  website or the space, from the first concept to the finished thing."
 - Intro: the verb drum now lands on "I build. (creatively)", which introduces
   the title; "prompt" sits among the rolling verbs as the only nod to AI.
 - AI appears in About, the Sprint description and the FAQ only, as a tool for

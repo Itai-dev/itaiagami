@@ -102,7 +102,7 @@ section:first-of-type{padding-top:clamp(40px,6vw,80px)}
 .obs{opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .obs.in{opacity:1;transform:none}
 .hero{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:min(calc(100svh - 90px),860px);padding-top:clamp(40px,6vh,72px);padding-bottom:clamp(40px,6vh,72px)}
-.hero .eyebrow{margin-bottom:clamp(24px,4vw,44px);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.hero .eyebrow{margin-bottom:clamp(24px,4vw,44px);display:flex;gap:4px 14px;flex-wrap:wrap;align-items:baseline}
 .hero .eyebrow .name{color:var(--fg);letter-spacing:0}
 .hero h1{font-family:"Inter",system-ui,sans-serif;font-weight:500;font-size:var(--t-hero);line-height:1.15;letter-spacing:-.02em;max-width:26ch;text-wrap:balance}
 .hero h1 em{font-style:italic}
@@ -1228,11 +1228,12 @@ nav.primary a{color:var(--fg)}
 /* hero: narrow lead column left, headline right */
 @media(min-width:901px){
   /* copy stacked on the left (headline, subheading, buttons), the figure on the right */
-  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:minmax(0,.55fr) auto auto auto minmax(0,1fr) auto;
-    grid-template-areas:". ." "title fig" "lead fig" "cta fig" ". ." "strip strip";column-gap:clamp(32px,4vw,72px);align-content:center;
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:minmax(0,.55fr) auto auto auto auto minmax(0,1fr) auto;
+    grid-template-areas:". ." "eyebrow fig" "title fig" "lead fig" "cta fig" ". ." "strip strip";column-gap:clamp(32px,4vw,72px);align-content:center;
     /* fills the first screen; the next section arrives on scroll */
     min-height:calc(100svh - 90px);padding-top:clamp(16px,2vh,32px);padding-bottom:clamp(32px,5vh,56px)}
   .hero .clients-strip{grid-area:strip;margin-top:clamp(24px,4vh,48px)}
+  .hero .eyebrow{grid-area:eyebrow;align-self:end;margin-bottom:clamp(16px,1.8vw,24px)}
   .hero h1{grid-area:title;align-self:end;margin:0;font-size:clamp(2.6rem,4.9vw,5.25rem)}
   .hero .sub{grid-area:lead;margin-top:clamp(20px,2.4vw,32px);max-width:42ch;color:var(--fg);font-weight:500;font-size:clamp(1.0625rem,1.35vw,1.25rem);line-height:1.38;letter-spacing:-.01em}
   .hero .cta{grid-area:cta;align-self:start;margin-top:clamp(24px,3vw,36px);flex-direction:row;align-items:center;gap:12px}
@@ -1264,7 +1265,7 @@ nav.primary a{color:var(--fg)}
 .index-list:not(.grid) .prow>a:hover,.notes-list a:hover,.svc-list > a:hover{background:var(--hover,var(--faint))}
 .svc-list > a:hover .svc-fig [data-hairline]{--hairline-plate:var(--hover,var(--faint))}
 :root[data-theme="light"] .btn.ghost:hover{background:var(--hover)}
-/* the headline keeps "Creative direction" on one line at every width */
+/* each headline line stays whole at every width */
 .hero h1 .reveal-line > *{white-space:nowrap}
 @media(max-width:600px){.hero h1{font-size:min(2.6rem,9.4vw)}}
 /* "what I lead": the statement sits centred between the hero and the 01–04 list */
