@@ -140,16 +140,17 @@ sections, no new facts.
 - Meaning, shown through the language: has the idea, sets how it looks, and
   takes it all the way to the finished thing.
 - Hero speaks to the client, not about Itai. Label: **Creative Builder** ·
-  Creative direction, design & technology. Headline: "Your idea, built."
+  Creative direction, design & technology. Headline: "Let's build your idea."
   Lead: "Bring the idea, or just the problem. Get back the brand, the film, the
   website or the space, from the first concept to the finished thing."
 - Intro: the verb drum now lands on "I build. (creatively)", which introduces
-  the title; "prompt" sits among the rolling verbs as the only nod to AI.
+  the title. "(creatively)" is drawn stroke by stroke in a single-line script
+  (EMS Allure, SIL OFL); "prompt" sits among the rolling verbs as the only nod to AI.
 - AI appears in About, the Sprint description and the FAQ only, as a tool for
   exploration, prototyping, storytelling and building. The FAQ and llms.txt
   say plainly that earlier projects only involved AI where the case study
   says so (Natural Intelligence, Taormina).
-- CTA: "Let's build your idea." (bands) / "Let's build something." (Contact).
+- CTA: "Let's build something." (closing bands and Contact).
   Building is the house verb: when in doubt, "build".
 
 ## Discoverability
