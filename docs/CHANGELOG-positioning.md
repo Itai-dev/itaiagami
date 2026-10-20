@@ -149,7 +149,8 @@ sections, no new facts.
   exploration, prototyping, storytelling and building. The FAQ and llms.txt
   say plainly that earlier projects only involved AI where the case study
   says so (Natural Intelligence, Taormina).
-- CTA: "Something worth making?" / "Let's make something."
+- CTA: "Let's build your idea." (bands) / "Let's build something." (Contact).
+  Building is the house verb: when in doubt, "build".
 
 ## Discoverability
 
