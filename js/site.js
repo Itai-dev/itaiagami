@@ -677,18 +677,17 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   }
   addEventListener('resize',()=>{if(!done)centre();});
 
-  /* "(creatively)" is written by hand: the left bracket, each letter in turn,
-     then the right bracket, and all of it stays on the page */
-  const hand=el.querySelector('.intro-hand'), [brL,brR]=el.querySelectorAll('.intro-aside .br');
-  const letters=[...hand.textContent].map(c=>{const s=document.createElement('span');s.className='ch';s.textContent=c;return s;});
-  hand.textContent=''; letters.forEach(s=>hand.appendChild(s));
+  /* "(creatively)" is written by hand: one stroke path per character, drawn in
+     order at pen speed (longer strokes take longer), and all of it stays */
+  const strokes=[...el.querySelectorAll('.intro-aside .hand path')];
+  const penTime=p=>{try{return Math.max(70,Math.min(260,p.getTotalLength()*.085));}catch(e){return 110;}};
 
   (async()=>{
     el.classList.add('typing');
     /* measure with the real fonts, and keep the line hidden until it is centred,
        so the caret never shows at the left edge first */
     if(document.fonts&&document.fonts.load) await Promise.race([
-      Promise.all([document.fonts.load('500 1em Inter','Hi, I’m Itai. I illustrate.'),document.fonts.load('600 1em Caveat','(creatively)')]),
+      document.fonts.load('500 1em Inter','Hi, I’m Itai. I illustrate.'),
       wait(1500)]).catch(()=>{});
     if(done)return;
     centre(); el.classList.add('ready');
@@ -717,22 +716,19 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
     }
     if(done)return;
     await turn(VERBS.length,720,easeBack);           /* settles on "build." with a small overshoot */
-    /* the hand font may arrive late: measure the aside with it before gliding */
-    if(document.fonts&&document.fonts.load) await Promise.race([document.fonts.load('600 1em Caveat','(creatively)'),wait(600)]).catch(()=>{});
-    await wait(200); if(done)return;
+    await wait(250); if(done)return;
     centre();
     landed=true; el.classList.add('landed');         /* glide to centre the finished sentence */
     line.style.transform=`translateX(${shift}px)`;
     await wait(shift?750:200); if(done)return;
     el.classList.add('aside');
-    brL.classList.add('on'); await wait(300); if(done)return;
-    for(const s of letters){
+    for(const s of strokes){
+      const t=penTime(s);
+      s.style.transition=`stroke-dashoffset ${t}ms cubic-bezier(.35,.1,.45,1)`;
       s.classList.add('on');
-      await wait(70+Math.random()*45); if(done)return;
+      await wait(t+20); if(done)return;
     }
-    await wait(90); if(done)return;
-    brR.classList.add('on');
-    await wait(2000);
+    await wait(400);                                  /* a beat to read it, then the site */
     finish();
   })();
 })();

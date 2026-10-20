@@ -1401,24 +1401,20 @@ mask-image:linear-gradient(transparent,#000 .5em,#000 calc(100% - .5em),transpar
 .intro-loader.rolling .intro-slot{display:inline-block}
 .intro-slot .sizer{visibility:hidden;white-space:nowrap}
 .intro-slot .w{position:absolute;left:0;top:.6em;white-space:nowrap;transform-origin:50% 50% -.5em;backface-visibility:hidden;will-change:transform,opacity}
-/* the hand-written aside: brackets drawn as pen strokes, the word written between them */
+/* the hand-written aside: "(creatively)" drawn stroke by stroke */
 /* the aside floats over the layout so writing it never moves the line;
    when there is no room to the right it hangs below "build" instead */
 .intro-end{position:relative;display:inline-block}
 .intro-aside{position:absolute;left:calc(100% + .3em);top:50%;visibility:hidden;white-space:nowrap;color:var(--mark);transform:translateY(-50%) rotate(-3deg);transform-origin:0 60%;pointer-events:none}
 .intro-loader.aside .intro-aside{visibility:visible}
 .intro-aside.below{left:auto;right:-.1em;top:100%;transform:translateY(-.1em) rotate(-3deg);transform-origin:100% 0}
-.intro-aside .br{display:inline-block;width:.3em;height:1.2em;vertical-align:-.26em;overflow:visible}
-.intro-aside .br path{vector-effect:none;stroke-width:2.8px;opacity:0}
 .intro-loader svg path{fill:none;stroke:currentColor;stroke-linecap:round;stroke-width:2.6px;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1}
-/* js/site.js writes it in order: "(", each letter, ")"; every stroke stays once drawn */
-.intro-aside .br.on path{opacity:1;stroke-dashoffset:0;transition:stroke-dashoffset .3s var(--ease)}
-.intro-hand{
-display:inline-block;padding:0 .02em;
-font-family:"Caveat","Segoe Print","Bradley Hand",cursive;font-weight:600;font-size:1.25em;line-height:1;letter-spacing:0;
-}
-.intro-hand .ch{display:inline-block;opacity:0;clip-path:inset(-80% 100% -80% -15%)}
-.intro-hand .ch.on{opacity:1;clip-path:inset(-80% -30% -80% -15%);transition:clip-path .14s ease-out}
+/* "(creatively)" in a single-stroke script (EMS Allure, SIL OFL), one path per
+   character. js/site.js draws them in order, "(", each letter, ")", at pen speed,
+   and every stroke stays once drawn */
+.intro-aside .hand{display:block;height:1.5em;width:calc(1.5em * var(--ar));overflow:visible}
+.intro-aside .hand path{vector-effect:none;stroke-width:64;stroke-linejoin:round}
+.intro-aside .hand path.on{stroke-dashoffset:0}
 /* after landing, the line glides from "centred on the widest word" to "centred on the sentence" */
 .intro-loader.landed .intro-line{transition:transform .7s var(--ease)}
 .intro-hint{position:absolute;left:var(--pad-x);bottom:var(--pad-x);font-size:var(--t-micro);color:var(--dim);opacity:0;animation:intro-hint .6s ease 1.2s forwards}
