@@ -1431,5 +1431,5 @@ mask-image:linear-gradient(transparent,#000 .5em,#000 calc(100% - .5em),transpar
 }
 /* after the closing band the figure already carries its own air, so the footer comes in closer */
 body:has(main .band) footer.site{margin-top:clamp(36px,6vw,88px)}
-/* line art: every Hairline figure drawn 3px bolder than the kit's 0.9px default */
-[data-hairline]{--hairline-stroke:3.9}
+/* line art: every Hairline figure drawn at 1.3px (the kit default is 0.9px) */
+[data-hairline]{--hairline-stroke:1.3}
