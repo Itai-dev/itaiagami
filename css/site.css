@@ -1736,3 +1736,57 @@ nav.primary .toggle{font-size:1.05rem}
 .sec-head:has(h1) + .work-intro{padding-bottom:clamp(48px,5vw,80px)}
 .sec-head:has(h1) + .svc-open + *,.sec-head:has(h1) + .work-intro + *{margin-top:clamp(40px,4.4vw,72px)}
 .sec-head:has(h1) + .svc-open .oneline{margin-left:auto!important;margin-right:auto!important;max-width:54ch;font-size:clamp(1rem,1.3vw,1.1875rem)}
+
+/* =====================================================================
+   DESIGN SYSTEM v4: Awwwards type and margins, fitted
+   The sizes were fitted against the Awwwards screenshots by matching rendered
+   text width and ink density:
+   - titles: Inter Tight 600, letter-spacing -0.01em, ~8.8vw, line-height 1
+   - section titles: Inter Tight 500, ~3.1vw
+   - descriptions: Inter 400, ~2.45vw
+   - content is full width with 3.9vw side margins (no 1440px cap)
+   - no line-art figures
+   ===================================================================== */
+:root{--maxw:100vw;--maxw-case:100vw;--pad-x:clamp(16px,3.9vw,96px)}
+
+/* titles */
+.hero h1,.c-open h1,.svc-open h1,.band h2,.c-cta .t,.c-page h1,.sec-head h1{
+  font-family:var(--display);font-weight:600;letter-spacing:-.01em;line-height:1;text-transform:uppercase}
+.hero h1,.c-open h1,.sec-head h1{font-size:clamp(2.6rem,8.8vw,13rem)}
+.hero h1{max-width:none}
+.c-open h1{max-width:none}
+.band h2,.c-cta .t{font-size:clamp(2.4rem,6.6vw,9.5rem)}
+.svc-open h1{font-size:clamp(2.4rem,6.2vw,9rem);max-width:16ch}
+.hero .sub{font-size:clamp(1rem,1.15vw,1.25rem);line-height:1.5}
+
+/* section titles */
+.sec-head h2,.c-gal-title{font-family:var(--display);font-weight:500;font-size:clamp(1.75rem,3.1vw,4.5rem);letter-spacing:-.01em;line-height:1.1;max-width:14ch}
+
+/* descriptions: large, regular */
+.c-sec{display:block}
+.c-sec .st{display:block;margin:0 0 18px}
+.c-sec .sb,.c-sec .sb.small{font-family:"Inter",system-ui,sans-serif;font-weight:400;font-size:clamp(1.25rem,2.45vw,3.5rem);letter-spacing:-.015em;line-height:1.3;max-width:none;color:color-mix(in srgb,var(--fg) 82%,transparent)}
+.c-story{max-width:none}
+.c-sec + .c-sec{margin-top:clamp(40px,4vw,72px)}
+.fit-lead{font-size:clamp(1.25rem,2.1vw,2.75rem);line-height:1.3;letter-spacing:-.015em;font-weight:400}
+.svc-open .oneline{font-size:clamp(1.0625rem,1.5vw,1.75rem);line-height:1.4}
+
+/* index rows: medium, not heavy */
+.prow .p-title,.prow h3{font-weight:500;letter-spacing:-.01em}
+
+/* no line-art figures */
+.svc-head{grid-template-columns:1fr}
+.band{text-align:center}
+.band h2,.band p{margin-left:auto;margin-right:auto}
+.band .cta{justify-content:center}
+.hero{padding-bottom:clamp(40px,5vw,80px)}
+.hero .cs-label{background:linear-gradient(90deg,var(--stage) 68%,transparent)}
+.hero .clients-strip{margin-bottom:0}
+.c-meta{margin-top:clamp(96px,9vw,144px)}
+.sec-head:has(h1) + .svc-open{max-width:none!important;width:100%;margin-left:auto;margin-right:auto}
+/* service pages: centred like a case opening */
+.svc-open h1{max-width:none}
+.svc-head{text-align:center;justify-items:center}
+.svc-head .crumb,.svc-open .crumb{justify-content:center}
+.svc-open .svc-head ~ .oneline,.svc-head .oneline,.svc-head p{margin-left:auto;margin-right:auto}
+.svc-head .svc-open{text-align:center}.svc-head .svc-open .oneline{margin-left:auto;margin-right:auto;max-width:54ch}

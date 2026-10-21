@@ -208,3 +208,12 @@ One layer at the end of css/site.css ("DESIGN SYSTEM v2"):
 - Case pages:
   - a highlights gallery in pairs of dark panels
   - facts and story under hairline labels
+
+## Design system v4: Awwwards type and margins, fitted
+- Titles: Inter Tight 600, letter-spacing −0.01em (was −0.04em), ~8.8vw, line-height 1.
+- Section titles: Inter Tight 500, ~3.1vw.
+- Descriptions: Inter 400, ~2.45vw.
+- These values were fitted by rendering candidates and matching text width and ink against the Awwwards screenshots.
+- Full-width layout with 3.9vw side margins, with no 1440px cap.
+- Line-art figures (Hairline) removed from every page, along with their scripts.
+- Service and case openings are centred.
