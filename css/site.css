@@ -1440,3 +1440,11 @@ body:has(main .band) footer.site{margin-top:clamp(36px,6vw,88px)}
 .c-open + .c-hero,.c-open + .c-hero-reel,.c-open + .c-film--lead{margin-top:clamp(36px,5vw,56px)}
 .c-hero:has(+ .c-meta),.c-hero-reel:has(+ .c-meta){margin-bottom:0}
 .c-hero + .c-meta,.c-hero-reel + .c-meta{margin-top:clamp(36px,5vw,56px)}
+/* case pages: an ask at the moment the work has made its case */
+.c-cta{border-top:1px solid var(--line);padding:clamp(36px,5vw,56px) 0 clamp(40px,5vw,60px)}
+.c-cta .t{font-family:var(--display,"Inter Tight"),system-ui,sans-serif;font-weight:700;font-size:clamp(1.75rem,3.4vw,2.75rem);line-height:1.05;letter-spacing:-.035em;max-width:20ch}
+.c-cta .d{margin-top:14px;max-width:48ch;color:var(--dim);font-size:var(--t-lead);line-height:1.5}
+.c-cta .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:clamp(22px,3vw,30px)}
+@media(max-width:600px){.c-cta .cta .btn{flex:1 1 100%;justify-content:center}}
+.svc-cred{margin-top:16px;font-size:var(--t-meta)}
+.svc-cred a{display:inline-flex;gap:8px;align-items:center;font-weight:500;border-bottom:1px solid var(--line-strong);padding-bottom:2px}

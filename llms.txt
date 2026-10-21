@@ -59,6 +59,7 @@ Clients usually arrive with a launch or a business problem rather than a design 
 
 - [About](https://itaiagami.com/about.html)
 - [Start a project](https://itaiagami.com/contact.html)
+- [One-page credentials (PDF)](https://itaiagami.com/assets/docs/Itai_Agami_Credentials.pdf): who he is, proof of scale, how engagements work and starting prices, for sharing with a buying team.
 - [Notes](https://itaiagami.com/notes.html)
 
 ## API and agent resources
