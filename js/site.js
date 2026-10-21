@@ -1256,3 +1256,25 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   },{passive:true});
   addEventListener('mouseleave',()=>el.classList.remove('on'));
 })();
+
+/* ---------- Awwwards layout: the grey stage and the second header button ----------
+   The stage runs from the top of the page to just below the lead visual.
+   Header: "Book a call" (solid) plus "Send a brief" (outlined), as on Awwwards. */
+(function(){
+  const main=document.querySelector('main'); if(!main)return;
+  const ends=['.c-hero','.c-film--lead','.c-hero-reel','.hero-system','.sec-head:has(h1) + .work-intro','.svc-open','.sec-head:has(h1)','.c-page h1'];
+  function pick(){for(const s of ends){try{const el=main.querySelector(s);if(el&&el.offsetParent!==null)return el}catch(e){}}return null}
+  function size(){
+    const el=pick(); if(!el){main.style.setProperty('--stage-h','0px');return}
+    const top=main.getBoundingClientRect().top, b=el.getBoundingClientRect().bottom;
+    const pad=el.matches('.work-intro,.sec-head + .svc-open')?0:el.matches('.c-hero,.c-film--lead,.c-hero-reel')?Math.min(56,innerWidth*.04):Math.min(64,innerWidth*.05);
+    main.style.setProperty('--stage-h',Math.round(b-top+pad)+'px');
+  }
+  size(); addEventListener('load',size); addEventListener('resize',size,{passive:true});
+  if('ResizeObserver' in window){const ro=new ResizeObserver(size);ro.observe(main)}
+  const cta=document.querySelector('header.site .nav-cta'), contact=document.querySelector('nav.primary a[href$="contact.html"]');
+  if(cta&&contact&&!document.querySelector('.nav-brief')){
+    const a=document.createElement('a'); a.className='btn ghost nav-brief'; a.href=contact.getAttribute('href')+'#brief'; a.textContent='Send a brief';
+    cta.after(a);
+  }
+})();
