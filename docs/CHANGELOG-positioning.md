@@ -181,3 +181,18 @@ sections, no new facts.
   "Let's build …". Pricing reframed as "full launches scoped; the Sprint that
   starts them begins at ₪30,000".
 - Work index intro and About sidebar price line in the same voice.
+
+## Design system v2, after the Awwwards UI (October 2026)
+
+One layer at the end of css/site.css ("DESIGN SYSTEM v2"):
+- Light theme: neutral #ededed ground, white surfaces, #111 ink panels for
+  media; no grain; the vertical frame rules removed; 1px dividers.
+- Radii: 10px media, 18px panels, full pills for buttons and tags.
+- Display type: Inter Tight 800, uppercase, -0.055em, line-height .9, for
+  the hero, case and service titles and closing bands. Section titles are
+  small, bold, stacked, with a pill link.
+- Home: centred hero; selected work as a two-column card grid; offers and
+  proof on white cards.
+- Case studies: centred uppercase title; key visual and gallery tiles in ink
+  panels; facts on a white card with disciplines as pills; "See the
+  highlights of this project." above the gallery; centred closing ask.
