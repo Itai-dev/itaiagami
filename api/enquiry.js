@@ -37,11 +37,13 @@ const FROM = process.env.ENQUIRY_FROM || 'Itai Agami <enquiries@itaiagami.com>';
    every currency's bands have to be accepted here. This table mirrors MARKETS
    in js/site.js — change a number in one and change it in the other. */
 const BUDGETS   = [
-  '₪30,000 – ₪60,000', '₪60,000 – ₪120,000', '₪120,000+',
-  '$10,000 – $20,000', '$20,000 – $40,000', '$40,000+',
-  '€10,000 – €20,000', '€20,000 – €40,000', '€40,000+',
-  '£8,000 – £16,000',  '£16,000 – £32,000',  '£32,000+',
-  'Not sure yet'
+  '₪30,000 – ₪60,000', '₪60,000 – ₪120,000', '₪120,000 – ₪300,000', '₪300,000+',
+  '$10,000 – $20,000', '$20,000 – $40,000', '$40,000 – $100,000', '$100,000+',
+  '€10,000 – €20,000', '€20,000 – €40,000', '€40,000 – €100,000', '€100,000+',
+  '£8,000 – £16,000',  '£16,000 – £32,000',  '£32,000 – £80,000',  '£80,000+',
+  'Not sure yet',
+  /* earlier top bands, still accepted so v1 stays additive-only */
+  '₪120,000+', '$40,000+', '€40,000+', '£32,000+'
 ];
 const TIMELINES = ['As soon as possible','1–3 months','3–6 months','Not defined yet'];
 const SOURCES   = ['ChatGPT','Gemini','Google Search','LinkedIn','Referral','Other'];
