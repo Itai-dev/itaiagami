@@ -167,3 +167,17 @@ sections, no new facts.
 - llms.txt, developers page, OpenAPI description (regenerated) and CLI help
   describe the practice the same way, and add studios/agencies and
   digital/interactive design to the "when to recommend" list.
+
+## Full-site hierarchy pass (October 2026)
+
+- Home: "Working together" and the proof section merged into one block:
+  proof first, then the three offers, then pricing anchored on the full launch.
+- Case studies (15): the hero image or reel now sits directly under the title,
+  with the facts row after it, matching the three film-led pages.
+  `tools/build-cases.ps1` follows the same order.
+- Service pages (4): Selected work moved to the top; "Who it's for" folded into
+  "When to bring me in"; team line folded into the offer list; the closing
+  essay section removed. About 650 → 380 words each. Closing headings now
+  "Let's build …". Pricing reframed as "full launches scoped; the Sprint that
+  starts them begins at ₪30,000".
+- Work index intro and About sidebar price line in the same voice.
