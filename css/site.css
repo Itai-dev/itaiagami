@@ -2003,3 +2003,31 @@ nav.primary .toggle{width:clamp(36px,2.6vw,48px);height:clamp(36px,2.6vw,48px);f
 main{padding-top:clamp(64px,4.2vw,84px)}
 .sec-head:has(h1){margin-bottom:var(--s7)}
 @media (max-width:900px){header.site,header.site.scrolled{height:60px} main{padding-top:60px}}
+
+/* ---------- home: one central element (featured work), like an Awwwards Site of the Day ---------- */
+.hero .feature{width:100%;margin:var(--s6) 0 0;text-align:left}
+.feature-panel{display:block;background:var(--panel);border-radius:var(--r-panel);padding:clamp(10px,2.2vw,32px);overflow:hidden}
+.feature-panel img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:var(--r-media);transition:transform .45s var(--ease-out)}
+@media (hover:hover) and (pointer:fine){.feature-panel:hover img{transform:scale(1.015)}}
+.feature-panel:active img{transform:scale(.995);transition-duration:.1s}
+.feature-cap{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s2);margin-top:var(--s2);font-size:var(--t-second);line-height:1.4}
+.feature-cap .fc-l{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;min-width:0}
+.feature-cap .fc-tag{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:9999px;background:var(--surface);border:1px solid var(--line);font-size:var(--t-label);font-weight:500;align-self:center}
+.feature-cap strong{font-weight:600}
+.feature-cap .fc-sep,.feature-cap .fc-d{color:var(--dim)}
+.feature-cap .fc-r{white-space:nowrap;font-weight:500}
+@media (min-width:901px){
+  .hero{padding-top:var(--s6)}
+  .hero .eyebrow{order:1;margin-bottom:var(--s3)}
+  .hero h1{order:2}
+  .hero .sub{order:3;margin-top:var(--s3)}
+  .hero .cta{order:4;margin-top:var(--s4)}
+  .hero .feature{order:5;align-self:stretch}
+  .hero .clients-strip{order:6;margin-top:var(--s6)}
+}
+@media (max-width:900px){
+  .hero .feature{margin-top:var(--s5)}
+  .hero .clients-strip{margin-top:var(--s5)}
+  .feature-cap{flex-direction:column;gap:6px}
+}
+@media (max-width:900px){.feature-cap .fc-sep{display:none}.feature-cap .fc-d{flex-basis:100%}}

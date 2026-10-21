@@ -238,3 +238,10 @@ One layer at the end of css/site.css ("DESIGN SYSTEM v2"):
   - Card titles are 20px. Card body text never exceeds the title.
   - Case stories and service steps share one label | text grid.
   - Touch targets are at least 44px on phones.
+
+## Home: one central element
+- Under the headline and CTAs, the homepage now leads with one featured piece of work, framed like an Awwwards Site of the Day:
+  - a full-width dark panel
+  - a 16:9 image
+  - a "Featured" caption row with a link to the case study
+- Channel 13 is the featured project (homeRank 1). The Selected work grid is unchanged, so nothing repeats.
