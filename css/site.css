@@ -1451,9 +1451,11 @@ body:has(main .band) footer.site{margin-top:clamp(36px,6vw,88px)}
 /* hero: the proof is named, and the first step is made small */
 .hero .cta .cta-note{flex-basis:100%;margin:2px 0 0;font-size:var(--t-micro);color:var(--dim)}
 .clients-strip{display:flex;align-items:center}
-.cs-label{flex:none;position:relative;z-index:1;align-self:stretch;display:flex;align-items:center;margin:-20px 0;padding:0 28px 0 calc(var(--frame-in,0px) - var(--rule,0px));background:linear-gradient(90deg,var(--bg) 82%,transparent);font-family:"IBM Plex Mono",monospace;font-size:var(--t-micro);letter-spacing:.04em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.cs-label{flex:none;position:relative;z-index:1;align-self:stretch;display:flex;align-items:center;margin:-20px 0;padding:0 64px 0 calc(var(--frame-in,0px) - var(--rule,0px));background:linear-gradient(90deg,var(--bg) 68%,transparent);font-family:"IBM Plex Mono",monospace;font-size:var(--t-micro);letter-spacing:.04em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
 @media(max-width:900px){.cs-label{padding-left:var(--pad-x)}}
+.clients-strip .cs-track{flex:none}
 @media(max-width:600px){
-  .hero .clients-strip{order:2;margin-top:28px}
-  .cs-label{padding-right:18px}
+  .hero .clients-strip{order:2;margin-top:28px;flex-direction:column;align-items:stretch;padding-top:14px}
+  .cs-label{margin:0 0 12px;padding:0 var(--pad-x);background:none;align-self:auto}
+  .clients-strip .cs-track{align-self:flex-start}
 }
