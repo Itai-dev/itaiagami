@@ -1790,3 +1790,206 @@ nav.primary .toggle{font-size:1.05rem}
 .svc-head .crumb,.svc-open .crumb{justify-content:center}
 .svc-open .svc-head ~ .oneline,.svc-head .oneline,.svc-head p{margin-left:auto;margin-right:auto}
 .svc-head .svc-open{text-align:center}.svc-head .svc-open .oneline{margin-left:auto;margin-right:auto;max-width:54ch}
+
+/* =====================================================================
+   MOTION PASS: Apple standards (apple-design skill)
+   - Reveals are one-time, short (≤500ms) and ease-out. They travel 8–16px
+     with no rotation, no 3D tilt and no clip-path wipes.
+   - Only page-opening titles rise word by word; section titles don't.
+   - Hover zooms are gated to fine pointers: scale 1.03 over 450ms.
+     A large image needs a little longer than UI chrome.
+   - Press feedback is instant on every link and button.
+   - Reduced motion keeps short opacity fades rather than cutting to zero.
+   ===================================================================== */
+:root{--ease-out:cubic-bezier(.23,1,.32,1)}
+
+/* hero: lines rise without rotation, tight stagger */
+.reveal-line > *{transform:translateY(100%);transition:transform .6s var(--ease-out),opacity .4s ease}
+.revealed .reveal-line:nth-of-type(2) > *{transition-delay:.06s}
+.revealed .reveal-line:nth-of-type(3) > *{transition-delay:.12s}
+.fade{transform:translateY(8px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+.revealed .fade.d2{transition-delay:.12s}
+.revealed .fade.d3{transition-delay:.18s}
+.revealed .fade.d4{transition-delay:.24s}
+
+/* page titles: words rise, no rotation, 30ms apart */
+.split .w>span{transform:translateY(100%);transition:transform .5s var(--ease-out)}
+.split.in-view .w>span{transition-delay:calc(min(var(--i),12) * 30ms)}
+
+/* blocks */
+.obs{transform:translateY(12px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+
+/* project cards: a plain rise; the image no longer wipes, tilts or zooms in */
+.swork.obs .media,.swork.obs:nth-child(even) .media{clip-path:none;opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+.swork.obs.in .media{clip-path:none;opacity:1;transform:none}
+.swork.obs .media img,.swork.obs.in .media img{transform:none;transition:transform .45s var(--ease-out)}
+.swork.obs .info > *{transform:translateY(8px);transition:opacity .4s ease,transform .45s var(--ease-out)}
+.swork.obs.in .info > :nth-child(1){transition-delay:.06s}
+.swork.obs.in .info > :nth-child(2){transition-delay:.1s}
+.swork.obs.in .info > :nth-child(3){transition-delay:.14s}
+.swork.obs.in .info > :nth-child(n+4){transition-delay:.18s}
+
+/* case media: a plain rise instead of a wipe plus zoom */
+.mo .c-gallery figure.rv .fm,.mo .a-video.rv video{clip-path:none;opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+.mo .c-gallery figure.rv.in-view .fm,.mo .a-video.rv.in-view video{clip-path:none;opacity:1;transform:none}
+.mo .c-gallery figure.rv .fm img{transform:none}
+.mo .c-gallery figure.rv figcaption{transform:translateY(6px);transition:opacity .4s ease .1s,transform .45s var(--ease-out) .1s}
+
+/* groups: small rise, 40ms apart */
+.mo .rv.c-meta>*,.mo .rv.index-list>*,.mo .rv.svc-cases>*,.mo .rv.c-sites>*,.mo .rv.notes-list>*,.mo .obs .caps>*{transform:translateY(10px);transition:opacity .4s ease,transform .45s var(--ease-out)}
+.mo .rv.in-view.c-meta>*,.mo .rv.in-view.index-list>*,.mo .rv.in-view.svc-cases>*,.mo .rv.in-view.c-sites>*,.mo .rv.in-view.notes-list>*,.mo .obs.in .caps>*{transition-delay:calc(min(var(--i),10) * 40ms)}
+
+/* hover: shorter, smaller, and only where a real pointer hovers */
+.swork .media img,.c-gallery img,.c-sites img,.index-list.grid .p-thumb img,.c-next .thumb img,.tile img,.tile video{transition:transform .45s var(--ease-out)}
+.swork:hover .media img,.swork.obs.in:hover .media img,.index-list.grid .prow>a:hover .p-thumb img,.c-next a:hover .thumb img,.tile:hover img,.tile:hover video{transform:scale(1.03);transition-duration:.45s}
+.c-next a:hover{transform:translateX(6px)}
+.contact .rows a{transition:color var(--dur-fast) ease}
+.contact .rows a:hover{padding-left:0}
+@media (hover:none),(pointer:coarse){
+  .swork:hover .media img,.swork.obs.in:hover .media img,.c-gallery figure:hover img,.c-sites a:hover img,
+  .index-list.grid .prow>a:hover .p-thumb img,.c-next a:hover .thumb img,.c-next a:hover,.tile:hover img,.tile:hover video,
+  .btn:hover .arw,.c-sites a:hover .cap .arw{transform:none}
+}
+
+/* press feedback: instant on press, eases back on release */
+a,button{-webkit-tap-highlight-color:transparent}
+a:not(.btn){transition-property:opacity,color,transform;transition-duration:.16s;transition-timing-function:ease-out}
+a:not(.btn):active{opacity:.6;transition-duration:0s}
+.swork .media:active img{transform:scale(.99);transition-duration:.1s}
+
+/* reduced motion: no movement, but keep short fades */
+@media (prefers-reduced-motion:reduce){
+  .mobile-menu{transform:none!important;opacity:0;transition:opacity .2s ease,visibility 0s linear .2s!important}
+  .mobile-menu.open{opacity:1;transition:opacity .2s ease,visibility 0s!important}
+  .obs,.fade,.reveal-line>*,.swork.obs .media,.swork.obs .info>*{transition:opacity .2s ease!important;transform:none!important}
+}
+
+/* type details: positive tracking on small labels; balanced headings */
+.swork .info .kmeta,.cap .n,.sec-head .count,.c-meta .m .l,.c-sec .st,.c-open .crumb,.cs-label,.index-head,.hero .eyebrow,footer.site .grid .col h4{letter-spacing:.01em!important}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+
+/* =====================================================================
+   LAYOUT PASS: Apple standards (apple-design skill)
+   One spacing scale (8pt), one type scale, one rhythm between sections.
+   Type follows Apple's web scale:
+   - 21–24px intro copy
+   - 17px body
+   - 15px secondary
+   - 13px labels
+   Each level is distinct from the one above.
+   ===================================================================== */
+:root{
+  --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;--s7:96px;--s8:128px;
+  --gap-section:clamp(80px,8vw,128px);
+  --t-intro:clamp(1.1875rem,1.45vw,1.5rem);   /* 19–24px */
+  --t-body:1.0625rem;                         /* 17px */
+  --t-second:.9375rem;                        /* 15px */
+  --t-label:.8125rem;                         /* 13px */
+}
+:root[data-theme="light"]{--dim:rgba(34,34,34,.64)}
+
+/* one rhythm between sections */
+section{padding-top:var(--gap-section)}
+.hero{padding-bottom:var(--s7)}
+.sec-head{margin-bottom:var(--s5);gap:var(--s2)}
+.sec-head:has(h1){padding-top:var(--s7)}
+footer.site{margin-top:var(--gap-section)}
+body:has(main .band) footer.site{margin-top:var(--s7)}
+.band{padding-top:var(--gap-section);border-top:0}
+
+/* labels: one size, readable */
+.swork .info .kmeta,.cap .n,.sec-head .count,.c-meta .m .l,.c-sec .st,.c-open .crumb,.cs-label,.index-head,
+footer.site .grid .col h4,.c-film .l,.c-next .l,.c-service .l,.c-credits h3,.svc-open .crumb{font-size:var(--t-label)!important}
+
+/* hero: the intro copy is a clear second level under the title */
+.hero .eyebrow{font-size:var(--t-label);margin-bottom:var(--s3)}
+.hero .sub{font-size:var(--t-intro);line-height:1.45;max-width:36ch;color:var(--dim)}
+.hero .cta{margin-top:var(--s4);gap:12px}
+.hero .cta-note{font-size:var(--t-label);margin-top:var(--s2)}
+
+/* project captions: title 17, meta and line 15, laid out on a grid */
+.swork .info{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;row-gap:4px;align-items:baseline;margin-top:var(--s2)}
+.selected .swork,.selected .swork:nth-child(even){gap:0}
+.swork .info h3{grid-column:1;grid-row:1;font-size:var(--t-body);font-weight:600}
+.swork .info .kmeta{grid-column:2;grid-row:1;font-size:var(--t-second)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.swork .info .kmeta::before{content:"— ";margin-right:2px}
+.swork .info .kmeta span:first-child{display:inline}
+.swork .info .challenge{grid-column:1 / -1;grid-row:2;font-size:var(--t-second);line-height:1.45}
+.selected{row-gap:var(--s6)}
+.selected .see-all{margin-top:0}
+
+/* "For launches…": one lead, a quieter proof card */
+.fit-lead{font-size:var(--t-intro);line-height:1.45;max-width:30ch;letter-spacing:-.01em}
+.fit-side p{font-size:var(--t-second);line-height:1.5}
+.fit-side p + p{margin-top:var(--s2)}
+
+/* cards: label 13 / title 20 / body 15, the same on every screen */
+.cap .n{margin-bottom:var(--s1)}
+.cap h3{font-size:1.25rem;font-weight:600;letter-spacing:-.01em;line-height:1.25;margin-bottom:var(--s1)}
+.cap p,.cap .d{font-size:var(--t-second)!important;line-height:1.5}
+.caps .cap,.caps.three .cap,.caps.three .cap:nth-child(3n+1),.caps.three .cap:nth-child(3n){padding:var(--s4)}
+.caps{gap:var(--s2)}
+.caps.three.fit-offers{margin-top:var(--s5)}
+
+/* case study: readable sizes and a steady rhythm */
+.c-open{padding-top:var(--s7);padding-bottom:var(--s5)}
+.c-open .crumb{margin-bottom:var(--s3)}
+.c-open h1{margin-bottom:var(--s3)}
+.c-open .oneline{font-size:var(--t-intro);line-height:1.45;max-width:40ch;color:var(--dim)}
+.c-meta{margin-top:var(--s8);gap:var(--s4)}
+.c-meta .m .v{font-size:var(--t-body);font-weight:500;line-height:1.45}
+.c-story{margin-top:var(--s7)}
+.c-sec{padding-top:var(--s2)}
+.c-sec + .c-sec{margin-top:var(--s6)}
+.c-sec .sb,.c-sec .sb.small{max-width:38ch;font-size:clamp(1.375rem,2.2vw,2.5rem);line-height:1.3}
+.c-gal-title{margin-top:var(--gap-section);margin-bottom:var(--s5)}
+.c-gallery{margin-bottom:var(--gap-section);row-gap:var(--s5);column-gap:var(--s2)}
+.c-gallery figcaption{font-size:var(--t-second);margin-top:var(--s2)}
+.c-film{margin-bottom:var(--gap-section)}
+.c-film .note{font-size:var(--t-second)}
+.c-credits{margin-bottom:var(--gap-section);max-width:none}
+.c-credits p{font-size:var(--t-second);line-height:1.8}
+.c-cta{padding-top:0;margin-bottom:var(--s7)}
+.c-cta .d{font-size:var(--t-intro);margin-top:var(--s3)}
+.c-cta .cta{margin-top:var(--s4)}
+.c-service{padding:var(--s3) 0;font-size:var(--t-second)}
+.c-next{padding-top:var(--s4)}
+
+/* services */
+.svc-open .oneline{font-size:var(--t-intro)!important;line-height:1.45}
+.sec-head:has(h1) + .svc-open .oneline{font-size:var(--t-intro)!important;max-width:44ch}
+
+/* band */
+.band h2{margin-bottom:var(--s3)}
+.band p{font-size:var(--t-intro);line-height:1.45;max-width:36ch;color:var(--dim)}
+.band .cta{margin-top:var(--s4)}
+
+/* touch targets: 44px minimum on phones */
+@media (max-width:900px){
+  .nav-cta,.menu-btn{height:44px;min-height:44px}
+  .btn{min-height:44px}
+  .hero .cta .btn,.band .cta .btn,.c-cta .cta .btn{min-height:52px}
+}
+@media (max-width:600px){
+  :root{--gap-section:72px}
+  .caps .cap,.caps.three .cap{padding:var(--s3)}
+  .selected{row-gap:var(--s5)}
+  .c-sec .sb,.c-sec .sb.small{font-size:1.375rem}
+}
+.selected .swork,.selected .swork:nth-child(even){align-items:stretch}
+.hero{padding-bottom:0}
+.c-story{display:grid;row-gap:var(--s6);gap:var(--s6)}
+.c-sec + .c-sec{margin-top:0}
+@media (min-width:900px){
+  .c-sec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);column-gap:var(--s4);align-items:baseline}
+  .c-sec .st{margin:0}
+  .c-sec .sb,.c-sec .sb.small{max-width:34ch}
+}
+/* service steps and service-page sections: the same label | text grid as case stories */
+.svc-body{max-width:none;gap:var(--s6)}
+.svc-sec{border-top:1px solid var(--line);padding-top:var(--s2)}
+.svc-sec .sb,.svc-sec .sb p{font-size:var(--t-intro);line-height:1.45;max-width:40ch}
+@media (min-width:900px){.svc-sec{grid-template-columns:minmax(0,1fr) minmax(0,3fr);column-gap:var(--s4);align-items:baseline}}
+@media (max-width:899px){.c-sec .sb,.c-sec .sb.small{max-width:none}}
+.svc-head .svc-open,.svc-head > div:first-child{max-width:none;width:100%}.svc-open h1{max-width:18ch;margin-left:auto;margin-right:auto}

@@ -519,12 +519,6 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
 })();
 
-/* ---------- border beam on primary CTAs (styles in site.css) ---------- */
-document.querySelectorAll('.btn.solid').forEach(b=>{
-  b.setAttribute('data-beam','cta'); b.setAttribute('data-active','');
-  const bloom=document.createElement('span'); bloom.setAttribute('data-beam-bloom',''); bloom.setAttribute('aria-hidden','true');
-  b.appendChild(bloom);
-});
 
 /* ---------- Hairline figures (home hero, services) ----------
    Hairline engine (@lucasmarkes/hairline, js/vendor/hairline-kernel.js).
@@ -1176,13 +1170,14 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
       }else if(c.nodeType===1&&c.tagName!=='BR')split(c);
     });
   }
-  const heads=document.querySelectorAll('.sec-head h1,.sec-head h2,.pov h2,.band h2,.c-open h1,.svc-open h1,.article h1,.c-open .oneline,.svc-open .oneline,.article .dek');
+  /* only page-opening titles rise in; section titles and body copy are simply there */
+  const heads=document.querySelectorAll('.sec-head h1,.c-open h1,.svc-open h1,.article h1');
   heads.forEach(h=>{n=0;split(h);h.classList.add('split');});
 
   // stagger indexes for groups
   const idx=(sel)=>document.querySelectorAll(sel).forEach(g=>[...g.children].forEach((c,i)=>c.style.setProperty('--i',i)));
   idx('.c-meta');idx('.caps');idx('.index-list');idx('.svc-cases');idx('.c-sites');idx('.notes-list');
-  document.querySelectorAll('.c-gallery figure,.svc-cases,.c-sites,.index-list,.c-meta,.notes-list,.c-contrib,.c-film--lead,.a-video').forEach(el=>el.classList.add('rv'));
+  document.querySelectorAll('.c-gallery figure,.svc-cases,.c-sites,.index-list,.c-meta,.notes-list,.a-video').forEach(el=>el.classList.add('rv'));
 
   const io=new IntersectionObserver(es=>es.forEach(e=>{
     if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}

@@ -217,3 +217,24 @@ One layer at the end of css/site.css ("DESIGN SYSTEM v2"):
 - Full-width layout with 3.9vw side margins, with no 1440px cap.
 - Line-art figures (Hairline) removed from every page, along with their scripts.
 - Service and case openings are centred.
+
+## Apple design pass (apple-design skill)
+- Motion:
+  - Reveals last 0.5s or less, ease out, and travel 8–16px. There is no rotation, no 3D tilt and no wipe.
+  - Only page titles rise word by word.
+  - Hover zooms are smaller (1.03), shorter (0.45s) and only fire on real pointers.
+  - Every link and button gives instant press feedback.
+  - The contribution line-draw and the unused CTA glow script are gone.
+  - Reduced motion keeps gentle fades.
+- Layout:
+  - An 8pt spacing scale and one section rhythm (80–128px desktop, 72px phone). Inline section margins that doubled the gaps are removed.
+  - Type scale:
+    - 13px labels
+    - 15px secondary
+    - 17px body
+    - 19–24px intro copy
+  - Hero, case and service intros moved up to intro size.
+  - Project captions are on a grid and aligned to the image.
+  - Card titles are 20px. Card body text never exceeds the title.
+  - Case stories and service steps share one label | text grid.
+  - Touch targets are at least 44px on phones.
