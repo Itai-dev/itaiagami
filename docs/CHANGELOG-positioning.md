@@ -196,3 +196,15 @@ One layer at the end of css/site.css ("DESIGN SYSTEM v2"):
 - Case studies: centred uppercase title; key visual and gallery tiles in ink
   panels; facts on a white card with disciplines as pills; "See the
   highlights of this project." above the gallery; centred closing ask.
+
+## Design system v3: Awwwards, measured
+- The palette and the grey top stage now match Awwwards:
+  - #f8f8f8 page, #e9e9e9 stage, #222 media panels
+- Header: 64px tall, with the logo and links on the left and two 40px buttons with an 8px radius on the right ("Book a call" solid, "Send a brief" outlined).
+- All buttons are 8px rounded rectangles with no arrows. The animated border beam is off.
+- Display type is uppercase at medium weight (600) instead of 800.
+- Labels: small plain labels (not mono) sit above two-line section titles. Page titles are huge and centred.
+- Project cards have one-line captions ("Title — Client").
+- Case pages:
+  - a highlights gallery in pairs of dark panels
+  - facts and story under hairline labels
