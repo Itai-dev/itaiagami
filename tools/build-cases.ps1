@@ -100,13 +100,13 @@ for ($i = 0; $i -lt $total; $i++) {
       <h1>$name</h1>
       <p class="oneline">$oneline</p>
     </div>
-    <div class="c-meta">
+$heroHtml    <div class="c-meta">
       <div class="m"><div class="l">Client</div><div class="v">$client</div></div>
       <div class="m"><div class="l">Role</div><div class="v">$role</div></div>
       <div class="m"><div class="l">Disciplines</div><div class="v">$disciplines</div></div>
       <div class="m"><div class="l">Collaborators</div><div class="v">$collab</div></div>
     </div>
-$heroHtml    <div class="c-story">
+    <div class="c-story">
 $story    </div>
 $galHtml$filmHtml$credHtml    <div class="c-next"><div class="l">Next project</div><a href="$($next.slug).html"><span class="thumb"><img src="$($next.thumb)" width="800" height="450" loading="lazy" alt=""></span><span class="t">$(Esc $next.name) →</span></a></div>
   </div>

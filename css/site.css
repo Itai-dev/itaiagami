@@ -1433,3 +1433,10 @@ mask-image:linear-gradient(transparent,#000 .5em,#000 calc(100% - .5em),transpar
 body:has(main .band) footer.site{margin-top:clamp(36px,6vw,88px)}
 /* line art: every Hairline figure drawn at 1.3px (the kit default is 0.9px) */
 [data-hairline]{--hairline-stroke:1.3}
+/* home: the three offers sit under the proof, inside one "working together" block */
+.fit-offers{margin-top:clamp(44px,6vw,80px);border-top:1px solid var(--line)}
+/* case pages: the work leads. The hero image or reel sits right under the title,
+   the facts row (client, role, disciplines) follows it, as on the film-led pages */
+.c-open + .c-hero,.c-open + .c-hero-reel,.c-open + .c-film--lead{margin-top:clamp(36px,5vw,56px)}
+.c-hero:has(+ .c-meta),.c-hero-reel:has(+ .c-meta){margin-bottom:0}
+.c-hero + .c-meta,.c-hero-reel + .c-meta{margin-top:clamp(36px,5vw,56px)}
