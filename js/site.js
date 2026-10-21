@@ -1262,12 +1262,12 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
    Header: "Book a call" (solid) plus "Send a brief" (outlined), as on Awwwards. */
 (function(){
   const main=document.querySelector('main'); if(!main)return;
-  const ends=['.c-hero','.c-film--lead','.c-hero-reel','.hero-system','.sec-head:has(h1) + .work-intro','.svc-open','.sec-head:has(h1)','.c-page h1'];
+  const ends=['.c-hero','.c-film--lead','.c-hero-reel','.hero .clients-strip','.hero .cta','.sec-head:has(h1) + .work-intro','.svc-open','.sec-head:has(h1)','.c-page h1'];
   function pick(){for(const s of ends){try{const el=main.querySelector(s);if(el&&el.offsetParent!==null)return el}catch(e){}}return null}
   function size(){
     const el=pick(); if(!el){main.style.setProperty('--stage-h','0px');return}
     const top=main.getBoundingClientRect().top, b=el.getBoundingClientRect().bottom;
-    const pad=el.matches('.work-intro,.sec-head + .svc-open')?0:el.matches('.c-hero,.c-film--lead,.c-hero-reel')?Math.min(56,innerWidth*.04):Math.min(64,innerWidth*.05);
+    const pad=el.matches('.work-intro,.sec-head + .svc-open,.clients-strip')?0:el.matches('.c-hero,.c-film--lead,.c-hero-reel')?Math.min(56,innerWidth*.04):Math.min(64,innerWidth*.05);
     main.style.setProperty('--stage-h',Math.round(b-top+pad)+'px');
   }
   size(); addEventListener('load',size); addEventListener('resize',size,{passive:true});
