@@ -1993,3 +1993,13 @@ footer.site .grid .col h4,.c-film .l,.c-next .l,.c-service .l,.c-credits h3,.svc
 @media (min-width:900px){.svc-sec{grid-template-columns:minmax(0,1fr) minmax(0,3fr);column-gap:var(--s4);align-items:baseline}}
 @media (max-width:899px){.c-sec .sb,.c-sec .sb.small{max-width:none}}
 .svc-head .svc-open,.svc-head > div:first-child{max-width:none;width:100%}.svc-open h1{max-width:18ch;margin-left:auto;margin-right:auto}
+
+/* ---------- fix: header scales with wide screens; stage never overlaps text ---------- */
+header.site,header.site.scrolled{height:clamp(64px,4.2vw,84px)}
+.brand{font-size:clamp(1.125rem,1.05vw,1.5rem)}
+nav.primary{font-size:clamp(.9375rem,.82vw,1.125rem);gap:clamp(22px,1.8vw,36px);margin-left:clamp(40px,3.4vw,64px)}
+.nav-cta,.nav-brief{height:clamp(40px,2.8vw,52px);min-height:clamp(40px,2.8vw,52px);font-size:clamp(.875rem,.78vw,1.0625rem);padding:0 clamp(16px,1.2vw,22px)}
+nav.primary .toggle{width:clamp(36px,2.6vw,48px);height:clamp(36px,2.6vw,48px);font-size:clamp(1rem,.9vw,1.25rem)}
+main{padding-top:clamp(64px,4.2vw,84px)}
+.sec-head:has(h1){margin-bottom:var(--s7)}
+@media (max-width:900px){header.site,header.site.scrolled{height:60px} main{padding-top:60px}}
