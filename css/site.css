@@ -1477,3 +1477,114 @@ body:has(main .band) footer.site{margin-top:clamp(36px,6vw,88px)}
 .view-cur{position:fixed;left:0;top:0;z-index:60;pointer-events:none;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;display:grid;place-items:center;background:var(--fg);color:var(--bg);font-size:var(--t-micro);font-weight:500;letter-spacing:.02em;opacity:0;scale:.4;transition:opacity .25s var(--ease),scale .35s var(--ease)}
 .view-cur.on{opacity:1;scale:1}
 @media(prefers-reduced-motion:reduce){.view-cur{transition:opacity .2s}}
+
+/* =====================================================================
+   DESIGN SYSTEM v2 (after the Awwwards UI): neutral grey ground, white
+   surfaces, ink panels for media; heavy uppercase display type; soft radii
+   (8px media, 16px panels, full pills); quiet dividers, more air.
+   One layer, last in the file, so it can be tuned or removed in one place.
+   ===================================================================== */
+:root{
+  --r-media:10px; --r-panel:18px; --r-btn:9999px;
+  --surface:#1a1a1a; --panel:#141414;
+}
+:root[data-theme="light"]{
+  --bg:#ededed; --surface:#ffffff; --panel:#111111;
+  --fg:#0b0b0b; --dim:rgba(0,0,0,.56); --faint:#e2e2e2; --hover:#ffffff;
+  --line:rgba(0,0,0,.09); --line-strong:rgba(0,0,0,.24);
+  --grain-opacity:0;
+}
+:root[data-theme="light"] meta{}
+/* quiet the drawn frame: no vertical rules, 1px dividers */
+@media (min-width:900px){ body::before{display:none} }
+:root{--rule:1px}
+
+/* buttons and tags: full pills */
+.btn{border-radius:9999px;padding:12px 20px}
+.btn .arw{border-radius:50%}
+.btn.solid{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+/* display type: heavy, uppercase, tight */
+.hero h1,.c-open h1,.svc-open h1,.band h2,.c-cta .t,.c-page h1{
+  font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:-.055em;line-height:.9}
+.hero h1{font-size:clamp(2.9rem,8.4vw,8.25rem)}
+.c-open h1{font-size:clamp(2.6rem,7.6vw,7.25rem)}
+.svc-open h1{font-size:clamp(2.2rem,5.4vw,5rem)}
+.band h2{font-size:clamp(2.4rem,6vw,5.75rem)}
+
+/* section titles: small, bold, stacked; a tiny label sits in .count */
+.sec-head{border:0;border-image:none;padding:0;margin-bottom:clamp(24px,3vw,40px);align-items:flex-end}
+.sec-head h1,.sec-head h2{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,2.6vw,2.35rem);letter-spacing:-.035em;line-height:1.02;max-width:16ch}
+.sec-head h1::before,.sec-head h2::before{display:none}
+.sec-head .count a{display:inline-flex;align-items:center;border:1px solid var(--line-strong);border-radius:9999px;padding:6px 14px}
+section{padding-top:clamp(72px,9vw,140px)}
+
+/* hero: centred, like a featured site */
+@media (min-width:901px){
+  .hero{display:flex;flex-direction:column;align-items:center;text-align:center;min-height:auto;padding-top:clamp(40px,6vh,80px)}
+  .hero .eyebrow{justify-content:center;margin-bottom:22px}
+  .hero h1{margin:0;max-width:12ch}
+  .hero .sub{margin:clamp(22px,2.4vw,32px) auto 0;max-width:46ch;text-align:center}
+  .hero .cta{justify-content:center;margin-top:clamp(24px,3vw,36px)}
+  .hero .cta .cta-note{text-align:center}
+  .hero-system{order:5;width:min(620px,70%);margin:clamp(16px,3vw,40px) auto 0;align-self:center}
+  .hero-system [data-hairline]{width:100%;margin:0}
+  .hero .clients-strip{order:6;align-self:stretch;margin-top:clamp(24px,4vw,56px)}
+}
+
+/* selected work: a grid of cards, image on a rounded plate, meta below */
+.selected{display:grid;grid-template-columns:1fr;gap:clamp(36px,4vw,56px) clamp(16px,2vw,28px)}
+@media (min-width:760px){.selected{grid-template-columns:1fr 1fr}}
+.sec-head + .selected{margin-top:0}
+.selected .swork,.selected .swork:nth-child(even){display:flex;flex-direction:column;gap:16px;padding:0;border:0;border-image:none;direction:ltr}
+.selected .swork::before{display:none}
+.selected .see-all{grid-column:1/-1;display:flex;justify-content:center;margin-top:8px}
+.swork .media{aspect-ratio:4/3;border-radius:var(--r-media)}
+.swork .info{gap:8px}
+.swork .info h3{font-size:clamp(1.25rem,1.6vw,1.5rem)}
+.swork .info .challenge{font-size:var(--t-meta);max-width:52ch;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.swork .info .open{display:none}
+.swork.obs .media,.swork.obs:nth-child(even) .media{transform:translate3d(0,40px,0) scale(.97)}
+
+/* offers and proof: white surfaces */
+.caps.three.fit-offers{border-top:0;gap:clamp(12px,1.6vw,20px);margin-top:clamp(36px,5vw,64px)}
+.caps.three.fit-offers .cap,.caps.three.fit-offers .cap:nth-child(3n+1),.caps.three.fit-offers .cap:nth-child(3n){background:var(--surface);border:0;border-radius:var(--r-panel);padding:clamp(24px,2.6vw,36px)}
+.fit-side{border-top:0;background:var(--surface);border-radius:var(--r-panel);padding:clamp(22px,2.4vw,32px)}
+
+/* ---------- case study display ---------- */
+.c-open{text-align:center;padding-top:clamp(36px,6vw,80px)}
+.c-open .crumb{justify-content:center}
+.c-open h1{margin:0 auto 20px;max-width:14ch}
+.c-open .oneline{margin:0 auto}
+.c-contrib{margin-left:auto;margin-right:auto;text-align:left}
+/* the key visual sits in an ink panel */
+.c-hero,.c-film--lead,.c-hero-reel{background:var(--panel);border-radius:var(--r-panel);padding:clamp(12px,2.4vw,34px)}
+.c-hero img{border-radius:calc(var(--r-media) - 2px)}
+.c-film--lead .frame{border-radius:calc(var(--r-media) - 2px)}
+.c-film--lead .note{color:rgba(255,255,255,.62)}
+.c-hero-reel .marquee{border-radius:calc(var(--r-media) - 2px);overflow:hidden}
+/* facts on a white card; disciplines as tags */
+.c-meta{background:var(--surface);border:0;border-radius:var(--r-panel);padding:clamp(20px,2.4vw,30px)}
+.c-meta .pill{display:inline-block;border:1px solid var(--line-strong);border-radius:9999px;padding:2px 11px;margin:0 6px 6px 0;font-size:var(--t-meta);line-height:1.6}
+/* story: label left, large text right */
+.c-sec .sb{font-size:clamp(1.125rem,1.7vw,1.5rem);letter-spacing:-.01em}
+/* highlights: framed tiles with "caption" underneath */
+.c-gal-title{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,2.6vw,2.35rem);letter-spacing:-.035em;line-height:1.02;margin:0 0 clamp(20px,2.4vw,32px)}
+.c-gallery .fm{background:var(--panel);border-radius:var(--r-panel);padding:clamp(10px,1.6vw,22px)}
+.c-gallery .fm img,.c-gallery .fm video{border-radius:calc(var(--r-media) - 2px)}
+.c-gallery figcaption{color:var(--fg);font-weight:500}
+.c-film .frame{border-radius:var(--r-media)}
+.c-film:not(.c-film--lead){background:var(--panel);border-radius:var(--r-panel);padding:clamp(12px,2vw,28px)}
+.c-film:not(.c-film--lead) .l,.c-film:not(.c-film--lead) .note{color:rgba(255,255,255,.62)}
+.c-cta{text-align:center;border-top:0}
+.c-cta .d{margin-left:auto;margin-right:auto}
+.c-cta .cta{justify-content:center}
+.c-next a .thumb{border-radius:var(--r-media)}
+
+/* service pages: title in the same voice */
+.svc-cases a .shot{border-radius:var(--r-media)}
+@media (min-width:901px){.hero .eyebrow,.hero h1,.hero .sub,.hero .cta{align-self:center}}
+.c-cta .t{margin-left:auto;margin-right:auto}
+/* every card grid: white rounded surfaces with a gap, not ruled columns */
+.caps{gap:clamp(12px,1.6vw,20px)}
+.caps .cap,.caps.three .cap,.caps.three .cap:nth-child(3n+1),.caps.three .cap:nth-child(3n){background:var(--surface);border:0;border-radius:var(--r-panel);padding:clamp(24px,2.6vw,36px)}
