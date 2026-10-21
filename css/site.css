@@ -1459,3 +1459,21 @@ body:has(main .band) footer.site{margin-top:clamp(36px,6vw,88px)}
   .cs-label{margin:0 0 12px;padding:0 var(--pad-x);background:none;align-self:auto}
   .clients-strip .cs-track{align-self:flex-start}
 }
+
+/* ---------- award-portfolio patterns ----------
+   Work index as a table: a header row and a client column (list view only). */
+.index-head{display:none}
+@media(min-width:760px){
+  .index-head{display:grid;grid-template-columns:52px minmax(0,1.3fr) minmax(0,1fr) 140px;gap:24px;padding:0 16px 12px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.04em;text-transform:uppercase;color:var(--dim)}
+  .index-head span:last-child{text-align:right}
+  .index-head:has(+ .index-list.grid){display:none}
+  .index-list:not(.grid) .prow>a{grid-template-columns:52px minmax(0,1.3fr) minmax(0,1fr) 140px}
+  .index-list:not(.grid) .prow .p-client{display:block;font-size:var(--t-meta);color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
+.prow .p-client{display:none}
+/* card anatomy: the discipline reads as a tag */
+.swork .info .kmeta span+span{border:1px solid var(--line-strong);border-radius:9999px;padding:1px 10px;line-height:1.6}
+/* "View" cursor over work images (fine pointers only; the system cursor stays) */
+.view-cur{position:fixed;left:0;top:0;z-index:60;pointer-events:none;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;display:grid;place-items:center;background:var(--fg);color:var(--bg);font-size:var(--t-micro);font-weight:500;letter-spacing:.02em;opacity:0;scale:.4;transition:opacity .25s var(--ease),scale .35s var(--ease)}
+.view-cur.on{opacity:1;scale:1}
+@media(prefers-reduced-motion:reduce){.view-cur{transition:opacity .2s}}

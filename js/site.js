@@ -1229,3 +1229,30 @@ document.querySelectorAll('.btn.solid').forEach(b=>{
   addEventListener('resize',paint);
   paint();
 })();
+
+/* "View" cursor: a small label that follows the pointer over work images
+   (home selection, service-page cases, next-project links). Fine pointers
+   only; it never replaces the system cursor and is purely decorative. */
+(function(){
+  if(!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+  const sel='.swork .media,.svc-cases a,.c-next a,.c-sites a';
+  if(!document.querySelector(sel))return;
+  const el=document.createElement('div'); el.className='view-cur'; el.setAttribute('aria-hidden','true'); el.textContent='View';
+  document.body.appendChild(el);
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let tx=0,ty=0,x=0,y=0,raf=0,last=0;
+  const step=t=>{
+    const dt=last?Math.min(t-last,64):16; last=t;
+    const k=still?1:1-Math.exp(-dt/70);
+    x+=(tx-x)*k; y+=(ty-y)*k; el.style.translate=x+'px '+y+'px';
+    raf=(Math.abs(tx-x)>.4||Math.abs(ty-y)>.4)?requestAnimationFrame(step):0; if(!raf)last=0;
+  };
+  addEventListener('mousemove',e=>{
+    tx=e.clientX; ty=e.clientY;
+    const over=!!(e.target.closest&&e.target.closest(sel));
+    if(over&&!el.classList.contains('on')){x=tx;y=ty;}
+    el.classList.toggle('on',over);
+    if(!raf)raf=requestAnimationFrame(step);
+  },{passive:true});
+  addEventListener('mouseleave',()=>el.classList.remove('on'));
+})();
