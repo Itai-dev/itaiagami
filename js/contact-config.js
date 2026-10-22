@@ -7,9 +7,10 @@
    ============================================================ */
 (function(root){
   var CONTACT_CONFIG = {
-    /* Google Calendar → Appointment schedule → Share → "Booking page" link.
-       While this is left as the placeholder, every "Book a call" button stays hidden. */
-    BOOKING_URL: 'https://calendar.app.google/qAYhVo928FsVE6PP7',
+    /* Cal.com event link, e.g. https://cal.com/<username>/<event-slug>.
+       The contact page embeds this calendar inline; every "Book a call" button opens it.
+       While this is left empty, every "Book a call" button stays hidden. */
+    BOOKING_URL: 'https://cal.com/itai-agami-cxjtiv/30min',
 
     /* Shown in error fallbacks and the success screen. */
     CONTACT_EMAIL: 'itaiagami@gmail.com',

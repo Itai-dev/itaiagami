@@ -44,6 +44,7 @@ in **GA4 → Admin → DebugView**. Form contents are never logged or sent.
 | `contact_form_submit` | **only** after `/api/enquiry` returns ok — the key event | `project_type`, `budget`, `timeline`, `self_reported_source`, `lead_source`, `landing_page`, `pages_viewed_count` |
 | `contact_form_error` | submission not accepted | `error_type` (validation / rate_limit / server / network / timeout), `http_status` |
 | `book_call_click` (+ `book_call_click_from_contact` / `book_call_click_after_submission`) | a "Book a call" link | `booking_context`, `page_path`, `source`, `referrer` (host only), `utm_source`, `utm_medium`, `utm_campaign`, `landing_page` |
+| `book_call_booked` | a call booked in the Cal.com calendar on the contact page | same as `book_call_click` (`booking_context` = `contact_embed`) |
 | `external_link_click` | email, LinkedIn, Instagram, Behance, Vimeo, other off-site links | `link_type`, `link_domain`, `link_url`, `link_text`, `link_location` |
 | `portfolio_cta_click` | any link to `contact.html` from another page | `cta_text`, `cta_location`, `page_path` |
 

@@ -79,6 +79,11 @@
       "source": "/notes/:slug([a-z0-9-]+)",
       "destination": "/notes/:slug.html",
       "permanent": true
+    },
+    {
+      "source": "/assets/docs/Itai_Agami_Credentials.pdf",
+      "destination": "/about.html",
+      "permanent": true
     }
   ],
   "headers": [

@@ -783,7 +783,7 @@
               "bookCall": {
                 "type": "string",
                 "format": "uri",
-                "description": "Booking page for a 20-minute intro call (for the person to open)."
+                "description": "Booking page for a 30-minute intro call (for the person to open)."
               },
               "email": {
                 "type": "string",

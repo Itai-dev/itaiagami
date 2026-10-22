@@ -595,11 +595,11 @@ font-size:clamp(1.0625rem,1.4vw,1.25rem);line-height:1.35;transition:color var(-
 .about-side .blk ul li a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
 
 /* ---------- contact qualification note ---------- */
-.c-intro .c-qual{border-top:1px solid var(--line);margin-top:26px;padding-top:18px;
+.c-qual{border-top:1px solid var(--line);margin-top:26px;padding-top:18px;
 font-size:var(--t-meta);color:var(--dim);line-height:1.65;max-width:48ch}
-.c-intro .c-qual strong{color:var(--fg);font-weight:500}
-.c-intro .c-qual a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
-.c-intro .c-qual a:hover{border-bottom-color:var(--fg)}
+.c-qual strong{color:var(--fg);font-weight:500}
+.c-qual a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
+.c-qual a:hover{border-bottom-color:var(--fg)}
 
 /* ---------- case study → engagement link ---------- */
 .c-service{border-top:1px solid var(--line);padding-top:22px;margin-bottom:clamp(30px,4vw,44px);
@@ -1255,8 +1255,11 @@ nav.primary a{color:var(--fg)}
 .c-tabs{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:calc(var(--r-btn) + 4px);margin-bottom:18px}
 .c-tabs [role="tab"]{font:inherit;font-size:var(--t-meta);font-weight:500;color:var(--dim);background:none;border:0;border-radius:var(--r-btn);padding:9px 16px;cursor:pointer}
 .c-tabs [role="tab"][aria-selected="true"]{background:var(--fg);color:var(--bg)}
-.c-cal{border:1px solid var(--line);border-radius:var(--r-media);overflow:hidden;background:#fff}
-.c-cal iframe{display:block;width:100%;height:min(760px,calc(100svh - 160px));min-height:560px;border:0}
+.c-cal{border:1px solid var(--line);border-radius:var(--r-media);overflow:hidden;background:var(--surface,var(--bg))}
+/* Cal.com inline embed: it sizes its own iframe to the content */
+.c-cal-inline{min-height:560px;width:100%;overflow:auto}
+.c-cal-inline iframe{display:block;width:100%;border:0}
+.c-cal-wait{margin:0;padding:24px;font-size:var(--t-micro);color:var(--dim)}
 .c-cal-alt{margin-top:12px;font-size:var(--t-micro);color:var(--dim)}
 .c-cal-alt a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
 .prow .p-name{font-family:var(--display);font-weight:600;letter-spacing:-.03em}
@@ -1446,8 +1449,6 @@ body:has(main .band) footer.site{margin-top:clamp(36px,6vw,88px)}
 .c-cta .d{margin-top:14px;max-width:48ch;color:var(--dim);font-size:var(--t-lead);line-height:1.5}
 .c-cta .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:clamp(22px,3vw,30px)}
 @media(max-width:600px){.c-cta .cta .btn{flex:1 1 100%;justify-content:center}}
-.svc-cred{margin-top:16px;font-size:var(--t-meta)}
-.svc-cred a{display:inline-flex;gap:8px;align-items:center;font-weight:500;border-bottom:1px solid var(--line-strong);padding-bottom:2px}
 /* hero: the proof is named, and the first step is made small */
 .hero .cta .cta-note{flex-basis:100%;margin:2px 0 0;font-size:var(--t-micro);color:var(--dim)}
 .clients-strip{display:flex;align-items:center}

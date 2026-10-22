@@ -111,7 +111,7 @@ $story    </div>
 $galHtml$filmHtml$credHtml    <div class="c-cta">
       <h2 class="t">Let’s build something like this.</h2>
       <p class="d">Tell me what it is, who it is for and what is still open. A rough idea is enough to start.</p>
-      <div class="cta"><a class="btn solid" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="case" target="_blank" rel="noopener">Book a call with Itai <span class="arw" aria-hidden="true">↗</span></a><a href="../contact.html#brief" class="btn ghost">Send a brief <span class="arw" aria-hidden="true">→</span></a></div>
+      <div class="cta"><a class="btn solid" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="case" target="_blank" rel="noopener">Book a call with Itai <span class="arw" aria-hidden="true">↗</span></a><a href="../contact.html#brief" class="btn ghost">Send a brief <span class="arw" aria-hidden="true">→</span></a></div>
     </div>
     <div class="c-next"><div class="l">Next project</div><a href="$($next.slug).html"><span class="thumb"><img src="$($next.thumb)" width="800" height="450" loading="lazy" alt=""></span><span class="t">$(Esc $next.name) →</span></a></div>
   </div>
