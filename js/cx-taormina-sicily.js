@@ -177,7 +177,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   /* ---------- scenes ---------- */
   const want = new THREE.Vector4(1, 0, 0, 0);
   const buttons = [...cues.querySelectorAll('button')];
-  let mode = 0, modeAt = 0, lastUser = -100;
+  let mode = 0, modeAt = 0, lastUser = -100, clockT = 0, ready = false, tick = null;
   function setMode(m, byUser) {
     mode = m; modeAt = clockT;
     want.set(m === 0 ? 1 : 0, m === 1 ? 1 : 0, m === 2 ? 1 : 0, m === 3 ? 1 : 0);
@@ -185,12 +185,12 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     if (m === 2) uniforms.uGodIn.value = 0;
     buttons.forEach((b, i) => b.setAttribute('aria-pressed', i === m ? 'true' : 'false'));
     if (byUser) { lastUser = clockT; done(); }
-    tick.wake();
+    if (tick) tick.wake();
   }
   buttons.forEach((b, i) => b.addEventListener('click', () => setMode(i, true)));
   cues.hidden = false;
   addEventListener('keydown', (e) => {
-    if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || !tick.isInView()) return;
+    if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || !tick || !tick.isInView()) return;
     if (/input|textarea|select/i.test((document.activeElement || {}).tagName || '')) return;
     const n = Number(e.key);
     if (n >= 1 && n <= 4) setMode(n - 1, true);
@@ -232,10 +232,9 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   });
 
   /* ---------- the loop ---------- */
-  let clockT = 0, ready = false;
   const cam = new THREE.Vector3(), look = new THREE.Vector3(0, 2.0, 0);
   if (calm) { setMode(1, false); uniforms.uMix.value.copy(want); }
-  const tick = runWhileVisible(stageEl, (t, dt) => {
+  tick = runWhileVisible(stageEl, (t, dt) => {
     clockT = t;
     uniforms.uTime.value = t;
     // the show runs itself until someone takes the controls
