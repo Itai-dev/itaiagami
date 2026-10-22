@@ -252,6 +252,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
   const pageMeshes = [...leaves.flatMap((l) => [l.front, l.back]), ...blocks];
   let hover = -1, held = -1, now = 0, lastTurn = 0, interacted = false;
+  window.__nl = () => ({ hover, held, lifts: items.map((i) => +i.lift.toFixed(2)) });
   const done = () => { if (!interacted && hint) { interacted = true; hint.classList.add('done'); } };
   const cast = (e) => {
     const r = renderer.domElement.getBoundingClientRect();

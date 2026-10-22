@@ -153,7 +153,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     box(0.44, 0.12, 0.44, x, 0.28, 0.42);
   });
   // ground
-  const ground = new THREE.Mesh(new THREE.PlaneGeometry(60, 30), new THREE.MeshBasicMaterial({ color: '#06060a' }));
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(220, 140), new THREE.MeshBasicMaterial({ color: '#06060a' }));
   ground.rotation.x = -Math.PI / 2; ground.position.y = -0.14;
   scene.add(ground);
   // stars
