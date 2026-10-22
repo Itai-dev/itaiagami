@@ -1,0 +1,118 @@
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap");
+/* ============================================================
+   Museum of Natural History: a field guide you look into.
+   Herbarium paper, deep leaf-green ink, and the turquoise light the
+   installation's projections glow in, with the illustrations' blossom
+   pink and sea blue as specimens' colours.
+   ============================================================ */
+body.cx.cx-museum-of-natural-history{
+  --nh-paper:#eff0e5; --nh-paper2:#e4e7d6; --nh-ink:#13302a; --nh-moss:#2f6b4f;
+  --nh-teal:#0b8577; --nh-glow:#2fe0cf; --nh-pink:#f1b9c8; --nh-sea:#1f5fa8; --nh-walnut:#5b3d26;
+  --cx-bg:var(--nh-paper); --cx-fg:var(--nh-ink); --cx-dim:rgba(19,48,42,.68);
+  --cx-accent:var(--nh-teal); --cx-line:rgba(19,48,42,.16);
+  --cx-header:rgba(239,240,229,.72); --cx-btn-bg:var(--nh-ink); --cx-btn-fg:var(--nh-paper);
+  --panel:#0f2621; --surface:#ffffff; --faint:#e4e7d6;
+}
+body.cx-museum-of-natural-history main{padding-top:0}
+.nh-serif,.nh-statement,.nh-plates-t em,.nh-title em,.nh-role-st,.nh-entry-b,.nh-ro-name,.nh-plate figcaption{font-family:Newsreader,"Iowan Old Style",Palatino,Georgia,serif}
+
+/* ---------- 1 · hero: text on the left, the drawer on the right ---------- */
+.cx-main section.nh-hero{padding:0;justify-content:center;
+  background:radial-gradient(70% 70% at 68% 52%,#ffffff 0%,rgba(255,255,255,0) 70%),linear-gradient(180deg,#f4f5ec,var(--nh-paper))}
+.nh-stage .cx-poster{left:auto;right:0;width:58%;opacity:.9;object-fit:contain;padding:calc(var(--header-h,72px) + 40px) 5vw 40px}
+.nh-stage .cx-canvas{cursor:none}
+.nh-copy{width:min(40%,560px);padding-top:calc(var(--header-h,72px) + 40px);padding-bottom:clamp(40px,7vh,80px)}
+.nh-title{font-size:clamp(3rem,6.6vw,7rem);line-height:.9;letter-spacing:-.045em;color:var(--nh-ink)}
+.nh-title em{font-style:italic;font-weight:400;letter-spacing:-.02em;color:var(--nh-moss)}
+.nh-one{color:var(--cx-dim)}
+.nh-readout{pointer-events:none;margin-top:clamp(28px,4vh,48px);max-width:360px;padding:16px 18px 18px;background:#fbfbf5;border:1px solid rgba(19,48,42,.18);
+  box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 20px 40px -24px rgba(19,48,42,.35);position:relative}
+.nh-readout::before{content:"";position:absolute;inset:4px;border:1px solid rgba(19,48,42,.1);pointer-events:none}
+.nh-ro-k{display:flex;justify-content:space-between;margin:0 0 6px;font-family:"IBM Plex Mono",monospace;font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--nh-teal)}
+.nh-ro-name{margin:0;font-size:1.625rem;font-style:italic;line-height:1.1;color:var(--nh-ink);transition:opacity .25s ease}
+.nh-ro-note{margin:8px 0 0;font-size:.875rem;line-height:1.5;color:var(--cx-dim);min-height:3em}
+.nh-ro-plate{margin:10px 0 0;font-family:"IBM Plex Mono",monospace;font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--nh-moss)}
+.nh-readout.swap .nh-ro-name,.nh-readout.swap .nh-ro-note{opacity:.2}
+.nh-hint{color:var(--cx-dim);top:auto;bottom:clamp(24px,4vh,40px)}
+@media(max-width:900px){
+  .cx-main section.nh-hero{justify-content:flex-end;min-height:max(760px,100svh)}
+  .nh-stage{bottom:auto;height:62%}
+  .nh-stage .cx-poster{width:100%;padding:calc(var(--header-h,64px) + 16px) 16px 0}
+  .nh-copy{width:100%;padding-top:0}
+  .nh-title{font-size:clamp(2.6rem,12vw,4.4rem)}
+  .nh-readout{display:none}
+  .nh-hint{top:calc(var(--header-h,64px) + 12px);bottom:auto;left:var(--gutter,16px);right:auto}
+}
+
+/* ---------- 2 · the spread + specimen tag ---------- */
+.nh-spread{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(40px,7vw,120px);align-items:center;padding:clamp(96px,12vw,170px) 0 clamp(80px,10vw,150px);border-top:1px solid var(--cx-line)}
+.nh-statement{margin:0;font-size:clamp(1.9rem,3.6vw,3.4rem);line-height:1.12;letter-spacing:-.015em;font-weight:400;max-width:24ch;text-wrap:balance}
+.nh-tag{position:relative;justify-self:end;width:min(100%,400px);padding:46px 28px 26px 28px;background:#fbf7e8;color:var(--nh-ink);
+  clip-path:polygon(0 30px,30px 0,100% 0,100% 100%,0 100%);
+  box-shadow:0 30px 60px -30px rgba(19,48,42,.45);filter:drop-shadow(0 20px 30px rgba(19,48,42,.12));
+  transform:rotate(-3deg) translateY(30px);opacity:0}
+.nh-tag.in{transform:rotate(-1.5deg);opacity:1}
+.nh-tag-hole{position:absolute;left:22px;top:22px;width:14px;height:14px;border-radius:50%;background:var(--nh-paper);box-shadow:inset 0 1px 2px rgba(0,0,0,.25),0 0 0 4px #e9dfc0}
+.nh-tag-k{margin:0 0 14px;padding-left:28px;font-family:"IBM Plex Mono",monospace;font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--nh-teal)}
+.nh-tag-dl{margin:0;border-top:1px solid rgba(19,48,42,.25)}
+.nh-tag-dl div{padding:11px 0;border-bottom:1px dashed rgba(19,48,42,.25)}
+.nh-tag-dl dt{font-family:"IBM Plex Mono",monospace;font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(19,48,42,.6)}
+.nh-tag-dl dd{margin:3px 0 0;font-size:1rem;line-height:1.4}
+@media(max-width:820px){.nh-spread{grid-template-columns:1fr}.nh-tag{justify-self:start}}
+
+/* ---------- 3 · plates ---------- */
+.nh-plates{padding:clamp(80px,10vw,150px) 0 clamp(40px,5vw,80px)}
+.nh-plates-t{font-family:"Inter Tight",Inter,sans-serif;font-weight:700;font-size:clamp(2.6rem,7.4vw,7.6rem);line-height:.9;letter-spacing:-.05em;margin:0 0 clamp(56px,7vw,110px)}
+.nh-plates-t em{font-weight:400;letter-spacing:-.025em;color:var(--nh-teal)}
+.nh-plate{position:relative;margin:0 0 clamp(64px,8vw,130px);opacity:0;transform:translateY(40px);transition:transform 1.1s cubic-bezier(.2,.7,.1,1),opacity .9s ease}
+.nh-plate.in{opacity:1;transform:none}
+.nh-pl-no{margin:0 0 10px;font-family:"IBM Plex Mono",monospace;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--nh-moss);display:flex;align-items:center;gap:12px}
+.nh-pl-no::after{content:"";flex:1;height:1px;background:var(--cx-line)}
+/* the plate: a print inside a hairline frame on the page */
+.nh-fig{position:relative;padding:clamp(8px,1vw,14px);background:#fbfbf5;border:1px solid rgba(19,48,42,.2);box-shadow:0 30px 70px -40px rgba(19,48,42,.5)}
+.nh-fig img{display:block;width:100%;height:auto}
+.nh-plate--a{width:min(100%,1180px)}
+.nh-plate--b{width:min(80%,980px);margin-left:auto}
+.nh-plate figcaption{margin:16px 0 0;max-width:50ch;font-size:1.0625rem;line-height:1.5;font-style:italic;color:rgba(19,48,42,.82)}
+.nh-fig-k{font-family:"IBM Plex Mono",monospace;font-style:normal;font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--nh-teal);margin-right:8px}
+.nh-pair{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,4vw,64px);align-items:end}
+.nh-loupe-hint{margin:0;font-family:"IBM Plex Mono",monospace;font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cx-dim);text-align:right}
+@media(hover:none){.nh-loupe-hint{display:none}}
+@media(max-width:820px){.nh-plate--b{width:100%}.nh-pair{grid-template-columns:1fr}}
+
+/* the loupe: a magnifier that follows the pointer over a plate */
+.nh-loupe{position:absolute;z-index:2;width:clamp(150px,16vw,220px);aspect-ratio:1;border-radius:50%;pointer-events:none;
+  background-repeat:no-repeat;background-color:#fbfbf5;
+  box-shadow:0 0 0 3px rgba(255,255,255,.95),0 0 0 5px rgba(11,133,119,.65),0 18px 40px -10px rgba(19,48,42,.5),inset 0 0 30px rgba(47,224,207,.25);
+  transform:translate(-50%,-50%) scale(.6);opacity:0;transition:opacity .25s ease,transform .3s cubic-bezier(.2,.7,.1,1)}
+.nh-fig.loupe-on{cursor:none}
+.nh-fig.loupe-on .nh-loupe{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+/* ---------- 4 · field notes ---------- */
+.nh-notes{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr);gap:clamp(40px,7vw,120px);align-items:start;padding:clamp(40px,5vw,80px) 0 clamp(80px,10vw,150px)}
+.nh-plate--tall{position:sticky;top:calc(var(--header-h,72px) + 24px);margin-bottom:0}
+.nh-fig--tall img{max-height:calc(100vh - 260px);width:auto;max-width:100%;margin:0 auto}
+.nh-entries{padding-top:clamp(0px,4vw,60px);
+  background-image:linear-gradient(rgba(11,133,119,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(11,133,119,.08) 1px,transparent 1px);background-size:24px 24px;
+  border:1px solid rgba(19,48,42,.12);padding:clamp(28px,4vw,56px)}
+.nh-entry{display:grid;grid-template-columns:3.2rem 1fr;column-gap:16px;padding:0 0 clamp(36px,5vw,64px)}
+.nh-entry + .nh-entry{border-top:1px solid rgba(19,48,42,.18);padding-top:clamp(28px,3.4vw,44px)}
+.nh-entry-n{grid-row:span 2;margin:4px 0 0;font-family:"IBM Plex Mono",monospace;font-size:.8125rem;color:var(--nh-teal)}
+.nh-entry-t{margin:0 0 10px;font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:.8125rem;letter-spacing:.08em;text-transform:uppercase;color:var(--nh-moss)}
+.nh-entry-b{margin:0;font-size:clamp(1.25rem,1.9vw,1.75rem);line-height:1.32;letter-spacing:-.005em;text-wrap:pretty}
+@media(max-width:820px){.nh-notes{grid-template-columns:1fr}.nh-plate--tall{position:relative;top:0}.nh-fig--tall img{max-height:none;width:100%}.nh-entry{grid-template-columns:2.4rem 1fr}}
+
+/* ---------- 5 · role + credits ---------- */
+.nh-role{padding:clamp(48px,6vw,96px) 0 clamp(80px,10vw,140px);border-top:1px solid var(--cx-line)}
+.nh-role-st{margin:0;max-width:30ch;font-size:clamp(1.75rem,3.2vw,3rem);line-height:1.14;letter-spacing:-.015em;text-wrap:balance}
+.nh-credits{display:inline-flex;gap:18px;align-items:baseline;margin-top:clamp(40px,5vw,64px);padding:10px 16px;border:1px solid rgba(19,48,42,.25);background:#fbfbf5}
+.nh-credits h3{margin:0;font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--nh-teal)}
+.nh-credits p{margin:0;font-size:.9375rem}
+
+/* ---------- close (light page) ---------- */
+.cx-museum-of-natural-history .cx-close .btn.ghost{color:var(--nh-ink);border-color:rgba(19,48,42,.3)}
+
+@media(prefers-reduced-motion:reduce){
+  .nh-tag,.nh-plate{transform:none!important;opacity:1!important;transition:none}
+  .nh-tag{transform:rotate(-1.5deg)!important}
+}
