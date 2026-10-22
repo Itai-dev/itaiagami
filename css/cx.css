@@ -17,6 +17,8 @@ body.cx{
   --cx-bg:#111; --cx-fg:#fff; --cx-dim:rgba(255,255,255,.66); --cx-accent:#fff;
   --cx-line:rgba(255,255,255,.16); --cx-header:rgba(17,17,17,.6);
   --cx-btn-bg:#fff; --cx-btn-fg:#111;
+  /* the site's squared system: the same on every page */
+  --r-media:8px; --r-panel:12px; --r-btn:8px;
   /* re-point the shared site tokens so header, buttons, ending and footer follow */
   --bg:var(--cx-bg); --fg:var(--cx-fg); --dim:var(--cx-dim);
   /* raised surfaces (secondary buttons, the consent banner) in the page's own colours */
@@ -30,13 +32,18 @@ body.cx .grain{display:none}
 /* header: glass in the page's own colour */
 body.cx header.site{background:var(--cx-header);-webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);border-bottom-color:var(--cx-line);color:var(--cx-fg)}
 body.cx header.site a,body.cx header.site button{color:var(--cx-fg)}
-body.cx header.site .btn.solid,body.cx .cx-close .btn.solid{background:var(--cx-btn-bg);color:var(--cx-btn-fg);border-color:var(--cx-btn-bg)}
-body.cx header.site .btn.ghost,body.cx header.site .menu-btn{background:transparent;border-color:var(--cx-line)}
+/* buttons: the site buttons (8px rectangles, same size and weight everywhere).
+   Solid is white on dark grounds and #222 on light ones (a page sets --cx-btn-bg/--cx-btn-fg to one of the two). */
+body.cx .btn{border-radius:8px}
+body.cx .btn.solid,body.cx .btn.solid:hover{background:var(--cx-btn-bg);color:var(--cx-btn-fg);border-color:var(--cx-btn-bg)}
+body.cx .btn.solid:hover{opacity:.9}
+body.cx .btn.ghost,body.cx .btn:not(.solid),body.cx header.site .menu-btn{background:var(--surface);color:var(--cx-fg);border-color:var(--cx-line)}
+body.cx .btn.ghost:hover,body.cx .btn:not(.solid):hover{border-color:var(--cx-fg);background:var(--surface)}
 body.cx .mobile-menu{background:var(--cx-bg);color:var(--cx-fg)}
 
 .cx-main{overflow-x:clip}
 .cx-wrap{width:min(1280px,100% - 2*var(--gutter,clamp(16px,4vw,56px)));margin-inline:auto}
-.cx-eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--cx-accent);margin:0 0 18px}
+.cx-eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cx-accent);margin:0 0 18px}
 .cx-crumb{font-size:.875rem;color:var(--cx-dim);margin:0 0 18px;display:flex;gap:8px}
 .cx-crumb a{color:var(--cx-dim)}
 .cx-crumb a:hover{color:var(--cx-fg)}
@@ -78,7 +85,6 @@ body.cx .mobile-menu{background:var(--cx-bg);color:var(--cx-fg)}
 
 /* ---------- the shared ending, in the page's colours ---------- */
 .cx-close .c-cta .t{color:var(--cx-fg)}
-.cx-close .btn.ghost{color:var(--cx-fg);border-color:var(--cx-line);background:transparent}
 .cx-close .c-service,.cx-close .c-next{border-color:var(--cx-line)}
 
 @media(prefers-reduced-motion:reduce){
