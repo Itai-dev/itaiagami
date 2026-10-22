@@ -221,7 +221,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
       const on = u + 0.06 + open * 0.13 >= c.u ? 1 : 0;
       c.v += (on - c.v) * (1 - Math.pow(0.01, dt));
       // fade a frame that comes too close to the lens, so it never fills the screen
-      const near = THREE.MathUtils.smoothstep(c.g.position.distanceTo(camera.position), 3.2, 6.5);
+      const near = THREE.MathUtils.smoothstep(c.g.position.distanceTo(camera.position), 4.5, 8);
       const v = c.v * near;
       c.g.visible = v > 0.01;
       if (c.g.visible) c.g.traverse((o) => { if (o.material && o.userData.base !== undefined) o.material.opacity = o.userData.base * v; });

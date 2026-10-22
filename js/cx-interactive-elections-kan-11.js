@@ -209,7 +209,8 @@ function build({ renderer, scene, camera, reveal, onResize }) {
 
   /* ---------- input: tap a seat to toggle its bloc; keys 1–6; R recounts ---------- */
   let lastUser = -100, pulse = 0, hover = -1;
-  const user = () => { lastUser = clockT; demo = null; };
+  // a visitor takes over: the demonstration's coalition is let go first
+  const user = () => { lastUser = clockT; if (demo) { demo = null; [...coalition].forEach((b) => toggle(b, false)); } };
   const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
   const pick = (e) => {
     const r = renderer.domElement.getBoundingClientRect();
