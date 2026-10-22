@@ -1,0 +1,284 @@
+/* =====================================================================
+   FUTURE / SERVICES: the offer as floating glass.
+   Loaded after css/future.css on services.html (body.fx-svc.fx-svc-index)
+   and on the four services/*.html pages (body.fx-svc.fx-svc-detail),
+   which share one layout. js/future-services.js feeds the pointer:
+   panels turn toward it (--rx/--ry) and catch its light (--mx/--my);
+   without it everything is still, readable glass.
+   ===================================================================== */
+
+/* ---------- ground ---------- */
+.fx-svc main::before{display:none}
+/* site.css hides .obs blocks until JS reveals them; never without JS or for reduced motion */
+html:not(.mo) .fx-svc .obs{opacity:1;transform:none}
+
+/* ---------- type ---------- */
+.fx-svc :is(.svc-open h1,.sec-head h1){font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;text-transform:none;letter-spacing:-.055em;line-height:.9;text-wrap:balance}
+.fx-svc .sec-head h1{font-size:clamp(3.6rem,14vw,12rem);letter-spacing:-.06em;line-height:.84;padding-right:.04em}
+.fx-svc .sec-head h2,.fx-svc .band h2{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;text-transform:none;letter-spacing:-.045em}
+.fx-svc .sec-head h2{font-size:clamp(2rem,4.2vw,3.6rem);line-height:.95;max-width:14ch}
+.fx-svc .sec-head .count,.fx-svc .svc-sec .st,.fx-svc .cap .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem!important;letter-spacing:.08em!important;text-transform:uppercase;color:var(--dim);font-weight:400}
+.fx-svc .sec-head{border:0!important;padding-bottom:0}
+
+/* the page-opening label floats as a small glass chip */
+.fx-svc .sec-head:has(h1) .count,.fx-svc .svc-open .crumb{display:inline-flex;align-items:center;gap:10px;padding:7px 14px;border-radius:9999px;
+  background:var(--glass);border:1px solid var(--glass-edge);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.fx-svc .sec-head:has(h1) .count::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--aurora);box-shadow:0 0 10px color-mix(in srgb,var(--mark) 70%,transparent)}
+.fx-svc .svc-open .crumb{margin:0 0 clamp(20px,2.4vw,30px)!important;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem!important;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.fx-svc .svc-open .crumb a{color:var(--fg)}
+.fx-svc .svc-open .crumb a:hover{text-decoration:underline;text-underline-offset:4px}
+
+/* ---------- opening ---------- */
+.fx-svc-index .sec-head:has(h1){align-items:center;text-align:center;padding-top:clamp(40px,7vw,104px);margin-bottom:0;gap:clamp(14px,1.6vw,22px);position:relative}
+.fx-svc :is(.sec-head:has(h1),.svc-head)::after{content:"";position:absolute;z-index:-1;left:50%;top:55%;width:min(1000px,100%);height:clamp(200px,24vw,360px);
+  transform:translate(-50%,-50%);pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,color-mix(in srgb,var(--mark) 20%,transparent),transparent 70%)}
+.fx-svc-index .svc-open{padding:clamp(22px,2.6vw,34px) 0 clamp(48px,6vw,96px)!important}
+.fx-svc-index .svc-open .oneline{max-width:50ch!important;font-size:clamp(1.0625rem,1.35vw,1.3rem)!important;line-height:1.5;color:var(--dim)}
+
+.fx-svc-detail .svc-head{position:relative;padding-top:clamp(40px,6.5vw,96px);padding-bottom:clamp(48px,6vw,96px)}
+.fx-svc-detail .svc-open{padding-top:0;max-width:none}
+.fx-svc-detail .svc-open h1{font-size:clamp(2.6rem,7vw,7rem);max-width:15ch;margin:0 auto 26px}
+.fx-svc-detail .svc-open .oneline{max-width:52ch;margin:0 auto;font-size:clamp(1.0625rem,1.35vw,1.3rem)!important;line-height:1.5;color:var(--dim)}
+
+/* ---------- the three offers: panels floating in an arc ---------- */
+.fx-svc .caps.three{--gap:clamp(16px,2vw,28px);gap:var(--gap)!important;margin-top:0!important;perspective:1600px;perspective-origin:50% 40%;
+  align-items:stretch;position:relative;padding:clamp(8px,2vw,24px) 0 clamp(16px,3vw,40px)}
+/* a soft light that follows the pointer across the whole group */
+.fx-svc .caps.three::before{content:"";position:absolute;inset:-10% 0;z-index:-1;pointer-events:none;
+  background:radial-gradient(40% 55% at var(--lx,50%) var(--ly,40%),color-mix(in srgb,var(--mark) 16%,transparent),transparent 70%);transition:background .2s linear}
+.fx-svc .caps.three .cap,.fx-svc .caps.three .cap:nth-child(3n+1),.fx-svc .caps.three .cap:nth-child(3n){
+  --ay:0deg;--az:0px;
+  position:relative;isolation:isolate;display:flex;flex-direction:column;
+  padding:clamp(26px,2.6vw,40px)!important;border:0!important;border-radius:30px;background:transparent!important;color:var(--fg);
+  transform:rotateY(calc(var(--ay) + var(--ry,0deg))) rotateX(var(--rx,0deg)) translateZ(var(--az));
+  transition:transform .8s var(--ease-out,cubic-bezier(.23,1,.32,1));will-change:transform}
+.fx-svc .caps.three .cap.is-tilt{transition:transform .16s linear}
+.fx-svc .caps.three .cap:nth-child(1){--ay:7deg;--az:-30px;transform-origin:100% 50%}
+.fx-svc .caps.three .cap:nth-child(3){--ay:-7deg;--az:-30px;transform-origin:0 50%}
+.fx-svc .caps.three .cap:hover,.fx-svc .caps.three .cap:focus-within{--ay:0deg;--az:24px}
+/* the pane */
+.fx-svc .caps.three .cap::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;
+  background:radial-gradient(90% 60% at var(--mx,30%) var(--my,0%),color-mix(in srgb,#fff 9%,transparent),transparent 60%),var(--glass);
+  border:1px solid var(--glass-edge);box-shadow:var(--shadow-float);
+  -webkit-backdrop-filter:blur(26px) saturate(160%);backdrop-filter:blur(26px) saturate(160%)}
+/* the Sprint is where it starts: its edge carries the aurora */
+.fx-svc .caps.three .cap#sprint::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:var(--aurora);opacity:.75;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.fx-svc .caps.three .cap#sprint{box-shadow:0 40px 90px -40px color-mix(in srgb,var(--mark) 55%,transparent)}
+.fx-svc .caps.three .cap#sprint .n{color:var(--fg)}
+.fx-svc .cap .n{display:flex;align-items:center;gap:10px;margin-bottom:clamp(18px,2vw,28px)!important}
+.fx-svc .cap .n::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--glass-edge),transparent)}
+.fx-svc .caps.three .cap h3{font-family:"Inter Tight",Inter,system-ui,sans-serif!important;font-weight:700!important;font-size:clamp(1.7rem,2.5vw,2.5rem)!important;
+  letter-spacing:-.045em!important;line-height:.98!important;margin-bottom:16px!important;max-width:11ch}
+.fx-svc .caps.three .cap h3 a{text-decoration:none}
+.fx-svc .caps.three .cap h3 a::after{content:" →";font-weight:400;opacity:.45;transition:opacity .2s}
+.fx-svc .caps.three .cap h3 a:hover{opacity:1;text-decoration:none}
+.fx-svc .caps.three .cap h3 a:hover::after{opacity:1}
+.fx-svc .caps.three .cap p{color:var(--dim);max-width:none;font-size:1rem!important;line-height:1.55}
+.fx-svc .caps.three .cap-list{margin:22px 0 24px;font-size:.9375rem;color:var(--fg)}
+.fx-svc .caps.three .cap-list li{display:flex;gap:12px;align-items:baseline;padding:10px 0;border-top:1px solid var(--glass-edge)}
+.fx-svc .caps.three .cap-list li::before{content:"";flex:0 0 auto;width:5px;height:5px;border-radius:50%;background:var(--mark);transform:translateY(-2px)}
+.fx-svc .caps.three .cap-meta{margin-top:auto!important;align-self:flex-start;display:inline-block;padding:10px 16px;border-radius:18px;
+  background:var(--glass-strong);border:1px solid var(--glass-edge);font-size:.875rem;line-height:1.35;font-weight:500}
+.fx-svc .caps.three .cap-meta strong{font-weight:700}
+
+/* ---------- capabilities: four glass tiles ---------- */
+.fx-svc .svc-list{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,1.6vw,22px);border:0!important}
+.fx-svc .svc-list>a{position:relative;isolation:isolate;display:grid!important;grid-template-columns:auto 1fr!important;grid-template-rows:auto 1fr auto!important;
+  column-gap:20px;row-gap:10px;padding:clamp(22px,2.4vw,34px)!important;border:0!important;border-radius:var(--r-panel);
+  background:var(--glass)!important;box-shadow:var(--shadow-float);outline:1px solid var(--glass-edge);outline-offset:-1px;
+  -webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%);
+  transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .7s var(--ease-out,ease),background .3s ease}
+.fx-svc .svc-list>a.is-tilt{transition:transform .14s linear,background .3s ease}
+.fx-svc .svc-list>a:hover{background:radial-gradient(70% 90% at var(--mx,50%) var(--my,0%),color-mix(in srgb,var(--mark) 14%,transparent),transparent 70%),var(--glass-strong)!important}
+.fx-svc .svc-list .n{grid-row:1/4;align-self:start;display:grid;place-items:center;width:56px;height:56px;border-radius:18px;
+  font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:1.5rem;color:var(--fg);letter-spacing:-.03em;
+  background:linear-gradient(150deg,var(--glass-hi),var(--glass));border:1px solid var(--glass-edge);
+  box-shadow:0 14px 30px -14px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.18)}
+.fx-svc .svc-list .t{grid-column:2;font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;letter-spacing:-.035em;font-size:clamp(1.35rem,1.9vw,1.75rem);line-height:1.05;align-self:center}
+.fx-svc .svc-list .d{grid-column:2;grid-row:2;margin:0!important;color:var(--dim);font-size:.9688rem;line-height:1.55}
+.fx-svc .svc-list .go{display:inline-flex!important;grid-column:2;grid-row:3;margin-top:8px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.fx-svc .svc-list>a:hover .go{color:var(--fg)}
+.fx-svc .svc-list>a:focus-visible{outline:2px solid var(--mark);outline-offset:3px}
+
+/* ---------- how it works: three stations on one line of light ---------- */
+.fx-svc-index .svc-body{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,28px);position:relative;counter-reset:step;padding-top:34px}
+.fx-svc-index .svc-body::before{content:"";position:absolute;left:8%;right:8%;top:12px;height:1px;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--mark) 60%,transparent) 15%,color-mix(in srgb,#22d3ee 50%,transparent) 85%,transparent)}
+.fx-svc-index .svc-body .svc-sec{position:relative;display:block!important;border:0!important;padding:clamp(24px,2.4vw,34px)!important;border-radius:var(--r-panel);
+  background:var(--glass);border:1px solid var(--glass-edge)!important;box-shadow:var(--shadow-float);
+  -webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%)}
+.fx-svc-index .svc-body .svc-sec:nth-child(2){translate:0 28px}
+.fx-svc-index .svc-body .svc-sec:nth-child(3){translate:0 56px}
+.fx-svc-index .svc-body .svc-sec::before{content:"";position:absolute;left:50%;top:-27px;width:11px;height:11px;margin-left:-5.5px;border-radius:50%;
+  background:var(--fg);box-shadow:0 0 0 5px color-mix(in srgb,var(--mark) 25%,transparent),0 0 18px var(--mark)}
+.fx-svc-index .svc-body .svc-sec:nth-child(2)::before{top:-55px}
+.fx-svc-index .svc-body .svc-sec:nth-child(3)::before{top:-83px}
+.fx-svc-index .svc-body .st{font-family:"Inter Tight",Inter,system-ui,sans-serif!important;font-weight:700;font-size:clamp(1.35rem,1.8vw,1.7rem)!important;letter-spacing:-.035em!important;
+  text-transform:none;color:var(--fg);line-height:1.05;padding:0;margin-bottom:14px}
+.fx-svc-index .svc-body .sb,.fx-svc-index .svc-body .sb p{font-size:1rem!important;line-height:1.55;color:var(--dim);max-width:none}
+.fx-svc-index section:has(> .svc-body){padding-bottom:56px}
+
+/* ---------- FAQ: the questions as a stack of glass ---------- */
+@media(min-width:1000px){
+  .fx-svc #faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:clamp(32px,5vw,80px);align-items:start}
+  .fx-svc #faq .sec-head{position:sticky;top:110px}
+}
+.fx-svc .faq{border:0!important;margin-top:0;display:flex;flex-direction:column;gap:10px}
+.fx-svc .faq details{border:1px solid var(--glass-edge)!important;border-radius:22px;background:var(--glass);overflow:hidden;
+  -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);transition:background .3s ease,box-shadow .3s ease}
+.fx-svc .faq details:hover{background:var(--glass-strong)}
+.fx-svc .faq details[open]{background:var(--glass-strong);box-shadow:var(--shadow-float)}
+.fx-svc .faq summary{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 20px 18px 24px!important;cursor:pointer;list-style:none;
+  font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:600;font-size:clamp(1.0625rem,1.3vw,1.25rem);letter-spacing:-.02em;line-height:1.3}
+.fx-svc .faq summary::after{content:"+"!important;flex:0 0 auto;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;
+  background:var(--glass-strong);border:1px solid var(--glass-edge);font-family:"Inter",system-ui,sans-serif;font-size:1.1rem;line-height:1;color:var(--fg);
+  transition:transform .4s var(--ease-out,ease),background .2s}
+.fx-svc .faq details[open] summary::after{transform:rotate(45deg);background:var(--fg);color:var(--bg)}
+.fx-svc .faq summary:focus-visible{outline:2px solid var(--mark);outline-offset:-2px;border-radius:22px}
+.fx-svc .faq .a{padding:0 24px 24px!important;max-width:64ch;color:var(--dim);line-height:1.65}
+
+/* ---------- the CTA: a lit portal ---------- */
+.fx-svc .band{position:relative;isolation:isolate;overflow:hidden;margin-top:clamp(48px,7vw,110px)!important;margin-bottom:0!important;
+  padding:clamp(56px,8vw,128px) clamp(20px,5vw,80px)!important;border-radius:clamp(26px,3vw,40px);border:1px solid var(--glass-edge)!important;
+  background:var(--glass);box-shadow:var(--shadow-float);-webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%);border-image:none!important}
+.fx-svc .band::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(45% 60% at var(--lx,30%) var(--ly,0%),color-mix(in srgb,#8b5cf6 26%,transparent),transparent 70%),
+    radial-gradient(40% 60% at calc(100% - var(--lx,30%)) 100%,color-mix(in srgb,#22d3ee 18%,transparent),transparent 70%);
+  transition:background .3s linear}
+.fx-svc .band h2{font-size:clamp(2.6rem,7.2vw,7.5rem)!important;line-height:.9;letter-spacing:-.055em;max-width:14ch;margin-bottom:24px!important}
+.fx-svc .band h2 em{font-style:normal;background:var(--aurora);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.05em}
+.fx-svc .band p{color:var(--dim)!important;opacity:1!important;max-width:44ch!important;margin-left:auto;margin-right:auto;font-size:clamp(1rem,1.3vw,1.2rem);line-height:1.5}
+.fx-svc .band .cta{display:flex;flex-wrap:wrap;justify-content:center;gap:12px!important;margin-top:clamp(26px,3vw,40px)!important}
+
+/* ---------- section rhythm (services index) ---------- */
+.fx-svc-index main section+section{margin-top:clamp(80px,10vw,150px)}
+.fx-svc-index .sec-head:not(:has(h1)){margin-bottom:clamp(28px,3.4vw,48px)}
+
+/* ---------- detail pages: one bento of glass ---------- */
+.fx-svc-detail .svc-body{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,1.6vw,22px);max-width:none}
+.fx-svc-detail .svc-sec{display:block!important;border:1px solid var(--glass-edge)!important;border-radius:var(--r-panel);padding:clamp(24px,3vw,44px)!important;
+  background:var(--glass);box-shadow:var(--shadow-float);-webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%)}
+.fx-svc-detail .svc-sec:nth-child(1),.fx-svc-detail .svc-sec:nth-child(n+4){grid-column:1/-1}
+.fx-svc-detail .svc-sec .st{padding:0;margin-bottom:18px;display:flex;align-items:center;gap:12px}
+.fx-svc-detail .svc-sec .st::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--mark);box-shadow:0 0 10px var(--mark)}
+.fx-svc-detail .svc-sec .sb,.fx-svc-detail .svc-sec .sb p{font-size:clamp(1.0625rem,1.35vw,1.3rem)!important;line-height:1.5;max-width:46ch}
+.fx-svc-detail .svc-sec .sb a{border-bottom:1px solid var(--line-strong)}
+.fx-svc-detail .svc-sec .sb a:hover{border-color:var(--fg)}
+.fx-svc-detail .svc-sec .sb strong{font-weight:700}
+/* "What I offer" spreads into two columns of numbered points */
+.fx-svc-detail .svc-sec:nth-child(4) .sb{max-width:none}
+.fx-svc-detail .svc-sec:nth-child(4) .sb ul{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,3vw,48px);counter-reset:offer;margin:0}
+.fx-svc-detail .svc-sec:nth-child(4) .sb ul li{counter-increment:offer;padding:16px 0 16px 46px;border-top:1px solid var(--glass-edge);color:var(--fg);font-size:1.0625rem;line-height:1.45}
+.fx-svc-detail .svc-sec:nth-child(4) .sb ul li::before{content:counter(offer,decimal-leading-zero);top:18px;left:0;width:auto;height:auto;background:none;border-radius:0;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem;letter-spacing:.06em;color:var(--dim)}
+/* "Engagement" reads as a statement: label left, terms right */
+@media(min-width:761px){
+  .fx-svc-detail .svc-sec:nth-child(5){display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:clamp(24px,4vw,64px);align-items:start}
+  .fx-svc-detail .svc-sec:nth-child(5) .st{margin:6px 0 0}
+  .fx-svc-detail .svc-sec:nth-child(5) .sb,.fx-svc-detail .svc-sec:nth-child(5) .sb p{max-width:40ch;font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:500;
+    font-size:clamp(1.25rem,1.8vw,1.65rem)!important;letter-spacing:-.02em;line-height:1.35}
+}
+/* the selected work sits open on the ground, not in a box */
+.fx-svc-detail .svc-sec:nth-child(1){background:transparent;border:0!important;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:0 0 clamp(16px,2vw,28px)!important}
+.fx-svc-detail .svc-sec:nth-child(1) .sb,.fx-svc-detail .svc-sec:nth-child(1) .sb p{max-width:none;font-size:.9375rem!important}
+.fx-svc-detail .svc-cases-note{color:var(--dim);font-size:.875rem!important;max-width:64ch;margin-top:22px}
+.fx-svc-detail .svc-also{margin-top:14px;color:var(--dim);font-size:.875rem!important}
+.fx-svc-detail .svc-also a{border-bottom:1px solid var(--line-strong)}
+.fx-svc-detail .svc-also a:hover{color:var(--fg);border-color:var(--fg)}
+
+/* ---------- case cards (detail pages), lit in each project's brand ---------- */
+.fx-svc .svc-cases a{--l1:#a594ff;--l2:#22d3ee;--ink:#0c0c11}
+.fx-svc .svc-cases a[href$="channel-13.html"]{--l1:#ff1380;--l2:#00f1c8;--ink:#00104a}
+.fx-svc .svc-cases a[href$="museum-of-natural-history.html"]{--l1:#2fe0cf;--l2:#f1b9c8;--ink:#13302a}
+.fx-svc .svc-cases a[href$="partner-tv.html"]{--l1:#ebb291;--l2:#c47e5d;--ink:#2b1209}
+.fx-svc .svc-cases a[href$="sky-max.html"]{--l1:#ff5a85;--l2:#8fe8d6;--ink:#021454}
+.fx-svc .svc-cases a[href$="simply-vision-pro.html"]{--l1:#8b4dff;--l2:#2ef2d0;--ink:#14072f}
+.fx-svc .svc-cases a[href$="tower-of-david.html"]{--l1:#d9ae57;--l2:#a9dcff;--ink:#0a1330}
+.fx-svc .svc-cases a[href$="interactive-elections-kan-11.html"]{--l1:#3d8bff;--l2:#ffa31a;--ink:#040b2a}
+.fx-svc .svc-cases a[href$="mako-12.html"]{--l1:#ff4a3d;--l2:#6b5cff;--ink:#0b0716}
+.fx-svc .svc-cases a[href$="natural-intelligence.html"]{--l1:#ff0c2c;--l2:#ff7a1a;--ink:#0b0b0c}
+.fx-svc .svc-cases a[href$="taormina-sicily.html"]{--l1:#ff8a2a;--l2:#ffc27a;--ink:#07080d}
+.fx-svc .svc-cases a[href$="amdocs-make-it-amazing.html"]{--l1:#dcaa63;--l2:#a9502e;--ink:#22100b}
+.fx-svc .svc-cases a[href$="google-shopping-il.html"]{--l1:#1a73e8;--l2:#fbbc04;--ink:#202124}
+.fx-svc .svc-cases a[href$="ten-facts-kan-11.html"]{--l1:#4fd0f5;--l2:#5df2b3;--ink:#0b0b0b}
+
+.fx-svc .svc-cases{gap:clamp(16px,2vw,28px)!important;margin-top:4px}
+.fx-svc .svc-cases a{position:relative;isolation:isolate;display:flex!important;flex-direction:column;padding:10px 10px 22px;border-radius:26px;color:var(--fg);
+  transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .7s var(--ease-out,ease),opacity .4s ease}
+.fx-svc .svc-cases a.is-tilt{transition:transform .14s linear,opacity .4s ease}
+.fx-svc .svc-cases a::before,:root[data-theme="light"] .fx-svc.fx-svc-detail .svc-cases a[href]::before{content:"";position:absolute;inset:0;z-index:-1;opacity:1;border-radius:inherit;
+  background:
+    radial-gradient(120% 70% at var(--mx,30%) var(--my,0%),color-mix(in srgb,#fff 10%,transparent),transparent 55%),
+    linear-gradient(160deg,color-mix(in srgb,var(--l1) 16%,transparent),color-mix(in srgb,var(--l2) 6%,transparent) 55%,transparent),
+    var(--glass);
+  border:1px solid var(--glass-edge);box-shadow:var(--shadow-float);
+  -webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%)}
+.fx-svc .svc-cases a::after{content:"";position:absolute;inset:-14% -10% -22%;z-index:-2;pointer-events:none;
+  background:radial-gradient(45% 40% at 35% 45%,color-mix(in srgb,var(--l1) 34%,transparent),transparent 70%),
+    radial-gradient(40% 40% at 70% 70%,color-mix(in srgb,var(--l2) 24%,transparent),transparent 70%);opacity:.6;transition:opacity .5s ease}
+.fx-svc .svc-cases a:hover::after{opacity:1}
+.fx-svc .svc-cases .shot{position:relative;border-radius:18px!important;background:var(--ink)!important;margin-bottom:16px;
+  box-shadow:0 18px 40px -24px color-mix(in srgb,var(--l1) 60%,#000)}
+.fx-svc .svc-cases .shot img{transform:scale(1.06) translate(calc(var(--px,0) * -12px),calc(var(--py,0) * -8px));transition:transform .9s var(--ease-out,ease)}
+.fx-svc .svc-cases a:hover .shot img{transform:scale(1.1) translate(calc(var(--px,0) * -12px),calc(var(--py,0) * -8px))}
+.fx-svc .svc-cases a.is-tilt .shot img{transition:transform .2s linear}
+.fx-svc .svc-cases .shot::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(125deg,rgba(255,255,255,.14),transparent 38%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.fx-svc .svc-cases .cn{display:flex!important;align-items:center;gap:10px;margin:0 8px!important;font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:1.3rem;letter-spacing:-.035em;line-height:1.1}
+.fx-svc .svc-cases .cn::before{content:"";flex:0 0 auto;width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,var(--l1),var(--l2));box-shadow:0 0 12px color-mix(in srgb,var(--l1) 70%,transparent)}
+.fx-svc .svc-cases .cd{margin:8px 8px 0!important;color:var(--dim);font-size:.9063rem!important;line-height:1.5}
+.fx-svc .svc-cases a:focus-visible{outline:2px solid var(--l1);outline-offset:4px}
+@media(hover:hover) and (pointer:fine){ .fx-svc .svc-cases:has(a:hover) a:not(:hover){opacity:.55} }
+
+/* ---------- light theme ---------- */
+:root[data-theme="light"] .fx-svc .caps.three .cap::before{background:radial-gradient(90% 60% at var(--mx,30%) var(--my,0%),rgba(255,255,255,.75),transparent 60%),var(--glass)}
+:root[data-theme="light"] .fx-svc .svc-list .n{box-shadow:0 14px 30px -16px rgba(40,30,80,.3),inset 0 1px 0 #fff}
+:root[data-theme="light"] .fx-svc.fx-svc-detail .svc-cases a[href]::before{background:
+    radial-gradient(120% 70% at var(--mx,30%) var(--my,0%),rgba(255,255,255,.7),transparent 55%),
+    linear-gradient(160deg,color-mix(in srgb,var(--l1) 14%,transparent),color-mix(in srgb,var(--l2) 6%,transparent) 55%,transparent),var(--glass)}
+:root[data-theme="light"] .fx-svc .band::before{background:
+    radial-gradient(45% 60% at var(--lx,30%) 0%,rgba(139,92,246,.18),transparent 70%),
+    radial-gradient(40% 60% at calc(100% - var(--lx,30%)) 100%,rgba(34,211,238,.16),transparent 70%)}
+
+/* ---------- smaller screens ---------- */
+@media(max-width:1000px){
+  .fx-svc .caps.three{grid-template-columns:1fr!important;max-width:640px;margin-left:auto;margin-right:auto;perspective:none}
+  .fx-svc .caps.three .cap:nth-child(n){--ay:0deg;--az:0px;transform:none}
+  .fx-svc .caps.three .cap h3{max-width:none}
+  .fx-svc-index .svc-body{grid-template-columns:1fr;padding-top:0;padding-left:28px;gap:14px}
+  .fx-svc-index .svc-body::before{left:5px;right:auto;top:24px;bottom:24px;width:1px;height:auto;
+    background:linear-gradient(180deg,color-mix(in srgb,var(--mark) 60%,transparent),color-mix(in srgb,#22d3ee 50%,transparent))}
+  .fx-svc-index .svc-body .svc-sec:nth-child(n){translate:none}
+  .fx-svc-index .svc-body .svc-sec:nth-child(n)::before{left:-28px;top:30px;margin-left:0}
+  .fx-svc-index section:has(> .svc-body){padding-bottom:0}
+  .fx-svc .svc-cases{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:760px){
+  .fx-svc .svc-list{grid-template-columns:1fr}
+  .fx-svc-detail .svc-body{grid-template-columns:1fr}
+  .fx-svc-detail .svc-sec:nth-child(4) .sb ul{grid-template-columns:1fr}
+  .fx-svc .svc-cases{grid-template-columns:1fr!important}
+  .fx-svc .svc-cases a::after{inset:-8% 0 -14%}
+}
+@media(max-width:520px){
+  .fx-svc .svc-list>a{grid-template-columns:1fr!important;row-gap:12px}
+  .fx-svc .svc-list .n{grid-row:auto;width:46px;height:46px;border-radius:15px;font-size:1.25rem}
+  .fx-svc .svc-list :is(.t,.d,.go){grid-column:1;grid-row:auto}
+  .fx-svc .svc-list .d{order:2}
+  .fx-svc .svc-list .go{order:3}
+  .fx-svc .faq summary{padding:16px 14px 16px 18px!important}
+  .fx-svc .faq .a{padding:0 18px 20px!important}
+  .fx-svc .band .cta .btn{flex:1 1 100%}
+}
+
+/* ---------- comfort ---------- */
+@media(prefers-reduced-motion:reduce){
+  .fx-svc :is(.caps.three .cap,.svc-list>a,.svc-cases a,.svc-cases .shot img){transition:none!important}
+}
+@media(prefers-reduced-transparency:reduce){
+  .fx-svc :is(.caps.three .cap::before,.svc-list>a,.svc-sec,.faq details,.band,.svc-cases a::before){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--surface)}
+}
