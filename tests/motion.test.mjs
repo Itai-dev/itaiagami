@@ -36,9 +36,12 @@ test('mobile menu: sheet timing, hidden from keyboard while closed, staggered li
   assert.match(js, /menu\.querySelectorAll\(':scope > a, \.mm-foot'\)/);
 });
 
-test('press feedback eases back on release, and the play pill keeps its centring', () => {
+test('press feedback eases back on release, and the play button keeps its centring', () => {
   assert.match(rule('.btn'), /transform \.16s var\(--ease\)/);
-  assert.match(css, /\.c-play:active \.pb\{transform:translate\(-50%,-50%\) scale\(\.97\)/);
+  // centred by inset/margin, not a transform, so the press scale (and the
+  // glass backdrop filter) never shift it off centre
+  assert.match(css, /\.c-play \.pb\{position:absolute;inset:0;margin:auto;/);
+  assert.match(css, /\.c-play:active \.pb\{transform:scale\(\.96\)/);
 });
 
 test('hover transforms are reset on touch; reduced transparency and contrast handled', () => {

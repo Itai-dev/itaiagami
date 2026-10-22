@@ -1142,32 +1142,102 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   vids.forEach(v=>io.observe(v));
 })();
 
-/* ---------- click-to-load film ----------
-   .frame[data-vimeo] holds a poster button; the player is only fetched when
-   someone asks for it, then starts with sound and Vimeo's own controls. */
+/* ---------- films (Mux, uploaded through Sanity) ----------
+   .frame[data-mux] holds a poster button; Mux's player is only fetched when
+   someone asks for it, then starts with sound and its own controls.
+   Any [data-mux][data-loop="start-end"] (a case-study frame, the homepage
+   feature) also plays that slice of the film, muted, over its poster (Mux
+   instant clipping). Skipped for reduced motion and data saver, paused off
+   screen. Safari and iOS play the clip natively; elsewhere <mux-video>,
+   bundled in the player, streams it. */
 (function(){
-  const frames=document.querySelectorAll('.frame[data-vimeo]');
-  if(!frames.length)return;
-  let warmed=false;
-  const warm=()=>{
-    if(warmed)return;warmed=true;
-    ['https://player.vimeo.com','https://i.vimeocdn.com','https://f.vimeocdn.com'].forEach(h=>{
-      const l=document.createElement('link');l.rel='preconnect';l.href=h;document.head.appendChild(l);
+  /* the play button is a clear glass lens: Chromium bends what is behind
+     it (backdrop-filter with an SVG displacement map), so it gets that filter */
+  if(document.querySelector('.c-play .pb')&&navigator.userAgentData&&navigator.userAgentData.brands.some(b=>/Chromium/.test(b.brand))){
+    const ns='http://www.w3.org/2000/svg';
+    /* displacement map: a round lens, flat in the middle and bending most
+       toward the rim, so the image behind magnifies and curves at the edge */
+    const N=128, cv=document.createElement('canvas'); cv.width=cv.height=N;
+    const cx=cv.getContext('2d'), img=cx.createImageData(N,N);
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+      /* the lens fills the middle 80% of the map; the rest stays neutral,
+         so a pixel or two of misalignment never shows an unbent edge */
+      const nx=((x+.5)/N*2-1)/.8, ny=((y+.5)/N*2-1)/.8, r=Math.hypot(nx,ny);
+      const k=r>1?0:Math.pow(r,3), i=(y*N+x)*4;
+      img.data[i]=Math.round(127.5+nx*k*127); img.data[i+1]=Math.round(127.5+ny*k*127); img.data[i+2]=128; img.data[i+3]=255;
+    }
+    cx.putImageData(img,0,0);
+    const map=cv.toDataURL('image/png');
+    const svg=document.createElementNS(ns,'svg');
+    svg.setAttribute('aria-hidden','true'); svg.setAttribute('width','0'); svg.setAttribute('height','0'); svg.style.position='absolute';
+    svg.innerHTML='<filter id="pb-glass" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">'
+      +'<feImage href="'+map+'" x="0" y="0" width="64" height="64" preserveAspectRatio="none" result="m"/>'
+      +'<feDisplacementMap in="SourceGraphic" in2="m" scale="20" xChannelSelector="R" yChannelSelector="G"/></filter>';
+    document.body.appendChild(svg);
+    /* the map is drawn in pixels, so it follows the button's size */
+    const fi=svg.querySelector('feImage'), fd=svg.querySelector('feDisplacementMap');
+    const fit=()=>{const pb=document.querySelector('.c-play .pb'); if(!pb)return; const w=pb.offsetWidth||64;
+      const m=w*1.25; fi.setAttribute('width',m); fi.setAttribute('height',m);
+      /* Chromium measures a backdrop filter from the element's centre */
+      fi.setAttribute('x',-m/2); fi.setAttribute('y',-m/2); fd.setAttribute('scale',Math.round(w*.3));};
+    fit(); addEventListener('resize',fit,{passive:true});
+    document.documentElement.classList.add('lg');
+  }
+
+  const frames=document.querySelectorAll('.frame[data-mux]');
+  const loops=document.querySelectorAll('[data-mux][data-loop]');
+  if(!frames.length&&!loops.length)return;
+  let loading=null;
+  const load=()=>loading||(loading=import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs').catch(()=>{}));
+
+  const calm=matchMedia('(prefers-reduced-motion: reduce)').matches||(navigator.connection&&navigator.connection.saveData);
+  const nativeHls=document.createElement('video').canPlayType('application/vnd.apple.mpegurl')!=='';
+  function startLoop(host,box){
+    const [a,b]=host.dataset.loop.split('-').map(Number);
+    const v=document.createElement(nativeHls?'video':'mux-video');
+    v.className='c-loop'; v.setAttribute('aria-hidden','true'); v.tabIndex=-1;
+    v.muted=true; v.loop=true; v.playsInline=true;
+    ['muted','loop','playsinline','autoplay'].forEach(k=>v.setAttribute(k,''));
+    if(!nativeHls) v.setAttribute('max-resolution','720p');
+    v.addEventListener('playing',()=>box.classList.add('looping'),{once:true});
+    v.setAttribute('src','https://stream.mux.com/'+encodeURIComponent(host.dataset.mux)+'.m3u8?asset_start_time='+a+'&asset_end_time='+b);
+    box.insertBefore(v,box.querySelector('.pb'));
+    new IntersectionObserver(es=>es.forEach(e=>{
+      if(!v.isConnected)return;
+      if(e.isIntersecting){const p=v.play&&v.play(); if(p&&p.catch)p.catch(()=>{});} else if(v.pause) v.pause();
+    })).observe(host);
+  }
+  if(!calm&&'IntersectionObserver' in window){
+    loops.forEach(host=>{
+      const box=host.querySelector('.c-play')||host.querySelector('.fp-media'); if(!box)return;
+      const io=new IntersectionObserver(es=>{
+        if(!es.some(e=>e.isIntersecting))return; io.disconnect();
+        if(nativeHls) startLoop(host,box);
+        else load().then(()=>customElements.whenDefined('mux-video')).then(()=>{ if(box.isConnected) startLoop(host,box); });
+      },{rootMargin:'200px'});
+      io.observe(host);
     });
-  };
+  }
+
   frames.forEach(f=>{
     const btn=f.querySelector('.c-play');
     if(!btn)return;
-    btn.addEventListener('pointerenter',warm,{once:true});
-    btn.addEventListener('focus',warm,{once:true});
+    btn.addEventListener('pointerenter',load,{once:true});
+    btn.addEventListener('focus',load,{once:true});
     btn.addEventListener('click',()=>{
-      const ifr=document.createElement('iframe');
-      ifr.src='https://player.vimeo.com/video/'+f.dataset.vimeo+'?autoplay=1&title=0&byline=0&portrait=0&dnt=1';
-      ifr.title=f.dataset.title||'Film';
-      ifr.allow='autoplay; fullscreen; picture-in-picture';
-      ifr.allowFullscreen=true;
-      btn.replaceWith(ifr);
-      ifr.focus();
+      load();
+      const pl=document.createElement('mux-player');
+      pl.setAttribute('playback-id',f.dataset.mux);
+      pl.setAttribute('stream-type','on-demand');
+      pl.setAttribute('accent-color','#0d0d0d');
+      pl.setAttribute('metadata-video-title',f.dataset.title||'Film');
+      pl.setAttribute('title',f.dataset.title||'Film');
+      pl.setAttribute('autoplay','');
+      btn.replaceWith(pl);
+      customElements.whenDefined('mux-player').then(()=>{
+        const p=pl.play&&pl.play();
+        if(p&&p.catch)p.catch(()=>{pl.muted=true;pl.play().catch(()=>{});});
+      });
     });
   });
 })();
