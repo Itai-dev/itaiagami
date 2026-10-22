@@ -137,3 +137,4 @@ body.cx-museum-of-natural-history main{padding-top:0}
   .nh-tag,.nh-plate{transform:none!important;opacity:1!important;transition:none}
   .nh-tag{transform:rotate(-1.5deg)!important}
 }
+.nh-stage:not(.live) .nh-hint,.nh-stage:not(.live) + .nh-cam{display:none}

@@ -114,3 +114,4 @@ body.cx-national-library-of-israel main{padding-top:0}
   .nl-card,.nl-item,.nl-room-fig{transform:none!important;opacity:1!important;transition:none}
   .nl-card{transform:rotate(1.2deg)!important}
 }
+.nl-stage:not(.live) ~ .nl-hint{display:none}

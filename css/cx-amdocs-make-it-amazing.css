@@ -11,7 +11,7 @@ body.cx.cx-amdocs-make-it-amazing{
   --cx-bg:var(--am-hallbg); --cx-fg:var(--am-cream); --cx-dim:rgba(244,231,207,.7); --cx-accent:var(--am-brass);
   --cx-line:rgba(220,170,99,.24); --cx-header:rgba(43,20,14,.72);
   --cx-btn-bg:var(--am-brass); --cx-btn-fg:var(--am-ink);
-  --panel:#150906; --faint:#3a1c13;
+  --panel:#150906; --faint:#3a1c13; --surface:#3a1c13;
 }
 .am{--am-display:"Big Shoulders Display","Inter Tight",Impact,system-ui,sans-serif}
 

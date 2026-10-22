@@ -21,7 +21,7 @@ body.cx.cx-sodastream{
 .ss-sky{position:absolute;inset:0;background:
   radial-gradient(40% 30% at 50% 58%,rgba(255,244,222,.95),transparent 70%),
   linear-gradient(180deg,#e9d3b3 0%,#f5e4ca 48%,#f7e7cf 60%,#efd2a8 100%)}
-.ss-stage .cx-poster{object-position:50% 30%;opacity:.3;filter:saturate(.7)}
+.ss-stage .cx-poster{object-position:50% 70%;opacity:.35;filter:saturate(.8)}
 .ss-stage::after{content:"";position:absolute;inset:auto 0 0 0;height:18%;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(242,220,191,.9))}
 .ss-stage .cx-canvas{cursor:pointer}
 .ss-hero-copy{display:flex;flex-direction:column;align-items:center;max-width:none;width:100%;padding:clamp(28px,6vh,72px) var(--gutter,clamp(16px,4vw,56px)) 0}

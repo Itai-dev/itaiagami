@@ -155,3 +155,4 @@ body.cx.cx-tower-of-david{
 }
 body.cx-tower-of-david main{padding-top:0}
 .cx-main section.td-hero{padding:0}
+.td-stage:not(.live) ~ .td-hud{display:none}

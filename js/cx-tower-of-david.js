@@ -362,7 +362,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     const px = calm ? 0 : pointer.x, py = calm ? 0 : pointer.y;
     if (wide) {
       camGoal.set(-6.5 + px * 2 + n * 2.5, 5.2 - py * 0.8, d);
-      look.set(-3.6 + n * 0.6, 4.1 + n * 0.7, 0);
+      look.set(-4.4 + n * 0.6, 4.1 + n * 0.7, 0);
     } else {
       camGoal.set(-4 + px * 1.5 + n * 1.5, 7.5 - n * 0.6, d);
       look.set(0.2, 2.4 + n * 0.6, 0);
