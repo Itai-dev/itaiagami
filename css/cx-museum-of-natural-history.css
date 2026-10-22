@@ -26,7 +26,7 @@ body.cx-museum-of-natural-history main{padding-top:0}
 .nh-one{margin:0 0 .4em;color:var(--cx-dim)}
 /* the wall itself */
 .nh-wall{position:relative}
-.nh-stage{position:relative;inset:auto;height:min(calc(100svh - 370px),58vw);min-height:460px;border-radius:clamp(14px,1.6vw,24px);
+.nh-stage{position:relative;inset:auto;height:min(calc(100svh - 360px),58vw);min-height:480px;border-radius:clamp(14px,1.6vw,24px);
   background:linear-gradient(180deg,#0d3f7c,#1d82b8 55%,#55c7c4);box-shadow:0 50px 100px -50px rgba(13,63,124,.6),0 0 0 1px rgba(19,48,42,.12);isolation:isolate}
 .nh-stage .cx-poster{opacity:.85}
 .nh-stage .cx-canvas{cursor:crosshair}
