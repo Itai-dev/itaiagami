@@ -62,23 +62,24 @@ function build({ renderer, scene, camera, reveal, onResize }) {
         vec2 f = fract(b); float mortar = smoothstep(0.0, 0.07, f.x) * smoothstep(1.0, 0.93, f.x) * smoothstep(0.0, 0.12, f.y) * smoothstep(1.0, 0.88, f.y);
         float wear = fbm(vW.xy * 1.7 + vW.z);
         vec3 stone = mix(vec3(0.20, 0.13, 0.09), vec3(0.50, 0.36, 0.26), wear * 0.8 + h21(floor(b)) * 0.35) * (0.55 + 0.45 * mortar);
-        vec3 col = stone * (0.05 + 0.06 * face) + vec3(0.01, 0.012, 0.03);
+        vec3 col = stone * (0.025 + 0.035 * face) + vec3(0.006, 0.008, 0.022);
         vec2 puv = vP.xy / vP.w * 0.5 + 0.5;
         float inP = step(0.0, puv.x) * step(puv.x, 1.0) * step(0.0, puv.y) * step(puv.y, 1.0);
         float lit = (0.35 + 0.65 * face) * inP;
         // I · the scan: a warm wash behind a sweeping band of light
         float band = exp(-pow((vW.x - uScan) * 1.2, 2.0));
         float behind = smoothstep(uScan + 0.4, uScan - 0.4, vW.x);
-        col += uMix.x * lit * (stone * 0.35 * behind + vec3(1.0, 0.5, 0.18) * band * 0.9);
+        float trace = (1.0 - mortar) * (0.5 + 0.5 * h21(floor(b) + floor(uTime * 2.0)));
+        col += uMix.x * lit * (stone * 0.18 * behind + vec3(1.0, 0.5, 0.18) * (band * 0.9 + behind * trace * 0.55));
         // II · the garden, projected over the stone
         vec3 g = texture2D(uGarden, puv).rgb;
         col += uMix.y * lit * (g * 1.9 * (0.55 + 0.45 * mortar) + stone * 0.12);
         // III · a marble god in the central niche
-        vec2 l = (puv - vec2(0.405, 0.06)) / vec2(0.19, 0.62);
+        vec2 l = (puv - vec2(0.452, 0.325)) / vec2(0.096, 0.30);
         float inG = step(0.0, l.x) * step(l.x, 1.0) * step(0.0, l.y) * step(l.y, 1.0);
-        vec2 guv = vec2(0.505, 0.04) + l * vec2(0.235, 0.93);
+        vec2 guv = vec2(0.5, 0.03) + l * vec2(0.25, 0.94);
         vec3 gd = texture2D(uGod, guv).rgb * inG * smoothstep(0.0, 1.0, uGodIn * 1.6 - (1.0 - l.y) * 0.6);
-        col += uMix.z * lit * (stone * vec3(0.16, 0.18, 0.26) + gd * 2.2);
+        col += uMix.z * lit * (stone * vec3(0.12, 0.14, 0.22) + gd * 2.6);
         // IV · molten light in the cracks
         float c = cracks(vW.xy * 0.75 + vW.z * 0.4);
         float heat = 0.65 + 0.35 * sin(uTime * 1.7 + vW.x * 0.8 + vW.y * 1.3);
@@ -162,7 +163,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     fragmentShader: `uniform float uScan; uniform vec4 uMix; uniform float uTime; varying vec3 vW;
       void main(){ float on = smoothstep(uScan + 0.3, uScan - 0.3, vW.x); float tip = exp(-pow((vW.x - uScan) * 2.0, 2.0));
         float a = uMix.x * (on * (0.75 + 0.25 * sin(uTime * 3.0 + vW.y * 4.0)) + tip * 1.5);
-        gl_FragColor = vec4(vec3(1.0, 0.62, 0.28) * a * 1.6, 1.0); }`,
+        gl_FragColor = vec4(vec3(1.0, 0.62, 0.28) * a * 3.0, 1.0); }`,
     transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
   });
   facade.updateMatrixWorld(true);
@@ -244,7 +245,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     uniforms.uGodIn.value = Math.min(1, uniforms.uGodIn.value + dt * (calm ? 99 : 0.45));
     for (let i = 0; i < PAINT; i++) paint[i].w = Math.max(0, paint[i].w - dt * 0.35);
 
-    const dist = mobile ? 15.5 : 17;
+    const dist = mobile ? 15.5 : 19;
     const sway = calm ? 0 : Math.sin(t * 0.15) * 0.6;
     cam.set(sway + pointer.x * 2.5, 2.3 - pointer.y * 0.8, dist);
     camera.position.lerp(cam, ready && !calm ? 0.05 : 1);

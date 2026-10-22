@@ -86,7 +86,7 @@ function machine() {
   scene.add(ring);
   const N = ADS.length, R = 5.4, H = 2.3;
   const loader = new THREE.TextureLoader();
-  const backMat = new THREE.MeshBasicMaterial({ color: '#141416' });
+  const backMat = new THREE.MeshBasicMaterial({ color: '#0d0d0f' });
   const edgeMat = new THREE.MeshBasicMaterial({ color: '#2a2a2e' });
   const cards = ADS.map((ad, i) => {
     const w = H * ad.w / ad.h;
@@ -208,14 +208,14 @@ function machine() {
   S.onResize((w, h) => {
     narrow = w / h < 0.85;
     const t = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-    const fitW = (narrow ? 5.2 : 13.5) / (2 * t * camera.aspect);
+    const fitW = (narrow ? 5.2 : 11.6) / (2 * t * camera.aspect);
     const fitH = (narrow ? 5.6 : 4.8) / (2 * t);
     const d = Math.max(fitW, fitH);
     camera.position.set(0, narrow ? 1.6 : 1.9, R + d);
     look.set(0, narrow ? -0.1 : 0.05, R - 1);
     camera.lookAt(look);
     // keep the ring in the lower part of the frame, under the title
-    camera.setViewOffset(w, h, narrow ? 0 : -w * 0.04, -h * (narrow ? 0.17 : 0.13), w, h);
+    camera.setViewOffset(w, h, narrow ? 0 : -w * 0.12, -h * (narrow ? 0.17 : 0.15), w, h);
   });
 
   /* ---------- the frame ---------- */

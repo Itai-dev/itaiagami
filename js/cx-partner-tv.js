@@ -210,8 +210,10 @@ async function start() {
   let dist = 12;
   stage.onResize((w, h) => {
     const narrow = w / h < 1;
-    look.set(narrow ? 0.2 : 0.9, 0, narrow ? 1.5 : 2.1);
-    dist = Math.max(7, distanceToFit(camera, WMW, narrow ? 1.12 : 1.02));
+    // phones look down more steeply and closer, so the wordmark spans the screen
+    camDir.set(narrow ? -0.8 : -2.2, narrow ? 8.6 : 7.6, narrow ? 5.6 : 8.2).normalize();
+    look.set(narrow ? 0.3 : 0.9, 0, narrow ? 1.7 : 2.1);
+    dist = Math.max(7, distanceToFit(camera, WMW, narrow ? 1.3 : 1.02));
   });
 
   /* ---------- channel state ---------- */
