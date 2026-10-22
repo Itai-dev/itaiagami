@@ -22,7 +22,7 @@ body.cx.cx-tidhar{
 .td-num{display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid var(--td-green);border-radius:50%;font-size:.72rem;letter-spacing:0}
 
 /* ---------- 1 · hero: the sheet ---------- */
-.td-hero{padding-top:0;overflow:hidden;background:radial-gradient(70% 60% at 50% 40%,#fbfaf6,var(--td-paper) 70%)}
+.td-hero{padding-top:0;overflow:hidden;min-height:max(620px,calc(100svh - clamp(60px,4.2vw,84px)));background:radial-gradient(70% 60% at 50% 40%,#fbfaf6,var(--td-paper) 70%)}
 .td-stage .cx-poster{opacity:.18;filter:grayscale(1)}
 .td-stage .cx-canvas{cursor:grab}
 .td-stage .cx-canvas:active{cursor:grabbing}
@@ -51,7 +51,7 @@ body.cx.cx-tidhar{
 .td-hint svg{width:18px;height:18px;fill:none;stroke:var(--td-sun);stroke-width:1.8}
 .td-hint svg circle{fill:var(--td-sun)}
 @media(max-width:820px){
-  .td-hero{min-height:max(760px,100svh)}
+  .td-hero{min-height:max(740px,calc(100svh - 60px))}
   .td-block{left:clamp(10px,1.6vw,22px);right:clamp(10px,1.6vw,22px);width:auto}
   .td-tb{grid-template-columns:1fr 1fr}
   .td-tb div:nth-child(2){border-right:0}
