@@ -1145,42 +1145,58 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
 /* ---------- films (Mux, uploaded through Sanity) ----------
    .frame[data-mux] holds a poster button; Mux's player is only fetched when
    someone asks for it, then starts with sound and its own controls.
-   A frame with data-loop="start-end" (seconds) also plays that slice of the
-   film, muted, behind the button (Mux instant clipping). Skipped for reduced
-   motion and data saver, paused off screen. Safari and iOS play the clip
-   natively; elsewhere <mux-video>, bundled in the player, streams it. */
+   Any [data-mux][data-loop="start-end"] (a case-study frame, the homepage
+   feature) also plays that slice of the film, muted, over its poster (Mux
+   instant clipping). Skipped for reduced motion and data saver, paused off
+   screen. Safari and iOS play the clip natively; elsewhere <mux-video>,
+   bundled in the player, streams it. */
 (function(){
+  /* the "Play film" pill is clear glass; Chromium can also bend what is
+     behind it (backdrop-filter with an SVG lens), so it gets that filter */
+  if(document.querySelector('.c-play .pb')&&navigator.userAgentData&&navigator.userAgentData.brands.some(b=>/Chromium/.test(b.brand))){
+    const ns='http://www.w3.org/2000/svg';
+    const map='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="'+ns+'" width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="x"><stop offset="0" stop-color="#c00"/><stop offset=".22" stop-color="#800"/><stop offset=".78" stop-color="#800"/><stop offset="1" stop-color="#400"/></linearGradient><linearGradient id="y" x2="0" y2="1"><stop offset="0" stop-color="#0c0"/><stop offset=".3" stop-color="#080"/><stop offset=".7" stop-color="#080"/><stop offset="1" stop-color="#040"/></linearGradient></defs><rect width="100" height="100" fill="url(#x)"/><rect width="100" height="100" fill="url(#y)" style="mix-blend-mode:screen"/></svg>');
+    const svg=document.createElementNS(ns,'svg');
+    svg.setAttribute('aria-hidden','true'); svg.setAttribute('width','0'); svg.setAttribute('height','0'); svg.style.position='absolute';
+    svg.innerHTML='<filter id="pb-glass" x="0" y="0" width="1" height="1" primitiveUnits="objectBoundingBox" color-interpolation-filters="sRGB">'
+      +'<feImage href="'+map+'" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="m"/>'
+      +'<feDisplacementMap in="SourceGraphic" in2="m" scale=".18" xChannelSelector="R" yChannelSelector="G"/></filter>';
+    document.body.appendChild(svg);
+    document.documentElement.classList.add('lg');
+  }
+
   const frames=document.querySelectorAll('.frame[data-mux]');
-  if(!frames.length)return;
+  const loops=document.querySelectorAll('[data-mux][data-loop]');
+  if(!frames.length&&!loops.length)return;
   let loading=null;
   const load=()=>loading||(loading=import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs').catch(()=>{}));
 
   const calm=matchMedia('(prefers-reduced-motion: reduce)').matches||(navigator.connection&&navigator.connection.saveData);
   const nativeHls=document.createElement('video').canPlayType('application/vnd.apple.mpegurl')!=='';
-  function startLoop(f,btn){
-    const [a,b]=f.dataset.loop.split('-').map(Number);
+  function startLoop(host,box){
+    const [a,b]=host.dataset.loop.split('-').map(Number);
     const v=document.createElement(nativeHls?'video':'mux-video');
     v.className='c-loop'; v.setAttribute('aria-hidden','true'); v.tabIndex=-1;
     v.muted=true; v.loop=true; v.playsInline=true;
     ['muted','loop','playsinline','autoplay'].forEach(k=>v.setAttribute(k,''));
     if(!nativeHls) v.setAttribute('max-resolution','720p');
-    v.addEventListener('playing',()=>btn.classList.add('looping'),{once:true});
-    v.setAttribute('src','https://stream.mux.com/'+encodeURIComponent(f.dataset.mux)+'.m3u8?asset_start_time='+a+'&asset_end_time='+b);
-    btn.insertBefore(v,btn.querySelector('.pb'));
+    v.addEventListener('playing',()=>box.classList.add('looping'),{once:true});
+    v.setAttribute('src','https://stream.mux.com/'+encodeURIComponent(host.dataset.mux)+'.m3u8?asset_start_time='+a+'&asset_end_time='+b);
+    box.insertBefore(v,box.querySelector('.pb'));
     new IntersectionObserver(es=>es.forEach(e=>{
       if(!v.isConnected)return;
       if(e.isIntersecting){const p=v.play&&v.play(); if(p&&p.catch)p.catch(()=>{});} else if(v.pause) v.pause();
-    })).observe(f);
+    })).observe(host);
   }
   if(!calm&&'IntersectionObserver' in window){
-    document.querySelectorAll('.frame[data-mux][data-loop]').forEach(f=>{
-      const btn=f.querySelector('.c-play'); if(!btn)return;
+    loops.forEach(host=>{
+      const box=host.querySelector('.c-play')||host.querySelector('.fp-media'); if(!box)return;
       const io=new IntersectionObserver(es=>{
         if(!es.some(e=>e.isIntersecting))return; io.disconnect();
-        if(nativeHls) startLoop(f,btn);
-        else load().then(()=>customElements.whenDefined('mux-video')).then(()=>{ if(btn.isConnected) startLoop(f,btn); });
+        if(nativeHls) startLoop(host,box);
+        else load().then(()=>customElements.whenDefined('mux-video')).then(()=>{ if(box.isConnected) startLoop(host,box); });
       },{rootMargin:'200px'});
-      io.observe(f);
+      io.observe(host);
     });
   }
 
