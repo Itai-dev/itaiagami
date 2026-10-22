@@ -1151,17 +1151,36 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
    screen. Safari and iOS play the clip natively; elsewhere <mux-video>,
    bundled in the player, streams it. */
 (function(){
-  /* the "Play film" pill is clear glass; Chromium can also bend what is
-     behind it (backdrop-filter with an SVG lens), so it gets that filter */
+  /* the play button is a clear glass lens: Chromium bends what is behind
+     it (backdrop-filter with an SVG displacement map), so it gets that filter */
   if(document.querySelector('.c-play .pb')&&navigator.userAgentData&&navigator.userAgentData.brands.some(b=>/Chromium/.test(b.brand))){
     const ns='http://www.w3.org/2000/svg';
-    const map='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="'+ns+'" width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="x"><stop offset="0" stop-color="#c00"/><stop offset=".22" stop-color="#800"/><stop offset=".78" stop-color="#800"/><stop offset="1" stop-color="#400"/></linearGradient><linearGradient id="y" x2="0" y2="1"><stop offset="0" stop-color="#0c0"/><stop offset=".3" stop-color="#080"/><stop offset=".7" stop-color="#080"/><stop offset="1" stop-color="#040"/></linearGradient></defs><rect width="100" height="100" fill="url(#x)"/><rect width="100" height="100" fill="url(#y)" style="mix-blend-mode:screen"/></svg>');
+    /* displacement map: a round lens, flat in the middle and bending most
+       toward the rim, so the image behind magnifies and curves at the edge */
+    const N=128, cv=document.createElement('canvas'); cv.width=cv.height=N;
+    const cx=cv.getContext('2d'), img=cx.createImageData(N,N);
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+      /* the lens fills the middle 80% of the map; the rest stays neutral,
+         so a pixel or two of misalignment never shows an unbent edge */
+      const nx=((x+.5)/N*2-1)/.8, ny=((y+.5)/N*2-1)/.8, r=Math.hypot(nx,ny);
+      const k=r>1?0:Math.pow(r,3), i=(y*N+x)*4;
+      img.data[i]=Math.round(127.5+nx*k*127); img.data[i+1]=Math.round(127.5+ny*k*127); img.data[i+2]=128; img.data[i+3]=255;
+    }
+    cx.putImageData(img,0,0);
+    const map=cv.toDataURL('image/png');
     const svg=document.createElementNS(ns,'svg');
     svg.setAttribute('aria-hidden','true'); svg.setAttribute('width','0'); svg.setAttribute('height','0'); svg.style.position='absolute';
-    svg.innerHTML='<filter id="pb-glass" x="0" y="0" width="1" height="1" primitiveUnits="objectBoundingBox" color-interpolation-filters="sRGB">'
-      +'<feImage href="'+map+'" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="m"/>'
-      +'<feDisplacementMap in="SourceGraphic" in2="m" scale=".18" xChannelSelector="R" yChannelSelector="G"/></filter>';
+    svg.innerHTML='<filter id="pb-glass" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">'
+      +'<feImage href="'+map+'" x="0" y="0" width="64" height="64" preserveAspectRatio="none" result="m"/>'
+      +'<feDisplacementMap in="SourceGraphic" in2="m" scale="20" xChannelSelector="R" yChannelSelector="G"/></filter>';
     document.body.appendChild(svg);
+    /* the map is drawn in pixels, so it follows the button's size */
+    const fi=svg.querySelector('feImage'), fd=svg.querySelector('feDisplacementMap');
+    const fit=()=>{const pb=document.querySelector('.c-play .pb'); if(!pb)return; const w=pb.offsetWidth||64;
+      const m=w*1.25; fi.setAttribute('width',m); fi.setAttribute('height',m);
+      /* Chromium measures a backdrop filter from the element's centre */
+      fi.setAttribute('x',-m/2); fi.setAttribute('y',-m/2); fd.setAttribute('scale',Math.round(w*.3));};
+    fit(); addEventListener('resize',fit,{passive:true});
     document.documentElement.classList.add('lg');
   }
 
