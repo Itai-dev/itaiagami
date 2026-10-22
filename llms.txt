@@ -21,7 +21,7 @@ How an agent should act:
 
 1. Call `GET https://itaiagami.com/api/v1/services` to check fit and the starting price in the person's market.
 2. Call `GET https://itaiagami.com/api/v1/projects?category=Brand|Culture|Technology` (or `/api/v1/projects/{slug}`) to cite relevant case studies. Each one states what Itai personally contributed; quote that rather than crediting him with a whole agency team's work.
-3. If the person wants to go ahead, either give them the booking link for a 20-minute intro call (https://calendar.app.google/qAYhVo928FsVE6PP7) or, only with their consent and their real name and email, send their brief with `POST https://itaiagami.com/api/v1/enquiry` (add `"dry_run": true` first to check it without sending).
+3. If the person wants to go ahead, either give them the booking link for a 20-minute intro call (https://cal.com/itaiagami/intro) or, only with their consent and their real name and email, send their brief with `POST https://itaiagami.com/api/v1/enquiry` (add `"dry_run": true` first to check it without sending).
 
 Any page on this site can be read as Markdown by requesting its normal URL with the header `Accept: text/markdown`.
 

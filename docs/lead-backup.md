@@ -38,21 +38,24 @@ contact.html form ──POST──▶ /api/enquiry (Vercel function)
 After changing any **Vercel env var**, redeploy (Deployments → ⋯ → Redeploy). Env changes
 do not apply to the running deployment.
 
-## Google Calendar booking page (free)
+## Cal.com booking calendar (free)
 
-1. Google Calendar → **Create → Appointment schedule**. Set a 20 min duration and your
-   availability, and add a Google Meet link.
-2. Save, then **Open booking page → Share**, and copy the link (it looks like
-   `https://calendar.app.google/…`).
-3. Paste it into `BOOKING_URL` in `js/contact-config.js` and deploy. Both "Book a call"
-   buttons appear by themselves, and the visitor receipt email gains the link.
-4. Keep the schedule selective, so the calendar never looks empty: two or three short
-   windows a week, 1–2 bookings a day, 48 h minimum notice, and a 2–3 week booking
-   window. Add 2–3 required booking-form questions (company, what they are working
-   on, rough budget), so people who skip the site form still leave a mini-brief.
+1. Sign up at **cal.com** with the username `itaiagami`, and connect Google Calendar
+   (Settings → Calendars) so busy times block slots and bookings land in your calendar.
+   Add Google Meet as the default conferencing app.
+2. Create an event type with the slug `intro`, 20 min. The link is then
+   `https://cal.com/itaiagami/intro` — already set as `BOOKING_URL` in
+   `js/contact-config.js`. Using a different username or slug? Paste the new link
+   there and deploy; every button, the embed and the visitor receipt follow it.
+3. Keep the schedule selective, so the calendar never looks empty: two or three short
+   windows a week, 1–2 bookings a day (Limits → booking frequency), 48 h minimum
+   notice, and a 2–3 week booking window. Add 2–3 required booking questions
+   (company, what they are working on, rough budget), so people who skip the site
+   form still leave a mini-brief.
 
-The booking page opens in a new tab rather than as an embed. Google's embedded
-scheduler is cramped on phones, and a new tab is the most reliable option on iPhone.
+The contact page embeds the calendar inline (Cal.com's embed, `js/site.js`) and
+colours it to match the site's light/dark theme. Every other "Book a call" button
+opens the booking page in a new tab. A completed booking fires `book_call_booked`.
 
 ## Backup sheet: Google Sheets + Apps Script (free, about 10 minutes)
 

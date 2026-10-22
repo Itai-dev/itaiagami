@@ -28,7 +28,7 @@ module.exports = (req, res) => {
     },
     contact: {
       enquiry: SITE + '/api/v1/enquiry',
-      bookCall: 'https://calendar.app.google/qAYhVo928FsVE6PP7',
+      bookCall: 'https://cal.com/itaiagami/intro',
       email: 'itaiagami@gmail.com'
     }
   });

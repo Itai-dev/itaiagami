@@ -1255,8 +1255,11 @@ nav.primary a{color:var(--fg)}
 .c-tabs{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:calc(var(--r-btn) + 4px);margin-bottom:18px}
 .c-tabs [role="tab"]{font:inherit;font-size:var(--t-meta);font-weight:500;color:var(--dim);background:none;border:0;border-radius:var(--r-btn);padding:9px 16px;cursor:pointer}
 .c-tabs [role="tab"][aria-selected="true"]{background:var(--fg);color:var(--bg)}
-.c-cal{border:1px solid var(--line);border-radius:var(--r-media);overflow:hidden;background:#fff}
-.c-cal iframe{display:block;width:100%;height:min(760px,calc(100svh - 160px));min-height:560px;border:0}
+.c-cal{border:1px solid var(--line);border-radius:var(--r-media);overflow:hidden;background:var(--surface,var(--bg))}
+/* Cal.com inline embed: it sizes its own iframe to the content */
+.c-cal-inline{min-height:560px;width:100%;overflow:auto}
+.c-cal-inline iframe{display:block;width:100%;border:0}
+.c-cal-wait{margin:0;padding:24px;font-size:var(--t-micro);color:var(--dim)}
 .c-cal-alt{margin-top:12px;font-size:var(--t-micro);color:var(--dim)}
 .c-cal-alt a{color:var(--fg);border-bottom:1px solid var(--line-strong)}
 .prow .p-name{font-family:var(--display);font-weight:600;letter-spacing:-.03em}

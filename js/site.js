@@ -45,7 +45,7 @@ const ANALYTICS_DEBUG     = false;
   +'<a href="../contact.html">Contact</a>'
   +'<button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>'
   +'</nav>'
-  +'<a class="btn solid nav-cta" href="https://calendar.app.google/qAYhVo928FsVE6PP7" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>'
+  +'<a class="btn solid nav-cta" href="https://cal.com/itaiagami/intro" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>'
   +'<button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>'
   +'</div></header>'
   +'<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">'
@@ -813,6 +813,36 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
     track('book_call_click',p);
     if(ctx==='contact'||ctx==='after_submission') track(ctx==='contact'?'book_call_click_from_contact':'book_call_click_after_submission',p);
   });
+
+  /* Cal.com inline calendar on the contact page. The calendar link comes from
+     BOOKING_URL (https://cal.com/<user>/<event>), and its colours follow the
+     site theme, including when the visitor flips it. If cal.com can't load,
+     the "Open the booking page" link under it still works. */
+  const calBox=document.getElementById('calInline');
+  let calLink='';
+  try{ const u=new URL(BOOKING); if(/(^|\.)cal\.com$/.test(u.hostname)) calLink=u.pathname.replace(/^\/|\/$/g,''); }catch(e){}
+  if(calBox&&calLink){
+    (function(C,A,L){const p=(a,ar)=>{a.q.push(ar);};const d=C.document;C.Cal=C.Cal||function(){const cal=C.Cal;const ar=arguments;
+      if(!cal.loaded){cal.ns={};cal.q=cal.q||[];d.head.appendChild(d.createElement('script')).src=A;cal.loaded=true;}
+      if(ar[0]===L){const api=function(){p(api,arguments);};const ns=ar[1];api.q=api.q||[];
+        if(typeof ns==='string'){cal.ns[ns]=cal.ns[ns]||api;p(cal.ns[ns],ar);p(cal,['initNamespace',ns]);}else p(cal,ar);return;}
+      p(cal,ar);};})(window,'https://app.cal.com/embed/embed.js','init');
+    const root=document.documentElement;
+    const theme=()=>root.getAttribute('data-theme')==='light'?'light':'dark';
+    const brand=()=>getComputedStyle(root).getPropertyValue('--fg').trim()||'#111111';
+    const ui=()=>({ theme:theme(), layout:'month_view', hideEventTypeDetails:false,
+      cssVarsPerTheme:{ light:{'cal-brand':brand()}, dark:{'cal-brand':brand()} } });
+    Cal('init','intro',{origin:'https://cal.com'});
+    Cal.ns.intro('inline',{ elementOrSelector:calBox, calLink, config:{ layout:'month_view', theme:theme() } });
+    Cal.ns.intro('ui',ui());
+    new MutationObserver(()=>Cal.ns.intro('ui',ui())).observe(root,{attributes:true,attributeFilter:['data-theme']});
+    Cal.ns.intro('on',{ action:'linkReady', callback:()=>{ const w=calBox.querySelector('.c-cal-wait'); if(w) w.remove(); } });
+    Cal.ns.intro('on',{ action:'linkFailed', callback:()=>{
+      calBox.innerHTML='<p class="c-cal-wait">The calendar could not load here. <a href="'+esc(BOOKING)+'" data-booking="contact" target="_blank" rel="noopener">Open the booking page ↗</a></p>';
+      calBox.style.minHeight='0'; } });
+    Cal.ns.intro('on',{ action:'bookingSuccessful', callback:()=>
+      track('book_call_booked',Object.assign({ page_path:location.pathname, booking_context:'contact_embed' },attributionParams())) });
+  }
 
   /* optional direct line — only when a phone number is configured */
   const direct=document.getElementById('directContact');
