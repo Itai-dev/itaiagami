@@ -16,7 +16,7 @@ body.cx.cx-amdocs-make-it-amazing{
 .am{--am-display:"Big Shoulders Display","Inter Tight",Impact,system-ui,sans-serif}
 
 /* ---------- 1 · hero: the hall and the machine ---------- */
-.am-hero{background:var(--am-hallbg);overflow:hidden}
+.am-hero{min-height:max(620px,calc(100svh - clamp(60px,4.2vw,84px)));background:var(--am-hallbg);overflow:hidden}
 /* the film's room: terracotta wall panels with brass light at the seams, a green carpet */
 .am-hall{position:absolute;inset:0;
   background:
@@ -41,7 +41,7 @@ body.cx.cx-amdocs-make-it-amazing{
 .am-hint-touch{display:none}
 @media(hover:none){.am-kbd,.am-hint-t{display:none}.am-hint-touch{display:inline}}
 @media(max-width:820px){
-  .am-hero{min-height:max(700px,100svh)}
+  .am-hero{min-height:max(700px,calc(100svh - 60px))}
   .am-stage::after{background:linear-gradient(0deg,var(--am-ink) 0%,rgba(34,16,11,.85) 30%,transparent 52%)}
   .am-stage .cx-poster{object-fit:cover;object-position:50% 20%;height:62%}
   .am-hero-copy{max-width:none}

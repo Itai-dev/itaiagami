@@ -17,11 +17,11 @@ body.cx.cx-sodastream{
 .ss .cx-eyebrow{color:var(--ss-blue-d)}
 
 /* ---------- 1 · hero: sky above, the scene below, title centred in the sky ---------- */
-.ss-hero{padding-top:0;justify-content:flex-start;align-items:center;text-align:center;overflow:hidden}
+.ss-hero{min-height:max(620px,calc(100svh - clamp(60px,4.2vw,84px)));padding-top:0;justify-content:flex-start;align-items:center;text-align:center;overflow:hidden}
 .ss-sky{position:absolute;inset:0;background:
   radial-gradient(40% 30% at 50% 58%,rgba(255,244,222,.95),transparent 70%),
   linear-gradient(180deg,#e9d3b3 0%,#f5e4ca 48%,#f7e7cf 60%,#efd2a8 100%)}
-.ss-stage .cx-poster{object-position:50% 30%;opacity:.9}
+.ss-stage .cx-poster{object-position:50% 30%;opacity:.3;filter:saturate(.7)}
 .ss-stage::after{content:"";position:absolute;inset:auto 0 0 0;height:18%;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(242,220,191,.9))}
 .ss-stage .cx-canvas{cursor:pointer}
 .ss-hero-copy{display:flex;flex-direction:column;align-items:center;max-width:none;width:100%;padding:clamp(28px,6vh,72px) var(--gutter,clamp(16px,4vw,56px)) 0}
@@ -34,7 +34,7 @@ body.cx.cx-sodastream{
 .ss-hint.done{opacity:0}
 .ss-key{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--ss-blue);color:#fff;font:600 .75rem "IBM Plex Mono",monospace}
 @media(hover:none){.ss-key{display:none}.ss-hint{padding-left:14px}}
-@media(max-width:820px){.ss-hero{min-height:max(700px,100svh)}}
+@media(max-width:820px){.ss-hero{min-height:max(680px,calc(100svh - 60px))}}
 
 /* ---------- 2 · the film in the set's blue ---------- */
 .ss-film-sec{padding:clamp(72px,9vw,140px) 0 clamp(56px,7vw,100px)}

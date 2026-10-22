@@ -15,7 +15,7 @@ body.cx.cx-sky-max{
 .sk .cx-eyebrow{color:var(--sk-navy);opacity:.85}
 
 /* ---------- 1 · hero: title up top, the card below ---------- */
-.sk-hero{justify-content:flex-start;overflow:hidden;padding-top:0;
+.sk-hero{min-height:max(620px,calc(100svh - clamp(60px,4.2vw,84px)));justify-content:flex-start;overflow:hidden;padding-top:0;
   background:radial-gradient(60% 60% at 70% 62%,#ff8fae 0%,transparent 70%),radial-gradient(40% 50% at 0% 0%,#ff7a9f,transparent 70%),var(--sk-pink)}
 .sk-stage .cx-poster{opacity:.25;mix-blend-mode:multiply}
 .sk-stage .cx-canvas{cursor:pointer}
@@ -23,12 +23,12 @@ body.cx.cx-sky-max{
 .sk-title{font-family:var(--sk-round);font-weight:800;font-size:clamp(4.4rem,11.5vw,12.5rem);line-height:.82;letter-spacing:-.045em;margin:0;color:var(--sk-navy)}
 .sk-title span{color:#fff}
 .sk-one{color:var(--sk-navy);max-width:30ch;font-weight:500}
-.sk-hint{top:auto;bottom:clamp(88px,13vh,130px);display:flex;align-items:center;gap:10px;color:var(--sk-navy);font-weight:500}
+.sk-hint{top:auto;bottom:clamp(24px,5vh,48px);display:flex;align-items:center;gap:10px;color:var(--sk-navy);font-weight:500}
 .sk-tap{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.8);animation:sk-ping 1.8s ease-out infinite}
 @keyframes sk-ping{to{box-shadow:0 0 0 14px rgba(255,255,255,0)}}
 @media(max-width:820px){
-  .sk-hero{min-height:max(720px,100svh)}
-  .sk-hint{right:auto;left:var(--gutter,clamp(16px,4vw,56px));bottom:clamp(64px,9vh,90px)}
+  .sk-hero{min-height:max(700px,calc(100svh - 60px))}
+  .sk-hint{right:auto;left:var(--gutter,clamp(16px,4vw,56px));bottom:24px}
   .sk-title{font-size:clamp(4.4rem,25vw,8rem)}
 }
 

@@ -100,7 +100,7 @@ function build() {
   // the lever: hinged at the back of the head, it rises toward the front
   const leverPivot = new THREE.Group(); leverPivot.position.set(0, 1.25, -0.16); machine.add(leverPivot);
   const lever = new THREE.Mesh(roundedBox(0.15, 0.06, 0.5, 0.05), black); lever.position.set(0, 0, 0.24); lever.castShadow = true; leverPivot.add(lever);
-  const leverCap = new THREE.Mesh(roundedBox(0.16, 0.025, 0.12, 0.04), chrome); leverCap.position.set(0, 0.04, 0.42); leverPivot.add(leverCap);
+  const leverCap = new THREE.Mesh(roundedBox(0.17, 0.05, 0.16, 0.05), chrome); leverCap.position.set(0, 0.02, 0.44); leverPivot.add(leverCap);
   // the bottle and the water in it
   const bottle = new THREE.Group(); bottle.position.set(0, 0.05, 0.1); machine.add(bottle);
   const glassMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.05, metalness: 0, transparent: true, opacity: 0.22, depthWrite: false });
@@ -111,7 +111,7 @@ function build() {
 
   // a glass of it beside the machine, strawberries and ice
   const glass = new THREE.Group(); glass.position.set(CX - 0.15, 0.905, 0.12); set.add(glass);
-  glass.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.1, 0.3, 28, 1, true), glassMat), { position: new THREE.Vector3(0, 0.15, 0) }));
+  const gb = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.1, 0.3, 28, 1, true), glassMat); gb.position.y = 0.15; glass.add(gb);
   const gw = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.095, 0.22, 28), water.material); gw.position.y = 0.115; glass.add(gw);
   const berry = new THREE.MeshStandardMaterial({ color: '#e0283c', roughness: 0.5 });
   [[-0.03, 0.12, 0.02, 0.4], [0.04, 0.17, -0.03, -0.6]].forEach(([x, y, z, r]) => { const b = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.08, 10), berry); b.position.set(x, y, z); b.rotation.z = r; glass.add(b); });
@@ -140,13 +140,13 @@ function build() {
   const hideD = new THREE.MeshStandardMaterial({ color: '#a8743f', roughness: 0.9 });
   const ball = new THREE.SphereGeometry(1, 28, 18);
   const blob = (sx, sy, sz, x, y, z, m = hide) => { const o = new THREE.Mesh(ball, m); o.scale.set(sx, sy, sz); o.position.set(x, y, z); o.castShadow = true; return o; };
-  camel.add(blob(0.82, 0.44, 0.38, 0, 1.55, 0));            // body
-  camel.add(blob(0.4, 0.42, 0.3, -0.08, 1.86, 0));          // hump
-  camel.add(blob(0.3, 0.32, 0.3, 0.62, 1.52, 0));           // chest
-  camel.add(blob(0.32, 0.3, 0.3, -0.62, 1.55, 0));          // haunch
-  const neckCurve = new THREE.CatmullRomCurve3([new THREE.Vector3(0.66, 1.55, 0), new THREE.Vector3(1.05, 1.5, 0), new THREE.Vector3(1.28, 1.85, 0), new THREE.Vector3(1.36, 2.28, 0)]);
-  const neck = new THREE.Mesh(new THREE.TubeGeometry(neckCurve, 24, 0.13, 12), hide); neck.castShadow = true; camel.add(neck);
-  const headG = new THREE.Group(); headG.position.set(1.38, 2.32, 0); camel.add(headG);
+  camel.add(blob(0.8, 0.36, 0.34, 0, 1.86, 0));             // body
+  camel.add(blob(0.36, 0.42, 0.26, -0.06, 2.12, 0));        // hump
+  camel.add(blob(0.28, 0.3, 0.27, 0.6, 1.82, 0));           // chest
+  camel.add(blob(0.3, 0.28, 0.28, -0.6, 1.86, 0));          // haunch
+  const neckCurve = new THREE.CatmullRomCurve3([new THREE.Vector3(0.62, 1.86, 0), new THREE.Vector3(1.02, 1.74, 0), new THREE.Vector3(1.34, 2.08, 0), new THREE.Vector3(1.44, 2.6, 0)]);
+  const neck = new THREE.Mesh(new THREE.TubeGeometry(neckCurve, 24, 0.12, 12), hide); neck.castShadow = true; camel.add(neck);
+  const headG = new THREE.Group(); headG.position.set(1.46, 2.64, 0); headG.scale.setScalar(1.25); camel.add(headG);
   headG.add(blob(0.22, 0.15, 0.14, 0.12, 0.02, 0));
   headG.add(blob(0.15, 0.11, 0.115, 0.32, -0.02, 0));        // muzzle
   const jaw = new THREE.Group(); jaw.position.set(0.18, -0.06, 0); headG.add(jaw);
@@ -157,18 +157,18 @@ function build() {
     const ear = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.1, 8), hideD); ear.position.set(0.0, 0.15, s * 0.08); ear.rotation.x = s * 0.35; headG.add(ear);
   }
   const leg = (x, z, bend) => {
-    const g = new THREE.Group(); g.position.set(x, 1.32, z);
-    const up = new THREE.Mesh(new THREE.CapsuleGeometry(0.085, 0.5, 4, 10), hide); up.position.y = -0.3; up.castShadow = true; g.add(up);
-    const knee = new THREE.Group(); knee.position.set(0, -0.62, 0); knee.rotation.z = bend; g.add(knee);
-    const low = new THREE.Mesh(new THREE.CapsuleGeometry(0.06, 0.52, 4, 10), hide); low.position.y = -0.32; low.castShadow = true; knee.add(low);
-    knee.add(blob(0.11, 0.04, 0.09, 0.03, -0.66, 0, hideD));
+    const g = new THREE.Group(); g.position.set(x, 1.66, z);
+    const up = new THREE.Mesh(new THREE.CapsuleGeometry(0.085, 0.66, 4, 10), hide); up.position.y = -0.38; up.castShadow = true; g.add(up);
+    const knee = new THREE.Group(); knee.position.set(0, -0.8, 0); knee.rotation.z = bend; g.add(knee);
+    const low = new THREE.Mesh(new THREE.CapsuleGeometry(0.06, 0.7, 4, 10), hide); low.position.y = -0.41; low.castShadow = true; knee.add(low);
+    knee.add(blob(0.11, 0.04, 0.09, 0.03, -0.84, 0, hideD));
     camel.add(g); return g;
   };
   leg(0.55, 0.16, 0); leg(0.55, -0.16, 0); leg(-0.58, 0.17, 0.12); leg(-0.58, -0.17, 0.12);
-  const tail = new THREE.Group(); tail.position.set(-0.85, 1.62, 0); camel.add(tail);
+  const tail = new THREE.Group(); tail.position.set(-0.84, 1.92, 0); camel.add(tail);
   const tailM = new THREE.Mesh(new THREE.CapsuleGeometry(0.025, 0.36, 4, 8), hideD); tailM.position.y = -0.2; tail.add(tailM);
-  camel.position.set(-1.75, 0, -0.35);
-  camel.rotation.y = 0.32;
+  camel.position.set(-2.05, 0, 0.35);
+  camel.rotation.y = -0.55;
   scene.add(camel);
 
   /* ---------- sound: the push, then the fizz ---------- */
@@ -216,7 +216,7 @@ function build() {
   st.onResize((w, h) => {
     wide = w / h > 1.05;
     camera.fov = wide ? 30 : 36;
-    camera.setViewOffset(w, h, 0, -h * (wide ? 0.2 : 0.17), w, h);   // the scene sits low, under the title
+    camera.setViewOffset(w, h, 0, -h * (wide ? 0.26 : 0.2), w, h);   // the scene sits low, under the title
     camera.updateProjectionMatrix();
     const fitW = (wide ? 9.5 : 5.6) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
     dist = Math.max(fitW, wide ? 9 : 7);
@@ -255,7 +255,7 @@ function build() {
     jaw.rotation.z = -0.08 - (Math.sin(t * 5.2) * 0.5 + 0.5) * 0.14 * idle;
     jaw.rotation.y = Math.sin(t * 2.6) * 0.08 * idle;
     headG.rotation.z = -0.12 + Math.sin(t * 0.7) * 0.03 * idle;
-    headG.rotation.y = 0.25 + Math.sin(t * 0.31) * 0.06 * idle;
+    headG.rotation.y = -0.75 + Math.sin(t * 0.31) * 0.06 * idle;   // turned to the viewer, deadpan
     camel.position.y = Math.sin(t * 1.1) * 0.006 * idle;
     tail.rotation.x = Math.sin(t * 1.7) * 0.25 * idle;
     if (!calm && t > blinkAt + 0.16) blinkAt = t + 2.5 + Math.random() * 3;

@@ -230,7 +230,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     const tg = new THREE.BufferGeometry(); tg.setAttribute('position', new THREE.BufferAttribute(tp, 3));
     const line = new THREE.Line(tg, new THREE.LineBasicMaterial({ color: threadCols[i], transparent: true, opacity: 0.35 }));
     line.position.copy(g.position); scene.add(line);
-    Object.assign(it, { g, line, tp, lift: 0, hold: 0, ph: rnd() * 6 });
+    Object.assign(it, { g, line, tp, lift: 0, hold: 0, ph: rnd() * 6, wx: it.x, wz: it.z, wr: it.r });
   });
 
   /* ---------- light: one reading lamp, a dim warm room ---------- */
@@ -288,9 +288,12 @@ function build({ renderer, scene, camera, reveal, onResize }) {
 
   /* ---------- framing ---------- */
   let dist = 9, narrow = false;
+  // on a phone the letters gather below the book instead of beside it
+  const phone = [[-1.25, 2.25, 0.22], [1.3, 2.6, -0.16], [-1.2, 3.45, -0.1], [1.3, 4.0, 0.1], [-0.1, 4.55, 0.04]];
   onResize((w, h) => {
     narrow = w / h < 0.9;
-    dist = Math.max(narrow ? 10 : 9.2, distanceToFit(camera, narrow ? 5.4 : 11.5, 0.92));
+    items.forEach((it, i) => { [it.x, it.z, it.r] = narrow ? phone[i] : [it.wx, it.wz, it.wr]; });
+    dist = Math.max(narrow ? 9 : 9.2, distanceToFit(camera, narrow ? 5.3 : 11.5, 0.96));
   });
   let scrollT = 0;
   const readScroll = () => { if (!hero) return; const r = hero.getBoundingClientRect(); scrollT = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height))); };
@@ -345,7 +348,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     const d = dist * (1 - scrollT * 0.2);
     const px = calm ? 0 : pointer.x, py = calm ? 0 : pointer.y;
     camGoal.set(px * 0.8, d * (0.72 + scrollT * 0.2) - py * 0.4, d * (0.62 - scrollT * 0.32));
-    look.set(0, 0, narrow ? -2.6 : -2.3);
+    look.set(0, 0, narrow ? -0.9 : -2.3);
     camera.position.lerp(camGoal, ready && !calm ? Math.min(1, dt * 3) : 1);
     camera.lookAt(look);
 
