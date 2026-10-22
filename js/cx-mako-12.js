@@ -125,7 +125,7 @@ function start() {
     const arm = new THREE.Group();
     arm.rotation.z = a.rot;
     const glass = new THREE.Mesh(glassGeo, new THREE.MeshPhysicalMaterial({
-      color: '#ffffff', metalness: 0, roughness: 0.05, transmission: 1, thickness: 1.1, ior: 1.5,
+      color: '#ffffff', metalness: 0, roughness: 0.05, transmission: 1, thickness: 0.7, ior: 1.32,
       dispersion: 6, clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.3,
       attenuationColor: new THREE.Color(a.inner).lerp(new THREE.Color('#ffffff'), 0.55), attenuationDistance: 2.2,
     }));

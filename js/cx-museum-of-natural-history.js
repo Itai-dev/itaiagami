@@ -328,7 +328,11 @@ function build({ renderer, scene, camera, reveal, onResize }) {
       try {
         cam.seg.segmentForVideo(segCanvas, performance.now(), (res) => {
           const m = res.confidenceMasks && res.confidenceMasks[0];
-          if (m) { cam.mask = m.getAsFloat32Array().slice(); cam.mw = m.width; cam.mh = m.height; }
+          if (m) {
+            const src = m.getAsFloat32Array();
+            if (!cam.mask || cam.mask.length !== src.length) cam.mask = new Float32Array(src.length);
+            cam.mask.set(src); cam.mw = m.width; cam.mh = m.height;
+          }
         });
       } catch (e) { cam.seg = null; cam.segFailed = true; }
       cam.busy = false;
