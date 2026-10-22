@@ -39,7 +39,7 @@ body.cx.cx-community-lights{
 .cl-tool:focus-visible,.cl-col:focus-visible,.cl-clear:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .cl-clear{margin-top:2px;padding:7px 10px;border-radius:99px;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;font:500 .75rem/1 Inter,system-ui,sans-serif;cursor:pointer}
 @media(max-width:820px){
-  .cl-tools{top:auto;bottom:16px;right:50%;transform:translateX(50%);flex-direction:row;padding:8px;gap:8px;max-width:calc(100% - 24px)}
+  .cl-tools{top:max(74svh,560px);bottom:auto;right:50%;transform:translateX(50%);flex-direction:row;padding:8px;gap:8px;max-width:calc(100% - 24px)}
   .cl-row{flex-direction:row;gap:5px}
   .cl-tool{width:36px;height:36px}
   .cl-col{width:22px;height:36px;border-radius:8px}

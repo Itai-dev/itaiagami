@@ -190,7 +190,7 @@ function build() {
   // 2 · flow arrows round the park
   dashed(path([V(-2.6, 0.06, 1.3), V(-2.75, 0.06, -0.6), V(-1.7, 0.06, -2.35), V(0.2, 0.06, -2.75)]), { color: COL.blue, r: 0.035, dash: 0.3, gap: 0.12, order: 1, arrow: true });
   dashed(path([V(2.55, 0.06, -1.0), V(2.75, 0.06, 0.9), V(1.7, 0.06, 2.4), V(-0.3, 0.06, 2.78)]), { color: COL.blue, r: 0.035, dash: 0.3, gap: 0.12, order: 1.2, arrow: true });
-  label('FLOW', COL.blue, V(2.9, 0.4, 1.0), 1);
+  label('FLOW', COL.blue, V(-3.0, 0.4, -0.9), 1);
   label('PARK', COL.park, V(-0.6, 0.35, -0.5), 1.1);
   // 3 · a measured span between two towers, with end ticks
   const ta = towers[3], tb = towers[4];
@@ -214,7 +214,7 @@ function build() {
 
   // 5 · the sun path: a dashed arc over the site, the sun on it, a ray to the tallest roof
   const ARC_R = 7.2;
-  const sunAt = (u, out) => out.set(-Math.cos(u * Math.PI) * ARC_R, 1.2 + Math.sin(u * Math.PI) * 5.8, -2.2 - Math.sin(u * Math.PI) * 1.6);
+  const sunAt = (u, out) => out.set(-Math.cos(u * Math.PI) * ARC_R, 1.2 + Math.sin(u * Math.PI) * 4.6, -2.2 - Math.sin(u * Math.PI) * 1.6);
   {
     const pts = []; for (let i = 0; i <= 40; i++) pts.push(sunAt(0.08 + (i / 40) * 0.84, new THREE.Vector3()));
     dashed(new THREE.CatmullRomCurve3(pts), { color: COL.sun, r: 0.03, dash: 0.24, gap: 0.2, order: 4 });
@@ -327,7 +327,7 @@ function build() {
     const d = dist * (1 - s * 0.22);
     camPos.set(Math.sin(azim) * Math.cos(elevC) * d, Math.sin(elevC) * d - pointer.y * 0.8, Math.cos(azim) * Math.cos(elevC) * d);
     if (first || calm) camera.position.copy(camPos); else camera.position.lerp(camPos, 0.08);
-    look.set(0, 1.0 + s * 0.6, 0);
+    look.set(0, 0.55 + s * 0.8, 0);
     camera.lookAt(look);
 
     renderer.render(scene, camera);
