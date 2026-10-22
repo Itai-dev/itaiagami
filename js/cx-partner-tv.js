@@ -124,7 +124,7 @@ async function start() {
   ground.receiveShadow = true;
   scene.add(ground);
 
-  try { await Promise.race([document.fonts.load('700 300px "Inter Tight"'), new Promise((r) => setTimeout(r, 1500))]); } catch (e) { /* system font */ }
+  try { await Promise.race([Promise.all([document.fonts.load('600 300px "Inter Tight"'), document.fonts.load('700 300px "Inter Tight"')]), new Promise((r) => setTimeout(r, 1500))]); } catch (e) { /* system font */ }
   const WM = wordmarkMaps();
   const WMW = 12, WMH = WMW * WM.h / WM.w;
   const markMat = new THREE.MeshStandardMaterial({
@@ -152,11 +152,11 @@ async function start() {
 
   /* ---------- relief: a row of thin sheets that ripples ---------- */
   const sheetMat = new THREE.MeshStandardMaterial({ color: groundCol, roughness: 0.7 });
-  const sheetGeo = roundedBox(0.06, 1.3, 1.3, 0.03);
+  const sheetGeo = roundedBox(0.035, 0.75, 0.9, 0.015);
   const sheets = [];
-  for (let i = 0; i < 13; i++) {
+  for (let i = 0; i < 14; i++) {
     const m = new THREE.Mesh(sheetGeo, sheetMat);
-    m.position.set(1.4 + i * 0.4, 0, -WMH / 2 - 1.3);
+    m.position.set(WMW / 2 - 2.6 + i * 0.17, 0, WMH / 2 + 0.9);
     m.castShadow = m.receiveShadow = true;
     scene.add(m);
     sheets.push(m);
@@ -206,7 +206,7 @@ async function start() {
 
   /* ---------- layout ---------- */
   const look = new THREE.Vector3(0.4, 0, 1.6);
-  const camDir = new THREE.Vector3(-2.6, 5.6, 8.6).normalize();
+  const camDir = new THREE.Vector3(-2.2, 7.6, 8.2).normalize();
   let dist = 12;
   stage.onResize((w, h) => {
     const narrow = w / h < 1;
