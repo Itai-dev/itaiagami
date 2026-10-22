@@ -78,7 +78,7 @@ body.cx.cx-natural-intelligence{
 .ni-wall-sec{padding:clamp(90px,11vw,160px) 0 clamp(70px,9vw,130px)}
 .ni-wall-t{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(3rem,10vw,9rem);line-height:.86;letter-spacing:-.06em;margin:0 0 clamp(32px,4vw,56px);
   background:var(--ni-grad);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
-.ni-wall{columns:5 200px;column-gap:clamp(10px,1.2vw,16px)}
+.ni-wall{columns:5 150px;column-gap:clamp(10px,1.2vw,16px)}
 .ni-tile{break-inside:avoid;margin:0 0 clamp(10px,1.2vw,16px);border-radius:14px;overflow:hidden;background:var(--faint);border:1px solid var(--cx-line)}
 .ni-tile img,.ni-tile video{display:block;width:100%;height:auto}
 

@@ -30,7 +30,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   const god = imageTexture('/assets/opt/b1cd695ffa8d.webp');
   const uniforms = {
     uTime: { value: 0 }, uMix: { value: new THREE.Vector4(1, 0, 0, 0) }, uScan: { value: -8 },
-    uProj: { value: projMat }, uGarden: { value: garden }, uGod: { value: god }, uGodIn: { value: 0 },
+    uProj: { value: projMat }, uGarden: { value: garden }, uGod: { value: god }, uGodIn: { value: 0 }, uGodRect: { value: new THREE.Vector4(0.45, 0.3, 0.1, 0.3) },
     uPaint: { value: paint },
   };
 
@@ -52,7 +52,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
       void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vN = normalize(mat3(modelMatrix) * normal);
         vP = uProj * w; gl_Position = projectionMatrix * viewMatrix * w; }`,
     fragmentShader: `uniform float uTime; uniform vec4 uMix; uniform float uScan; uniform sampler2D uGarden; uniform sampler2D uGod;
-      uniform float uGodIn; uniform vec4 uPaint[${PAINT}]; varying vec3 vW; varying vec3 vN; varying vec4 vP;
+      uniform float uGodIn; uniform vec4 uGodRect; uniform vec4 uPaint[${PAINT}]; varying vec3 vW; varying vec3 vN; varying vec4 vP;
       ${NOISE}
       void main(){
         vec3 n = normalize(vN);
@@ -70,12 +70,12 @@ function build({ renderer, scene, camera, reveal, onResize }) {
         float band = exp(-pow((vW.x - uScan) * 1.2, 2.0));
         float behind = smoothstep(uScan + 0.4, uScan - 0.4, vW.x);
         float trace = (1.0 - mortar) * (0.5 + 0.5 * h21(floor(b) + floor(uTime * 2.0)));
-        col += uMix.x * lit * (stone * 0.18 * behind + vec3(1.0, 0.5, 0.18) * (band * 0.9 + behind * trace * 0.55));
+        col += uMix.x * lit * (stone * 0.18 * behind + vec3(1.0, 0.5, 0.18) * (band * 0.9 + behind * trace * 1.1));
         // II · the garden, projected over the stone
         vec3 g = texture2D(uGarden, puv).rgb;
         col += uMix.y * lit * (g * 1.9 * (0.55 + 0.45 * mortar) + stone * 0.12);
         // III · a marble god in the central niche
-        vec2 l = (puv - vec2(0.452, 0.325)) / vec2(0.096, 0.30);
+        vec2 l = (puv - uGodRect.xy) / uGodRect.zw;
         float inG = step(0.0, l.x) * step(l.x, 1.0) * step(0.0, l.y) * step(l.y, 1.0);
         vec2 guv = vec2(0.5, 0.03) + l * vec2(0.25, 0.94);
         vec3 gd = texture2D(uGod, guv).rgb * inG * smoothstep(0.0, 1.0, uGodIn * 1.6 - (1.0 - l.y) * 0.6);
@@ -92,6 +92,12 @@ function build({ renderer, scene, camera, reveal, onResize }) {
         #include <colorspace_fragment>
       }`,
   });
+
+  // the god's frame: the niche's corners as the projector sees them
+  const toP = (x, y, z) => { const v = new THREE.Vector3(x, y, z).applyMatrix4(projMat); return [v.x * 0.5 + 0.5, v.y * 0.5 + 0.5]; };
+  const [gx0, gy0] = toP(-0.85, 0.35, -0.75), [gx1, gy1] = toP(0.85, 3.55, -0.75);
+  uniforms.uGodRect.value.set(gx0, gy0, gx1 - gx0, gy1 - gy0);
+  stoneMat.polygonOffset = true; stoneMat.polygonOffsetFactor = 1; stoneMat.polygonOffsetUnits = 2;
 
   /* ---------- the façade ---------- */
   const facade = new THREE.Group();
@@ -241,7 +247,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     // the show runs itself until someone takes the controls
     if (!calm && t - modeAt > 7.5 && t - lastUser > 12) setMode((mode + 1) % 4, false);
     uniforms.uMix.value.lerp(want, calm ? 1 : 1 - Math.pow(0.08, dt));
-    uniforms.uScan.value = Math.min(9, uniforms.uScan.value + dt * (calm ? 99 : 4.2));
+    uniforms.uScan.value = Math.min(9, uniforms.uScan.value + dt * (calm ? 99 : 6));
     uniforms.uGodIn.value = Math.min(1, uniforms.uGodIn.value + dt * (calm ? 99 : 0.45));
     for (let i = 0; i < PAINT; i++) paint[i].w = Math.max(0, paint[i].w - dt * 0.35);
 
