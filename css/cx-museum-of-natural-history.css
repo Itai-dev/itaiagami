@@ -21,12 +21,12 @@ body.cx-museum-of-natural-history main{padding-top:0}
   background:linear-gradient(180deg,#f6f7ef,var(--nh-paper))}
 .nh-head{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px clamp(32px,5vw,80px);align-items:end;margin-bottom:clamp(24px,3.4vw,44px)}
 .nh-head .cx-crumb{margin-bottom:14px}
-.nh-title{font-size:clamp(2.8rem,7vw,7.2rem);line-height:.9;letter-spacing:-.05em;color:var(--nh-ink)}
+.nh-title{font-size:clamp(2.8rem,6vw,6rem);line-height:.9;letter-spacing:-.05em;color:var(--nh-ink)}
 .nh-title em{font-style:italic;font-weight:400;letter-spacing:-.025em;color:var(--nh-teal)}
 .nh-one{margin:0 0 .4em;color:var(--cx-dim)}
 /* the wall itself */
 .nh-wall{position:relative}
-.nh-stage{position:relative;inset:auto;height:min(76vh,58vw);min-height:420px;border-radius:clamp(14px,1.6vw,24px);
+.nh-stage{position:relative;inset:auto;height:min(calc(100svh - 370px),58vw);min-height:460px;border-radius:clamp(14px,1.6vw,24px);
   background:linear-gradient(180deg,#0d3f7c,#1d82b8 55%,#55c7c4);box-shadow:0 50px 100px -50px rgba(13,63,124,.6),0 0 0 1px rgba(19,48,42,.12);isolation:isolate}
 .nh-stage .cx-poster{opacity:.85}
 .nh-stage .cx-canvas{cursor:crosshair}
@@ -35,6 +35,14 @@ body.cx-museum-of-natural-history main{padding-top:0}
 .nh-hint.done{opacity:0}
 /* the camera label under the wall, like an exhibit caption */
 .nh-cam{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 22px;align-items:center;margin-top:18px}
+@media(min-width:821px){
+  .nh-cam{position:absolute;z-index:3;left:calc(var(--gutter,clamp(16px,4vw,56px)) * 0 + 20px);bottom:20px;margin:0;max-width:min(620px,calc(100% - 40px));padding:14px 18px 14px 14px;border-radius:18px;
+    background:rgba(5,30,60,.42);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);border:1px solid rgba(200,255,250,.22)}
+  .nh-cam .nh-cam-note{color:rgba(233,255,251,.86)}
+  .nh-cam .nh-cam-status{color:#9ff3ff}
+  .nh-cam .nh-cam-btn{background:#e9fffb;color:#0b2a3a;border-color:#e9fffb}
+  .nh-cam .nh-cam-btn[aria-pressed="true"]{background:transparent;color:#e9fffb}
+}
 .nh-cam-btn{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border-radius:999px;border:1px solid var(--nh-ink);background:var(--nh-ink);color:var(--nh-paper);
   font:500 .9375rem/1 Inter,system-ui,sans-serif;cursor:pointer;transition:background .25s ease,color .25s ease,transform .2s ease}
 .nh-cam-btn:hover{transform:translateY(-1px)}

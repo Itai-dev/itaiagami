@@ -247,7 +247,7 @@ function build() {
     q.o.position.set((Math.random() - 0.5) * 1.2, 0, 0.3);
     q.v.set((Math.random() - 0.5) * 3.2, 2.2 + Math.random() * 1.4, 0.8 + Math.random() * 1.2);
     q.spin.set(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1).multiplyScalar(2);
-    if (hint && !hint.classList.contains('done')) hint.classList.add('done');
+    if (audible && hint && !hint.classList.contains('done')) hint.classList.add('done');
     run.wake();
   }
 
@@ -283,7 +283,7 @@ function build() {
     if (wide) camera.setViewOffset(w, h, -w * 0.2, -h * 0.06, w, h);
     else camera.setViewOffset(w, h, 0, -h * 0.17, w, h);
     camera.updateProjectionMatrix();
-    const fitW = (wide ? 11.5 : 6.6) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
+    const fitW = (wide ? 11.5 : 5.6) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
     const fitH = (wide ? 8.4 : 9) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
     dist = Math.max(fitW, fitH);
   });

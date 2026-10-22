@@ -49,7 +49,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   function layer(z, draw) {
     const tex = canvasTexture(2048, 1152, draw);
     const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, toneMapped: false }));
-    m.position.z = z; scene.add(m); layers.push(m); return m;
+    m.position.z = z; m.renderOrder = z > 1 ? 5 : layers.length; scene.add(m); layers.push(m); return m;
   }
   const INK = '#0b2a3a';
   const blob = (c, x, y, r) => { c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill(); };
@@ -171,7 +171,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(N * 3), 3).setUsage(THREE.DynamicDrawUsage));
     g.setAttribute('aColor', new THREE.BufferAttribute(col, 3).setUsage(THREE.DynamicDrawUsage));
     g.setAttribute('aAlpha', new THREE.BufferAttribute(alpha, 1).setUsage(THREE.DynamicDrawUsage));
-    points = new THREE.Points(g, pMat); points.frustumCulled = false; scene.add(points);
+    points = new THREE.Points(g, pMat); points.frustumCulled = false; points.renderOrder = 3; scene.add(points);
     analysis.width = cols; analysis.height = rows;
     pMat.uniforms.uSize.value = (stageEl.clientWidth / cols) * Math.min(devicePixelRatio || 1, 2) * 1.5;
   }
@@ -203,8 +203,8 @@ function build({ renderer, scene, camera, reveal, onResize }) {
       .replace('#include <uv_vertex>', '#include <uv_vertex>\nvMapUv = vec2(uv.x * 0.25 + aOff, uv.y);');
   };
   const flies = new THREE.InstancedMesh(bGeo, bMat, BN);
-  flies.frustumCulled = false; flies.position.z = 0.6; scene.add(flies);
-  const fly = Array.from({ length: BN }, () => ({ x: (rnd() - 0.5) * 8, y: (rnd() - 0.2) * 3, vx: 0, vy: 0, ph: rnd() * 6, hx: 0, hy: 0, s: 0.28 + rnd() * 0.14 }));
+  flies.frustumCulled = false; flies.position.z = 0.6; flies.renderOrder = 4; scene.add(flies);
+  const fly = Array.from({ length: BN }, () => ({ x: (rnd() - 0.5) * 8, y: (rnd() - 0.2) * 3, vx: 0, vy: 0, ph: rnd() * 6, hx: 0, hy: 0, s: 0.18 + rnd() * 0.1 }));
   fly.forEach((f) => { f.hx = f.x; f.hy = f.y; });
   const dummy = new THREE.Object3D();
 

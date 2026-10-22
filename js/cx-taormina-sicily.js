@@ -231,7 +231,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   let mobile = false;
   onResize((w, h) => {
     mobile = w < 820;
-    const cyp = mobile ? Math.min(h, innerHeight) * 0.33 : h * 0.38;
+    const cyp = mobile ? Math.min(h, innerHeight) * 0.3 : h * 0.38;
     camera.setViewOffset(w, h, 0, h / 2 - cyp, w, h);
     camera.fov = mobile ? 42 : 32;
     camera.updateProjectionMatrix();
@@ -251,7 +251,8 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     uniforms.uGodIn.value = Math.min(1, uniforms.uGodIn.value + dt * (calm ? 99 : 0.45));
     for (let i = 0; i < PAINT; i++) paint[i].w = Math.max(0, paint[i].w - dt * 0.35);
 
-    const dist = mobile ? 15.5 : 19;
+    // phones: step back until the main wall and most of both wings fit the width
+    const dist = mobile ? Math.max(15.5, 12.5 / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect)) : 19;
     const sway = calm ? 0 : Math.sin(t * 0.15) * 0.6;
     cam.set(sway + pointer.x * 2.5, 2.3 - pointer.y * 0.8, dist);
     camera.position.lerp(cam, ready && !calm ? 0.05 : 1);
