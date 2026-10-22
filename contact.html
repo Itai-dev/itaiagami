@@ -27,7 +27,7 @@
 }
 </script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-<meta name="theme-color" content="#e8e8e3" />
+<meta name="theme-color" content="#07070a" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Start a Project | Itai Agami, Creative Builder" />
 <meta property="og:description" content="Have an idea to build? Tell Itai Agami, Creative Builder, what it is and who it is for, or book a 30-minute intro call. Engagements from $10,000 / ₪30,000." />
@@ -44,8 +44,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="css/site.css" />
 <link rel="stylesheet" href="css/future.css" />
+<link rel="stylesheet" href="css/future-pages.css" />
 </head>
-<body>
+<body class="fp fp-contact">
 <div class="grain" aria-hidden="true"></div>
 
 <header class="site" id="siteHeader">
@@ -86,10 +87,11 @@
       <div class="c-intro">
         <h1>Let’s build <em>something</em>.</h1>
         <p class="c-paths">Pick a time for a 30-minute intro call. We talk through what you want to build, who it is for and what is still open. Prefer to write first? Send a brief instead.</p>
+        <div class="c-orb" aria-hidden="true"><i></i><i></i><i></i><b></b></div>
       </div>
 
       <!-- 2 — book a call (default) or send a brief -->
-      <div class="c-form">
+      <div class="c-form fx-glass">
         <div class="c-tabs" role="tablist" aria-label="How to get in touch">
           <button type="button" role="tab" id="tab-call" aria-controls="panel-call" aria-selected="true">Book a call</button>
           <button type="button" role="tab" id="tab-brief" aria-controls="panel-brief" aria-selected="false" tabindex="-1">Send a brief</button>
@@ -225,5 +227,6 @@
 
 <script src="js/contact-config.js"></script>
 <script src="js/site.js"></script>
+<script src="js/future-pages.js"></script>
 </body>
 </html>

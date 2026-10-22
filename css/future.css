@@ -43,7 +43,9 @@ body::before{
     radial-gradient(40vmax 40vmax at 50% 105%,var(--light-c),transparent 70%),
     var(--bg);
   animation:fx-drift 38s ease-in-out infinite alternate;
+  display:block!important;width:auto!important;margin:0!important;border:0!important;   /* site.css frames body::before on desktop */
 }
+main::before{display:none!important}   /* the old grey stage behind page titles */
 @keyframes fx-drift{
   0%{transform:translate3d(0,0,0) scale(1)}
   50%{transform:translate3d(2vmax,-1.5vmax,0) scale(1.04)}
@@ -70,6 +72,11 @@ header.site nav.primary a.active::after{display:none}
   header.site .hwrap{height:52px!important}
 }
 main{padding-top:calc(56px + 28px)}
+
+/* theme toggle: a drawn half-moon (the glyph renders as a sliver in the glass bar) */
+.toggle{border-color:var(--glass-edge)!important}
+.toggle>span[aria-hidden]{font-size:0;display:inline-block;width:14px;height:14px;border-radius:50%;
+  border:1.5px solid currentColor;background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
 
 /* ---------- buttons: light pills and glass ---------- */
 .btn{border-radius:9999px!important}

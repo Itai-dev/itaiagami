@@ -11,8 +11,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="/css/site.css" />
 <link rel="stylesheet" href="/css/future.css" />
+<link rel="stylesheet" href="/css/future-pages.css" />
 </head>
-<body>
+<body class="fp fp-404">
 <div class="grain" aria-hidden="true"></div>
 
 <header class="site" id="siteHeader">
@@ -43,15 +44,18 @@
   </div>
 </nav>
 
-<main>
+<main class="nf">
 <div class="wrap">
-  <section class="band" aria-label="Page not found" style="border-top:0;padding-top:clamp(60px,10vw,140px);margin-bottom:clamp(60px,10vw,120px)">
-    <h1 style="font-weight:500;font-size:var(--t-display);line-height:1.15;letter-spacing:-.02em;max-width:16ch;margin-bottom:clamp(24px,3vw,36px)">This page <em>doesn’t exist</em>.</h1>
-    <p style="max-width:52ch;color:inherit;opacity:.7;margin-bottom:28px">It may have moved. The work, the services and a way to start a project are all one click away.</p>
-    <div class="cta" style="display:flex;gap:14px;flex-wrap:wrap">
-      <a href="/work.html" class="btn solid">See the work <span class="arw" aria-hidden="true">→</span></a>
-      <a href="/services.html" class="btn ghost">Services</a>
-      <a href="/contact.html" class="btn ghost">Start a project</a>
+  <section class="nf-stage" aria-label="Page not found">
+    <div class="nf-card fx-glass fp-lit" data-fp-face>
+      <span class="nf-code fx-display" aria-hidden="true">404</span>
+      <h1 class="fx-display">This page <em>doesn’t exist</em>.</h1>
+      <p>It may have moved. The work, the services and a way to start a project are all one click away.</p>
+      <div class="cta">
+        <a href="/work.html" class="btn solid">See the work <span class="arw" aria-hidden="true">→</span></a>
+        <a href="/services.html" class="btn ghost">Services</a>
+        <a href="/contact.html" class="btn ghost">Start a project</a>
+      </div>
     </div>
   </section>
 </div>
@@ -74,5 +78,6 @@
 
 <script src="/js/contact-config.js"></script>
 <script src="/js/site.js"></script>
+<script src="/js/future-pages.js"></script>
 </body>
 </html>
