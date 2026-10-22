@@ -10,10 +10,11 @@
 @property --ptv-deep{syntax:'<color>';inherits:true;initial-value:#c47e5d}
 @property --ptv-hi{syntax:'<color>';inherits:true;initial-value:#f8d3bb}
 @property --ptv-accent{syntax:'<color>';inherits:true;initial-value:#7a2e12}
+@property --ptv-panel{syntax:'<color>';inherits:true;initial-value:#2b1209}
 
 body.cx.cx-partner-tv{
   /* channel 1 · relief (default) */
-  --ptv-bg:#ebb291; --ptv-fg:#2b1209; --ptv-deep:#c47e5d; --ptv-hi:#f8d3bb; --ptv-accent:#7a2e12;
+  --ptv-bg:#ebb291; --ptv-fg:#2b1209; --ptv-deep:#c47e5d; --ptv-hi:#f8d3bb; --ptv-accent:#7a2e12; --ptv-panel:#2b1209;
   --cx-bg:var(--ptv-bg); --cx-fg:var(--ptv-fg);
   --cx-dim:color-mix(in srgb,var(--ptv-fg) 74%,transparent);
   --cx-accent:var(--ptv-accent);
@@ -21,13 +22,13 @@ body.cx.cx-partner-tv{
   --cx-header:color-mix(in srgb,var(--ptv-bg) 72%,transparent);
   --cx-btn-bg:var(--ptv-fg); --cx-btn-fg:var(--ptv-bg);
   --surface:var(--ptv-hi); --faint:var(--ptv-deep);
-  --panel:color-mix(in srgb,var(--ptv-fg) 92%,var(--ptv-bg));
-  transition:--ptv-bg .9s ease,--ptv-fg .9s ease,--ptv-deep .9s ease,--ptv-hi .9s ease,--ptv-accent .9s ease;
+  --panel:var(--ptv-panel);
+  transition:--ptv-bg .9s ease,--ptv-fg .9s ease,--ptv-deep .9s ease,--ptv-hi .9s ease,--ptv-accent .9s ease,--ptv-panel .9s ease;
 }
 /* channel 2 · play: the glossy amber */
-body.cx.cx-partner-tv[data-ch="1"]{--ptv-bg:#ffb21a;--ptv-fg:#2a1500;--ptv-deep:#d17f00;--ptv-hi:#ffe08a;--ptv-accent:#6b3700}
+body.cx.cx-partner-tv[data-ch="1"]{--ptv-bg:#ffb21a;--ptv-fg:#2a1500;--ptv-deep:#d17f00;--ptv-hi:#ffe08a;--ptv-accent:#6b3700;--ptv-panel:#2a1500}
 /* channel 3 · the end frame: blue neon on night */
-body.cx.cx-partner-tv[data-ch="2"]{--ptv-bg:#03182b;--ptv-fg:#ffffff;--ptv-deep:#00070f;--ptv-hi:#0b2a46;--ptv-accent:#5cc8ff}
+body.cx.cx-partner-tv[data-ch="2"]{--ptv-bg:#03182b;--ptv-fg:#ffffff;--ptv-deep:#00070f;--ptv-hi:#0b2a46;--ptv-accent:#5cc8ff;--ptv-panel:#00070f}
 body.cx-partner-tv header.site .btn.ghost{color:var(--cx-fg)}
 
 .ptv .cx-eyebrow{color:var(--ptv-accent)}
