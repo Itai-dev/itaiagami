@@ -1376,3 +1376,21 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
     cta.after(a);
   }
 })();
+
+/* ---------- back to top ----------
+   One link at the end of every footer. Scrolls smoothly (instantly for
+   reduced motion) and puts keyboard focus back at the top of the page. */
+(function(){
+  const base=document.querySelector('footer.site .base'); if(!base||base.querySelector('.to-top'))return;
+  const a=document.createElement('a');
+  a.className='to-top'; a.href='#';
+  a.innerHTML='Back to top <span class="tt-i" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10.5V1.5M1.75 5.75 6 1.5l4.25 4.25"/></svg></span>';
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top:0,behavior:calm?'auto':'smooth'});
+    const first=document.querySelector('header.site a, header.site button');
+    if(first) first.focus({preventScroll:true});
+  });
+  base.appendChild(a);
+})();
