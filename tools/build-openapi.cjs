@@ -204,7 +204,7 @@ function build(){
               type: 'object', required: ['enquiry', 'bookCall', 'email'],
               properties: {
                 enquiry: { type: 'string', format: 'uri', description: 'POST endpoint for submitEnquiry.' },
-                bookCall: { type: 'string', format: 'uri', description: 'Booking page for a 20-minute intro call (for the person to open).' },
+                bookCall: { type: 'string', format: 'uri', description: 'Booking page for a 30-minute intro call (for the person to open).' },
                 email: { type: 'string', format: 'email' }
               }
             }

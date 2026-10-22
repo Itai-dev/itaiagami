@@ -45,7 +45,7 @@ const ANALYTICS_DEBUG     = false;
   +'<a href="../contact.html">Contact</a>'
   +'<button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button>'
   +'</nav>'
-  +'<a class="btn solid nav-cta" href="https://cal.com/itaiagami/intro" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>'
+  +'<a class="btn solid nav-cta" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a>'
   +'<button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>'
   +'</div></header>'
   +'<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">'
@@ -932,7 +932,7 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
     done.className='f-success'; done.tabIndex=-1;
     done.innerHTML='<h2>Thanks, I got it.</h2>'
       +'<p>I’ll get back to you shortly.</p>'
-      +(BOOKING?'<div class="f-book"><p>Want to skip the email back-and-forth? Book a 20 min intro call.</p>'
+      +(BOOKING?'<div class="f-book"><p>Want to skip the email back-and-forth? Book a 30 min intro call.</p>'
         +'<a class="btn solid" data-booking="after_submission">Book a call <span class="arw" aria-hidden="true">↗</span></a></div>':'')
       ;
     form.replaceWith(done);

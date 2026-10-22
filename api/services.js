@@ -28,7 +28,7 @@ module.exports = (req, res) => {
     },
     contact: {
       enquiry: SITE + '/api/v1/enquiry',
-      bookCall: 'https://cal.com/itaiagami/intro',
+      bookCall: 'https://cal.com/itai-agami-cxjtiv/30min',
       email: 'itaiagami@gmail.com'
     }
   });

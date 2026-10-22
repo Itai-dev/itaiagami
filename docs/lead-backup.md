@@ -40,12 +40,11 @@ do not apply to the running deployment.
 
 ## Cal.com booking calendar (free)
 
-1. Sign up at **cal.com** with the username `itaiagami`, and connect Google Calendar
-   (Settings → Calendars) so busy times block slots and bookings land in your calendar.
-   Add Google Meet as the default conferencing app.
-2. Create an event type with the slug `intro`, 20 min. The link is then
-   `https://cal.com/itaiagami/intro` — already set as `BOOKING_URL` in
-   `js/contact-config.js`. Using a different username or slug? Paste the new link
+1. The account is `cal.com/itai-agami-cxjtiv`. Connect Google Calendar
+   (Settings → Calendars) so busy times block slots and bookings land in your calendar,
+   and set Google Meet as the default conferencing app.
+2. The site books the 30 min event: `https://cal.com/itai-agami-cxjtiv/30min`, set as
+   `BOOKING_URL` in `js/contact-config.js`. To use a different event, paste its link
    there and deploy; every button, the embed and the visitor receipt follow it.
 3. Keep the schedule selective, so the calendar never looks empty: two or three short
    windows a week, 1–2 bookings a day (Limits → booking frequency), 48 h minimum
@@ -124,7 +123,7 @@ enquiry with `[test]` in the message. Expect:
 - an email to you titled `New enquiry - <name> - <type>`;
 - a receipt in the inbox you entered.
 
-**Booking:** after `BOOKING_URL` is set, click **Book a 20 min intro call** on the
+**Booking:** after `BOOKING_URL` is set, click **Book a 30 min intro call** on the
 contact page, then submit a test enquiry and click **Book a call**. Both open the Google
 booking page in a new tab. With `?analytics_debug=1` the console logs
 `book_call_click_from_contact` and `book_call_click_after_submission`.
