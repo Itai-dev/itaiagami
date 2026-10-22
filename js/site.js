@@ -465,9 +465,9 @@ const MARKETS = {
     .catch(()=>{});                                  /* offline or blocked — the ₪ default stands */
 })();
 
-/* ---------- theme (paper default, dark optional, persisted) ----------
-   Pages ship <html data-theme="light"> so the paper ground paints first;
-   a saved 'dark' choice removes it. */
+/* ---------- theme (dark default, paper optional, persisted) ----------
+   Pages ship without data-theme so the dark ground paints first;
+   a saved 'light' choice adds it. */
 (function(){
   const root=document.documentElement;
   let saved=null; try{saved=localStorage.getItem('theme')}catch(e){}
@@ -475,7 +475,7 @@ const MARKETS = {
     if(t==='light')root.setAttribute('data-theme','light');else root.removeAttribute('data-theme');
     document.querySelectorAll('.tlm').forEach(el=>el.textContent=(t==='light')?'Dark':'Light');
   }
-  apply(saved==='dark'?'dark':'light');
+  apply(saved==='light'?'light':'dark');
   function toggle(){
     const next=root.getAttribute('data-theme')==='light'?'dark':'light';
     try{localStorage.setItem('theme',next)}catch(e){}

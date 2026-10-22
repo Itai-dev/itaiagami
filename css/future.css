@@ -1,0 +1,99 @@
+/* =====================================================================
+   FUTURE: the spatial shell around the case studies.
+   Loaded after site.css on the shell pages (home, work, services,
+   about, contact, notes, legal). The case studies keep their own worlds
+   (css/cx*.css); this frames them: a deep ink ground with soft moving
+   light, glass that floats, and type that sits in space.
+
+   Dark is the default; [data-theme="light"] is the paper variant.
+   Page-specific layers live in css/future-<page>.css.
+   ===================================================================== */
+:root{
+  --bg:#07070a; --fg:#f2f1ee; --dim:rgba(242,241,238,.62); --faint:#14141a; --hover:#1a1a22;
+  --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.22);
+  --surface:#111117; --panel:#0c0c11; --stage:#101016;
+  --mark:#a594ff;                                   /* signal: soft violet */
+  --aurora:linear-gradient(100deg,#8b5cf6 0%,#22d3ee 48%,#a3e635 100%);
+  --glass:rgba(255,255,255,.055); --glass-strong:rgba(255,255,255,.09);
+  --glass-edge:rgba(255,255,255,.14); --glass-hi:rgba(255,255,255,.22);
+  --shadow-float:0 30px 80px -30px rgba(0,0,0,.65),0 2px 0 0 rgba(255,255,255,.04) inset;
+  --r-media:14px; --r-panel:24px; --r-btn:9999px;
+  --light-a:rgba(139,92,246,.22); --light-b:rgba(34,211,238,.14); --light-c:rgba(163,230,53,.08);
+  --grain-opacity:0;
+}
+:root[data-theme="light"]{
+  --bg:#f3f2ef; --fg:#111114; --dim:rgba(17,17,20,.6); --faint:#e7e6e2; --hover:#ffffff;
+  --line:rgba(0,0,0,.08); --line-strong:rgba(0,0,0,.18);
+  --surface:#ffffff; --panel:#16161b; --stage:#e9e8e4;
+  --mark:#6d4ff2;
+  --glass:rgba(255,255,255,.55); --glass-strong:rgba(255,255,255,.75);
+  --glass-edge:rgba(0,0,0,.08); --glass-hi:rgba(255,255,255,.9);
+  --shadow-float:0 30px 70px -30px rgba(40,30,80,.28),0 1px 0 0 rgba(255,255,255,.8) inset;
+  --light-a:rgba(139,92,246,.16); --light-b:rgba(34,211,238,.12); --light-c:rgba(163,230,53,.10);
+}
+
+/* ---------- the ground: ink with slow light ---------- */
+html{background:var(--bg)}
+body{background:transparent;color:var(--fg)}
+body::before{
+  content:"";position:fixed;inset:-20vmax;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(38vmax 38vmax at 18% 12%,var(--light-a),transparent 70%),
+    radial-gradient(34vmax 34vmax at 85% 30%,var(--light-b),transparent 70%),
+    radial-gradient(40vmax 40vmax at 50% 105%,var(--light-c),transparent 70%),
+    var(--bg);
+  animation:fx-drift 38s ease-in-out infinite alternate;
+}
+@keyframes fx-drift{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(2vmax,-1.5vmax,0) scale(1.04)}
+  100%{transform:translate3d(-2vmax,1vmax,0) scale(1.02)}
+}
+::selection{background:var(--mark);color:#fff}
+
+/* ---------- header: a floating glass bar ---------- */
+header.site{
+  top:12px!important;left:50%;right:auto;transform:translateX(-50%);
+  width:min(1240px,calc(100% - 24px));border-radius:9999px;
+  background:var(--glass)!important;border:1px solid var(--glass-edge)!important;
+  -webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);
+  box-shadow:var(--shadow-float);
+}
+header.site .hwrap{padding-inline:clamp(14px,2vw,22px)!important;height:56px!important;min-height:0!important}
+header.site .brand{letter-spacing:-.02em}
+header.site nav.primary a{border-radius:9999px;padding:8px 12px;transition:background var(--dur-fast,.2s),color var(--dur-fast,.2s)}
+header.site nav.primary a:hover{background:var(--glass-strong)}
+header.site nav.primary a.active{background:var(--glass-strong)}
+header.site nav.primary a.active::after{display:none}
+@media(max-width:820px){
+  header.site{top:8px!important;width:calc(100% - 16px)}
+  header.site .hwrap{height:52px!important}
+}
+main{padding-top:calc(56px + 28px)}
+
+/* ---------- buttons: light pills and glass ---------- */
+.btn{border-radius:9999px!important}
+.btn.solid{background:var(--fg)!important;color:var(--bg)!important;border-color:var(--fg)!important}
+.btn.solid:hover{box-shadow:0 0 0 6px color-mix(in srgb,var(--mark) 25%,transparent)}
+.btn.ghost,.btn:not(.solid){background:var(--glass)!important;border:1px solid var(--glass-edge)!important;color:var(--fg)!important;
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.btn.ghost:hover,.btn:not(.solid):hover{background:var(--glass-strong)!important}
+
+/* ---------- shared pieces the page layers use ---------- */
+.fx-glass{background:var(--glass);border:1px solid var(--glass-edge);border-radius:var(--r-panel);
+  -webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%);box-shadow:var(--shadow-float)}
+.fx-label{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.fx-aurora{background:var(--aurora);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fx-display{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;letter-spacing:-.05em;line-height:.9}
+
+/* ---------- footer: the end of the page, now part of the space ---------- */
+footer.site{background:color-mix(in srgb,var(--panel) 88%,transparent)!important;
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:1px solid var(--line)!important;
+  border-radius:var(--r-panel) var(--r-panel) 0 0}
+:root[data-theme="light"] footer.site{background:var(--panel)!important}
+
+@media(prefers-reduced-motion:reduce){ body::before{animation:none} }
+@media(prefers-reduced-transparency:reduce){
+  header.site{background:var(--bg)!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .fx-glass{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--surface)}
+}
