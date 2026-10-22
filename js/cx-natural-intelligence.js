@@ -220,7 +220,7 @@ function machine() {
 
   /* ---------- the frame ---------- */
   const scroll = scrollProgress(stageEl);
-  let ready = false, lastFront = -1, lastScroll = 0;
+  let ready = false, lastFront = -1, lastScroll = scroll();
   const steps = stepsEl ? [...stepsEl.children] : [];
   const loop = runWhileVisible(stageEl, (t, dt) => {
     loop.t = t;
