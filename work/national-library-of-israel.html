@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,6 +21,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="../css/site.css" />
+<link rel="stylesheet" href="../css/cx.css" />
+<link rel="stylesheet" href="../css/cx-national-library-of-israel.css" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/+esm" crossorigin />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -49,39 +52,106 @@
 }
 </script>
 </head>
-<body data-chrome="sub">
+<body data-chrome="sub" class="cx cx-national-library-of-israel">
 <div class="grain" aria-hidden="true"></div>
 <header class="site" id="siteHeader"><div class="hwrap"><a href="../index.html" class="brand" aria-label="Itai Agami, home">Itai&nbsp;Agami</a><nav class="primary" aria-label="Primary"><a href="../work.html" class="active">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button></nav><a class="btn solid nav-cta" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a><button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button></div></header>
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile"><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button><span>Tel Aviv, IL · Worldwide</span></div></nav>
-<main>
-  <div class="cwrap">
-    <div class="c-open">
-      <p class="crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>11 / 18</span></p>
-      <h1>National Library of Israel</h1>
-      <p class="oneline">Making a national archive personal: a country’s history told through the people who lived it.</p>
+<main class="cx-main nl">
+  <!-- 1 · the reading desk: an archive book that turns its pages, letters that lift when you reach for them -->
+  <section class="cx-hero nl-hero" aria-labelledby="nl-title">
+    <div class="cx-stage nl-stage" id="nlStage">
+      <img class="cx-poster" src="/assets/opt/e4e7d7622c15.webp" alt="" fetchpriority="high">
     </div>
-    <div class="c-hero"><img src="/assets/opt/e4e7d7622c15.webp" alt="A reading gallery at the National Library of Israel: archival documents in lit vitrines beneath a stone volume." loading="eager" fetchpriority="high"></div>
-    <div class="c-meta">
-      <div class="m"><div class="l">Client</div><div class="v">National Library of Israel</div></div>
-      <div class="m"><div class="l">Role</div><div class="v">Design, Experience</div></div>
-      <div class="m"><div class="l">Disciplines</div><div class="v"><span class="pill">Design</span><span class="pill">Narrative</span><span class="pill">Experience Design</span></div></div>
-      <div class="m"><div class="l">Collaborators</div><div class="v">Shortcut Playground</div></div>
+    <div class="cx-hero-copy nl-copy">
+      <p class="cx-crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>11 / 18</span></p>
+      <h1 class="nl-title" id="nl-title">National Library <span>of Israel</span></h1>
+      <p class="cx-one nl-one">Making a national archive personal: a country’s history told through the people who lived it.</p>
     </div>
-    <div class="c-story">
-      <div class="c-sec"><h2 class="st">The challenge</h2><div class="sb">Tell the nation’s rich history through the personal stories of its people, drawing on an archive of letters, diaries, photographs and art.</div></div>
-      <div class="c-sec"><h2 class="st">The idea</h2><div class="sb">Combine archival content, illustration and imagery into a clean environment that complements the narrators rather than competing with them.</div></div>
-      <div class="c-sec"><h2 class="st">The system</h2><div class="sb">A multi-format approach combining live footage, graphic design, illustration, sound and animation into one coherent narrative.</div></div>
-      <div class="c-sec"><h2 class="st">The outcome</h2><div class="sb small">Produced for the National Library of Israel as one narrative across live footage, archival material, illustration, sound and animation: the nation’s archive told through the voices of the people in it.</div></div>
-      <div class="c-sec"><h2 class="st">Role &amp; contribution</h2><div class="sb small">I designed the visual environment and shaped how archival material, illustration and live footage came together around the narrators.</div></div>
+    <p class="cx-hint nl-hint" id="nlHint" aria-hidden="true">Tap the book to turn a page · Reach for a letter</p>
+  </section>
+
+  <!-- 2 · the brief, filed on a catalogue card -->
+  <section class="nl-brief cx-wrap">
+    <div class="nl-brief-copy">
+      <p class="cx-eyebrow">The challenge</p>
+      <p class="nl-statement">Tell the nation’s rich history through the personal stories of its people, drawing on an archive of letters, diaries, photographs and art.</p>
     </div>
-    <h2 class="c-gal-title">See the highlights<br>of this project.</h2>
-    <div class="c-gallery">
-      <figure><div class="fm"><img src="/assets/opt/bea5f573ce58.webp" loading="lazy" alt="A dark gallery with low seating facing a large projection of a narrator beside an archival book cover."></div><figcaption>The room is built for sitting and listening, with the archive placed next to the person telling the story.</figcaption></figure>
-      <figure><div class="fm"><img src="/assets/opt/54a2e32ea808.webp" loading="lazy" alt="A wall-height projection of Arabic manuscript handwriting in white on black, a narrator standing beside a page from the archive."></div><figcaption>Original manuscripts are used at architectural scale, so the source material sets the tone rather than the design.</figcaption></figure>
-      <figure><div class="fm"><img src="/assets/opt/2dd33e8c1eaf.webp" loading="lazy" alt="An interface of three portraits above archival books, linked by fine coloured lines on black."></div><figcaption>Navigation is by person: a country’s history entered through the individuals who lived it.</figcaption></figure>
+    <aside class="nl-card cx-turn" aria-label="Project details">
+      <p class="nl-card-h"><span>National Library of Israel</span><span aria-hidden="true">11 / 18</span></p>
+      <dl class="nl-card-dl">
+        <div><dt>Client</dt><dd>National Library of Israel</dd></div>
+        <div><dt>Role</dt><dd>Design, Experience</dd></div>
+        <div><dt>Disciplines</dt><dd>Design · Narrative · Experience Design</dd></div>
+        <div><dt>Collaborators</dt><dd>Shortcut Playground</dd></div>
+      </dl>
+      <span class="nl-card-hole" aria-hidden="true"></span>
+    </aside>
+  </section>
+
+  <!-- 3 · the film: an 80:13 panorama, strung between the archive's threads -->
+  <section class="nl-pano" aria-labelledby="nl-film-t">
+    <div class="cx-wrap nl-pano-head">
+      <h2 class="nl-pano-t" id="nl-film-t">The film</h2>
+      <p class="nl-pano-note">The narrative film for the National Library of Israel, combining live footage of narrators with archival letters, diaries, photographs and illustration.</p>
     </div>
-    <div class="c-film"><div class="l">Film</div><p class="note">The narrative film for the National Library of Israel, combining live footage of narrators with archival letters, diaries, photographs and illustration.</p><div class="frame dark" data-mux="8pZhZoqn7dWvQEsIb53V9pIbK1qhzmpSJ4rNYVvT6S00" style="aspect-ratio:80/13" data-title="National Library of Israel film"><button type="button" class="c-play contain" aria-label="Play film: National Library of Israel"><img src="https://image.mux.com/8pZhZoqn7dWvQEsIb53V9pIbK1qhzmpSJ4rNYVvT6S00/thumbnail.webp?width=1600&amp;time=4.5" alt="" loading="lazy"><span class="pb" aria-hidden="true"><svg viewBox="0 0 14 16" aria-hidden="true"><path d="M1.5 1.5l11 6.5-11 6.5z"/></svg></span></button><noscript><iframe src="https://player.mux.com/8pZhZoqn7dWvQEsIb53V9pIbK1qhzmpSJ4rNYVvT6S00" title="National Library of Israel film" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></noscript></div></div>
-    <div class="c-credits"><h3>Credits</h3><p>Creative Agency: Shortcut Playground</p></div>
+    <div class="nl-threads" aria-hidden="true"></div>
+    <div class="nl-strip" id="nlStrip">
+      <div class="nl-strip-in">
+        <div class="c-film cx-film nl-film"><div class="frame dark" data-mux="8pZhZoqn7dWvQEsIb53V9pIbK1qhzmpSJ4rNYVvT6S00" style="aspect-ratio:80/13" data-title="National Library of Israel film"><button type="button" class="c-play contain" aria-label="Play film: National Library of Israel"><img src="https://image.mux.com/8pZhZoqn7dWvQEsIb53V9pIbK1qhzmpSJ4rNYVvT6S00/thumbnail.webp?width=1600&amp;time=4.5" alt="" loading="lazy"><span class="pb" aria-hidden="true"><svg viewBox="0 0 14 16" aria-hidden="true"><path d="M1.5 1.5l11 6.5-11 6.5z"/></svg></span></button><noscript><iframe src="https://player.mux.com/8pZhZoqn7dWvQEsIb53V9pIbK1qhzmpSJ4rNYVvT6S00" title="National Library of Israel film" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></noscript></div></div>
+      </div>
+    </div>
+    <div class="nl-threads nl-threads--b" aria-hidden="true"></div>
+    <p class="cx-wrap nl-pano-meta" aria-hidden="true"><span>80 : 13</span><span class="nl-swipe">Swipe along the panorama →</span></p>
+  </section>
+
+  <!-- 4 · navigation by person: each frame hangs from its own thread -->
+  <section class="nl-people cx-wrap" aria-labelledby="nl-people-t">
+    <h2 class="nl-people-t" id="nl-people-t">History, entered through the people who lived&nbsp;it.</h2>
+    <div class="nl-hang">
+      <figure class="nl-item nl-item--1 cx-turn">
+        <div class="nl-photo"><img src="/assets/opt/bea5f573ce58.webp" loading="lazy" alt="A dark gallery with low seating facing a large projection of a narrator beside an archival book cover."></div>
+        <figcaption>The room is built for sitting and listening, with the archive placed next to the person telling the story.</figcaption>
+      </figure>
+      <figure class="nl-item nl-item--2 cx-turn">
+        <div class="nl-photo"><img src="/assets/opt/54a2e32ea808.webp" loading="lazy" alt="A wall-height projection of Arabic manuscript handwriting in white on black, a narrator standing beside a page from the archive."></div>
+        <figcaption>Original manuscripts are used at architectural scale, so the source material sets the tone rather than the design.</figcaption>
+      </figure>
+      <figure class="nl-item nl-item--3 cx-turn">
+        <div class="nl-photo"><img src="/assets/opt/2dd33e8c1eaf.webp" loading="lazy" alt="An interface of three portraits above archival books, linked by fine coloured lines on black."></div>
+        <figcaption>Navigation is by person: a country’s history entered through the individuals who lived it.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 5 · the reading room, and the idea and system filed beside it -->
+  <section class="nl-room cx-wrap" aria-label="The idea and the system">
+    <figure class="nl-room-fig cx-turn">
+      <img src="/assets/opt/e4e7d7622c15.webp" loading="lazy" alt="A reading gallery at the National Library of Israel: archival documents in lit vitrines beneath a stone volume.">
+    </figure>
+    <div class="nl-folios">
+      <article class="nl-folio">
+        <p class="nl-folio-k"><span>The idea</span><span aria-hidden="true">f. 1</span></p>
+        <p class="nl-folio-b">Combine archival content, illustration and imagery into a clean environment that complements the narrators rather than competing with them.</p>
+      </article>
+      <article class="nl-folio">
+        <p class="nl-folio-k"><span>The system</span><span aria-hidden="true">f. 2</span></p>
+        <p class="nl-folio-b">A multi-format approach combining live footage, graphic design, illustration, sound and animation into one coherent narrative.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 6 · what it became, and what was mine -->
+  <section class="nl-outcome cx-wrap">
+    <p class="cx-eyebrow">The outcome</p>
+    <p class="nl-out-st">Produced for the National Library of Israel as one narrative across live footage, archival material, illustration, sound and animation: the nation’s archive told through the voices of the people in it.</p>
+    <div class="nl-role">
+      <p class="cx-eyebrow">Role &amp; contribution</p>
+      <p class="cx-body">I designed the visual environment and shaped how archival material, illustration and live footage came together around the narrators.</p>
+      <div class="nl-credits"><h3>Credits</h3><p>Creative Agency: Shortcut Playground</p></div>
+    </div>
+  </section>
+
+  <div class="cwrap cx-close">
     <div class="c-cta">
       <h2 class="t">Let’s build something like this.</h2>
       <p class="d">Tell me what it is, who it is for and what is still open. A rough idea is enough to start.</p>
@@ -96,5 +166,6 @@
 
 <script src="../js/contact-config.js"></script>
 <script src="../js/site.js"></script>
+<script type="module" src="../js/cx-national-library-of-israel.js"></script>
 </body>
 </html>

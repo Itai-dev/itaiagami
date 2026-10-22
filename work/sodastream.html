@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,6 +21,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="../css/site.css" />
+<link rel="stylesheet" href="../css/cx.css" />
+<link rel="stylesheet" href="../css/cx-sodastream.css" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/+esm" crossorigin />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -49,31 +52,89 @@
 }
 </script>
 </head>
-<body data-chrome="sub">
+<body data-chrome="sub" class="cx cx-sodastream">
 <div class="grain" aria-hidden="true"></div>
 <header class="site" id="siteHeader"><div class="hwrap"><a href="../index.html" class="brand" aria-label="Itai Agami, home">Itai&nbsp;Agami</a><nav class="primary" aria-label="Primary"><a href="../work.html" class="active">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button></nav><a class="btn solid nav-cta" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a><button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button></div></header>
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile"><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button><span>Tel Aviv, IL · Worldwide</span></div></nav>
-<main>
-  <div class="cwrap">
-    <div class="c-open">
-      <p class="crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>17 / 18</span></p>
-      <h1>SodaStream</h1>
-      <p class="oneline">Push for Better: the brand line played straight, with one guest nobody in the room acknowledges.</p>
+<main class="cx-main ss">
+  <!-- 1 · a kitchen counter in the dunes, a camel beside it, and a machine to push -->
+  <section class="cx-hero ss-hero" aria-labelledby="ss-title">
+    <div class="ss-sky" aria-hidden="true"></div>
+    <div class="cx-stage ss-stage" id="ssStage">
+      <img class="cx-poster" src="https://image.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c/thumbnail.webp?width=1600&amp;time=1" alt="" fetchpriority="high">
     </div>
-    <div class="c-film c-film--lead"><div class="frame dark" data-mux="U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c" data-loop="3-11" data-title="SodaStream film"><button type="button" class="c-play contain" aria-label="Play film: SodaStream"><img src="https://image.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c/thumbnail.webp?width=1600&amp;time=3" alt="" loading="eager" fetchpriority="high"><span class="pb" aria-hidden="true"><svg viewBox="0 0 14 16" aria-hidden="true"><path d="M1.5 1.5l11 6.5-11 6.5z"/></svg></span></button><noscript><iframe src="https://player.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c" title="SodaStream film" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></noscript></div><p class="note">The Push for Better spot: a camel standing in a bright domestic kitchen while nobody in frame reacts to it.</p></div>
-    <div class="c-meta">
-      <div class="m"><div class="l">Client</div><div class="v">SodaStream</div></div>
-      <div class="m"><div class="l">Role</div><div class="v">Art Direction</div></div>
-      <div class="m"><div class="l">Disciplines</div><div class="v"><span class="pill">Art Direction</span><span class="pill">Film</span></div></div>
-      
+    <div class="cx-hero-copy ss-hero-copy">
+      <p class="cx-crumb ss-crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>17 / 18</span></p>
+      <h1 id="ss-title" class="ss-title"><span class="ss-l">Soda</span><span class="ss-b">Stream</span></h1>
+      <p class="cx-one ss-one">Push for Better: the brand line played straight, with one guest nobody in the room acknowledges.</p>
     </div>
-    <div class="c-story">
-      <div class="c-sec"><h2 class="st">The challenge</h2><div class="sb">Carry the Push for Better platform in a spot short enough to run as pre-roll, without spending its few seconds explaining the product.</div></div>
-      <div class="c-sec"><h2 class="st">The idea</h2><div class="sb">Bring the desert indoors. A camel stands in a bright domestic kitchen and nobody in frame reacts to it. The restraint is what makes it land, and the machine stays the only thing actually being demonstrated.</div></div>
-      <div class="c-sec"><h2 class="st">The system</h2><div class="sb">A warm, daylit set built around the product, with the brand lockup resolving over the scene rather than interrupting it.</div></div>
-      <div class="c-sec"><h2 class="st">The outcome</h2><div class="sb small">Produced for the SodaStream Push for Better platform.</div></div>
-      <div class="c-sec"><h2 class="st">Role &amp; contribution</h2><div class="sb small">I art-directed the spot: the set, the framing and the restraint that lets the idea land while the product stays the only thing being demonstrated.</div></div>
+    <p class="cx-hint ss-hint" id="ssHint" aria-hidden="true"><span class="ss-key">P</span><span class="ss-hint-t">Push the lever on the machine</span></p>
+  </section>
+
+  <!-- 2 · the film, framed by the set's blue shelving -->
+  <section class="ss-film-sec" aria-label="The film">
+    <div class="ss-set cx-wrap">
+      <div class="ss-window cx-turn">
+        <div class="c-film cx-film ss-film"><div class="frame dark" data-mux="U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c" data-loop="3-11" data-title="SodaStream film"><button type="button" class="c-play contain" aria-label="Play film: SodaStream"><img src="https://image.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c/thumbnail.webp?width=1600&amp;time=3" alt="" loading="eager" fetchpriority="high"><span class="pb" aria-hidden="true"><svg viewBox="0 0 14 16" aria-hidden="true"><path d="M1.5 1.5l11 6.5-11 6.5z"/></svg></span></button><noscript><iframe src="https://player.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c" title="SodaStream film" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></noscript></div></div>
+      </div>
+      <p class="ss-cap">The Push for Better spot: a camel standing in a bright domestic kitchen while nobody in frame reacts to it.</p>
     </div>
+    <dl class="ss-label cx-wrap">
+      <div><dt>Client</dt><dd>SodaStream</dd></div>
+      <div><dt>Role</dt><dd>Art Direction</dd></div>
+      <div><dt>Disciplines</dt><dd>Art Direction · Film</dd></div>
+    </dl>
+  </section>
+
+  <!-- 3 · the challenge: a few seconds of pre-roll -->
+  <section class="ss-brief cx-wrap">
+    <p class="cx-eyebrow">The challenge</p>
+    <p class="ss-statement">Carry the Push for Better platform in a spot short enough to run as pre-roll, without spending its few seconds explaining the product.</p>
+    <div class="ss-roll" aria-hidden="true"><span class="ss-roll-fill" id="ssRoll"></span></div>
+  </section>
+
+  <!-- 4 · the idea -->
+  <section class="ss-idea" aria-labelledby="ss-idea-t">
+    <div class="cx-wrap">
+      <p class="cx-eyebrow">The idea</p>
+      <h2 id="ss-idea-t" class="ss-big">Bring the <span class="ss-sand">desert</span> <span class="ss-blue">indoors.</span></h2>
+      <div class="ss-idea-grid">
+        <p class="cx-lead">A camel stands in a bright domestic kitchen and nobody in frame reacts to it.</p>
+        <p class="ss-quote">The restraint is what makes it land, and the machine stays the only thing actually being demonstrated.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · the spot in six frames: from the dunes to the kitchen -->
+  <section class="ss-strip-sec" aria-labelledby="ss-strip-t">
+    <h2 id="ss-strip-t" class="ss-strip-t cx-wrap">From the dunes to the counter</h2>
+    <ol class="ss-strip" tabindex="0" aria-labelledby="ss-strip-t">
+      <li><figure><img src="https://image.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c/thumbnail.webp?width=640&amp;time=1" loading="lazy" width="640" height="360" alt="A woman in a white embroidered robe holds up a water bottle at the opening of a tent, with desert dunes behind her."><figcaption>0:01</figcaption></figure></li>
+      <li><figure><img src="https://image.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c/thumbnail.webp?width=640&amp;time=4" loading="lazy" width="640" height="360" alt="The same woman, now in a white top, crosses a bright kitchen set with blue SodaStream shelving."><figcaption>0:04</figcaption></figure></li>
+      <li><figure><img src="https://image.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c/thumbnail.webp?width=640&amp;time=9" loading="lazy" width="640" height="360" alt="She stands at a daylit kitchen counter beside a black sparkling-water machine."><figcaption>0:09</figcaption></figure></li>
+      <li><figure><img src="https://image.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c/thumbnail.webp?width=640&amp;time=10.5" loading="lazy" width="640" height="360" alt="Close-up of a hand pushing the top of the sparkling-water machine."><figcaption>0:10</figcaption></figure></li>
+      <li><figure><img src="https://image.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c/thumbnail.webp?width=640&amp;time=11.5" loading="lazy" width="640" height="360" alt="A glass of sparkling water with ice and strawberries."><figcaption>0:11</figcaption></figure></li>
+      <li><figure><img src="https://image.mux.com/U3wBcbBpG6ySCSlq6Lt1aJk8KqeYlMvSUAZHOV8DQ9c/thumbnail.webp?width=640&amp;time=13" loading="lazy" width="640" height="360" alt="A camel stands in the kitchen behind her as the SodaStream Push for Better lockup resolves over the scene."><figcaption>0:13</figcaption></figure></li>
+    </ol>
+  </section>
+
+  <!-- 6 · system, outcome, role -->
+  <section class="ss-notes cx-wrap">
+    <div class="ss-note">
+      <p class="cx-eyebrow">The system</p>
+      <p class="cx-lead">A warm, daylit set built around the product, with the brand lockup resolving over the scene rather than interrupting it.</p>
+    </div>
+    <div class="ss-note">
+      <p class="cx-eyebrow">The outcome</p>
+      <p class="cx-lead">Produced for the SodaStream Push for Better platform.</p>
+    </div>
+    <div class="ss-note ss-note--role">
+      <p class="cx-eyebrow">Role &amp; contribution</p>
+      <p class="cx-body">I art-directed the spot: the set, the framing and the restraint that lets the idea land while the product stays the only thing being demonstrated.</p>
+    </div>
+  </section>
+
+  <div class="cwrap cx-close">
     <div class="c-cta">
       <h2 class="t">Let’s build something like this.</h2>
       <p class="d">Tell me what it is, who it is for and what is still open. A rough idea is enough to start.</p>
@@ -88,5 +149,6 @@
 
 <script src="../js/contact-config.js"></script>
 <script src="../js/site.js"></script>
+<script type="module" src="../js/cx-sodastream.js"></script>
 </body>
 </html>

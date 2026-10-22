@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,6 +21,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="../css/site.css" />
+<link rel="stylesheet" href="../css/cx.css" />
+<link rel="stylesheet" href="../css/cx-interactive-elections-kan-11.css" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/+esm" crossorigin />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -49,38 +52,91 @@
 }
 </script>
 </head>
-<body data-chrome="sub">
+<body data-chrome="sub" class="cx cx-interactive-elections-kan-11">
 <div class="grain" aria-hidden="true"></div>
 <header class="site" id="siteHeader"><div class="hwrap"><a href="../index.html" class="brand" aria-label="Itai Agami, home">Itai&nbsp;Agami</a><nav class="primary" aria-label="Primary"><a href="../work.html" class="active">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button></nav><a class="btn solid nav-cta" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a><button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button></div></header>
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile"><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button><span>Tel Aviv, IL · Worldwide</span></div></nav>
-<main>
-  <div class="cwrap">
-    <div class="c-open">
-      <p class="crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>07 / 18</span></p>
-      <h1>Kan 11 Interactive Elections</h1>
-      <p class="oneline">Election night as a live interface: results, polls and coalition maths readable at a glance.</p>
+<main class="cx-main el">
+  <!-- 1 · on air: a parliament of 120 seats that counts itself in -->
+  <section class="cx-hero el-hero" aria-labelledby="el-title">
+    <div class="cx-stage el-stage" id="elStage">
+      <img class="cx-poster" src="/assets/opt/elections-hero.webp" alt="" fetchpriority="high">
     </div>
-    <div class="c-hero"><img src="/assets/opt/elections-hero.webp" alt="The Kan 11 election-night title: the Knesset drawn in light above a field of blue particles, titled Elections 2022 in Hebrew." loading="eager" fetchpriority="high"></div>
-    <div class="c-meta">
-      <div class="m"><div class="l">Client</div><div class="v">Kan 11, Israeli Public Broadcasting Corporation</div></div>
-      <div class="m"><div class="l">Role</div><div class="v">Art Direction, Design</div></div>
-      <div class="m"><div class="l">Disciplines</div><div class="v"><span class="pill">Art Direction</span><span class="pill">Data Visualisation</span><span class="pill">Broadcast Graphics</span></div></div>
-      
+    <div class="el-hud" id="elHud" hidden>
+      <p class="el-hud-t"><span class="el-bar" aria-hidden="true"></span>Build a coalition</p>
+      <div class="el-meter" aria-hidden="true"><span class="el-fill" id="elFill"></span><span class="el-maj"><i>Majority</i></span></div>
+      <div class="el-blocs" id="elBlocs" role="group" aria-label="Abstract blocs: tap to add one to the coalition"></div>
+      <div class="el-hud-foot"><p class="el-status" id="elStatus" aria-live="polite">Tap the blocs to build a majority.</p><button type="button" class="el-recount" id="elRecount">Count again</button></div>
+      <p class="el-note">An abstract simulation: no real parties or results.</p>
     </div>
-    <div class="c-story">
-      <div class="c-sec"><h2 class="st">The challenge</h2><div class="sb">Election night gives a broadcast no second takes. Exit polls, real counts, seat projections and coalition blocs all arrive at once, keep changing for hours, and have to stay legible to a viewer who has just switched the television on.</div></div>
-      <div class="c-sec"><h2 class="st">The idea</h2><div class="sb">Treat the whole broadcast as one interface rather than a run of separate slides. Every screen shares the same geometry, glow and hierarchy, so the audience learns to read the system once and then follows the numbers instead of the graphics.</div></div>
-      <div class="c-sec"><h2 class="st">The system</h2><div class="sb">A touch-driven screen set for the 25th Knesset election: title sequence, exit polls, real results against the counted-ballot percentage, per-party seat counts carrying candidate portraits, regional breakdowns mapped over territory, and live windows to reporters in the field.</div></div>
-      <div class="c-sec"><h2 class="st">The outcome</h2><div class="sb small">Produced for Kan 11’s coverage of Israel’s 25th Knesset election, November 2022: one touch-driven screen set spanning title sequence, exit polls, real results, seat counts, regional maps and live field windows.</div></div>
-      <div class="c-sec"><h2 class="st">Role &amp; contribution</h2><div class="sb small">I art-directed and designed the screen set: the shared geometry and hierarchy that make every screen part of one interface, the exit-poll and real-result screens, the regional maps, and the live and social windows that open inside them.</div></div>
+    <div class="cx-hero-copy el-hero-copy">
+      <p class="cx-crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>07 / 18</span></p>
+      <h1 class="el-title" id="el-title"><span class="el-k">Kan 11</span> Interactive Elections</h1>
+      <p class="cx-one">Election night as a live interface: results, polls and coalition maths readable at a glance.</p>
     </div>
-    <h2 class="c-gal-title">See the highlights<br>of this project.</h2>
-    <div class="c-gallery">
-      <figure><div class="fm"><img src="/assets/opt/elections-g1.webp" loading="lazy" alt="The real-results screen: a party-by-party bar list for Tel Aviv over a glowing map of the region."></div><figcaption>Regional results are mapped over territory, so a viewer can see where a number comes from.</figcaption></figure>
-      <figure><div class="fm"><img src="/assets/opt/elections-g2.webp" loading="lazy" alt="The polls screen: a pie divided 58 / 57 / 5 between the two blocs and the Arab parties."></div><figcaption>Coalition arithmetic reduced to one shape a viewer can read in a second.</figcaption></figure>
-      <figure class="half"><div class="fm"><img src="/assets/opt/elections-g3.webp" loading="lazy" alt="The live window: a reporter on air from Labour headquarters in Tel Aviv, framed inside the results interface."></div><figcaption>Live feeds open inside the system rather than cutting away from it.</figcaption></figure>
-      <figure class="half"><div class="fm"><img src="/assets/opt/elections-g4.webp" loading="lazy" alt="The social-media screen: a post from a party leader shown with its video and full text."></div><figcaption>Statements arriving during the night are absorbed into the broadcast without breaking its language.</figcaption></figure>
+  </section>
+
+  <!-- 2 · the ident strip -->
+  <section class="el-ident cx-wrap" aria-label="Project details">
+    <dl class="el-strip">
+      <div><dt>Client</dt><dd>Kan 11, Israeli Public Broadcasting Corporation</dd></div>
+      <div><dt>Role</dt><dd>Art Direction, Design</dd></div>
+      <div><dt>Disciplines</dt><dd>Art Direction · Data Visualisation · Broadcast Graphics</dd></div>
+    </dl>
+  </section>
+
+  <!-- 3 · the running order: a sticky rail and one screen per beat -->
+  <section class="el-run cx-wrap" aria-label="The story">
+    <nav class="el-rail" aria-label="Sections">
+      <a href="#el-challenge" class="on">Challenge</a><a href="#el-idea">Idea</a><a href="#el-system">System</a><a href="#el-outcome">Outcome</a>
+    </nav>
+    <div class="el-screens">
+      <article class="el-screen" id="el-challenge">
+        <h2 class="el-h"><span class="el-bar" aria-hidden="true"></span>The challenge</h2>
+        <p class="el-big">No second takes.</p>
+        <p class="cx-body">Election night gives a broadcast no second takes. Exit polls, real counts, seat projections and coalition blocs all arrive at once, keep changing for hours, and have to stay legible to a viewer who has just switched the television on.</p>
+      </article>
+      <article class="el-screen" id="el-idea">
+        <h2 class="el-h"><span class="el-bar" aria-hidden="true"></span>The idea</h2>
+        <p class="el-big">One interface, not a run of slides.</p>
+        <p class="cx-body">Treat the whole broadcast as one interface rather than a run of separate slides. Every screen shares the same geometry, glow and hierarchy, so the audience learns to read the system once and then follows the numbers instead of the graphics.</p>
+      </article>
+      <article class="el-screen" id="el-system">
+        <h2 class="el-h"><span class="el-bar" aria-hidden="true"></span>The system</h2>
+        <p class="el-big">A touch-driven screen set.</p>
+        <p class="cx-body">A touch-driven screen set for the 25th Knesset election: title sequence, exit polls, real results against the counted-ballot percentage, per-party seat counts carrying candidate portraits, regional breakdowns mapped over territory, and live windows to reporters in the field.</p>
+        <ul class="el-chips" aria-label="Screens in the set"><li>Title sequence</li><li>Exit polls</li><li>Real results</li><li>Seat counts</li><li>Regional maps</li><li>Live field windows</li></ul>
+      </article>
     </div>
+  </section>
+
+  <!-- 4 · the multiview: every screen of the set on one wall -->
+  <section class="el-wall" aria-labelledby="el-wall-t">
+    <div class="cx-wrap">
+      <h2 class="el-wall-t" id="el-wall-t">Learn to read it once.<br><span>Then follow the numbers.</span></h2>
+      <div class="el-mv">
+        <figure class="el-mon el-mon--wide"><div class="el-glass"><img src="/assets/opt/elections-hero.webp" loading="lazy" alt="The Kan 11 election-night title: the Knesset drawn in light above a field of blue particles, titled Elections 2022 in Hebrew."></div><figcaption><span class="el-tag">01 · Title</span></figcaption></figure>
+        <figure class="el-mon"><div class="el-glass"><img src="/assets/opt/elections-g1.webp" loading="lazy" alt="The real-results screen: a party-by-party bar list for Tel Aviv over a glowing map of the region."></div><figcaption><span class="el-tag">02 · Real results</span>Regional results are mapped over territory, so a viewer can see where a number comes from.</figcaption></figure>
+        <figure class="el-mon"><div class="el-glass"><img src="/assets/opt/elections-g2.webp" loading="lazy" alt="The polls screen: a pie divided 58 / 57 / 5 between the two blocs and the Arab parties."></div><figcaption><span class="el-tag">03 · Polls</span>Coalition arithmetic reduced to one shape a viewer can read in a second.</figcaption></figure>
+        <figure class="el-mon"><div class="el-glass"><img src="/assets/opt/elections-g3.webp" loading="lazy" alt="The live window: a reporter on air from Labour headquarters in Tel Aviv, framed inside the results interface."></div><figcaption><span class="el-tag">04 · Live</span>Live feeds open inside the system rather than cutting away from it.</figcaption></figure>
+        <figure class="el-mon"><div class="el-glass"><img src="/assets/opt/elections-g4.webp" loading="lazy" alt="The social-media screen: a post from a party leader shown with its video and full text."></div><figcaption><span class="el-tag">05 · Social</span>Statements arriving during the night are absorbed into the broadcast without breaking its language.</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · the outcome, on the broadcast's own blue -->
+  <section class="el-band" id="el-outcome" aria-labelledby="el-out-t">
+    <div class="cx-wrap el-band-in">
+      <h2 class="el-h" id="el-out-t"><span class="el-bar" aria-hidden="true"></span>The outcome</h2>
+      <p class="cx-statement">Produced for Kan 11’s coverage of Israel’s 25th Knesset election, November 2022.</p>
+      <div class="el-band-grid">
+        <p class="cx-body">One touch-driven screen set spanning title sequence, exit polls, real results, seat counts, regional maps and live field windows.</p>
+        <p class="cx-body el-role"><strong>Role &amp; contribution.</strong> I art-directed and designed the screen set: the shared geometry and hierarchy that make every screen part of one interface, the exit-poll and real-result screens, the regional maps, and the live and social windows that open inside them.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cwrap cx-close">
     <div class="c-cta">
       <h2 class="t">Let’s build something like this.</h2>
       <p class="d">Tell me what it is, who it is for and what is still open. A rough idea is enough to start.</p>
@@ -95,5 +151,6 @@
 
 <script src="../js/contact-config.js"></script>
 <script src="../js/site.js"></script>
+<script type="module" src="../js/cx-interactive-elections-kan-11.js"></script>
 </body>
 </html>

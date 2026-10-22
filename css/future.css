@@ -1,0 +1,79 @@
+/* =====================================================================
+   FUTURE: the spatial shell around the case studies.
+   Loaded after site.css on the shell pages (home, work, services,
+   about, contact, notes, legal). The case studies keep their own worlds
+   (css/cx*.css); this frames them: a deep ink ground with soft moving
+   light, glass that floats, and type that sits in space.
+
+   Dark is the default; [data-theme="light"] is the paper variant.
+   Page-specific layers live in css/future-<page>.css.
+   ===================================================================== */
+:root{
+  --bg:#07070a; --fg:#f2f1ee; --dim:rgba(242,241,238,.62); --faint:#14141a; --hover:#1a1a22;
+  --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.22);
+  --surface:#111117; --panel:#0c0c11; --stage:#101016;
+  --mark:#a594ff;                                   /* signal: soft violet */
+  --aurora:linear-gradient(100deg,#8b5cf6 0%,#22d3ee 48%,#a3e635 100%);
+  --glass:rgba(255,255,255,.055); --glass-strong:rgba(255,255,255,.09);
+  --glass-edge:rgba(255,255,255,.14); --glass-hi:rgba(255,255,255,.22);
+  --shadow-float:0 30px 80px -30px rgba(0,0,0,.65),0 2px 0 0 rgba(255,255,255,.04) inset;
+  --r-media:8px; --r-panel:12px; --r-btn:8px;   /* the site's squared system */
+  --light-a:rgba(139,92,246,.22); --light-b:rgba(34,211,238,.14); --light-c:rgba(163,230,53,.08);
+  --grain-opacity:0;
+}
+:root[data-theme="light"]{
+  --bg:#f3f2ef; --fg:#111114; --dim:rgba(17,17,20,.6); --faint:#e7e6e2; --hover:#ffffff;
+  --line:rgba(0,0,0,.08); --line-strong:rgba(0,0,0,.18);
+  --surface:#ffffff; --panel:#16161b; --stage:#e9e8e4;
+  --mark:#6d4ff2;
+  --glass:rgba(255,255,255,.55); --glass-strong:rgba(255,255,255,.75);
+  --glass-edge:rgba(0,0,0,.08); --glass-hi:rgba(255,255,255,.9);
+  --shadow-float:0 30px 70px -30px rgba(40,30,80,.28),0 1px 0 0 rgba(255,255,255,.8) inset;
+  --light-a:rgba(139,92,246,.16); --light-b:rgba(34,211,238,.12); --light-c:rgba(163,230,53,.10);
+}
+
+/* ---------- the ground: ink with slow light ---------- */
+html{background:var(--bg)}
+body{background:transparent;color:var(--fg)}
+body::before{
+  content:"";position:fixed;inset:-20vmax;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(38vmax 38vmax at 18% 12%,var(--light-a),transparent 70%),
+    radial-gradient(34vmax 34vmax at 85% 30%,var(--light-b),transparent 70%),
+    radial-gradient(40vmax 40vmax at 50% 105%,var(--light-c),transparent 70%),
+    var(--bg);
+  animation:fx-drift 38s ease-in-out infinite alternate;
+  display:block!important;width:auto!important;margin:0!important;border:0!important;   /* site.css frames body::before on desktop */
+}
+main::before{display:none!important}   /* the old grey stage behind page titles */
+@keyframes fx-drift{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(2vmax,-1.5vmax,0) scale(1.04)}
+  100%{transform:translate3d(-2vmax,1vmax,0) scale(1.02)}
+}
+::selection{background:var(--mark);color:#fff}
+
+/* ---------- header: the site header (css/site.css), unchanged ---------- */
+
+/* theme toggle: a drawn half-moon (the glyph renders as a sliver in the glass bar) */
+.toggle>span[aria-hidden]{font-size:0;display:inline-block;width:14px;height:14px;border-radius:50%;
+  border:1.5px solid currentColor;background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+
+/* ---------- buttons: the site buttons (css/site.css, 8px rectangles), unchanged ---------- */
+
+/* ---------- shared pieces the page layers use ---------- */
+.fx-glass{background:var(--glass);border:1px solid var(--glass-edge);border-radius:var(--r-panel);
+  -webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%);box-shadow:var(--shadow-float)}
+.fx-label{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.fx-aurora{background:var(--aurora);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fx-display{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;letter-spacing:-.05em;line-height:.9}
+
+/* ---------- footer: the end of the page, now part of the space ---------- */
+footer.site{background:color-mix(in srgb,var(--panel) 88%,transparent)!important;
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:1px solid var(--line)!important}
+:root[data-theme="light"] footer.site{background:var(--panel)!important}
+
+@media(prefers-reduced-motion:reduce){ body::before{animation:none} }
+@media(prefers-reduced-transparency:reduce){
+  .fx-glass{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--surface)}
+}

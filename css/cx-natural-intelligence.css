@@ -1,0 +1,105 @@
+/* ============================================================
+   Natural Intelligence: the machine room.
+   A near-black ground with the logo's red-to-orange gradient as the
+   only colour: the signal. Mono labels like a spec sheet, the loop
+   drawn as a chain, every creative on one wall. Loaded only here.
+   ============================================================ */
+body.cx.cx-natural-intelligence{
+  --ni-red:#ff0c2c; --ni-orange:#ff7a1a; --ni-grad:linear-gradient(100deg,#ff0c2c 0%,#ff3d22 45%,#ff7a1a 100%);
+  --ni-ink:#0b0b0c; --ni-raise:#151517;
+  --cx-bg:var(--ni-ink); --cx-fg:#f4f2ef; --cx-dim:rgba(244,242,239,.62); --cx-accent:#ff5a2a;
+  --cx-line:rgba(255,255,255,.12); --cx-header:rgba(11,11,12,.6);
+  --cx-btn-bg:#fff; --cx-btn-fg:var(--ni-ink);
+  --panel:#050506; --faint:#1b1b1e; --surface:#161618;
+}
+.ni-wrap{width:min(1320px,100% - 2*var(--gutter,clamp(16px,4vw,56px)));margin-inline:auto}
+
+/* ---------- 1 · hero: title top-left, the ring below, the loop's state on the right ---------- */
+.ni-hero{justify-content:flex-start;min-height:max(640px,calc(100svh - 64px));
+  background:radial-gradient(55% 45% at 50% 72%,rgba(255,60,30,.2),transparent 70%),var(--ni-ink)}
+.ni-stage .cx-poster{object-fit:contain;opacity:.6}
+.ni-stage .cx-canvas{cursor:grab}
+.ni-stage.touched ~ .ni-hud .ni-drag{opacity:0}
+/* a scrim at the top so the title stays clean over the ring */
+.ni-stage::after{content:"";position:absolute;inset:0 0 auto 0;height:42%;pointer-events:none;background:linear-gradient(180deg,var(--ni-ink) 20%,rgba(11,11,12,0))}
+.ni-hero-copy{padding:clamp(24px,5vh,56px) var(--gutter,clamp(16px,4vw,56px)) 0;max-width:none}
+.ni-title{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(2.9rem,6.6vw,6.4rem);line-height:.9;letter-spacing:-.05em;margin:0;max-width:11ch}
+.ni-one{margin:clamp(16px,2vw,24px) 0 0;max-width:34ch;font-size:clamp(1.0625rem,1.5vw,1.3125rem);line-height:1.45;color:var(--cx-dim)}
+.ni-hud{position:absolute;z-index:2;right:var(--gutter,clamp(16px,4vw,56px));top:clamp(32px,6vh,64px);text-align:right;pointer-events:none;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.8125rem;letter-spacing:.04em}
+.ni-steps{list-style:none;margin:0 0 14px;padding:0;display:flex;gap:6px;justify-content:flex-end}
+.ni-steps li{padding:7px 12px;border-radius:999px;border:1px solid var(--cx-line);color:var(--cx-dim);text-transform:uppercase;transition:color .3s,background .3s,border-color .3s}
+.ni-steps li.on{background:var(--ni-grad);border-color:transparent;color:#fff}
+.ni-now{margin:0;color:#fff;min-height:1.4em}
+.ni-drag{margin:8px 0 0;color:var(--cx-dim);transition:opacity .5s}
+@media(max-width:760px){
+  .ni-hud{top:auto;bottom:18px;left:var(--gutter,16px);right:var(--gutter,16px);text-align:center}
+  .ni-steps{justify-content:center}
+  .ni-drag{display:none}
+}
+
+/* ---------- 2 · spec sheet ---------- */
+.ni-spec-sec{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);padding:clamp(72px,9vw,130px) 0 clamp(60px,8vw,110px);align-items:start}
+.ni-spec{margin:0;border-top:1px solid var(--cx-line)}
+.ni-spec div{display:grid;grid-template-columns:9rem 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--cx-line)}
+.ni-spec dt{font-family:"IBM Plex Mono",monospace;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;color:var(--cx-accent);padding-top:3px}
+.ni-spec dd{margin:0;font-size:1rem;line-height:1.5}
+.ni-note{margin:0;font-size:.9375rem;line-height:1.65;color:var(--cx-dim);padding:22px 24px;border-radius:16px;background:var(--ni-raise);border:1px solid var(--cx-line)}
+.ni-note a{color:#fff;text-decoration:underline;text-decoration-color:var(--cx-accent);text-underline-offset:3px}
+@media(max-width:860px){.ni-spec-sec{grid-template-columns:1fr}.ni-spec div{grid-template-columns:7.5rem 1fr}}
+
+/* ---------- 3 · challenge and idea ---------- */
+.ni-why{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,7vw,120px);padding:clamp(40px,5vw,80px) 0 clamp(90px,11vw,170px)}
+.ni-block--idea{margin-top:clamp(60px,12vw,200px)}
+.ni-statement{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:600;font-size:clamp(2rem,3.8vw,3.6rem);line-height:1.02;letter-spacing:-.035em;margin:0 0 clamp(24px,3vw,40px);text-wrap:balance}
+.ni-block--idea .ni-statement{background:var(--ni-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media(max-width:860px){.ni-why{grid-template-columns:1fr}.ni-block--idea{margin-top:0}}
+
+/* ---------- 4 · the loop ---------- */
+.ni-system{position:relative;padding:clamp(80px,10vw,150px) 0;background:linear-gradient(180deg,var(--ni-ink),#120806 50%,var(--ni-ink))}
+.ni-loop{list-style:none;margin:clamp(24px,3vw,40px) 0 0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(8px,1vw,14px);counter-reset:s}
+.ni-loop li{position:relative;padding:clamp(14px,1.4vw,20px);min-height:clamp(120px,11vw,160px);border-radius:14px;border:1px solid var(--cx-line);background:var(--ni-raise);
+  display:flex;flex-direction:column;justify-content:space-between;font-family:"Inter Tight",Inter,sans-serif;font-weight:600;font-size:clamp(1rem,1.3vw,1.25rem);line-height:1.15;letter-spacing:-.01em}
+.ni-loop li span{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:.75rem;color:var(--cx-dim)}
+.ni-loop li:not(:last-child)::after{content:"";position:absolute;top:50%;right:calc(-1 * clamp(8px,1vw,14px));width:clamp(8px,1vw,14px);height:1px;background:rgba(255,255,255,.3)}
+.ni-loop li:nth-child(5){background:var(--ni-grad);border-color:transparent}
+.ni-loop li:nth-child(5) span{color:rgba(255,255,255,.85)}
+.ni-return{position:relative;margin:clamp(14px,1.6vw,22px) 0 0;padding:16px 0 0;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:.8125rem;color:var(--cx-accent)}
+.ni-return::before{content:"";position:absolute;left:calc(100%/14);right:calc(100%/14);top:0;height:14px;border:1px dashed rgba(255,90,42,.6);border-top:0;border-radius:0 0 12px 12px}
+.ni-system-copy{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);margin-top:clamp(56px,7vw,100px)}
+@media(max-width:960px){
+  .ni-loop{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .ni-loop li::after{display:none}
+  .ni-return::before{display:none}
+}
+@media(max-width:600px){.ni-loop{grid-template-columns:1fr 1fr}.ni-loop li{min-height:96px}.ni-loop li:last-child{grid-column:1 / -1}.ni-system-copy{grid-template-columns:1fr}}
+
+/* ---------- 5 · the wall ---------- */
+.ni-wall-sec{padding:clamp(90px,11vw,160px) 0 clamp(70px,9vw,130px)}
+.ni-wall-t{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(3rem,10vw,9rem);line-height:.86;letter-spacing:-.06em;margin:0 0 clamp(32px,4vw,56px);
+  background:var(--ni-grad);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+.ni-wall{columns:5 150px;column-gap:clamp(10px,1.2vw,16px)}
+.ni-tile{break-inside:avoid;margin:0 0 clamp(10px,1.2vw,16px);border-radius:14px;overflow:hidden;background:var(--faint);border:1px solid var(--cx-line)}
+.ni-tile img,.ni-tile video{display:block;width:100%;height:auto}
+
+/* ---------- 6 · where it goes ---------- */
+.ni-market{padding:clamp(40px,6vw,90px) 0 clamp(80px,10vw,150px);border-top:1px solid var(--cx-line)}
+.ni-market-head{display:grid;grid-template-columns:minmax(0,.5fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);margin-bottom:clamp(40px,5vw,72px)}
+.ni-sites{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.4vw,36px)}
+.ni-sites a{display:block;color:inherit;text-decoration:none}
+.ni-shot{position:relative;border-radius:14px;overflow:hidden;background:#fff;padding-top:28px;border:1px solid var(--cx-line);transition:transform .5s cubic-bezier(.2,.7,.1,1)}
+.ni-shot img{display:block;width:100%;height:auto}
+.ni-dots{position:absolute;left:12px;top:10px;display:flex;gap:6px}
+.ni-dots i{width:8px;height:8px;border-radius:50%;background:#d7d7d7}
+.ni-sites a:hover .ni-shot{transform:translateY(-6px)}
+.ni-cap{margin-top:14px;font-family:"Inter Tight",Inter,sans-serif;font-weight:600;font-size:clamp(1.125rem,1.6vw,1.375rem)}
+.ni-cap .arw{color:var(--cx-accent)}
+@media(max-width:760px){.ni-market-head,.ni-sites{grid-template-columns:1fr}}
+
+/* ---------- 7 · outcome, why, role ---------- */
+.ni-end{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(40px,5vw,80px) clamp(32px,6vw,96px);padding:0 0 clamp(80px,10vw,140px)}
+.ni-end-col--wide{grid-column:1 / -1;padding-bottom:clamp(16px,2vw,32px);border-bottom:1px solid var(--cx-line)}
+.ni-outcome{margin:0;font-family:"Inter Tight",Inter,sans-serif;font-weight:500;font-size:clamp(1.5rem,2.8vw,2.5rem);line-height:1.18;letter-spacing:-.025em;max-width:32ch;text-wrap:pretty}
+@media(max-width:760px){.ni-end{grid-template-columns:1fr}}
+
+@media(prefers-reduced-motion:reduce){.ni-steps li,.ni-shot,.ni-drag{transition:none}}

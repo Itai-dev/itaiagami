@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,8 +21,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="css/site.css" />
+<link rel="stylesheet" href="css/future.css" />
+<link rel="stylesheet" href="css/future-pages.css" />
 </head>
-<body>
+<body class="fp fp-article fp-doc">
 <div class="grain" aria-hidden="true"></div>
 
 <header class="site" id="siteHeader">
@@ -53,6 +55,7 @@
   </div>
 </nav>
 
+<div class="fp-progress" aria-hidden="true"><span></span></div>
 <main>
   <div class="cwrap">
     <!-- LAWYER REVIEW: this page is a plain-language draft written for a one-person
@@ -95,6 +98,7 @@
         <p>If you send an enquiry, what you enter (name, email, organisation and the details of your project) is emailed to me through Resend, an email delivery service, together with the referral and campaign information above, and a backup copy may be kept in a private Google Sheet so no enquiry is lost. You receive a short automatic confirmation by email. It is used only to reply to you and to discuss your project, and it is not sold or shared for marketing. Analytics never records what you type.</p>
         <h2>Booking a call</h2>
         <p>The contact page shows my Cal.com booking calendar inside the site, and the "Book a call" buttons open the same page. It is provided by Cal.com: the calendar loads from Cal.com's servers, and the name, email and any notes you enter when you book go to Cal.com under <a href="https://cal.com/privacy" target="_blank" rel="noopener">Cal.com's privacy policy</a>, and from there to my calendar. I use them only to hold the call.</p>
+        <p>The Museum of Natural History case study can use your camera, but only if you press "Enable camera". The image is processed in your browser to draw the effect; nothing is recorded, stored or sent. When you enable it, a person-detection model is downloaded from Google and the code that runs it from jsDelivr. The camera turns off when you press "Stop camera", scroll away or leave the page.</p>
         <!-- LAWYER REVIEW: how long enquiry emails are kept, and the legal basis
              (steps prior to a contract / legitimate interest). -->
 
@@ -125,5 +129,6 @@
 
 <script src="js/contact-config.js"></script>
 <script src="js/site.js"></script>
+<script src="js/future-pages.js"></script>
 </body>
 </html>

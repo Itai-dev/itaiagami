@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,6 +21,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="../css/site.css" />
+<link rel="stylesheet" href="../css/cx.css" />
+<link rel="stylesheet" href="../css/cx-natural-intelligence.css" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/+esm" crossorigin />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -49,80 +52,129 @@
 }
 </script>
 </head>
-<body data-chrome="sub">
+<body data-chrome="sub" class="cx cx-natural-intelligence">
 <div class="grain" aria-hidden="true"></div>
 <header class="site" id="siteHeader"><div class="hwrap"><a href="../index.html" class="brand" aria-label="Itai Agami, home">Itai&nbsp;Agami</a><nav class="primary" aria-label="Primary"><a href="../work.html" class="active">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button></nav><a class="btn solid nav-cta" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a><button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button></div></header>
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile"><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button><span>Tel Aviv, IL · Worldwide</span></div></nav>
-<main>
-  <div class="cwrap">
-    <div class="c-open">
-      <p class="crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>09 / 18</span></p>
-      <h1>Natural Intelligence</h1>
-      <p class="oneline">Turning creative production into a system that generates, tests and scales ideas.</p>
+<main class="cx-main ni">
+  <!-- 1 · the machine: a ring of creatives in market that turns, tests and scales -->
+  <section class="cx-hero ni-hero" aria-labelledby="ni-title">
+    <div class="cx-stage ni-stage" id="niStage">
+      <img class="cx-poster" src="/assets/opt/ni-hero.webp" alt="" fetchpriority="high">
     </div>
-    <div class="c-hero-reel">
-      <div class="marquee" aria-label="Creative territories running in market">
-        <div class="track">
-          <div class="tile"><img src="/assets/opt/ni-ad-pet-23.webp" width="720" height="900" alt="BestMoney: pet insurance"></div>
-          <div class="tile"><video src="/assets/opt/ni-ad-home-options.mp4" poster="/assets/opt/ni-ad-home-options-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: home insurance film"></video></div>
-          <div class="tile"><img src="/assets/opt/ni-ad-cards-balance.webp" width="720" height="900" alt="BestMoney: balance transfer cards"></div>
-          <div class="tile"><video src="/assets/opt/ni-ad-loans-sba.mp4" poster="/assets/opt/ni-ad-loans-sba-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: SBA loans film"></video></div>
-          <div class="tile"><img src="/assets/opt/ni-ad-car-select.webp" width="506" height="900" alt="BestMoney: car insurance"></div>
-          <div class="tile"><video src="/assets/opt/ni-ad-pet-vetbill.mp4" poster="/assets/opt/ni-ad-pet-vetbill-poster.jpg" width="480" height="600" muted loop playsinline preload="none" aria-label="BestMoney: pet insurance vet bill film"></video></div>
-          <div class="tile"><img src="/assets/opt/ni-ad-loans-100k.webp" width="720" height="900" alt="BestMoney: business loans"></div>
-          <div class="tile"><video src="/assets/opt/ni-ad-street-interview.mp4" poster="/assets/opt/ni-ad-street-interview-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: street interview film"></video></div>
-          <div class="tile"><img src="/assets/opt/ni-ad-cards-apr.webp" width="720" height="900" alt="BestMoney: intro APR cards"></div>
-          <div class="tile"><video src="/assets/opt/ni-ad-home-storm.mp4" poster="/assets/opt/ni-ad-home-storm-poster.jpg" width="480" height="600" muted loop playsinline preload="none" aria-label="BestMoney: home insurance storm film"></video></div>
-          <div class="tile"><img src="/assets/opt/ni-ad-pet-15.webp" width="506" height="900" alt="BestMoney: pet insurance"></div>
-          <div class="tile"><video src="/assets/opt/ni-ad-cards-motion.mp4" poster="/assets/opt/ni-ad-cards-motion-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: balance transfer motion"></video></div>
-          <div class="tile"><video src="/assets/opt/ni-ad-home-ugc.mp4" poster="/assets/opt/ni-ad-home-ugc-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: home insurance creator film"></video></div>
-          <div class="tile" aria-hidden="true"><img src="/assets/opt/ni-ad-pet-23.webp" width="720" height="900" alt=""></div>
-          <div class="tile" aria-hidden="true"><video src="/assets/opt/ni-ad-home-options.mp4" poster="/assets/opt/ni-ad-home-options-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: home insurance film"></video></div>
-          <div class="tile" aria-hidden="true"><img src="/assets/opt/ni-ad-cards-balance.webp" width="720" height="900" alt=""></div>
-          <div class="tile" aria-hidden="true"><video src="/assets/opt/ni-ad-loans-sba.mp4" poster="/assets/opt/ni-ad-loans-sba-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: SBA loans film"></video></div>
-          <div class="tile" aria-hidden="true"><img src="/assets/opt/ni-ad-car-select.webp" width="506" height="900" alt=""></div>
-          <div class="tile" aria-hidden="true"><video src="/assets/opt/ni-ad-pet-vetbill.mp4" poster="/assets/opt/ni-ad-pet-vetbill-poster.jpg" width="480" height="600" muted loop playsinline preload="none" aria-label="BestMoney: pet insurance vet bill film"></video></div>
-          <div class="tile" aria-hidden="true"><img src="/assets/opt/ni-ad-loans-100k.webp" width="720" height="900" alt=""></div>
-          <div class="tile" aria-hidden="true"><video src="/assets/opt/ni-ad-street-interview.mp4" poster="/assets/opt/ni-ad-street-interview-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: street interview film"></video></div>
-          <div class="tile" aria-hidden="true"><img src="/assets/opt/ni-ad-cards-apr.webp" width="720" height="900" alt=""></div>
-          <div class="tile" aria-hidden="true"><video src="/assets/opt/ni-ad-home-storm.mp4" poster="/assets/opt/ni-ad-home-storm-poster.jpg" width="480" height="600" muted loop playsinline preload="none" aria-label="BestMoney: home insurance storm film"></video></div>
-          <div class="tile" aria-hidden="true"><img src="/assets/opt/ni-ad-pet-15.webp" width="506" height="900" alt=""></div>
-          <div class="tile" aria-hidden="true"><video src="/assets/opt/ni-ad-cards-motion.mp4" poster="/assets/opt/ni-ad-cards-motion-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: balance transfer motion"></video></div>
-          <div class="tile" aria-hidden="true"><video src="/assets/opt/ni-ad-home-ugc.mp4" poster="/assets/opt/ni-ad-home-ugc-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: home insurance creator film"></video></div>
-        </div>
+    <div class="cx-hero-copy ni-hero-copy">
+      <p class="cx-crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>09 / 18</span></p>
+      <h1 id="ni-title" class="ni-title">Natural Intelligence</h1>
+      <p class="ni-one">Turning creative production into a system that generates, tests and scales ideas.</p>
+    </div>
+    <div class="ni-hud" aria-hidden="true">
+      <ol class="ni-steps" id="niSteps"><li>Generate</li><li>Test</li><li>Scale</li></ol>
+      <p class="ni-now" id="niNow">Creative territories running in market</p>
+      <p class="ni-drag">Drag to turn · tap a creative</p>
+    </div>
+  </section>
+
+  <!-- 2 · the brief, as a spec sheet -->
+  <section class="ni-spec-sec ni-wrap">
+    <dl class="ni-spec">
+      <div><dt>Client</dt><dd>Natural Intelligence</dd></div>
+      <div><dt>Title</dt><dd>Creative Art Director (in-house), Jan 2025 - Jun 2026</dd></div>
+      <div><dt>Disciplines</dt><dd>Creative Systems · Concept Development · Art Direction · AI-assisted Workflow · Motion &amp; Video</dd></div>
+      <div><dt>Collaborators</dt><dd>In-house copy, growth, data and creative teams</dd></div>
+    </dl>
+    <p class="ni-note">Output from the system in market: creative for Natural Intelligence’s comparison brands, developed with the in-house creative team. Each one began as a hypothesis about an audience rather than as a request for an asset. <a href="https://www.facebook.com/ads/library/?active_status=active&amp;ad_type=all&amp;country=ALL&amp;is_targeted_country=false&amp;media_type=all&amp;q=bestmoney&amp;search_type=keyword_unordered&amp;sort_data[direction]=desc&amp;sort_data[mode]=total_impressions" target="_blank" rel="noopener noreferrer">See what is running today in Meta’s Ad Library</a>.</p>
+  </section>
+
+  <!-- 3 · challenge and idea, two statements -->
+  <section class="ni-why ni-wrap">
+    <div class="ni-block">
+      <p class="cx-eyebrow">The challenge</p>
+      <p class="ni-statement">The challenge was never to produce more assets.</p>
+      <p class="cx-body">Natural Intelligence runs digital comparison platforms across some of the most competitive consumer categories in the US market: car insurance, pet insurance, mortgage, home equity, business loans and home security. Every creative decision lived inside a measurable acquisition system: the work had to stop attention in crowded feeds, explain complex products quickly, build trust around high-consideration decisions and still produce enough variation to learn from. The challenge was never to produce more assets. It was to create conditions in which creative thinking could generate repeatable learning.</p>
+    </div>
+    <div class="ni-block ni-block--idea">
+      <p class="cx-eyebrow">The idea</p>
+      <p class="ni-statement">A variation should test an idea, not the colour of a&nbsp;button.</p>
+      <p class="cx-body">Treat creative as a system rather than a run of campaigns. Build distinct creative territories, each with its own point of view, tone and visual language, then translate them into testable variables, so every execution answers a question instead of decorating one. A variation should test an idea, not the colour of a button.</p>
+    </div>
+  </section>
+
+  <!-- 4 · the system: the loop, drawn -->
+  <section class="ni-system" aria-labelledby="ni-system-t">
+    <div class="ni-wrap">
+      <p class="cx-eyebrow" id="ni-system-t">The system</p>
+      <ol class="ni-loop" aria-label="The loop">
+        <li><span>01</span>Audience tension</li>
+        <li><span>02</span>Hypothesis</li>
+        <li><span>03</span>Creative territory</li>
+        <li><span>04</span>Concept</li>
+        <li><span>05</span>Variation</li>
+        <li><span>06</span>Test and learn</li>
+        <li><span>07</span>Scale</li>
+      </ol>
+      <p class="ni-return" aria-hidden="true">The performance signal feeds the next round of concepts</p>
+      <div class="ni-system-copy">
+        <p class="cx-lead">A repeatable loop: audience tension → hypothesis → creative territory → concept → variation → test and learn → scale, with the performance signal feeding the next round of concepts.</p>
+        <p class="cx-body">The process stayed constant while each category was entered through its own human tension: urgency and savings in car insurance, care and trust in pet insurance, opportunity and complexity in mortgage and lending. As volume grew, I initiated an AI-assisted resizing MVP to take repetitive format adaptation out of the workflow while keeping composition, hierarchy and creative intent under a designer’s judgment.</p>
       </div>
     </div>
-    <div class="c-meta">
-      <div class="m"><div class="l">Client</div><div class="v">Natural Intelligence</div></div>
-      <div class="m"><div class="l">Title</div><div class="v">Creative Art Director (in-house), Jan 2025 - Jun 2026</div></div>
-      <div class="m"><div class="l">Disciplines</div><div class="v"><span class="pill">Creative Systems</span><span class="pill">Concept Development</span><span class="pill">Art Direction</span><span class="pill">AI-assisted Workflow</span><span class="pill">Motion &amp; Video</span></div></div>
-      <div class="m"><div class="l">Collaborators</div><div class="v">In-house copy, growth, data and creative teams</div></div>
+  </section>
+
+  <!-- 5 · the output: every creative, playing -->
+  <section class="ni-wall-sec ni-wrap" aria-labelledby="ni-wall-t">
+    <h2 class="ni-wall-t" id="ni-wall-t">In market.</h2>
+    <div class="ni-wall" aria-label="Creative territories running in market">
+      <div class="ni-tile"><img src="/assets/opt/ni-ad-pet-23.webp" width="720" height="900" loading="lazy" alt="BestMoney: pet insurance"></div>
+      <div class="ni-tile"><video src="/assets/opt/ni-ad-home-options.mp4" poster="/assets/opt/ni-ad-home-options-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: home insurance film"></video></div>
+      <div class="ni-tile"><img src="/assets/opt/ni-ad-cards-balance.webp" width="720" height="900" loading="lazy" alt="BestMoney: balance transfer cards"></div>
+      <div class="ni-tile"><video src="/assets/opt/ni-ad-loans-sba.mp4" poster="/assets/opt/ni-ad-loans-sba-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: SBA loans film"></video></div>
+      <div class="ni-tile"><img src="/assets/opt/ni-ad-car-select.webp" width="506" height="900" loading="lazy" alt="BestMoney: car insurance"></div>
+      <div class="ni-tile"><video src="/assets/opt/ni-ad-pet-vetbill.mp4" poster="/assets/opt/ni-ad-pet-vetbill-poster.jpg" width="480" height="600" muted loop playsinline preload="none" aria-label="BestMoney: pet insurance vet bill film"></video></div>
+      <div class="ni-tile"><img src="/assets/opt/ni-ad-loans-100k.webp" width="720" height="900" loading="lazy" alt="BestMoney: business loans"></div>
+      <div class="ni-tile"><video src="/assets/opt/ni-ad-street-interview.mp4" poster="/assets/opt/ni-ad-street-interview-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: street interview film"></video></div>
+      <div class="ni-tile"><img src="/assets/opt/ni-ad-cards-apr.webp" width="720" height="900" loading="lazy" alt="BestMoney: intro APR cards"></div>
+      <div class="ni-tile"><video src="/assets/opt/ni-ad-home-storm.mp4" poster="/assets/opt/ni-ad-home-storm-poster.jpg" width="480" height="600" muted loop playsinline preload="none" aria-label="BestMoney: home insurance storm film"></video></div>
+      <div class="ni-tile"><img src="/assets/opt/ni-ad-pet-15.webp" width="506" height="900" loading="lazy" alt="BestMoney: pet insurance"></div>
+      <div class="ni-tile"><video src="/assets/opt/ni-ad-cards-motion.mp4" poster="/assets/opt/ni-ad-cards-motion-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: balance transfer motion"></video></div>
+      <div class="ni-tile"><video src="/assets/opt/ni-ad-home-ugc.mp4" poster="/assets/opt/ni-ad-home-ugc-poster.jpg" width="338" height="600" muted loop playsinline preload="none" aria-label="BestMoney: home insurance creator film"></video></div>
     </div>
-    <p class="hero-note">Output from the system in market: creative for Natural Intelligence’s comparison brands, developed with the in-house creative team. Each one began as a hypothesis about an audience rather than as a request for an asset. <a href="https://www.facebook.com/ads/library/?active_status=active&amp;ad_type=all&amp;country=ALL&amp;is_targeted_country=false&amp;media_type=all&amp;q=bestmoney&amp;search_type=keyword_unordered&amp;sort_data[direction]=desc&amp;sort_data[mode]=total_impressions" target="_blank" rel="noopener noreferrer">See what is running today in Meta’s Ad Library</a>.</p>
-    <div class="c-story">
-      <div class="c-sec"><h2 class="st">The challenge</h2><div class="sb">Natural Intelligence runs digital comparison platforms across some of the most competitive consumer categories in the US market: car insurance, pet insurance, mortgage, home equity, business loans and home security. Every creative decision lived inside a measurable acquisition system: the work had to stop attention in crowded feeds, explain complex products quickly, build trust around high-consideration decisions and still produce enough variation to learn from. The challenge was never to produce more assets. It was to create conditions in which creative thinking could generate repeatable learning.</div></div>
-      <div class="c-sec"><h2 class="st">The idea</h2><div class="sb">Treat creative as a system rather than a run of campaigns. Build distinct creative territories, each with its own point of view, tone and visual language, then translate them into testable variables, so every execution answers a question instead of decorating one. A variation should test an idea, not the colour of a button.</div></div>
-      <div class="c-sec"><h2 class="st">The system</h2><div class="sb">A repeatable loop: audience tension → hypothesis → creative territory → concept → variation → test and learn → scale, with the performance signal feeding the next round of concepts. The process stayed constant while each category was entered through its own human tension: urgency and savings in car insurance, care and trust in pet insurance, opportunity and complexity in mortgage and lending. As volume grew, I initiated an AI-assisted resizing MVP to take repetitive format adaptation out of the workflow while keeping composition, hierarchy and creative intent under a designer’s judgment.</div></div>
+  </section>
+
+  <!-- 6 · where it goes -->
+  <section class="ni-market ni-wrap" aria-labelledby="ni-market-t">
+    <div class="ni-market-head">
+      <p class="cx-eyebrow" id="ni-market-t">Where it goes</p>
+      <p class="cx-lead">Every one of these creatives is the front door to a comparison flow. The hook does its work in the feed, then hands the visitor to Natural Intelligence’s own platforms, where the category is chosen, the providers are compared and the decision actually gets made.</p>
     </div>
-    <div class="c-market">
-      <div class="l">Where it goes</div>
-      <p class="intro">Every one of these creatives is the front door to a comparison flow. The hook does its work in the feed, then hands the visitor to Natural Intelligence’s own platforms, where the category is chosen, the providers are compared and the decision actually gets made.</p>
-      <div class="c-sites">
-        <a href="https://www.bestmoney.com/" target="_blank" rel="noopener noreferrer">
-          <div class="shot"><img src="/assets/opt/ni-site-bestmoney.webp" width="1200" height="682" loading="lazy" alt="BestMoney.com homepage"></div>
-          <div class="cap">BestMoney.com <span class="arw" aria-hidden="true">→</span></div>
-        </a>
-        <a href="https://www.top10.com/" target="_blank" rel="noopener noreferrer">
-          <div class="shot"><img src="/assets/opt/ni-site-top10.webp" width="1200" height="685" loading="lazy" alt="Top10.com homepage"></div>
-          <div class="cap">Top10.com <span class="arw" aria-hidden="true">→</span></div>
-        </a>
-      </div>
+    <div class="ni-sites">
+      <a href="https://www.bestmoney.com/" target="_blank" rel="noopener noreferrer">
+        <div class="ni-shot"><span class="ni-dots" aria-hidden="true"><i></i><i></i><i></i></span><img src="/assets/opt/ni-site-bestmoney.webp" width="1200" height="682" loading="lazy" alt="BestMoney.com homepage"></div>
+        <div class="ni-cap">BestMoney.com <span class="arw" aria-hidden="true">→</span></div>
+      </a>
+      <a href="https://www.top10.com/" target="_blank" rel="noopener noreferrer">
+        <div class="ni-shot"><span class="ni-dots" aria-hidden="true"><i></i><i></i><i></i></span><img src="/assets/opt/ni-site-top10.webp" width="1200" height="685" loading="lazy" alt="Top10.com homepage"></div>
+        <div class="ni-cap">Top10.com <span class="arw" aria-hidden="true">→</span></div>
+      </a>
     </div>
-    <div class="c-story">
-      <div class="c-sec"><h2 class="st">The outcome</h2><div class="sb small">Creative directions used across several competitive US consumer categories, including car insurance and pet insurance; creative support for the launch and development of mortgage-related verticals; a repeatable experimentation process connecting concept, variation and learning; and an AI-assisted resizing MVP for adapting creative across formats.</div></div>
-      <div class="c-sec"><h2 class="st">Why it’s here</h2><div class="sb small">Eighteen months inside a technology company that runs creative at scale: how a creative system is built and kept honest, where AI belongs in production without flattening the work, and how ideas get tested rather than argued. The same thinking applies to any launch that has to keep producing after day one.</div></div>
-      <div class="c-sec"><h2 class="st">Role &amp; contribution</h2><div class="sb small">My title was Creative Art Director; the work spanned concept development, art direction, design, motion and video. I developed concepts and produced static, motion and video assets for global insurance and finance campaigns, and partnered with copy, growth and data teams to test narrative hooks and refine creative using performance insights. I also initiated and developed an AI-assisted resizing MVP for creative adaptation across formats.</div></div>
+  </section>
+
+  <!-- 7 · outcome, why it's here, role -->
+  <section class="ni-end ni-wrap">
+    <div class="ni-end-col ni-end-col--wide">
+      <p class="cx-eyebrow">The outcome</p>
+      <p class="ni-outcome">Creative directions used across several competitive US consumer categories, including car insurance and pet insurance; creative support for the launch and development of mortgage-related verticals; a repeatable experimentation process connecting concept, variation and learning; and an AI-assisted resizing MVP for adapting creative across formats.</p>
     </div>
+    <div class="ni-end-col">
+      <p class="cx-eyebrow">Why it’s here</p>
+      <p class="cx-body">Eighteen months inside a technology company that runs creative at scale: how a creative system is built and kept honest, where AI belongs in production without flattening the work, and how ideas get tested rather than argued. The same thinking applies to any launch that has to keep producing after day one.</p>
+    </div>
+    <div class="ni-end-col">
+      <p class="cx-eyebrow">Role &amp; contribution</p>
+      <p class="cx-body">My title was Creative Art Director; the work spanned concept development, art direction, design, motion and video. I developed concepts and produced static, motion and video assets for global insurance and finance campaigns, and partnered with copy, growth and data teams to test narrative hooks and refine creative using performance insights. I also initiated and developed an AI-assisted resizing MVP for creative adaptation across formats.</p>
+    </div>
+  </section>
+
+  <div class="cwrap cx-close">
     <div class="c-cta">
       <h2 class="t">Let’s build something like this.</h2>
       <p class="d">Tell me what it is, who it is for and what is still open. A rough idea is enough to start.</p>
@@ -137,5 +189,6 @@
 
 <script src="../js/contact-config.js"></script>
 <script src="../js/site.js"></script>
+<script type="module" src="../js/cx-natural-intelligence.js"></script>
 </body>
 </html>

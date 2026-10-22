@@ -1,0 +1,130 @@
+/* ============================================================
+   SkyMax: the MAX end card as a page. MAX pink ground, the end
+   card's navy and its mint frame, puffy white toy-plane forms.
+   ============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800&display=swap");
+
+body.cx.cx-sky-max{
+  --sk-pink:#ff5a85; --sk-pink-l:#ff86a6; --sk-pink-d:#e8406d; --sk-navy:#021454; --sk-navy-2:#0b2272; --sk-mint:#8fe8d6; --sk-cream:#fff6ef;
+  --cx-bg:var(--sk-pink); --cx-fg:var(--sk-navy); --cx-dim:rgba(2,20,84,.74); --cx-accent:var(--sk-navy);
+  --cx-line:rgba(2,20,84,.2); --cx-header:rgba(255,90,133,.78);
+  --cx-btn-bg:var(--sk-navy); --cx-btn-fg:#fff;
+  --panel:#020c33; --faint:#ff7398;
+}
+.sk{--sk-round:"Rubik","Inter Tight",system-ui,sans-serif}
+.sk .cx-eyebrow{color:var(--sk-navy);opacity:.85}
+
+/* ---------- 1 · hero: title up top, the card below ---------- */
+.sk-hero{min-height:max(620px,calc(100svh - clamp(60px,4.2vw,84px)));justify-content:flex-start;overflow:hidden;padding-top:0;
+  background:radial-gradient(60% 60% at 70% 62%,#ff8fae 0%,transparent 70%),radial-gradient(40% 50% at 0% 0%,#ff7a9f,transparent 70%),var(--sk-pink)}
+.sk-stage .cx-poster{opacity:.25;mix-blend-mode:multiply}
+.sk-stage .cx-canvas{cursor:pointer}
+.sk-hero-copy{padding-top:clamp(56px,11vh,120px);padding-bottom:0}
+.sk-title{font-family:var(--sk-round);font-weight:800;font-size:clamp(4.4rem,11.5vw,12.5rem);line-height:.82;letter-spacing:-.045em;margin:0;color:var(--sk-navy)}
+.sk-title span{color:#fff}
+.sk-one{color:var(--sk-navy);max-width:30ch;font-weight:500}
+.sk-hint{top:auto;bottom:clamp(24px,5vh,48px);display:flex;align-items:center;gap:10px;color:var(--sk-navy);font-weight:500}
+.sk-tap{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.8);animation:sk-ping 1.8s ease-out infinite}
+@keyframes sk-ping{to{box-shadow:0 0 0 14px rgba(255,255,255,0)}}
+@media(max-width:820px){
+  .sk-hero{min-height:max(700px,calc(100svh - 60px))}
+  .sk-hint{right:auto;left:var(--gutter,clamp(16px,4vw,56px));bottom:24px}
+  .sk-title{font-size:clamp(4.4rem,25vw,8rem)}
+}
+
+/* ---------- 2 · challenge ---------- */
+.sk-brief{padding:clamp(88px,11vw,170px) 0 clamp(56px,7vw,100px)}
+.sk-statement{font-family:var(--sk-round);font-weight:700;letter-spacing:-.03em;max-width:21ch}
+
+/* ---------- 3 · the film, on the end card ---------- */
+.sk-film-sec{background:var(--sk-navy);color:#fff;padding:clamp(56px,7vw,110px) 0 clamp(48px,6vw,90px);position:relative;overflow:hidden}
+.sk-film-sec::before{content:"";position:absolute;inset:0;background:radial-gradient(50% 60% at 50% 0%,rgba(143,232,214,.18),transparent 70%);pointer-events:none}
+.sk-screen{position:relative;padding:clamp(6px,.8vw,10px);border-radius:clamp(18px,2.4vw,34px);border:clamp(3px,.4vw,5px) solid var(--sk-mint);max-width:1180px;transform-origin:50% 50%}
+.cx-on .sk-screen:not(.in){transform:scale(.9) rotate(-2deg);opacity:.5}
+.sk-film .frame{border-radius:clamp(12px,1.8vw,26px)}
+.sk-cap{position:relative;max-width:1180px;margin-top:22px;color:rgba(255,255,255,.75);font-size:.9375rem;line-height:1.6}
+
+/* ---------- 4 · boarding pass ---------- */
+.sk-pass-sec{padding:clamp(72px,9vw,140px) 0 clamp(40px,5vw,80px)}
+.sk-pass{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.42fr);max-width:1080px;margin:0 auto;color:var(--sk-navy);
+  filter:drop-shadow(0 30px 40px rgba(130,10,50,.28));transform-origin:50% 100%}
+.cx-on .sk-pass:not(.in){transform:translateY(60px) rotate(-3deg);opacity:.3}
+.sk-pass-main,.sk-pass-stub{background:var(--sk-cream);padding:clamp(24px,3.4vw,48px)}
+.sk-pass-main{border-radius:26px 0 0 26px;
+  -webkit-mask:radial-gradient(circle at 100% 0,transparent 16px,#000 16.5px) top/100% 51% no-repeat,radial-gradient(circle at 100% 100%,transparent 16px,#000 16.5px) bottom/100% 51% no-repeat;
+  mask:radial-gradient(circle at 100% 0,transparent 16px,#000 16.5px) top/100% 51% no-repeat,radial-gradient(circle at 100% 100%,transparent 16px,#000 16.5px) bottom/100% 51% no-repeat}
+.sk-pass-stub{border-radius:0 26px 26px 0;border-left:2px dashed rgba(2,20,84,.28);
+  -webkit-mask:radial-gradient(circle at 0 0,transparent 16px,#000 16.5px) top/100% 51% no-repeat,radial-gradient(circle at 0 100%,transparent 16px,#000 16.5px) bottom/100% 51% no-repeat;
+  mask:radial-gradient(circle at 0 0,transparent 16px,#000 16.5px) top/100% 51% no-repeat,radial-gradient(circle at 0 100%,transparent 16px,#000 16.5px) bottom/100% 51% no-repeat}
+.sk-route{display:flex;align-items:center;gap:clamp(10px,2vw,24px);margin:0 0 clamp(22px,3vw,40px);font-family:var(--sk-round);font-weight:800;font-size:clamp(2.2rem,5.4vw,4.6rem);letter-spacing:-.03em;line-height:1}
+.sk-route svg{flex:1 1 40px;min-width:28px;max-width:220px;height:auto;overflow:visible}
+.sk-route path{fill:none;stroke:var(--sk-pink);stroke-width:3}
+.sk-route path.f{fill:var(--sk-pink);stroke:none}
+.sk-fields{display:grid;grid-template-columns:1fr 1fr;gap:18px clamp(18px,3vw,40px);margin:0}
+.sk-fields dt{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(2,20,84,.6);margin-bottom:4px}
+.sk-fields dd{margin:0;font-weight:600;font-size:1rem;line-height:1.4}
+.sk-stub-h{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(2,20,84,.6);margin:0 0 14px}
+.sk-credits{margin:0;font-size:1rem;line-height:1.75;font-weight:500}
+@media(max-width:720px){
+  .sk-pass{grid-template-columns:1fr}
+  .sk-pass-main{border-radius:22px 22px 0 0;
+    -webkit-mask:radial-gradient(circle at 0 100%,transparent 16px,#000 16.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 100%,transparent 16px,#000 16.5px) right/51% 100% no-repeat;
+    mask:radial-gradient(circle at 0 100%,transparent 16px,#000 16.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 100%,transparent 16px,#000 16.5px) right/51% 100% no-repeat}
+  .sk-pass-stub{border-radius:0 0 22px 22px;border-left:0;border-top:2px dashed rgba(2,20,84,.28);
+    -webkit-mask:radial-gradient(circle at 0 0,transparent 16px,#000 16.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 0,transparent 16px,#000 16.5px) right/51% 100% no-repeat;
+    mask:radial-gradient(circle at 0 0,transparent 16px,#000 16.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 0,transparent 16px,#000 16.5px) right/51% 100% no-repeat}
+  .sk-fields{grid-template-columns:1fr}
+  .sk-route{font-size:clamp(1.9rem,10vw,2.6rem)}
+}
+
+/* ---------- 5 · idea → system, along a flight path ---------- */
+.sk-flight{position:relative;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;padding:clamp(80px,10vw,150px) 0 clamp(80px,10vw,150px)}
+.sk-flight-t{grid-column:1/-1;font-family:var(--sk-round);font-weight:800;font-size:clamp(3rem,8.4vw,8.4rem);line-height:.86;letter-spacing:-.045em;margin:0 0 clamp(40px,6vw,90px);color:#fff;text-align:right}
+.sk-path{position:absolute;left:0;right:0;top:clamp(260px,26vw,420px);width:100%;height:clamp(300px,38vw,520px);overflow:visible;pointer-events:none}
+.sk-path path{fill:none;stroke:#fff;stroke-width:3;stroke-dasharray:2 14;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:.9}
+.sk-plane{position:absolute;left:0;top:0;width:clamp(36px,4vw,54px);height:clamp(36px,4vw,54px);color:var(--sk-navy);pointer-events:none;will-change:transform;display:none}
+.sk-plane svg{width:100%;height:100%;fill:currentColor;filter:drop-shadow(0 6px 8px rgba(2,20,84,.25))}
+.cx-on .sk-plane{display:block}
+.sk-step{position:relative;align-self:start;padding:clamp(24px,3vw,40px);border-radius:28px;background:var(--sk-cream);box-shadow:0 30px 60px -30px rgba(130,10,50,.45)}
+.sk-step .cx-eyebrow{color:var(--sk-pink-d);opacity:1}
+.sk-step--idea{grid-column:1/span 6}
+.sk-step--system{grid-column:7/span 6;margin-top:clamp(120px,16vw,240px)}
+@media(max-width:820px){
+  .sk-step--idea,.sk-step--system{grid-column:1/-1;margin-top:0}
+  .sk-flight-t{text-align:left}
+  .sk-path,.cx-on .sk-plane{display:none}
+}
+
+/* ---------- 6 · gallery: snapshots that straighten up ---------- */
+.sk-gal{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(24px,3vw,40px) clamp(16px,2vw,28px);padding:clamp(40px,6vw,80px) 0 clamp(96px,12vw,170px)}
+.sk-gal-t{grid-column:1/-1;font-family:var(--sk-round);font-weight:800;font-size:clamp(2.4rem,5.6vw,5.4rem);line-height:.9;letter-spacing:-.04em;margin:0 0 clamp(24px,3vw,48px)}
+.sk-snap{margin:0}
+.sk-ph{background:#fff;padding:clamp(8px,1vw,14px) clamp(8px,1vw,14px) clamp(8px,1vw,14px);border-radius:14px;box-shadow:0 30px 60px -28px rgba(130,10,50,.55)}
+.sk-ph img{display:block;width:100%;height:auto;border-radius:8px}
+.sk-snap figcaption{margin:16px 6px 0;font-size:.9375rem;line-height:1.55;color:var(--cx-dim);max-width:44ch}
+.sk-snap--a{grid-column:1/span 7;grid-row:span 2}
+.sk-snap--b{grid-column:8/span 5}
+.sk-snap--c{grid-column:8/span 5}
+.cx-on .sk-snap--a:not(.in){transform:rotate(-5deg) translateY(40px)}
+.cx-on .sk-snap--b:not(.in){transform:rotate(6deg) translateY(50px)}
+.cx-on .sk-snap--c:not(.in){transform:rotate(-4deg) translateY(60px)}
+.sk-snap--a.in{transform:rotate(-1.2deg)}
+.sk-snap--b.in{transform:rotate(1.4deg)}
+.sk-snap--c.in{transform:rotate(-.8deg)}
+@media(max-width:820px){.sk-snap--a,.sk-snap--b,.sk-snap--c{grid-column:1/-1;grid-row:auto}}
+
+/* ---------- 7 · outcome on navy ---------- */
+.sk-out{background:var(--sk-navy);color:#fff;padding:clamp(88px,11vw,170px) 0;margin-bottom:clamp(64px,8vw,120px);
+  background-image:radial-gradient(40% 60% at 90% 10%,rgba(255,90,133,.3),transparent 70%)}
+.sk-out .cx-eyebrow{color:var(--sk-mint);opacity:1}
+.sk-out .sk-statement{max-width:26ch}
+.sk-role{margin-top:clamp(32px,4vw,56px);color:rgba(255,255,255,.76)}
+.sk-out .sk-role strong{color:#fff}
+
+/* ---------- close ---------- */
+.cx-sky-max .cx-close .btn.ghost{border-color:rgba(2,20,84,.4)}
+
+@media(prefers-reduced-motion:reduce){
+  .sk-tap{animation:none}
+  .sk-screen,.sk-pass,.sk-snap{transform:none!important;opacity:1!important}
+}
