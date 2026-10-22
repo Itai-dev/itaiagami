@@ -33,11 +33,12 @@ const stageEl = document.getElementById('nhStage');
 const MP = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/1/selfie_segmenter.tflite';
 
-/* the project's environment illustrations: [file, aspect, vertical focus] */
+/* the project's long-shot environments, as projected on the installation's wall:
+   [file, aspect, vertical focus]. Both are 503:800 portraits and the wall takes that
+   shape, so each is shown whole. */
 const SCENES = {
-  sea: ['/assets/opt/4d08fb76dde2.webp', 724 / 592, 0.42],
-  orchard: ['/assets/opt/bda8ea7797dc.webp', 691 / 701, 0.68],
-  street: ['/assets/opt/c021d5d14394.webp', 1006 / 1600, 0.6],
+  valley: ['/assets/opt/mnh-valley.webp', 503 / 800, 0.5],
+  street: ['/assets/opt/c021d5d14394.webp', 1006 / 1600, 0.5],
 };
 
 const S = makeStage(stageEl, { shadows: false, exposure: 1.0 });
@@ -57,7 +58,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   let VW = 10, VH = 6, aspect = 1.6;
 
   /* ---------- the backdrop: the illustrations themselves, cross-fading ---------- */
-  const order = () => (aspect < 0.9 ? ['orchard', 'street', 'sea'] : ['sea', 'orchard', 'street']);
+  const order = () => ['valley', 'street'];
   const texOf = {};
   for (const k in SCENES) texOf[k] = imageTexture(SCENES[k][0]);
   const bgMat = new THREE.ShaderMaterial({
@@ -71,7 +72,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
       uniform sampler2D tA, tB; uniform float aA, aB, fA, fB, uMix, uAspect; uniform vec2 uPar; varying vec2 vUv;
       vec2 cover(vec2 uv, float ia, float focus){
         vec2 s = uAspect > ia ? vec2(1.0, ia / uAspect) : vec2(uAspect / ia, 1.0);
-        s /= 1.04;                                         // a little slack for the parallax
+        s /= 1.015;                                        // a sliver of slack for the parallax
         vec2 c = vec2(0.5, mix(0.5, 1.0 - focus, 1.0 - s.y > 0.0 ? 1.0 : 0.0));
         c.y = clamp(c.y, s.y * 0.5, 1.0 - s.y * 0.5);
         return (uv - 0.5) * s + c + uPar * (1.0 - s) * 0.5;
@@ -79,7 +80,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
       void main(){
         vec3 a = texture2D(tA, cover(vUv, aA, fA)).rgb;
         vec3 b = texture2D(tB, cover(vUv, aB, fB)).rgb;
-        gl_FragColor = vec4(mix(a, b, uMix) * 0.72, 1.0);  // dimmed, like a projection in a dark room
+        gl_FragColor = vec4(mix(a, b, uMix), 1.0);
         #include <colorspace_fragment>
       }`,
   });
@@ -95,7 +96,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   /* ---------- the particles ---------- */
   let cols = 0, rows = 0, N = 0;
   let home, off, vel, alpha, target, pres, motion, prevLuma;
-  let points = null, halo = null;
+  let points = null, halo = null, shade = null;
   const pUniforms = { uSize: { value: 2 }, uTime: { value: 0 }, uTwinkle: { value: calm ? 0 : 1 } };
   const vert = (sizeK) => /* glsl */`
     attribute float aAlpha; attribute float aSeed;
@@ -119,6 +120,15 @@ function build({ renderer, scene, camera, reveal, onResize }) {
         vec3 c = mix(vec3(0.6, 1.0, 0.8), vec3(0.9, 1.0, 0.93), core);
         gl_FragColor = vec4(c * core * vA * (0.52 + glint), 1.0); }`,
   });
+  // a faint dark halo under the body, so the light reads on the bright art without dimming it
+  const shadeMat = new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, uniforms: pUniforms,
+    vertexShader: vert('7.0'),
+    fragmentShader: /* glsl */`
+      varying float vA;
+      void main(){ float d = length(gl_PointCoord - 0.5) * 2.0; if (d > 1.0) discard;
+        gl_FragColor = vec4(0.02, 0.16, 0.15, exp(-d * d * 3.0) * vA * 0.035); }`,
+  });
   // the glow around the body: large, faint, green
   const haloMat = new THREE.ShaderMaterial({
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, uniforms: pUniforms,
@@ -136,21 +146,22 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     figCanvas.width = w; figCanvas.height = h;
     const c = figCanvas.getContext('2d', { willReadFrequently: true });
     c.clearRect(0, 0, w, h);
-    c.save(); c.translate(w * 0.5, h * 0.99); const s = h / 108; c.scale(s, s);
+    c.save(); c.translate(w * 0.44, h * 0.9); const s = (h * 0.66) / 98; c.scale(s, s);   // feet on the path, two-thirds of the wall
     c.fillStyle = '#fff'; c.strokeStyle = '#fff'; c.lineCap = 'round'; c.lineJoin = 'round';
-    c.beginPath(); c.ellipse(0, -76, 6.2, 7.4, 0, 0, Math.PI * 2); c.fill();                        // head
-    c.lineWidth = 6; c.beginPath(); c.moveTo(0, -68); c.lineTo(0, -64); c.stroke();                   // neck
-    c.beginPath(); c.moveTo(-10, -62); c.quadraticCurveTo(0, -66, 10, -62); c.lineTo(8, -36); c.lineTo(-8, -36); c.closePath(); c.fill(); // torso
-    c.lineWidth = 5; c.beginPath(); c.moveTo(9, -60); c.quadraticCurveTo(18, -74, 22, -92); c.stroke(); // raised arm
-    c.beginPath(); c.moveTo(-9, -60); c.quadraticCurveTo(-16, -48, -14, -36); c.stroke();             // lowered arm
-    c.lineWidth = 7; c.beginPath(); c.moveTo(-4, -37); c.lineTo(-7, -2); c.stroke();                   // legs
-    c.beginPath(); c.moveTo(4, -37); c.lineTo(7, -2); c.stroke();
+    c.beginPath(); c.ellipse(0, -84, 5.2, 6.4, 0, 0, Math.PI * 2); c.fill();                        // head
+    c.lineWidth = 4; c.beginPath(); c.moveTo(0, -78); c.lineTo(0, -73); c.stroke();                   // neck
+    c.beginPath(); c.moveTo(-8.5, -72); c.quadraticCurveTo(0, -75, 8.5, -72);                         // shoulders, torso, hips
+    c.lineTo(6, -56); c.lineTo(7, -44); c.lineTo(-7, -44); c.lineTo(-6, -56); c.closePath(); c.fill();
+    c.lineWidth = 3.6; c.beginPath(); c.moveTo(7.5, -70); c.quadraticCurveTo(13, -82, 15, -98); c.stroke(); // raised arm, reaching for the wall
+    c.beginPath(); c.moveTo(-7.5, -70); c.quadraticCurveTo(-12, -58, -11, -46); c.stroke();           // lowered arm
+    c.lineWidth = 5; c.beginPath(); c.moveTo(-3.5, -45); c.lineTo(-5.5, -2); c.stroke();               // legs
+    c.beginPath(); c.moveTo(3.5, -45); c.lineTo(5.5, -2); c.stroke();
     c.restore();
     // soften the edge so the body has a fringe of looser specks, as in the photographs
     const d = c.getImageData(0, 0, w, h).data, out = new Float32Array(w * h);
     for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
       let a = 0, n = 0;
-      for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) {
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
         const xx = x + dx, yy = y + dy;
         if (xx >= 0 && yy >= 0 && xx < w && yy < h) { a += d[(yy * w + xx) * 4 + 3]; n++; }
       }
@@ -160,7 +171,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   }
   let figure = null;
   function rebuild() {
-    const want = innerWidth < 700 ? 26000 : 56000;
+    const want = innerWidth < 700 ? 22000 : 36000;
     cols = Math.max(40, Math.round(Math.sqrt(want * aspect)));
     rows = Math.max(40, Math.round(cols / aspect));
     N = cols * rows;
@@ -175,11 +186,12 @@ function build({ renderer, scene, camera, reveal, onResize }) {
       seeds[i] = rnd();
     }
     figure = drawFigure(cols, rows);
-    if (points) { scene.remove(points, halo); points.geometry.dispose(); }
+    if (points) { scene.remove(points, halo, shade); points.geometry.dispose(); }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(N * 3), 3).setUsage(THREE.DynamicDrawUsage));
     g.setAttribute('aAlpha', new THREE.BufferAttribute(alpha, 1).setUsage(THREE.DynamicDrawUsage));
     g.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1));
+    shade = new THREE.Points(g, shadeMat); shade.frustumCulled = false; shade.renderOrder = 1; scene.add(shade);
     halo = new THREE.Points(g, haloMat); halo.frustumCulled = false; halo.renderOrder = 2; scene.add(halo);
     points = new THREE.Points(g, speckMat); points.frustumCulled = false; points.renderOrder = 3; scene.add(points);
     analysis.width = cols; analysis.height = rows;
@@ -365,7 +377,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     const pSpeed = Math.min(1.5, Math.hypot(ptr.vx, ptr.vy) * 8) + (ptr.burst || 0);
     ptr.burst = Math.max(0, (ptr.burst || 0) - dt * 3);
     ptr.vx *= 0.8; ptr.vy *= 0.8;
-    const R2 = 0.9 * 0.9;
+    const R2 = 0.7 * 0.7;
     const pos = points.geometry.attributes.position.array;
     const kSpring = cam.stream ? 14 : 9, damp = Math.pow(0.04, dt), push = 26 * GENTLE, mPush = cam.stream ? 0.45 : 1;
     const ga = Math.max(1, Math.round(cols / 48));
@@ -384,7 +396,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
       if (ptr.on && pSpeed > 0.02 && alpha[i] > 0.01) {
         const dx = hx + ox - ptr.x, dy = hy + oy - ptr.y, d2 = dx * dx + dy * dy;
         if (d2 < R2) {
-          const d = Math.sqrt(d2) + 0.02, f = (1 - d / 0.9) * pSpeed * push * 0.6 * dt;
+          const d = Math.sqrt(d2) + 0.02, f = (1 - d / 0.7) * pSpeed * push * 0.6 * dt;
           vx += (dx / d) * f + ptr.vx * f * 6; vy += (dy / d) * f + ptr.vy * f * 6;
         }
       }

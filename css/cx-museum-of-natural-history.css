@@ -16,34 +16,28 @@ body.cx.cx-museum-of-natural-history{
 body.cx-museum-of-natural-history main{padding-top:0}
 .nh-serif,.nh-statement,.nh-plates-t em,.nh-title em,.nh-role-st,.nh-entry-b,.nh-plate figcaption{font-family:Newsreader,"Iowan Old Style",Palatino,Georgia,serif}
 
-/* ---------- 1 · hero: a projection wall set into the page ---------- */
-.cx-main section.nh-hero{padding:calc(var(--header-h,72px) + clamp(28px,5vh,56px)) 0 clamp(56px,8vw,110px);min-height:0;display:block;
+/* ---------- 1 · hero: standing in front of a tall projection wall ---------- */
+.cx-main section.nh-hero{padding:calc(var(--header-h,64px) + clamp(20px,3vh,40px)) 0 clamp(40px,6vw,96px);min-height:0;display:block;
   background:linear-gradient(180deg,#f6f7ef,var(--nh-paper))}
-.nh-head{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px clamp(32px,5vw,80px);align-items:end;margin-bottom:clamp(24px,3.4vw,44px)}
+/* the long shots are 503:800 portraits; the wall takes their shape, never taller than ~1.6x the art */
+.nh-hero-in{--wall-h:min(calc(100svh - var(--header-h,64px) - 64px),1280px);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"head wall" "cam wall";grid-template-rows:1fr auto;column-gap:clamp(32px,6vw,110px);align-items:end}
+.nh-head{grid-area:head;align-self:center}
 .nh-head .cx-crumb{margin-bottom:14px}
-.nh-title{font-size:clamp(2.8rem,6vw,6rem);line-height:.9;letter-spacing:-.05em;color:var(--nh-ink)}
+.nh-title{font-size:clamp(2.8rem,6.4vw,6.6rem);line-height:.9;letter-spacing:-.05em;color:var(--nh-ink)}
 .nh-title em{font-style:italic;font-weight:400;letter-spacing:-.025em;color:var(--nh-teal)}
-.nh-one{margin:0 0 .4em;color:var(--cx-dim)}
-/* the wall itself */
-.nh-wall{position:relative}
-.nh-stage{position:relative;inset:auto;height:min(calc(100svh - 360px),58vw);min-height:480px;border-radius:clamp(14px,1.6vw,24px);
-  background:linear-gradient(180deg,#0d3f7c,#1d82b8 55%,#55c7c4);box-shadow:0 50px 100px -50px rgba(13,63,124,.6),0 0 0 1px rgba(19,48,42,.12);isolation:isolate}
-.nh-stage .cx-poster{opacity:.85}
+.nh-one{margin:22px 0 0;color:var(--cx-dim);max-width:30ch}
+.nh-wall{grid-area:wall;position:relative}
+.nh-stage{position:relative;inset:auto;height:max(520px,var(--wall-h));aspect-ratio:503/800;border-radius:8px;background:#9fd0e6;
+  box-shadow:0 60px 120px -50px rgba(13,63,80,.55),0 0 0 1px rgba(19,48,42,.12);isolation:isolate}
+.nh-stage .cx-poster{object-fit:cover}
 .nh-stage .cx-canvas{cursor:crosshair}
-.nh-hint{position:absolute;z-index:2;right:16px;top:14px;margin:0;padding:6px 12px;border-radius:999px;font-family:"IBM Plex Mono",monospace;font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;
-  color:#e9fffb;background:rgba(5,30,60,.35);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:opacity .5s ease;pointer-events:none}
+.nh-hint{position:absolute;z-index:2;right:12px;top:12px;margin:0;padding:6px 12px;border-radius:999px;font-family:"IBM Plex Mono",monospace;font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;
+  color:#f2fffb;background:rgba(10,40,50,.38);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:opacity .5s ease;pointer-events:none}
 .nh-hint.done{opacity:0}
-/* the camera label under the wall, like an exhibit caption */
-.nh-cam{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 22px;align-items:center;margin-top:18px}
-@media(min-width:821px){
-  .nh-cam{position:absolute;z-index:3;left:calc(var(--gutter,clamp(16px,4vw,56px)) * 0 + 20px);bottom:20px;margin:0;max-width:min(620px,calc(100% - 40px));padding:14px 18px 14px 14px;border-radius:18px;
-    background:rgba(5,30,60,.42);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);border:1px solid rgba(200,255,250,.22)}
-  .nh-cam .nh-cam-note{color:rgba(233,255,251,.86)}
-  .nh-cam .nh-cam-status{color:#9ff3ff}
-  .nh-cam .nh-cam-btn{background:#e9fffb;color:#0b2a3a;border-color:#e9fffb}
-  .nh-cam .nh-cam-btn[aria-pressed="true"]{background:transparent;color:#e9fffb}
-}
-.nh-cam-btn{display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border-radius:999px;border:1px solid var(--nh-ink);background:var(--nh-ink);color:var(--nh-paper);
+/* the camera label, like an exhibit caption beside the wall */
+.nh-cam{grid-area:cam;display:grid;gap:12px;align-content:end;max-width:44ch;padding-top:28px;border-top:1px solid var(--cx-line);margin-top:32px}
+.nh-cam-btn{justify-self:start;display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 16px;border-radius:999px;border:1px solid var(--nh-ink);background:var(--nh-ink);color:var(--nh-paper);
   font:500 .9375rem/1 Inter,system-ui,sans-serif;cursor:pointer;transition:background .25s ease,color .25s ease,transform .2s ease}
 .nh-cam-btn:hover{transform:translateY(-1px)}
 .nh-cam-btn:focus-visible{outline:2px solid var(--nh-teal);outline-offset:3px}
@@ -54,15 +48,14 @@ body.cx-museum-of-natural-history main{padding-top:0}
 .nh-cam-dot::after{content:"";position:absolute;right:-6px;top:2px;border:4px solid transparent;border-left:0;border-right:5px solid currentColor}
 .nh-cam-btn[aria-pressed="true"] .nh-cam-dot{border-color:#d33;background:#d33;border-radius:50%;width:10px;height:10px}
 .nh-cam-btn[aria-pressed="true"] .nh-cam-dot::before,.nh-cam-btn[aria-pressed="true"] .nh-cam-dot::after{display:none}
-.nh-cam-note{margin:0;max-width:62ch;font-size:.875rem;line-height:1.5;color:var(--cx-dim)}
-.nh-cam-btn[hidden] + .nh-cam-note{grid-column:1 / -1}
-.nh-cam-status{grid-column:1 / -1;margin:0;font-size:.875rem;line-height:1.5;color:var(--nh-teal)}
+.nh-cam-note{margin:0;font-size:.875rem;line-height:1.55;color:var(--cx-dim)}
+.nh-cam-status{margin:0;font-size:.875rem;line-height:1.5;color:var(--nh-teal)}
 .nh-cam-status:empty{display:none}
 @media(max-width:820px){
-  .nh-head{grid-template-columns:1fr}
+  .nh-hero-in{grid-template-columns:1fr;grid-template-areas:"head" "wall" "cam";grid-template-rows:auto;row-gap:24px}
   .nh-title{font-size:clamp(2.6rem,12.5vw,4.6rem)}
-  .nh-stage{height:auto;aspect-ratio:4/5;min-height:0}
-  .nh-cam{grid-template-columns:1fr}
+  .nh-stage{height:auto;width:100%}
+  .nh-cam{margin-top:0;padding-top:0;border-top:0}
 }
 
 /* ---------- 2 · the spread + specimen tag ---------- */
@@ -137,4 +130,4 @@ body.cx-museum-of-natural-history main{padding-top:0}
   .nh-tag,.nh-plate{transform:none!important;opacity:1!important;transition:none}
   .nh-tag{transform:rotate(-1.5deg)!important}
 }
-.nh-stage:not(.live) .nh-hint,.nh-stage:not(.live) + .nh-cam{display:none}
+.nh-stage:not(.live) .nh-hint,.nh-hero-in:has(.nh-stage:not(.live)) .nh-cam{display:none}
