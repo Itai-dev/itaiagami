@@ -36,7 +36,6 @@ const entry = [
   '      {"src": "/assets/opt/ni-g3.webp", "half": false},',
   '      {"src": "/assets/opt/ni-g2.webp", "half": false}',
   '    ],',
-  '    "vimeo": null,',
   '    "credits": []',
   '  }'
 ].join('\r\n');

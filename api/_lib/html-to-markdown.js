@@ -155,11 +155,6 @@ function blocks(node, ctx, out){
     out.push('[' + escMd(title) + '](https://player.mux.com/' + encodeURIComponent(a['data-mux']) + ')');
     return out;
   }
-  if(a['data-vimeo']){
-    const title = a['data-title'] || 'Film';
-    out.push('[' + escMd(title) + '](https://vimeo.com/' + encodeURIComponent(a['data-vimeo']) + ')');
-    return out;
-  }
   const tag = node.tag;
   const inl = () => inline(node, ctx).replace(/[ \t]+/g, ' ').replace(/ *\n */g, '\n').trim();
 
@@ -221,7 +216,7 @@ function blocks(node, ctx, out){
     run = [];
   };
   for(const c of node.children || []){
-    if(c.tag && (BLOCK.has(c.tag) || hasBlockChild(c) || c.attrs['data-vimeo'] || c.attrs['data-mux'])){ flush(); blocks(c, ctx, out); }
+    if(c.tag && (BLOCK.has(c.tag) || hasBlockChild(c) || c.attrs['data-mux'])){ flush(); blocks(c, ctx, out); }
     else run.push(c);
   }
   flush();

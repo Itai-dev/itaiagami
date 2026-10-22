@@ -35,7 +35,7 @@ Add the entry **first** in the array (array order = Work index order).
   "system": "",
   "result": "",
   "contribution": "",
-  "thumb": "", "hero": "", "gallery": [], "vimeo": null, "credits": []
+  "thumb": "", "hero": "", "gallery": [], "credits": []
 }
 ```
 

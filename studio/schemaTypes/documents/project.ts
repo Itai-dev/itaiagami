@@ -78,15 +78,6 @@ export const project = defineType({
       hidden: ({parent}) => !isType(parent, 'video', 'site'),
       description: 'Shown after the video above, with arrows to step through them. Drag to reorder.',
     }),
-    defineField({
-      name: 'vimeoId',
-      title: 'Vimeo ID (fallback)',
-      type: 'string',
-      group: 'main',
-      hidden: ({parent}) => !isType(parent, 'video'),
-      description: 'Only used while no video is uploaded above: the number in vimeo.com/123456789.',
-      validation: (rule) => rule.regex(/^\d+$/, {name: 'numeric id'}).warning(),
-    }),
 
     // image
     defineField({

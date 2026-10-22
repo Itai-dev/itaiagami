@@ -40,7 +40,7 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
       .map(firstSentence)
       .filter((sentence, i) => i === 0 || sentence.length <= 150)
       .join(' ')
-  const type = project.type ?? (project.muxPlaybackId || project.vimeoId ? 'video' : 'image')
+  const type = project.type ?? (project.muxPlaybackId ? 'video' : 'image')
   const meta = [project.client, project.role].filter(Boolean).join(' · ')
   // the mosaic: the extra videos and images, the hero, then gallery images and
   // video clips in the order set in the CMS
@@ -106,15 +106,6 @@ export default async function ProjectPage(props: PageProps<'/work/[slug]'>) {
         ) : project.muxPlaybackId ? (
           <div className="mb-1.5 [column-span:all]">
             <Film playbackId={project.muxPlaybackId} aspect={project.muxAspect} title={project.name} />
-          </div>
-        ) : project.vimeoId ? (
-          <div className="relative mb-1.5 aspect-video bg-black [column-span:all]">
-            <iframe
-              src={`https://player.vimeo.com/video/${project.vimeoId}?autoplay=1&title=0&byline=0&portrait=0&dnt=1`}
-              title={`${project.name} film`}
-              allow="autoplay; fullscreen; picture-in-picture"
-              className="absolute inset-0 h-full w-full border-0"
-            />
           </div>
         ) : project.image?.asset ? (
           <Image

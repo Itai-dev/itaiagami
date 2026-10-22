@@ -20,7 +20,7 @@ const QUERY = `{
     "slug": coalesce(slug.current, _id), name, type, text,
     "group": group->{ "id": _id, name, text }, groupOrder, client, "cat": category, role, disciplines,
     "oneline": oneliner, challenge, idea, system, "result": outcome, contribution, credits,
-    "vimeo": vimeoId, siteUrl, siteEmbed,
+    siteUrl, siteEmbed,
     "mux": film.asset->{ playbackId, "aspect": data.aspect_ratio },
     "thumb": thumbnail.asset->url,
     "image": image.asset->url,

@@ -44,7 +44,7 @@ async function start() {
   const { projects, settings } = await loadContent();
   // what a project is: video, image or site (older entries are inferred)
   const muxId = p => (p.mux && p.mux.playbackId) || null;
-  const kind = p => p.type || (muxId(p) || p.vimeo ? 'video' : 'image');
+  const kind = p => p.type || (muxId(p) ? 'video' : 'image');
   // name and category are optional in the CMS
   const tagOf = p => [p.name || 'untitled', p.cat].filter(Boolean).join(' · ').toLowerCase();
   // card image: the card image if one is set, else a video's first frame (so the
@@ -599,7 +599,7 @@ async function start() {
   function mediaOf(p, site) {
     const type = kind(p);
     const videos = [
-      ...(muxId(p) ? [{ mux: muxId(p) }] : p.vimeo && type !== 'site' ? [{ vimeo: p.vimeo }] : []),
+      ...(muxId(p) ? [{ mux: muxId(p) }] : []),
       ...(p.moreMux || []).filter(m => m && m.playbackId).map(m => ({ mux: m.playbackId })),
     ];
     const images = [p.image, ...(p.moreImages || [])].filter(Boolean).map(img => ({ img }));
@@ -616,7 +616,6 @@ async function start() {
       loadMuxPlayer();
       return `<mux-player playback-id="${esc(m.mux)}" stream-type="on-demand" thumbnail-time="0" accent-color="#26262b" primary-color="#ffffff" title="${esc(p.name)}" metadata-video-title="${esc(p.name)}"></mux-player>`;
     }
-    if (m.vimeo) return `<iframe src="https://player.vimeo.com/video/${encodeURIComponent(m.vimeo)}?autoplay=1&title=0&byline=0&portrait=0&dnt=1" title="${esc(p.name)} film" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
     return '';
   }
   function showMedia(play) {
@@ -816,9 +815,9 @@ async function start() {
   }
   // Case studies are re-laid out inside the window: one plain paragraph on top,
   // then the film and every image together in a single tight mosaic.
-  // Pages without a film get the project's film from the data (Mux, else Vimeo).
-  const filmBySlug = Object.fromEntries(projects.filter(p => muxId(p) || p.vimeo).map(p => [p.slug,
-    muxId(p) ? `https://player.mux.com/${encodeURIComponent(muxId(p))}` : `https://player.vimeo.com/video/${p.vimeo}?title=0&byline=0&portrait=0&dnt=1`]));
+  // Pages without a film get the project's film from the data (Mux).
+  const filmBySlug = Object.fromEntries(projects.filter(p => muxId(p)).map(p => [p.slug,
+    `https://player.mux.com/${encodeURIComponent(muxId(p))}`]));
   const firstSentence = t => { const m = t.match(/^(.{20,}?[.!?])(\s|$)/); return m ? m[1] : t; };
   const textOf = el => (el ? el.textContent : '').replace(/\s+/g, ' ').trim();
 
@@ -836,10 +835,10 @@ async function start() {
   function startFilm(film) {
     const play = film.querySelector('.c-play');
     if (play) play.click();
-    for (const f of film.querySelectorAll('iframe[src*="player.vimeo.com"], iframe[src*="player.mux.com"]')) {
+    for (const f of film.querySelectorAll('iframe[src*="player.mux.com"]')) {
       if (/[?&]autoplay=(1|true)/.test(f.src)) continue;
       f.allow = 'autoplay; fullscreen; picture-in-picture';
-      f.src += (f.src.includes('?') ? '&' : '?') + (f.src.includes('mux.com') ? 'autoplay=true' : 'autoplay=1');
+      f.src += (f.src.includes('?') ? '&' : '?') + 'autoplay=true';
     }
     const v = film.matches('video') ? film : film.querySelector('video');
     if (v) { v.muted = true; v.preload = 'auto'; v.play().catch(() => {}); }
