@@ -136,7 +136,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     figCanvas.width = w; figCanvas.height = h;
     const c = figCanvas.getContext('2d');
     c.clearRect(0, 0, w, h);
-    c.save(); c.translate(w * 0.5, h * 0.98); const s = h / 100; c.scale(s, s);
+    c.save(); c.translate(w * 0.5, h * 0.99); const s = h / 112; c.scale(s, s);
     c.fillStyle = '#fff'; c.strokeStyle = '#fff'; c.lineCap = 'round'; c.lineJoin = 'round';
     c.beginPath(); c.ellipse(0, -76, 6.2, 7.4, 0, 0, Math.PI * 2); c.fill();                        // head
     c.lineWidth = 6; c.beginPath(); c.moveTo(0, -68); c.lineTo(0, -64); c.stroke();                   // neck

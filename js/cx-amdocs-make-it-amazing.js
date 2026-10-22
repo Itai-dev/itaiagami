@@ -424,8 +424,6 @@ function build() {
     ball.x = 2.78; ball.z = 5.4; ball.vx = 0; ball.vz = 0; ball.inPlay = true; ball.wait = 0.7;
   }
   serve();
-  window.__amBall = ball;
-  window.__amSim = (sec) => { const log = []; let tt = 0; for (let i = 0; i < sec * 60; i++) { tt += 1 / 60; now = 1000 + tt; simFrame(1 / 60); if (i % 15 === 0) log.push([ball.x.toFixed(2), ball.z.toFixed(2), Math.hypot(ball.vx, ball.vz).toFixed(1), score].join(' ')); } return log; };
 
   /* attract mode: the machine flips for itself when nobody is playing */
   let aiHoldL = 0, aiHoldR = 0;
