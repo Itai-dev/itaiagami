@@ -42,7 +42,8 @@ function start() {
   const { renderer, scene, camera } = stage;
   renderer.setClearColor('#0b0716', 1);
   renderer.toneMapping = THREE.NeutralToneMapping;
-  if ('transmissionResolutionScale' in renderer) renderer.transmissionResolutionScale = 0.6;
+  if ('transmissionResolutionScale' in renderer) renderer.transmissionResolutionScale = 0.5;
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));   // the glass is costly: keep the canvas lighter
   camera.fov = 30; camera.near = 0.5; camera.far = 60; camera.updateProjectionMatrix();
   const CAMZ = 15;
   camera.position.set(0, 0, CAMZ);
@@ -110,9 +111,9 @@ function start() {
   const spinner = new THREE.Group();
   plus.add(spinner);
   scene.add(plus);
-  const D = 1.18, LEN = 1.05, R = 0.37;
+  const D = 1.2, LEN = 1.0, R = 0.4;
   const glassGeo = new THREE.CapsuleGeometry(R, LEN, 12, 40);
-  const coreGeo = new THREE.CapsuleGeometry(R * 0.5, LEN * 0.96, 8, 24);
+  const coreGeo = new THREE.CapsuleGeometry(R * 0.34, LEN * 0.92, 8, 24);
   const glowTex = canvasTexture(128, 256, (c, w, h) => {
     const g = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, h / 2);
     g.addColorStop(0, 'rgba(255,255,255,.9)'); g.addColorStop(0.35, 'rgba(255,255,255,.28)'); g.addColorStop(1, 'rgba(255,255,255,0)');
@@ -124,7 +125,7 @@ function start() {
     const arm = new THREE.Group();
     arm.rotation.z = a.rot;
     const glass = new THREE.Mesh(glassGeo, new THREE.MeshPhysicalMaterial({
-      color: '#ffffff', metalness: 0, roughness: 0.05, transmission: 1, thickness: 0.9, ior: 1.52,
+      color: '#ffffff', metalness: 0, roughness: 0.05, transmission: 1, thickness: 1.1, ior: 1.5,
       dispersion: 6, clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.3,
       attenuationColor: new THREE.Color(a.inner).lerp(new THREE.Color('#ffffff'), 0.55), attenuationDistance: 2.2,
     }));

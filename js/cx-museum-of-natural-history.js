@@ -173,7 +173,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     g.setAttribute('aAlpha', new THREE.BufferAttribute(alpha, 1).setUsage(THREE.DynamicDrawUsage));
     points = new THREE.Points(g, pMat); points.frustumCulled = false; points.renderOrder = 3; scene.add(points);
     analysis.width = cols; analysis.height = rows;
-    pMat.uniforms.uSize.value = (stageEl.clientWidth / cols) * Math.min(devicePixelRatio || 1, 2) * 1.5;
+    pMat.uniforms.uSize.value = (stageEl.clientWidth / cols) * Math.min(devicePixelRatio || 1, 2) * 1.7;
   }
   const analysis = document.createElement('canvas');
   const actx = analysis.getContext('2d', { willReadFrequently: true });
@@ -338,22 +338,22 @@ function build({ renderer, scene, camera, reveal, onResize }) {
       const R = px[i * 4] / 255, G = px[i * 4 + 1] / 255, B = px[i * 4 + 2] / 255;
       const l = 0.3 * R + 0.59 * G + 0.11 * B;
       const d = Math.abs(l - prevLuma[i]); prevLuma[i] = l;
-      motion[i] = Math.max(motion[i] * 0.86, d > 0.06 ? Math.min(1, d * 4) : 0);
+      motion[i] = Math.max(motion[i] * 0.82, d > 0.08 ? Math.min(1, d * 3) : 0);
       let m;
       if (hasMask) {
         const mx = Math.min(cam.mw - 1, Math.floor((c / cols) * cam.mw)), my = Math.min(cam.mh - 1, Math.floor((r / rows) * cam.mh));
         m = cam.mask[my * cam.mw + mx];
-        m = m > 0.5 ? 0.6 + m * 0.4 : m * 0.2;
+        m = Math.min(1, Math.max(0, (m - 0.4) / 0.3));
       } else {
         // fallback: movement reveals the figure, and it lingers for a few seconds
         m = Math.min(1, target[i] * 0.985 + motion[i] * 0.9);
       }
       target[i] = m;
       // the visitor's own colours, lifted toward the exhibit's light
-      const lift = 0.25;
-      col[i * 3] = Math.min(1, R * 1.15 * (1 - lift) + glowCol[i * 3] * lift);
-      col[i * 3 + 1] = Math.min(1, G * 1.15 * (1 - lift) + glowCol[i * 3 + 1] * lift);
-      col[i * 3 + 2] = Math.min(1, B * 1.15 * (1 - lift) + glowCol[i * 3 + 2] * lift);
+      const lift = 0.35;
+      col[i * 3] = Math.min(1, R * 1.3 * (1 - lift) + glowCol[i * 3] * lift);
+      col[i * 3 + 1] = Math.min(1, G * 1.3 * (1 - lift) + glowCol[i * 3 + 1] * lift);
+      col[i * 3 + 2] = Math.min(1, B * 1.3 * (1 - lift) + glowCol[i * 3 + 2] * lift);
     }
   }
   function readFigure(t) {
@@ -378,7 +378,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     ptr.vx *= 0.8; ptr.vy *= 0.8;
     const R2 = 0.9 * 0.9;
     const pos = points.geometry.attributes.position.array;
-    const kSpring = 9, damp = Math.pow(0.04, dt), push = 26 * GENTLE;
+    const kSpring = cam.stream ? 14 : 9, damp = Math.pow(0.04, dt), push = 26 * GENTLE, mPush = cam.stream ? 0.45 : 1;
     const ga = Math.max(1, Math.round(cols / 48));
     for (let r = 0, i = 0; r < rows; r++) for (let c = 0; c < cols; c++, i++) {
       const hx = home[i * 3], hy = home[i * 3 + 1];
@@ -388,8 +388,8 @@ function build({ renderer, scene, camera, reveal, onResize }) {
       if (m > 0.05) {
         const gx = (motion[i - (c >= ga ? ga : 0)] || 0) - (motion[i + (c < cols - ga ? ga : 0)] || 0);
         const gy = (motion[i + (r < rows - ga ? ga * cols : 0)] || 0) - (motion[i - (r >= ga ? ga * cols : 0)] || 0);
-        vx += (gx * 3 + (rnd() - 0.5) * m * 2) * push * dt;
-        vy += (gy * 3 + (rnd() - 0.5) * m * 2) * push * dt;
+        vx += (gx * 3 + (rnd() - 0.5) * m * 1.4) * push * mPush * dt;
+        vy += (gy * 3 + (rnd() - 0.5) * m * 1.4) * push * mPush * dt;
       }
       if (ptr.on && pSpeed > 0.02) {
         const dx = hx + ox - ptr.x, dy = hy + oy - ptr.y, d2 = dx * dx + dy * dy;
