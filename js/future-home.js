@@ -62,7 +62,7 @@ varying vec2 vUv;
 void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
 const FRAG = /* glsl */`
 uniform sampler2D uMap;
-uniform float uHasMap, uImgAspect, uMargin, uBezel, uRadius, uFocus, uAlpha, uGlow, uTheme, uSheen;
+uniform float uHasMap, uImgAspect, uMargin, uBezel, uRadius, uRadiusIn, uFocus, uAlpha, uGlow, uTheme, uSheen;
 uniform vec2 uSize;
 uniform vec3 uLight, uBase;
 varying vec2 vUv;
@@ -77,7 +77,7 @@ void main(){
 
   /* the picture, inset in the glass, cover-fitted */
   vec2 ib = hb - uBezel;
-  float di = sdRR(p, ib, max(uRadius - uBezel * 0.7, 0.01));
+  float di = sdRR(p, ib, uRadiusIn);
   float inImg = 1.0 - smoothstep(-aa, aa, di);
   vec2 iuv = p / (2.0 * ib) + 0.5;
   float wa = ib.x / ib.y;
@@ -162,7 +162,7 @@ function init() {
       vertexShader: VERT, fragmentShader: FRAG, transparent: true, depthWrite: false, toneMapped: false,
       uniforms: {
         uMap: { value: blank }, uHasMap: { value: 0 }, uImgAspect: { value: 16 / 9 },
-        uSize: { value: new THREE.Vector2(1.6, 1) }, uMargin: { value: 0.7 }, uBezel: { value: 0.028 }, uRadius: { value: 0.08 },
+        uSize: { value: new THREE.Vector2(1.6, 1) }, uMargin: { value: 0.7 }, uBezel: { value: 0.028 }, uRadius: { value: 0.03 }, uRadiusIn: { value: 0.02 },
         uFocus: { value: 0 }, uAlpha: { value: 0 }, uGlow: { value: 0.5 }, uTheme: { value: theme() }, uSheen: { value: 0 },
         uLight: { value: it.light.color.clone() }, uBase: { value: new THREE.Color(it.li.dataset.bg) },
       },
@@ -193,11 +193,13 @@ function init() {
   paintTheme();
 
   /* ---------- layout: the hero constellation and the arc ---------- */
-  const L = { W: 1.6, H: 1, D: 6, step: 0.3, mobile: false, vw: 1, vh: 1, cy: 0.5, run: 1 };
+  const L = { W: 1.6, H: 1, D: 6, step: 0.3, mobile: false, vw: 1, vh: 1, cy: 0.5, run: 1, head: 64 };
+  const header = document.getElementById('siteHeader');
   const tanH = () => Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
   function layout() {
     const w = stageEl.clientWidth || innerWidth, h = stageEl.clientHeight || innerHeight;
     L.vw = w; L.vh = h; L.mobile = w < 700;
+    L.head = (header && header.offsetHeight) || 64;     /* the site header: the name tag stays below it */
     const asp = L.mobile ? 1.0 : 16 / 10;
     L.H = 1; L.W = asp;
     /* the slot is the free space between the heading and the caption */
@@ -210,8 +212,13 @@ function init() {
     L.D = Math.max(dH, dW, 2.2);
     L.step = (L.W * (L.mobile ? 1.12 : 1.16)) / L.D;
     L.run = Math.max(1, gallery.offsetHeight - h);
+    /* the site's squared system: a 12px frame (--r-panel) around an 8px picture
+       (--r-media), measured on the window when it faces you in the gallery */
+    const pxPerUnit = h / (2 * tanH() * L.D);
+    const rOut = clamp(12 / pxPerUnit, 0.012, 0.06), rIn = clamp(8 / pxPerUnit, 0.008, 0.04);
     items.forEach((it) => {
       it.u.uSize.value.set(L.W, L.H);
+      it.u.uRadius.value = rOut; it.u.uRadiusIn.value = rIn;
       it.mesh.scale.set(L.W + 2 * it.u.uMargin.value, L.H + 2 * it.u.uMargin.value, 1);
     });
     /* constellation: scattered in depth above and around the type */
@@ -468,7 +475,7 @@ function init() {
         tag.style.setProperty('--tc', it.light.css);
       }
       tag.style.setProperty('--tx', Math.round(clamp(tx, 120, w - 120)) + 'px');
-      tag.style.setProperty('--ty', Math.round(Math.max(ty, 70)) + 'px');
+      tag.style.setProperty('--ty', Math.round(Math.max(ty, L.head + 46)) + 'px');
       tag.classList.add('on');
     } else tag.classList.remove('on');
 

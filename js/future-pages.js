@@ -7,7 +7,7 @@
    - panels that settle forward out of depth as they arrive (.fp-rise)
    - a card that turns to face the pointer ([data-fp-face])
    - the clients constellation on About ([data-fp-field])
-   - the reading line in the header pill (.fp-progress)
+   - the reading line along the foot of the site header (.fp-progress)
    - Cal.com embed colours matched to the glass, in both themes
    ===================================================================== */
 (function(){
@@ -151,7 +151,7 @@
   }
 
   /* ---------- the reading line ----------
-     Lives inside the floating header pill. CSS drives it with a scroll
+     Lives along the foot of the site header. CSS drives it with a scroll
      timeline where supported; elsewhere this keeps --p in step. */
   const prog=document.querySelector('.fp-progress');
   if(prog){
