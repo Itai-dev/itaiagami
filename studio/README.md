@@ -11,7 +11,7 @@ itaiagami/            repo root = project folder
 
 - **Project**: name, slug, client, category (Brand / Culture / Technology), order,
   card image, optional card video loop (short mp4), one-liner, role, idea, outcome,
-  challenge, system, contribution, disciplines, credits, film (Mux), hero, images.
+  challenge, system, contribution, disciplines, credits, Vimeo film ID, hero, images.
 - **Site settings** (single document): about lines, email, LinkedIn, CV.
 
 ## One-time setup (needs your Sanity login)

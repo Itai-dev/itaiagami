@@ -54,6 +54,12 @@ for ($i = 0; $i -lt $total; $i++) {
 
   # film
   $filmHtml = ""
+  if ($p.vimeo) {
+    $filmHtml = @"
+    <div class="c-film"><div class="l">Film</div><div class="frame"><iframe src="https://player.vimeo.com/video/$($p.vimeo)?title=0&byline=0&portrait=0&dnt=1" title="$name — film" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div></div>
+
+"@
+  }
 
   # credits
   $credHtml = ""

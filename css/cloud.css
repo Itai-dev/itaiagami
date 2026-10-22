@@ -105,7 +105,7 @@ html.cloud-on #cloud{display:block}
 .cl .cl-focus-nav button{height:100%;padding:0 7px;color:inherit;font:inherit;cursor:pointer}
 .cl .cl-focus-nav button:hover{filter:brightness(.85);background:rgba(0,0,0,.08)}
 .cl-focus-count{font-variant-numeric:tabular-nums;padding:0 1px}
-.cl-play iframe:not([src*="player.mux.com"]){background:#fff}
+.cl-play iframe:not([src*="vimeo"]){background:#fff}
 .cl .cl-focus-min{display:grid;place-items:center;width:26px;padding:0;cursor:pointer}
 .cl .cl-focus-min:hover{filter:brightness(.85)}
 .cl-focus-info{margin:0;white-space:normal;line-height:1.4;transition:opacity .2s,background-color .3s,color .3s}

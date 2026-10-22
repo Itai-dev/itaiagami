@@ -48,6 +48,7 @@ const docs = projects.map((p, i) => ({
   contribution: p.contribution,
   disciplines: p.disciplines,
   credits: p.credits || [],
+  vimeoId: p.vimeo || undefined,
   hero: asset('image', p.hero),
   gallery: (p.gallery || []).map((g, k) => ({
     _key: `g${k}`,

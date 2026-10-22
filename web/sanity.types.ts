@@ -88,6 +88,7 @@ export type Project = {
       _key: string;
     } & MuxVideo
   >;
+  vimeoId?: string;
   image?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -453,7 +454,7 @@ export type PROJECT_SLUGS_QUERY_RESULT = Array<{
 
 // Source: ../web/src/sanity/queries.ts
 // Variable: PROJECT_QUERY
-// Query: *[_type == "project" && (slug.current == $slug || _id == $slug)][0]{    _id,    name,    type,    text,    image,    siteEmbed,    client,    role,    oneliner,    idea,    outcome,    siteUrl,    "muxPlaybackId": film.asset->playbackId,    "muxAspect": film.asset->data.aspect_ratio,    moreVideos[]{_key, "muxPlaybackId": asset->playbackId, "muxAspect": asset->data.aspect_ratio},    moreImages,    hero,    gallery[]{      _key,      _type,      image,      alt,      half,      "muxPlaybackId": video.asset->playbackId,      "muxAspect": video.asset->data.aspect_ratio    },    "loopUrl": loop.asset->url  }
+// Query: *[_type == "project" && (slug.current == $slug || _id == $slug)][0]{    _id,    name,    type,    text,    image,    siteEmbed,    client,    role,    oneliner,    idea,    outcome,    vimeoId,    siteUrl,    "muxPlaybackId": film.asset->playbackId,    "muxAspect": film.asset->data.aspect_ratio,    moreVideos[]{_key, "muxPlaybackId": asset->playbackId, "muxAspect": asset->data.aspect_ratio},    moreImages,    hero,    gallery[]{      _key,      _type,      image,      alt,      half,      "muxPlaybackId": video.asset->playbackId,      "muxAspect": video.asset->data.aspect_ratio    },    "loopUrl": loop.asset->url  }
 export type PROJECT_QUERY_RESULT = {
   _id: string;
   name: string | null;
@@ -472,6 +473,7 @@ export type PROJECT_QUERY_RESULT = {
   oneliner: string | null;
   idea: string | null;
   outcome: string | null;
+  vimeoId: string | null;
   siteUrl: string | null;
   muxPlaybackId: string | null;
   muxAspect: string | null;
@@ -547,7 +549,7 @@ declare global {
   interface SanityQueries {
     '\n  *[_type == "project"] | order(coalesce(order, 999) asc, name asc){\n    _id,\n    name,\n    type,\n    "slug": coalesce(slug.current, _id),\n    category,\n    client,\n    thumbnail,\n    image,\n    "muxPlaybackId": film.asset->playbackId,\n    "loopUrl": loop.asset->url\n  }\n': PROJECTS_QUERY_RESULT;
     '\n  *[_type == "project"]{"slug": coalesce(slug.current, _id)}\n': PROJECT_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "project" && (slug.current == $slug || _id == $slug)][0]{\n    _id,\n    name,\n    type,\n    text,\n    image,\n    siteEmbed,\n    client,\n    role,\n    oneliner,\n    idea,\n    outcome,\n    siteUrl,\n    "muxPlaybackId": film.asset->playbackId,\n    "muxAspect": film.asset->data.aspect_ratio,\n    moreVideos[]{_key, "muxPlaybackId": asset->playbackId, "muxAspect": asset->data.aspect_ratio},\n    moreImages,\n    hero,\n    gallery[]{\n      _key,\n      _type,\n      image,\n      alt,\n      half,\n      "muxPlaybackId": video.asset->playbackId,\n      "muxAspect": video.asset->data.aspect_ratio\n    },\n    "loopUrl": loop.asset->url\n  }\n': PROJECT_QUERY_RESULT;
+    '\n  *[_type == "project" && (slug.current == $slug || _id == $slug)][0]{\n    _id,\n    name,\n    type,\n    text,\n    image,\n    siteEmbed,\n    client,\n    role,\n    oneliner,\n    idea,\n    outcome,\n    vimeoId,\n    siteUrl,\n    "muxPlaybackId": film.asset->playbackId,\n    "muxAspect": film.asset->data.aspect_ratio,\n    moreVideos[]{_key, "muxPlaybackId": asset->playbackId, "muxAspect": asset->data.aspect_ratio},\n    moreImages,\n    hero,\n    gallery[]{\n      _key,\n      _type,\n      image,\n      alt,\n      half,\n      "muxPlaybackId": video.asset->playbackId,\n      "muxAspect": video.asset->data.aspect_ratio\n    },\n    "loopUrl": loop.asset->url\n  }\n': PROJECT_QUERY_RESULT;
     '\n  *[_id == "settings"][0]{about, email, linkedin, "cvUrl": cv.asset->url}\n': SETTINGS_QUERY_RESULT;
   }
 }
