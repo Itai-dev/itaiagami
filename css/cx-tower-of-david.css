@@ -156,3 +156,4 @@ body.cx.cx-tower-of-david{
 body.cx-tower-of-david main{padding-top:0}
 .cx-main section.td-hero{padding:0}
 .td-stage:not(.live) ~ .td-hud{display:none}
+.td-copy .cx-crumb,.td-copy .cx-crumb a{color:rgba(242,233,216,.88);text-shadow:0 1px 12px rgba(10,19,48,.45)}
