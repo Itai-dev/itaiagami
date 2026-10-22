@@ -1142,32 +1142,67 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   vids.forEach(v=>io.observe(v));
 })();
 
-/* ---------- click-to-load film ----------
-   .frame[data-vimeo] holds a poster button; the player is only fetched when
-   someone asks for it, then starts with sound and Vimeo's own controls. */
+/* ---------- films (Mux, uploaded through Sanity) ----------
+   .frame[data-mux] holds a poster button; Mux's player is only fetched when
+   someone asks for it, then starts with sound and its own controls.
+   A frame with data-loop="start-end" (seconds) also plays that slice of the
+   film, muted, behind the button (Mux instant clipping). Skipped for reduced
+   motion and data saver, paused off screen. Safari and iOS play the clip
+   natively; elsewhere <mux-video>, bundled in the player, streams it. */
 (function(){
-  const frames=document.querySelectorAll('.frame[data-vimeo]');
+  const frames=document.querySelectorAll('.frame[data-mux]');
   if(!frames.length)return;
-  let warmed=false;
-  const warm=()=>{
-    if(warmed)return;warmed=true;
-    ['https://player.vimeo.com','https://i.vimeocdn.com','https://f.vimeocdn.com'].forEach(h=>{
-      const l=document.createElement('link');l.rel='preconnect';l.href=h;document.head.appendChild(l);
+  let loading=null;
+  const load=()=>loading||(loading=import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs').catch(()=>{}));
+
+  const calm=matchMedia('(prefers-reduced-motion: reduce)').matches||(navigator.connection&&navigator.connection.saveData);
+  const nativeHls=document.createElement('video').canPlayType('application/vnd.apple.mpegurl')!=='';
+  function startLoop(f,btn){
+    const [a,b]=f.dataset.loop.split('-').map(Number);
+    const v=document.createElement(nativeHls?'video':'mux-video');
+    v.className='c-loop'; v.setAttribute('aria-hidden','true'); v.tabIndex=-1;
+    v.muted=true; v.loop=true; v.playsInline=true;
+    ['muted','loop','playsinline','autoplay'].forEach(k=>v.setAttribute(k,''));
+    if(!nativeHls) v.setAttribute('max-resolution','720p');
+    v.addEventListener('playing',()=>btn.classList.add('looping'),{once:true});
+    v.setAttribute('src','https://stream.mux.com/'+encodeURIComponent(f.dataset.mux)+'.m3u8?asset_start_time='+a+'&asset_end_time='+b);
+    btn.insertBefore(v,btn.querySelector('.pb'));
+    new IntersectionObserver(es=>es.forEach(e=>{
+      if(!v.isConnected)return;
+      if(e.isIntersecting){const p=v.play&&v.play(); if(p&&p.catch)p.catch(()=>{});} else if(v.pause) v.pause();
+    })).observe(f);
+  }
+  if(!calm&&'IntersectionObserver' in window){
+    document.querySelectorAll('.frame[data-mux][data-loop]').forEach(f=>{
+      const btn=f.querySelector('.c-play'); if(!btn)return;
+      const io=new IntersectionObserver(es=>{
+        if(!es.some(e=>e.isIntersecting))return; io.disconnect();
+        if(nativeHls) startLoop(f,btn);
+        else load().then(()=>customElements.whenDefined('mux-video')).then(()=>{ if(btn.isConnected) startLoop(f,btn); });
+      },{rootMargin:'200px'});
+      io.observe(f);
     });
-  };
+  }
+
   frames.forEach(f=>{
     const btn=f.querySelector('.c-play');
     if(!btn)return;
-    btn.addEventListener('pointerenter',warm,{once:true});
-    btn.addEventListener('focus',warm,{once:true});
+    btn.addEventListener('pointerenter',load,{once:true});
+    btn.addEventListener('focus',load,{once:true});
     btn.addEventListener('click',()=>{
-      const ifr=document.createElement('iframe');
-      ifr.src='https://player.vimeo.com/video/'+f.dataset.vimeo+'?autoplay=1&title=0&byline=0&portrait=0&dnt=1';
-      ifr.title=f.dataset.title||'Film';
-      ifr.allow='autoplay; fullscreen; picture-in-picture';
-      ifr.allowFullscreen=true;
-      btn.replaceWith(ifr);
-      ifr.focus();
+      load();
+      const pl=document.createElement('mux-player');
+      pl.setAttribute('playback-id',f.dataset.mux);
+      pl.setAttribute('stream-type','on-demand');
+      pl.setAttribute('accent-color','#0d0d0d');
+      pl.setAttribute('metadata-video-title',f.dataset.title||'Film');
+      pl.setAttribute('title',f.dataset.title||'Film');
+      pl.setAttribute('autoplay','');
+      btn.replaceWith(pl);
+      customElements.whenDefined('mux-player').then(()=>{
+        const p=pl.play&&pl.play();
+        if(p&&p.catch)p.catch(()=>{pl.muted=true;pl.play().catch(()=>{});});
+      });
     });
   });
 })();
