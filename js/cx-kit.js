@@ -30,7 +30,7 @@ export function makeStage(stage, { shadows = true, exposure = 1.05, alpha = true
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = exposure;
-  if (shadows) { renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; }
+  if (shadows) { renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; /* soft edges come from light.shadow.radius */ }
   renderer.domElement.className = 'cx-canvas';
   renderer.domElement.setAttribute('aria-hidden', 'true');
   const scene = new THREE.Scene();
@@ -59,16 +59,18 @@ export function makeStage(stage, { shadows = true, exposure = 1.05, alpha = true
    tab is visible. With reduced motion it draws once, then again only for
    `wake()` (call it from a click or key handler) for ~1.2 s. */
 export function runWhileVisible(el, frame) {
-  const clock = new THREE.Clock();
+  /* elapsed time pauses while the scene is off screen (THREE.Clock is deprecated) */
+  let elapsed = 0, last = 0;
+  const clock = { getDelta() { const now = performance.now() / 1000; const d = last ? now - last : 0; last = now; elapsed += Math.min(d, 0.25); return d; }, get elapsedTime() { return elapsed; } };
   let inView = true, running = false, wakeUntil = 0;
   const loop = () => {
     if (running) return;
     running = true;
     const tick = () => {
-      if (!inView || document.hidden) { running = false; return; }
+      if (!inView || document.hidden) { running = false; last = 0; return; }
       const dt = Math.min(clock.getDelta(), 0.05);
       frame(clock.elapsedTime, dt);
-      if (calm && performance.now() > wakeUntil) { running = false; return; }
+      if (calm && performance.now() > wakeUntil) { running = false; last = 0; return; }
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);

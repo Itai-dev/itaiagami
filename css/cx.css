@@ -19,6 +19,8 @@ body.cx{
   --cx-btn-bg:#fff; --cx-btn-fg:#111;
   /* re-point the shared site tokens so header, buttons, ending and footer follow */
   --bg:var(--cx-bg); --fg:var(--cx-fg); --dim:var(--cx-dim);
+  /* raised surfaces (secondary buttons, the consent banner) in the page's own colours */
+  --surface:color-mix(in srgb,var(--cx-bg) 88%,var(--cx-fg));
   --line:var(--cx-line); --line-strong:var(--cx-line); --mark:var(--cx-accent);
   background:var(--cx-bg); color:var(--cx-fg);
 }
