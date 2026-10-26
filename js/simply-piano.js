@@ -1,7 +1,10 @@
 /* ============================================================
    Simply Vision Pro: the playable keyboard.
    A live 3D keyboard under a floating purple notation bar, the way the
-   launch film showed it, framed in the case page. The melody plays itself silently (keys light
+   launch film showed it, with the film's white virtual hand above it.
+   On a desktop the hand is the cursor: it follows the pointer and a click
+   presses the key under the index finger. On touch, the hand travels to
+   the tapped key and presses it. Idle, the hand plays the lesson. The melody plays itself silently (keys light
    turquoise in time); a visitor can tap keys or use the computer keyboard
    (A W S E D F T G Y H U J K) and hear them.
 
@@ -140,6 +143,49 @@ async function start() {
     new THREE.MeshBasicMaterial({ color: TEAL, transparent: true, opacity: 0, depthWrite: false, toneMapped: false }));
   scene.add(beam);
 
+  /* ---------- the hand: a white virtual hand, as in the film. Its origin is the index fingertip ---------- */
+  const handMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.42, metalness: 0, emissive: '#ffffff', emissiveIntensity: 0.06 });
+  const hand = new THREE.Group(), handBody = new THREE.Group();
+  hand.add(handBody); scene.add(hand);
+  const seg = (r, L) => { const g = new THREE.CapsuleGeometry(r, L, 6, 14); g.rotateX(Math.PI / 2); g.translate(0, 0, -L / 2); return g; };
+  function finger(x, y, z, lens, r, bends, turn = 0) {
+    const root = new THREE.Group(); root.position.set(x, y, z); root.rotation.y = turn;
+    let parent = root; const joints = [];
+    lens.forEach((L, i) => {
+      const j = new THREE.Group(); j.rotation.x = -bends[i];
+      if (i) j.position.z = -lens[i - 1];
+      parent.add(j);
+      const m = new THREE.Mesh(seg(r * (1 - i * 0.08), L), handMat); m.castShadow = true; j.add(m);
+      joints.push(j); parent = j;
+    });
+    const tip = new THREE.Object3D(); tip.position.z = -lens[lens.length - 1] - r * 0.8; parent.add(tip);
+    handBody.add(root);
+    return { joints, tip, bends };
+  }
+  // a pianist's right hand seen from the player's seat: an arched back, long fingers curving down at the tips
+  const palm = new THREE.Mesh(rounded(0.47, 0.07, 0.34, 0.15), handMat);
+  palm.position.set(0.2, 0.0, 0.2); palm.castShadow = true; handBody.add(palm);
+  const wrist = new THREE.Mesh(seg(0.1, 0.12), handMat);
+  wrist.rotation.y = Math.PI; wrist.scale.set(0.95, 0.55, 1); wrist.position.set(0.2, -0.005, 0.34); wrist.castShadow = true; handBody.add(wrist);
+  const index = finger(0, 0, 0.02, [0.24, 0.16, 0.11], 0.04, [0.12, 0.45, 0.55]);
+  finger(0.14, 0, 0.0, [0.26, 0.17, 0.12], 0.041, [0.12, 0.45, 0.55]);
+  finger(0.27, 0, 0.02, [0.24, 0.16, 0.11], 0.039, [0.12, 0.45, 0.55]);
+  finger(0.39, 0, 0.06, [0.18, 0.12, 0.09], 0.035, [0.12, 0.42, 0.5]);
+  finger(-0.06, -0.02, 0.26, [0.17, 0.13], 0.045, [0.15, 0.3], 0.85);   // thumb
+  handBody.rotation.x = 0.18;                                      // the back of the hand turns toward the viewer
+  hand.scale.setScalar(1.45);
+  {
+    hand.updateMatrixWorld(true);
+    const tipAt = index.tip.getWorldPosition(new THREE.Vector3()).divideScalar(1.45);
+    handBody.position.sub(tipAt);                                  // the hand hangs from its index fingertip
+  }
+  const WHITE_TOP = WH + 0.02, BLACK_TOP = WH + BH - 0.02;
+  const keyPoint = (k, v = new THREE.Vector3()) => v.set(k.x, (k.black ? BLACK_TOP : WHITE_TOP) + board.position.y, k.black ? -0.12 : 0.36);
+  const handPos = new THREE.Vector3(), handTarget = new THREE.Vector3();
+  let handPress = 0, queued = null, hoverKey = null;
+  keyPoint(keys.E4, handTarget); handPos.copy(handTarget);   // start resting over the first note
+  const HOVER = 0.14;
+
   /* ---------- sound: a small soft piano voice, only after a visitor plays ---------- */
   let audio = null;
   const freq = (n) => {
@@ -176,6 +222,17 @@ async function start() {
     if (audible) sound(n);
   }
 
+  /* the hand travels to a key, then presses it when the finger arrives */
+  function playWithHand(n, audible) {
+    const k = keys[n]; if (!k) return;
+    keyPoint(k, handTarget);
+    queued = { n, audible };
+    if (audible) warmAudio();
+  }
+  function warmAudio() {   // the audio context must start inside the visitor's gesture
+    try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); if (audio.state === 'suspended') audio.resume(); } catch (e) {}
+  }
+
   /* ---------- the self-playing lesson ---------- */
   let step = 0, nextAt = 0, userUntil = 0;
   const STEP = 0.48;
@@ -183,19 +240,34 @@ async function start() {
   /* ---------- input: tap/click keys, or the home row of a computer keyboard ---------- */
   const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
   const keyMeshes = Object.values(keys).map((k) => k.mesh);
-  renderer.domElement.addEventListener('pointerdown', (e) => {
+  const hoverPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.5), onPlane = new THREE.Vector3();
+  const aim = (e) => {
     const r = renderer.domElement.getBoundingClientRect();
     ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ptr, camera);
     const hit = ray.intersectObjects(keyMeshes, false)[0];
-    if (hit) { press(hit.object.userData.note, { audible: true }); userUntil = clock.elapsedTime + 4; played(); }
+    return hit ? keys[hit.object.userData.note] && hit.object.userData.note : null;
+  };
+  // a fine pointer: the hand is the cursor, hovering over the key under it
+  renderer.domElement.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+    const n = aim(e);
+    hoverKey = n;
+    if (n) keyPoint(keys[n], handTarget);
+    else if (ray.ray.intersectPlane(hoverPlane, onPlane)) handTarget.set(THREE.MathUtils.clamp(onPlane.x, -2.3, 2.3), 0.36 + board.position.y, THREE.MathUtils.clamp(onPlane.z, -0.6, 1.2));
+    userUntil = clock.elapsedTime + 2.5;
+  });
+  renderer.domElement.addEventListener('pointerleave', () => { hoverKey = null; userUntil = clock.elapsedTime + 0.8; });
+  renderer.domElement.addEventListener('pointerdown', (e) => {
+    const n = aim(e);
+    if (n) { playWithHand(n, true); userUntil = clock.elapsedTime + 4; played(); }
   });
   const map = { a: 'C4', w: 'C#4', s: 'D4', e: 'D#4', d: 'E4', f: 'F4', t: 'F#4', g: 'G4', y: 'G#4', h: 'A4', u: 'A#4', j: 'B4', k: 'C5' };
   addEventListener('keydown', (e) => {
     if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || !inView) return;
     if (/input|textarea|select/i.test((document.activeElement || {}).tagName || '')) return;
     const n = map[e.key.toLowerCase()];
-    if (n) { press(n, { audible: true }); userUntil = clock.elapsedTime + 4; played(); }
+    if (n) { playWithHand(n, true); userUntil = clock.elapsedTime + 4; played(); }
   });
   let hinted = false;
   function played() { if (!hinted && hint) { hinted = true; hint.classList.add('done'); } }
@@ -238,7 +310,7 @@ async function start() {
     // the lesson plays itself while nobody is playing
     if (!calm && t > userUntil && t >= nextAt) {
       const n = melody[step];
-      press(n);
+      playWithHand(n, false);
       panel.setCursor(step);
       step = (step + 1) % melody.length;
       nextAt = t + (step === 0 ? STEP * 4 : STEP);
@@ -250,6 +322,18 @@ async function start() {
       k.mat.emissiveIntensity = k.press * 1.6;
       k.press = Math.max(0, k.press - dt * 2.4);
     }
+    // the hand: glide to its target, press when the finger arrives, then lift
+    const follow = calm ? 1 : 1 - Math.exp(-dt * (queued && queued.audible ? 22 : 13));
+    handPos.lerp(handTarget, follow);
+    if (queued && Math.hypot(handPos.x - handTarget.x, handPos.z - handTarget.z) < 0.035) {
+      press(queued.n, { audible: queued.audible });
+      handPress = 1; queued = null;
+    }
+    hand.position.set(handPos.x, handPos.y + HOVER - handPress * (HOVER + 0.05), handPos.z);
+    index.joints[0].rotation.x = -(index.bends[0] + handPress * 0.22);
+    hand.rotation.z = calm ? 0 : Math.sin(t * 1.1) * 0.03;
+    handPress = Math.max(0, handPress - dt * 5);
+
     if (lastPlayed) {
       const v = lastPlayed.press;
       beam.position.set(lastPlayed.x, (lastPlayed.black ? WH + BH : WH) + 0.47, lastPlayed.black ? -WD / 2 + BD * 0.62 : 0.1);
@@ -284,13 +368,14 @@ async function start() {
     };
     requestAnimationFrame(tick);
   }
-  const anyPressed = () => Object.values(keys).some((k) => k.press > 0.001);
+  const anyPressed = () => queued || handPress > 0.001 || Object.values(keys).some((k) => k.press > 0.001);
   // with reduced motion, a key press wakes the loop just long enough to animate it
   if (calm) {
     const wake = () => setTimeout(loop, 0);
     renderer.domElement.addEventListener('pointerdown', wake);
     addEventListener('keydown', wake);
     press('E4'); panel.setCursor(0);
+    keyPoint(keys.E4, handTarget); handPos.copy(handTarget);
   }
   loop();
 
