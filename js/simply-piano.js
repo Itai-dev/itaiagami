@@ -23,7 +23,6 @@ async function start() {
   } catch (e) { return; }                       // no WebGL: the poster stays
 
   const TEAL = new THREE.Color('#2ef2d0');
-  const PURPLE = new THREE.Color('#8b4dff');
 
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -37,8 +36,8 @@ async function start() {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 60);
 
-  /* ---------- light: lilac sky, deep purple bounce, one soft key light ---------- */
-  scene.add(new THREE.HemisphereLight('#d9c6ff', '#2a0d5e', 1.4));
+  /* ---------- light: a soft white studio, one key light; the purple lives in the notation bar ---------- */
+  scene.add(new THREE.HemisphereLight('#ffffff', '#cfcad8', 1.7));
   const key = new THREE.DirectionalLight('#ffffff', 2.4);
   key.position.set(-2.5, 6, 4);
   key.castShadow = true;
@@ -46,7 +45,7 @@ async function start() {
   Object.assign(key.shadow.camera, { left: -4, right: 4, top: 3, bottom: -3, near: 1, far: 16 });
   key.shadow.radius = 6;
   scene.add(key);
-  const rim = new THREE.PointLight(PURPLE, 18, 9, 1.6);
+  const rim = new THREE.PointLight('#ffffff', 8, 9, 1.6);
   rim.position.set(2.8, 1.6, -1.6);
   scene.add(rim);
   const glow = new THREE.PointLight(TEAL, 0, 2.2, 2);   // follows the lit key
@@ -122,10 +121,10 @@ async function start() {
     board.add(k);
   }
 
-  /* a floor that only catches the shadow, so the purple page shows through */
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.ShadowMaterial({ opacity: 0.28 }));
+  /* a floor well below the keyboard that only catches its shadow, so it floats over the page */
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.ShadowMaterial({ opacity: 0.2 }));
   floor.rotation.x = -Math.PI / 2;
-  floor.position.y = -0.11;
+  floor.position.y = -0.6;
   floor.receiveShadow = true;
   scene.add(floor);
 
@@ -219,7 +218,7 @@ async function start() {
   let scrollT = 0, px = 0, py = 0;
   addEventListener('scroll', () => {
     const r = stage.getBoundingClientRect();
-    scrollT = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height))) * 0.5;
+    scrollT = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height))) - 0.5;   // -0.5..0.5 as it crosses the screen
   }, { passive: true });
   if (!calm) addEventListener('pointermove', (e) => { px = e.clientX / innerWidth - 0.5; py = e.clientY / innerHeight - 0.5; }, { passive: true });
 
@@ -260,13 +259,16 @@ async function start() {
       glow.intensity = v * 6;
     }
 
-    // camera: a slow breath, the visitor's pointer, and the page scroll
-    const d = baseDist * (1 - scrollT * 0.18);
+    // camera: a slow breath and the visitor's pointer
+    const d = baseDist;
     const sway = calm ? 0 : Math.sin(t * 0.25) * 0.12;
-    cam.set(sway + px * 0.6, 2.35 + d * 0.32 - py * 0.3 - scrollT * 0.5, d * 0.88);
+    cam.set(sway + px * 0.9, 2.35 + d * 0.32 - py * 0.4, d * 0.88);
     camera.position.lerp(cam, calm || !ready ? 1 : 0.06);
     camera.lookAt(look);
-    panel.group.position.y = 1.25 + (calm ? 0 : Math.sin(t * 0.9) * 0.03);
+    // parallax: the keyboard floats and the notation bar, nearer the eye, travels further with scroll and pointer
+    const s = calm ? 0 : scrollT;
+    board.position.y = (calm ? 0 : Math.sin(t * 0.8) * 0.04) - s * 0.12;
+    panel.group.position.set(px * 0.3, 1.25 + s * 0.55 + (calm ? 0 : Math.sin(t * 0.9) * 0.03), -1.05 + 0.25);
 
     renderer.render(scene, camera);
     if (!ready) { ready = true; stage.appendChild(renderer.domElement); stage.classList.add('live'); }
