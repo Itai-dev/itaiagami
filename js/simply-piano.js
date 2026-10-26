@@ -13,6 +13,7 @@
    camera drift; a key still answers when pressed.
    ============================================================ */
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.186.1/+esm';
+import { buildHand } from './simply-hand.js';
 
 const stage = document.getElementById('pnStage');
 const hint = document.getElementById('pnHint');
@@ -143,42 +144,17 @@ async function start() {
     new THREE.MeshBasicMaterial({ color: TEAL, transparent: true, opacity: 0, depthWrite: false, toneMapped: false }));
   scene.add(beam);
 
-  /* ---------- the hand: a white virtual hand, as in the film. Its origin is the index fingertip ---------- */
-  const handMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.42, metalness: 0, emissive: '#ffffff', emissiveIntensity: 0.06 });
-  const hand = new THREE.Group(), handBody = new THREE.Group();
-  hand.add(handBody); scene.add(hand);
-  const seg = (r, L) => { const g = new THREE.CapsuleGeometry(r, L, 6, 14); g.rotateX(Math.PI / 2); g.translate(0, 0, -L / 2); return g; };
-  function finger(x, y, z, lens, r, bends, turn = 0) {
-    const root = new THREE.Group(); root.position.set(x, y, z); root.rotation.y = turn;
-    let parent = root; const joints = [];
-    lens.forEach((L, i) => {
-      const j = new THREE.Group(); j.rotation.x = -bends[i];
-      if (i) j.position.z = -lens[i - 1];
-      parent.add(j);
-      const m = new THREE.Mesh(seg(r * (1 - i * 0.08), L), handMat); m.castShadow = true; j.add(m);
-      joints.push(j); parent = j;
-    });
-    const tip = new THREE.Object3D(); tip.position.z = -lens[lens.length - 1] - r * 0.8; parent.add(tip);
-    handBody.add(root);
-    return { joints, tip, bends };
-  }
-  // a pianist's right hand seen from the player's seat: an arched back, long fingers curving down at the tips
-  const palm = new THREE.Mesh(rounded(0.47, 0.07, 0.34, 0.15), handMat);
-  palm.position.set(0.2, 0.0, 0.2); palm.castShadow = true; handBody.add(palm);
-  const wrist = new THREE.Mesh(seg(0.1, 0.12), handMat);
-  wrist.rotation.y = Math.PI; wrist.scale.set(0.95, 0.55, 1); wrist.position.set(0.2, -0.005, 0.34); wrist.castShadow = true; handBody.add(wrist);
-  const index = finger(0, 0, 0.02, [0.24, 0.16, 0.11], 0.04, [0.12, 0.45, 0.55]);
-  finger(0.14, 0, 0.0, [0.26, 0.17, 0.12], 0.041, [0.12, 0.45, 0.55]);
-  finger(0.27, 0, 0.02, [0.24, 0.16, 0.11], 0.039, [0.12, 0.45, 0.55]);
-  finger(0.39, 0, 0.06, [0.18, 0.12, 0.09], 0.035, [0.12, 0.42, 0.5]);
-  finger(-0.06, -0.02, 0.26, [0.17, 0.13], 0.045, [0.15, 0.3], 0.85);   // thumb
-  handBody.rotation.x = 0.18;                                      // the back of the hand turns toward the viewer
-  hand.scale.setScalar(1.45);
-  {
-    hand.updateMatrixWorld(true);
-    const tipAt = index.tip.getWorldPosition(new THREE.Vector3()).divideScalar(1.45);
-    handBody.position.sub(tipAt);                                  // the hand hangs from its index fingertip
-  }
+  /* ---------- the hand: the film's white glove hand (js/simply-hand.js). Its origin is the index fingertip ---------- */
+  const hand = new THREE.Group();
+  scene.add(hand);
+  let glove = null;
+  // sculpted once, just after the first frame, so the keyboard appears without waiting for it
+  setTimeout(() => {
+    glove = buildHand(THREE, { step: matchMedia('(max-width: 700px)').matches ? 0.017 : 0.0135 });
+    glove.scale.setScalar(1.2);
+    hand.add(glove);
+    loop();
+  }, 60);
   const WHITE_TOP = WH + 0.02, BLACK_TOP = WH + BH - 0.02;
   const keyPoint = (k, v = new THREE.Vector3()) => v.set(k.x, (k.black ? BLACK_TOP : WHITE_TOP) + board.position.y, k.black ? -0.12 : 0.36);
   const handPos = new THREE.Vector3(), handTarget = new THREE.Vector3();
@@ -329,8 +305,8 @@ async function start() {
       press(queued.n, { audible: queued.audible });
       handPress = 1; queued = null;
     }
-    hand.position.set(handPos.x, handPos.y + HOVER - handPress * (HOVER + 0.05), handPos.z);
-    index.joints[0].rotation.x = -(index.bends[0] + handPress * 0.22);
+    hand.position.set(handPos.x, handPos.y + HOVER - handPress * (HOVER + 0.03), handPos.z);
+    if (glove) glove.userData.setPress(handPress);
     hand.rotation.z = calm ? 0 : Math.sin(t * 1.1) * 0.03;
     handPress = Math.max(0, handPress - dt * 5);
 
