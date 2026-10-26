@@ -10,3 +10,11 @@
 .c-plus .note{font-size:var(--t-meta);color:var(--dim);line-height:1.6;max-width:64ch;margin:14px 0 0}
 @media(max-width:700px){.mk-stage{aspect-ratio:4/3}}
 @media(prefers-reduced-motion:reduce){.mk-stage .cx-canvas{animation:none;opacity:1}}
+
+/* the gallery under one streak of light: the campaign's prism band crosses the images as the page scrolls */
+.mk-reel{position:relative;overflow:hidden}
+.mk-reel figcaption{position:relative;z-index:3}   /* captions stay clear of the light */
+.mk-streak{--x:0;position:absolute;z-index:2;pointer-events:none;top:-20%;bottom:-20%;left:0;width:34%;
+  background:linear-gradient(90deg,transparent,rgba(255,74,61,.55) 20%,rgba(255,178,31,.5) 36%,rgba(91,227,125,.45) 52%,rgba(47,211,230,.45) 66%,rgba(107,92,255,.55) 80%,transparent);
+  mix-blend-mode:screen;filter:blur(18px);opacity:.75;transform:translateX(calc(var(--x) * 300% - 100%)) skewX(-18deg)}
+@media(prefers-reduced-motion:reduce){.mk-streak{transform:translateX(80%) skewX(-18deg)}}

@@ -22,7 +22,25 @@ if (!calm) addEventListener('pointermove', (e) => {
   pointer.y = Math.max(-0.8, Math.min(0.8, (e.clientY - r.top) / r.height - 0.5));
 }, { passive: true });
 
+streak();
 if (stageEl) start();
+
+/* the band of light that crosses the gallery as it scrolls */
+function streak() {
+  const reel = document.getElementById('mkReel');
+  const band = reel && reel.querySelector('.mk-streak');
+  if (!band || calm) return;
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const r = reel.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height)));
+    band.style.setProperty('--x', p.toFixed(4));
+  };
+  addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  addEventListener('resize', update);
+  update();
+}
 
 function start() {
   const stage = makeStage(stageEl, { shadows: false, exposure: 1.0, alpha: false });

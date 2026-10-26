@@ -1394,25 +1394,3 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   });
   base.appendChild(a);
 })();
-
-/* ---------- shine: a project image under a fine pointer tilts a touch and catches the light ---------- */
-(function(){
-  if(!matchMedia('(hover:hover) and (pointer:fine)').matches||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const SEL='.swork .media, .index-list.grid .p-thumb, .c-next .thumb', MAX=4;
-  let cur=null, ev=null, raf=0;
-  const off=el=>{ el.classList.remove('shine-on'); ['--mx','--my','--rx','--ry'].forEach(p=>el.style.removeProperty(p)); };
-  const paint=()=>{
-    raf=0; if(!cur||!ev) return;
-    const r=cur.getBoundingClientRect();
-    const x=Math.min(1,Math.max(0,(ev.clientX-r.left)/r.width)), y=Math.min(1,Math.max(0,(ev.clientY-r.top)/r.height));
-    const s=cur.style;
-    s.setProperty('--mx',(x*100).toFixed(1)+'%'); s.setProperty('--my',(y*100).toFixed(1)+'%');
-    s.setProperty('--ry',((x-.5)*2*MAX).toFixed(2)+'deg'); s.setProperty('--rx',((.5-y)*2*MAX*.8).toFixed(2)+'deg');
-  };
-  document.addEventListener('pointermove',e=>{
-    const el=e.target.closest?e.target.closest(SEL):null;
-    if(el!==cur){ if(cur) off(cur); cur=el; if(cur) cur.classList.add('shine-on'); }
-    ev=e; if(cur&&!raf) raf=requestAnimationFrame(paint);
-  },{passive:true});
-  document.addEventListener('pointerleave',()=>{ if(cur) off(cur); cur=null; });
-})();
