@@ -14,7 +14,7 @@
 /* as the cover, straight under the title */
 .c-piano--cover{margin:clamp(4px,1vw,12px) 0 clamp(36px,5vw,64px)}
 .c-piano--cover .pn-stage{aspect-ratio:16/7.5}
-/* the hand is the cursor on a fine pointer */
-@media(hover:hover) and (pointer:fine){.pn-canvas{cursor:none}.pn-h-touch{display:none}}
+/* hint wording for mouse or touch */
+@media(hover:hover) and (pointer:fine){.pn-h-touch{display:none}}
 @media not ((hover:hover) and (pointer:fine)){.pn-h-fine{display:none}}
 @media(max-width:700px){.pn-stage,.c-piano--cover .pn-stage{aspect-ratio:4/3}}
