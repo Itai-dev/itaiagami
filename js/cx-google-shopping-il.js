@@ -1,6 +1,6 @@
 /* ============================================================
    Google Shopping IL: the shop, live.
-   A small built set in the films' language, seen through an arch:
+   A small built set in the films' language, framed in red:
    white wall, blue pipes, the red arch shelf, a blue counter with
    arched cut-outs, yellow bottles. The film's loop plays in a browser
    window on the wall. Tap a bottle and it hops into the cart; a full
@@ -98,7 +98,7 @@ function start() {
   const bar = canvasTexture(512, 40, (c, w, h) => {
     c.fillStyle = '#f1f3f4'; c.fillRect(0, 0, w, h);
     ['#ea4335', '#fbbc04', '#34a853'].forEach((col, i) => { c.fillStyle = col; c.beginPath(); c.arc(20 + i * 22, h / 2, 6.5, 0, Math.PI * 2); c.fill(); });
-    c.fillStyle = '#ffffff'; c.beginPath(); c.roundRect(100, 9, w - 130, h - 18, 11); c.fill();
+    c.fillStyle = '#ffffff'; c.beginPath(); c.roundRect(100, 9, w - 130, h - 18, 5); c.fill();
   });
   const barMesh = new THREE.Mesh(new THREE.PlaneGeometry(ww, ww * 40 / 512), new THREE.MeshBasicMaterial({ map: bar, toneMapped: false }));
   barMesh.position.set(0, wh / 2 + 0.12, 0.07); win.add(barMesh);
@@ -244,7 +244,7 @@ function start() {
     const fitH = 4.5 / (2 * t);
     dist = Math.max(fitW, fitH);
     look.set(narrow ? 0.8 : 0.4, narrow ? 1.85 : 1.6, 0);
-    // keep the floor short: push the set down inside the arch
+    // keep the floor short: push the set down inside the frame
     camera.setViewOffset(w, h, 0, -h * (narrow ? 0.05 : 0.09), w, h);
   });
 

@@ -59,11 +59,12 @@
 <main class="cx-main nh">
   <!-- 1 · the projection wall: step in front of it (camera, opt-in) or move the pointer through it -->
   <section class="cx-hero nh-hero" aria-labelledby="nh-title">
-    <div class="nh-hero-in cx-wrap">
-      <div class="nh-head">
-        <p class="cx-crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>02 / 18</span></p>
+    <div class="nh-hero-in">
+      <div class="cx-hero-copy nh-head">
+        <p class="cx-crumb"><a href="../work.html">Work</a> <span aria-hidden="true">/</span> <span>Museum of Natural History</span></p>
+        <p class="cx-eyebrow">Art Direction · Interaction · Experience Design</p>
         <h1 class="cx-title nh-title" id="nh-title">Museum of <em>Natural</em> History</h1>
-        <p class="cx-one nh-one">Turning dense science into an experience visitors explore rather than read.</p>
+        <p class="cx-one">Turning dense science into an experience visitors explore rather than read.</p>
       </div>
       <div class="nh-wall">
         <div class="cx-stage nh-stage" id="nhStage">
@@ -72,33 +73,35 @@
         </div>
       </div>
       <div class="nh-cam" id="nhCam">
-        <button type="button" class="nh-cam-btn" id="nhCamBtn" aria-pressed="false" hidden><span class="nh-cam-dot" aria-hidden="true"></span><span class="nh-cam-l">Enable camera</span></button>
+        <button type="button" class="btn solid nh-cam-btn" id="nhCamBtn" aria-pressed="false" hidden><span class="nh-cam-dot" aria-hidden="true"></span><span class="nh-cam-l">Enable camera</span></button>
         <p class="nh-cam-note" id="nhCamNote">Step in as a figure of light: the exhibition’s own landscapes take the place of your room, and your movement scatters the particles. The video stays on your device and is never recorded or sent.</p>
         <p class="nh-cam-status" id="nhCamStatus" role="status" aria-live="polite"></p>
       </div>
     </div>
   </section>
 
-  <!-- 2 · the brief, as a field-guide spread with a specimen tag -->
-  <section class="nh-spread cx-wrap">
-    <div class="nh-page">
-      <p class="cx-eyebrow">The challenge</p>
-      <p class="nh-statement">Create an interactive experience that educates visitors of all ages on the true value of natural environments, without simplifying the science into decoration.</p>
+  <!-- 2 · the brief, with the spec on a specimen tag -->
+  <section class="cx-section cx-wrap nh-spread">
+    <p class="cx-eyebrow">The challenge</p>
+    <p class="cx-statement">Create an interactive experience that educates visitors of all ages on the true value of natural environments, without simplifying the science into decoration.</p>
+    <div class="cx-brief-grid">
+      <aside class="nh-tag cx-turn" aria-label="Project details">
+        <span class="nh-tag-hole" aria-hidden="true"></span>
+        <p class="nh-tag-k">Catalogue · 02</p>
+        <dl class="cx-spec nh-tag-dl">
+          <div><dt>Client</dt><dd>Museum of Natural History</dd></div>
+          <div><dt>Role</dt><dd>Art Direction, Experience Design</dd></div>
+          <div><dt>Disciplines</dt><dd>Art Direction · Interaction · Experience Design</dd></div>
+          <div><dt>Collaborators</dt><dd>Shortcut Playground</dd></div>
+          <div><dt>My contribution</dt><dd>Art-directed the experience and led the multidisciplinary team of illustrators, designers, animators and developers from first concept through the installed exhibit.</dd></div>
+        </dl>
+      </aside>
     </div>
-    <aside class="nh-tag cx-turn" aria-label="Project details">
-      <span class="nh-tag-hole" aria-hidden="true"></span>
-      <p class="nh-tag-k">Catalogue · 02</p>
-      <dl class="nh-tag-dl">
-        <div><dt>Client</dt><dd>Museum of Natural History</dd></div>
-        <div><dt>Role</dt><dd>Art Direction, Experience Design</dd></div>
-        <div><dt>Disciplines</dt><dd>Art Direction · Interaction · Experience Design</dd></div>
-        <div><dt>Collaborators</dt><dd>Shortcut Playground</dd></div>
-      </dl>
-    </aside>
   </section>
 
   <!-- 3 · the plates: look closer -->
   <section class="nh-plates cx-wrap" aria-labelledby="nh-plates-t">
+    <p class="cx-eyebrow">The plates</p>
     <h2 class="nh-plates-t" id="nh-plates-t">Explore,<br><em>rather than read.</em></h2>
 
     <figure class="nh-plate nh-plate--a cx-turn" id="plate-1">
@@ -129,6 +132,7 @@
 
   <!-- 4 · field notes beside the tallest plate -->
   <section class="nh-notes cx-wrap" aria-label="Field notes">
+    <p class="cx-eyebrow nh-notes-eb">Field notes</p>
     <figure class="nh-plate nh-plate--tall cx-turn" id="plate-5">
       <p class="nh-pl-no" aria-hidden="true">Plate V</p>
       <div class="nh-fig nh-fig--tall"><img src="/assets/opt/c021d5d14394.webp" loading="lazy" alt="A tall illustration of a green city street: planted balconies, mature trees and a cycle lane running through it."></div>
@@ -137,26 +141,26 @@
     <div class="nh-entries">
       <article class="nh-entry">
         <p class="nh-entry-n" aria-hidden="true">01</p>
-        <h2 class="nh-entry-t">The idea</h2>
-        <p class="nh-entry-b">Working with environmental-science experts, design environments that fit the museum’s world, feel natural, and invite people to interact rather than observe.</p>
+        <h2 class="cx-eyebrow nh-entry-t">The idea</h2>
+        <p class="cx-lead nh-entry-b">Working with environmental-science experts, design environments that fit the museum’s world, feel natural, and invite people to interact rather than observe.</p>
       </article>
       <article class="nh-entry">
         <p class="nh-entry-n" aria-hidden="true">02</p>
-        <h2 class="nh-entry-t">The system</h2>
-        <p class="nh-entry-b">Leading a multidisciplinary team of illustrators, designers, animators and developers to build an immersive experience that inspires positive interaction with nature.</p>
+        <h2 class="cx-eyebrow nh-entry-t">The system</h2>
+        <p class="cx-lead nh-entry-b">Leading a multidisciplinary team of illustrators, designers, animators and developers to build an immersive experience that inspires positive interaction with nature.</p>
       </article>
       <article class="nh-entry">
         <p class="nh-entry-n" aria-hidden="true">03</p>
-        <h2 class="nh-entry-t">The outcome</h2>
-        <p class="nh-entry-b">Installed and running inside the museum: a physical and digital experience built with environmental-science experts and a team of illustrators, designers, animators and developers, explored hands-on by visitors of every age.</p>
+        <h2 class="cx-eyebrow nh-entry-t">The outcome</h2>
+        <p class="cx-lead nh-entry-b">Installed and running inside the museum: a physical and digital experience built with environmental-science experts and a team of illustrators, designers, animators and developers, explored hands-on by visitors of every age.</p>
       </article>
     </div>
   </section>
 
   <!-- 5 · role, and the credit line -->
-  <section class="nh-role cx-wrap">
+  <section class="cx-section nh-role cx-wrap">
     <p class="cx-eyebrow">Role &amp; contribution</p>
-    <p class="nh-role-st">I art-directed the experience and led the multidisciplinary team of illustrators, designers, animators and developers from first concept through the installed exhibit.</p>
+    <p class="cx-lead nh-role-st">I art-directed the experience and led the multidisciplinary team of illustrators, designers, animators and developers from first concept through the installed exhibit.</p>
     <div class="nh-credits"><h3>Credits</h3><p>Creative Agency: Shortcut Playground</p></div>
   </section>
 

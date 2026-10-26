@@ -144,7 +144,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   const status = document.getElementById('elStatus');
   NAMES.forEach((n, b) => {
     const btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'el-bloc';
+    btn.type = 'button'; btn.className = 'btn ghost el-sm el-bloc';
     btn.setAttribute('aria-pressed', 'false');
     btn.style.setProperty('--c', '#' + blocCols[b].getHexString());
     btn.innerHTML = `<span class="sw">Bloc ${n}</span><span class="bar" aria-hidden="true"></span>`;

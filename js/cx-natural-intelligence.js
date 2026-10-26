@@ -214,8 +214,8 @@ function machine() {
     camera.position.set(0, narrow ? 1.6 : 1.9, R + d);
     look.set(0, narrow ? -0.1 : 0.05, R - 1);
     camera.lookAt(look);
-    // keep the ring in the lower part of the frame, under the title
-    camera.setViewOffset(w, h, narrow ? 0 : -w * 0.15, -h * (narrow ? 0.1 : 0.15), w, h);
+    // the title sits at the bottom left: the ring turns to the right of it (on a phone, above it)
+    camera.setViewOffset(w, h, narrow ? 0 : -w * 0.25, narrow ? h * 0.12 : h * 0.04, w, h);
   });
 
   /* ---------- the frame ---------- */

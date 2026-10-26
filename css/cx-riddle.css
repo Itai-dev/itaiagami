@@ -10,10 +10,9 @@ body.cx.cx-riddle{
   --rd-ink:#001478;
   --cx-bg:var(--rd-sky); --cx-fg:var(--rd-ink); --cx-dim:rgba(0,20,120,.74); --cx-accent:var(--rd-blue);
   --cx-line:rgba(0,20,120,.2); --cx-header:rgba(138,212,228,.72);
-  --cx-btn-bg:var(--rd-ink); --cx-btn-fg:#fff;
+  --cx-btn-bg:#222; --cx-btn-fg:#fff;
   --panel:#00137a; --faint:#7ccbdd; --surface:#a9e5ee;
 }
-.rd-wrap{width:min(1240px,100% - 2*var(--gutter,clamp(16px,4vw,56px)));margin-inline:auto}
 .rd .cx-eyebrow{display:flex;align-items:center;gap:10px;color:var(--rd-ink);font-weight:500}
 /* a tiny isometric cube before every label: the logo's rule, in miniature */
 .rd .cx-eyebrow::before{content:"";width:14px;height:16px;flex:none;
@@ -21,10 +20,10 @@ body.cx.cx-riddle{
   clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
 .rd .cx-body{color:var(--cx-dim)}
 .rd .cx-body strong{color:var(--rd-ink)}
-.rd-h{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(2rem,4.4vw,4rem);line-height:1;letter-spacing:-.04em;margin:0 0 clamp(20px,2.4vw,32px);text-wrap:balance}
+.rd-h{margin:0 0 clamp(20px,2.4vw,32px)}
 
 /* a tile that sits on the page like a block: a solid side instead of a soft shadow */
-.rd-tile{position:relative;border-radius:clamp(14px,1.6vw,22px);overflow:hidden;background:#fff;
+.rd-tile{position:relative;border-radius:var(--r-media);overflow:hidden;background:#fff;
   box-shadow:clamp(6px,.8vw,10px) clamp(6px,.8vw,10px) 0 var(--rd-ink)}
 .rd-tile img,.rd-tile video{display:block;width:100%;height:auto}
 .rd-tile--sky{background:var(--rd-sky-lo)}
@@ -32,55 +31,35 @@ body.cx.cx-riddle{
 .rd figure{margin:0}
 .rd figcaption{margin-top:clamp(16px,1.6vw,22px);font-size:.9375rem;line-height:1.55;color:var(--cx-dim);max-width:48ch}
 
-/* ---------- 1 · hero: the stack under the title, like the key visual ---------- */
-.rd-hero{justify-content:flex-start;text-align:center;min-height:max(600px,calc(100svh - 64px));
-  background:linear-gradient(180deg,var(--rd-sky-hi) 0%,var(--rd-sky) 55%,var(--rd-sky-lo) 100%)}
-.rd-stage .cx-poster{object-position:50% 70%;opacity:.9}
+body.cx-riddle main{padding-top:0}
+/* ---------- 1 · hero: the stack beside the shared copy block, like the key visual ---------- */
+.rd-hero{background:linear-gradient(180deg,var(--rd-sky-hi) 0%,var(--rd-sky) 55%,var(--rd-sky-lo) 100%)}
+.rd-stage .cx-poster{object-position:70% 60%;opacity:.9}
 .rd-stage .cx-canvas{cursor:default}
-.rd-hero-copy{padding:clamp(20px,4vh,40px) var(--gutter,clamp(16px,4vw,56px)) 0;margin:0 auto;display:flex;flex-direction:column;align-items:center}
-.rd-hero-copy .cx-crumb{justify-content:center;color:var(--rd-ink)}
-.rd-hero-copy .cx-crumb a{color:var(--rd-ink)}
+.rd-hero-copy .cx-crumb,.rd-hero-copy .cx-crumb a{color:var(--rd-ink)}
+.rd-hero .cx-one{color:var(--rd-ink)}
 /* white block letters with a soft extruded side, as in the "Simply smart" renders */
-.rd-title{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(4.2rem,10vw,9rem);line-height:.86;letter-spacing:-.055em;margin:0;color:#fff;
+.rd-title{color:#fff;
   text-shadow:0 1px 0 #d6eef4,0 2px 0 #c9e7ef,0 3px 0 #bde1ea,0 4px 0 #b0dae5,0 5px 0 #a3d3e0,0 6px 0 #96ccdb,0 7px 0 #8ac6d6,0 20px 30px rgba(0,40,100,.22)}
-.rd-one{margin:clamp(14px,2vh,22px) auto 0;max-width:52ch;font-size:clamp(1.0625rem,1.5vw,1.3125rem);line-height:1.45;color:var(--rd-ink);font-weight:500;text-wrap:balance}
-.rd-hint{position:absolute;z-index:2;left:50%;bottom:clamp(18px,4vh,36px);transform:translateX(-50%);margin:0;display:flex;align-items:center;gap:12px;
-  padding:6px 6px 6px 16px;border-radius:999px;background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-  color:var(--rd-ink);font-size:.875rem;white-space:nowrap;box-shadow:0 10px 30px -12px rgba(0,30,90,.35)}
+.rd-hint{display:flex;align-items:center;gap:10px;margin:0;color:var(--rd-ink)}
+.rd-hint .btn{pointer-events:auto}
 .rd-hint-dot{width:8px;height:8px;border-radius:50%;background:var(--rd-red);animation:rd-pulse 1.6s ease-in-out infinite}
 @keyframes rd-pulse{50%{transform:scale(1.6);opacity:.5}}
-.rd-hint-btn{font:inherit;font-weight:600;font-size:.8125rem;border:0;border-radius:999px;padding:8px 14px;background:var(--rd-ink);color:#fff;cursor:pointer}
-.rd-hint-btn:hover{background:var(--rd-blue)}
-.rd-hint-btn:focus-visible{outline:3px solid var(--rd-yellow);outline-offset:2px}
-@media(max-width:560px){.rd-hint-t{display:none}.rd-hint{padding-left:12px}}
+/* the compact site button: only height and padding change */
+body.cx .btn.cx-btn-sm{min-height:34px;padding:0 12px}
+@media(max-width:560px){.rd-hint-t{display:none}}
 
-/* ---------- 2 · the facts: four blocks, stepping like a stack ---------- */
-.rd-facts{padding:clamp(56px,7vw,110px) 0 0}
-.rd-blocks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,1.6vw,22px);margin:0;align-items:end}
-.rd-b{--c:var(--rd-yellow);--fg:var(--rd-ink);background:var(--c);color:var(--fg);border-radius:14px;padding:clamp(18px,2vw,26px);
-  box-shadow:8px 8px 0 var(--rd-ink);min-height:clamp(130px,13vw,180px);display:flex;flex-direction:column;justify-content:space-between;gap:18px;
-  transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
-.rd-b:nth-child(2){transform:translateY(-14px)}
-.rd-b:nth-child(3){transform:translateY(-28px)}
-.rd-b:nth-child(4){transform:translateY(-42px)}
-.rd-b:hover{transform:translateY(-52px) rotate(-1deg)}
-.rd-b--r{--c:var(--rd-red);--fg:#fff}
-.rd-b--c{--c:var(--rd-cyan)}
-.rd-b--n{--c:var(--rd-navy);--fg:#fff}
-.rd-b dt{font-family:"IBM Plex Mono",monospace;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
-.rd-b dd{margin:0;font-family:"Inter Tight",Inter,sans-serif;font-weight:600;font-size:clamp(1.0625rem,1.5vw,1.375rem);line-height:1.2;letter-spacing:-.01em}
-.rd-note{margin:clamp(28px,3vw,40px) 0 0;font-size:.875rem;color:var(--cx-dim)}
-@media(max-width:820px){
-  .rd-blocks{grid-template-columns:1fr 1fr}
-  .rd-b:nth-child(n){transform:none}
-  .rd-b:nth-child(2n){transform:translateY(-12px)}
-}
-
-/* ---------- 3 · the challenge ---------- */
-.rd-challenge{padding:clamp(80px,10vw,150px) 0}
-.rd-big{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(2.2rem,5.4vw,5rem);line-height:.98;letter-spacing:-.045em;margin:0;max-width:17ch;text-wrap:balance}
-.rd-cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,80px);margin-top:clamp(32px,4vw,56px);max-width:1080px}
-@media(max-width:820px){.rd-cols{grid-template-columns:1fr}}
+/* ---------- 2 · the brief (shared skeleton); each fact keyed to a primary ---------- */
+.cx-brief .cx-statement{max-width:22ch}
+.cx-brief-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);margin-top:clamp(40px,6vw,80px);align-items:start}
+@media(max-width:820px){.cx-brief-grid{grid-template-columns:1fr}}
+.rd-cols{display:grid;gap:20px}
+.rd-spec dt{display:flex;align-items:center;gap:10px;color:var(--rd-ink)}
+.rd-spec dt::before{content:"";width:10px;height:10px;flex:none;border-radius:2px;background:var(--k,var(--rd-yellow))}
+.rd-spec div:nth-child(2){--k:var(--rd-red)}
+.rd-spec div:nth-child(3){--k:var(--rd-cyan)}
+.rd-spec div:nth-child(4){--k:var(--rd-navy)}
+.rd-note{margin:20px 0 0;font-size:.875rem;color:var(--cx-dim)}
 
 /* ---------- 4 · the idea: a full band of the deep blue ---------- */
 .rd-idea{position:relative;background:var(--rd-navy);color:#fff;padding:clamp(80px,10vw,150px) 0;overflow:hidden}
@@ -88,7 +67,7 @@ body.cx.cx-riddle{
 .rd-idea::before{content:"";position:absolute;inset:0 0 auto 0;height:12px;
   background:linear-gradient(90deg,var(--rd-yellow) 0 25%,var(--rd-red) 0 50%,var(--rd-cyan) 0 75%,var(--rd-blue) 0)}
 .rd-idea .cx-eyebrow{color:#fff}
-.rd-idea-t{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(2.6rem,7vw,6.6rem);line-height:.94;letter-spacing:-.05em;margin:0;max-width:14ch;text-wrap:balance}
+.rd-idea-t{font-size:clamp(2.6rem,7vw,6.6rem);line-height:.94;max-width:14ch}
 .rd-idea-t span{color:var(--rd-yellow)}
 .rd-idea-foot{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);margin-top:clamp(40px,5vw,72px);align-items:end}
 .rd-idea .cx-body{color:rgba(255,255,255,.8)}
@@ -125,7 +104,7 @@ body.cx.cx-riddle{
 .rd-scan .cx-body{color:rgba(255,255,255,.88)}
 .rd-scan-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:clamp(40px,5vw,72px)}
 .rd-scan-head .cx-eyebrow{grid-column:1 / -1;margin-bottom:0}
-.rd-scan-t{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(3.6rem,12vw,11rem);line-height:.84;letter-spacing:-.06em;margin:0}
+.rd-scan-t{font-size:clamp(3.6rem,12vw,11rem);line-height:.84;letter-spacing:-.055em}
 .rd-scan-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);grid-template-rows:auto auto;gap:clamp(20px,2.6vw,40px) clamp(20px,2.6vw,40px)}
 .rd-shelter{grid-row:1 / span 2}
 .rd-scan .rd-tile{box-shadow:clamp(6px,.8vw,10px) clamp(6px,.8vw,10px) 0 #7a000a}
@@ -144,7 +123,7 @@ body.cx.cx-riddle{
 
 /* ---------- 10 · digital home ---------- */
 .rd-home{padding:clamp(60px,8vw,120px) 0 clamp(40px,6vw,80px);text-align:center;display:flex;flex-direction:column;align-items:center}
-.rd-home-t{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:600;font-size:clamp(1.6rem,3.2vw,2.75rem);line-height:1.12;letter-spacing:-.03em;max-width:30ch;margin:0;text-wrap:balance}
+.rd-home-t{font-size:clamp(1.6rem,3.2vw,2.75rem);line-height:1.12;max-width:30ch}
 
 /* ---------- the ending, on the sky ---------- */
 .rd ~ footer.site,.cx-riddle footer.site{--ft-fg:#fff}
@@ -152,5 +131,5 @@ body.cx.cx-riddle{
 
 @media(prefers-reduced-motion:reduce){
   .rd-hint-dot{animation:none}
-  .rd-b,.rd-b:hover{transition:none}
 }
+.rd-stage:not(.live) ~ .rd-hint{display:none}

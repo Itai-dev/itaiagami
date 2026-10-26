@@ -193,7 +193,7 @@ function hero() {
   clouds.forEach((c) => { c.g.position.set(c.x, c.y, c.z); c.g.traverse((m) => { if (m.isMesh) m.userData.cloud = c; }); scene.add(c.g); });
   const cloudMeshes = []; clouds.forEach((c) => c.g.traverse((m) => { if (m.isMesh) cloudMeshes.push(m); }));
 
-  /* ---------- the layout: stack low in the frame, below the title ---------- */
+  /* ---------- the layout: the stack beside the title ---------- */
   const look = new THREE.Vector3(0, 2.2, 0);
   const camDir = new THREE.Vector3(0.42, 0.42, 1).normalize();
   let dist = 18, narrow = false;
@@ -204,8 +204,8 @@ function hero() {
     const byH = 5.0 / fillH / (2 * Math.tan(fov));
     const byW = (narrow ? 4.4 : 9) / (2 * Math.tan(fov) * camera.aspect) / 0.9;
     dist = Math.max(byH, byW);
-    // push the stack down, out from under the title (the copy sits at the top)
-    camera.setViewOffset(w, h, 0, -h * (narrow ? 0.21 : 0.19), w, h);
+    // the copy sits at the bottom left: the stack stands to the right (on a phone, above it)
+    camera.setViewOffset(w, h, narrow ? 0 : -w * 0.2, narrow ? h * 0.17 : h * 0.02, w, h);
     layoutAway();
   });
 
@@ -299,7 +299,7 @@ function hero() {
 
   /* an accessible control for the same thing */
   const btn = document.createElement('button');
-  btn.type = 'button'; btn.className = 'rd-hint-btn';
+  btn.type = 'button'; btn.className = 'btn ghost cx-btn-sm rd-hint-btn';
   btn.textContent = 'Take it apart';
   if (hint) { hint.removeAttribute('aria-hidden'); hint.appendChild(btn); hint.querySelector('.rd-hint-t').setAttribute('aria-hidden', 'true'); }
   btn.addEventListener('click', () => { intro = false; if (anyOut()) solveAll(); else takeApart(); done(); loop.wake(); });

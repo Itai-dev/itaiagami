@@ -293,7 +293,7 @@ function build({ renderer, scene, camera, reveal, onResize }) {
   onResize((w, h) => {
     narrow = w / h < 0.9;
     items.forEach((it, i) => { [it.x, it.z, it.r] = narrow ? phone[i] : [it.wx, it.wz, it.wr]; });
-    dist = Math.max(narrow ? 9 : 9.2, distanceToFit(camera, narrow ? 5.3 : 11.5, 0.96));
+    dist = Math.max(narrow ? 9 : 10, distanceToFit(camera, narrow ? 5.3 : 13, 0.96));
   });
   let scrollT = 0;
   const readScroll = () => { if (!hero) return; const r = hero.getBoundingClientRect(); scrollT = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height))); };
@@ -348,7 +348,8 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     const d = dist * (1 - scrollT * 0.2);
     const px = calm ? 0 : pointer.x, py = calm ? 0 : pointer.y;
     camGoal.set(px * 0.8, d * (0.72 + scrollT * 0.2) - py * 0.4, d * (0.62 - scrollT * 0.32));
-    look.set(0, 0, narrow ? -0.9 : -2.3);
+    // the desk sits up and to the right, clear of the title block at the bottom left
+    look.set(narrow ? 0 : -2.7, 0, narrow ? 1.6 : 1.7);
     camera.position.lerp(camGoal, ready && !calm ? Math.min(1, dt * 3) : 1);
     camera.lookAt(look);
 

@@ -279,9 +279,9 @@ function build() {
   st.onResize((w, h) => {
     wide = w / h > 1.05;
     camera.fov = 32;
-    // wide: the card sits right of the title; phones: below it
-    if (wide) camera.setViewOffset(w, h, -w * 0.2, -h * 0.06, w, h);
-    else camera.setViewOffset(w, h, 0, -h * 0.17, w, h);
+    // wide: the card sits right of the title; phones: above it
+    if (wide) camera.setViewOffset(w, h, -w * 0.2, -h * 0.02, w, h);
+    else camera.setViewOffset(w, h, 0, h * 0.14, w, h);
     camera.updateProjectionMatrix();
     const fitW = (wide ? 11.5 : 5.6) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
     const fitH = (wide ? 8.4 : 9) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));

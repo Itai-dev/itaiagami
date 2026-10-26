@@ -216,7 +216,7 @@ function build() {
   st.onResize((w, h) => {
     wide = w / h > 1.05;
     camera.fov = wide ? 30 : 36;
-    camera.setViewOffset(w, h, 0, -h * (wide ? 0.26 : 0.2), w, h);   // the scene sits low, under the title
+    camera.setViewOffset(w, h, wide ? -w * 0.22 : 0, wide ? h * 0.04 : h * 0.12, w, h);   // the set stands right of the title (on a phone, above it)
     camera.updateProjectionMatrix();
     const fitW = (wide ? 9.5 : 5.6) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
     dist = Math.max(fitW, wide ? 9 : 7);

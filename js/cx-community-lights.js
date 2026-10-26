@@ -241,13 +241,13 @@ function build({ renderer, scene, camera, reveal, onResize }) {
     }
   }
 
-  /* ---------- framing: the menorah under the title ---------- */
+  /* ---------- framing: the menorah above the copy block (bottom-left), clear of the toolbar ---------- */
   let mobile = false;
   onResize((w, h) => {
     mobile = w < 820;
     const vh = Math.min(h, innerHeight || h);
-    const cyp = mobile ? vh * 0.56 : vh * 0.66;
-    const cxp = mobile ? w / 2 : w * 0.46;
+    const cyp = mobile ? vh * 0.34 : vh * 0.44;
+    const cxp = mobile ? w / 2 : w * 0.54;
     camera.setViewOffset(w, h, w / 2 - cxp, h / 2 - cyp, w, h);
   });
 

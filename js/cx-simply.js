@@ -41,7 +41,7 @@ async function start() {
   renderer.toneMappingExposure = 1.05;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.domElement.className = 'sx-canvas';
+  renderer.domElement.className = 'cx-canvas';
   renderer.domElement.setAttribute('aria-hidden', 'true');
 
   const scene = new THREE.Scene();
@@ -326,8 +326,9 @@ async function start() {
     const c = cv.getContext('2d');
     const rr = (x, y, w, h, r) => { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); };
     // purple glass frame, white staff card, the clef and the notes
-    rr(0, 0, cw, ch, 56); c.fillStyle = 'rgba(139,77,255,0.94)'; c.fill();
-    rr(28, 30, cw - 56, ch - 60, 34); c.fillStyle = '#ffffff'; c.fill();
+    // squared like the site's panels: ~12px corners at the size the bar is seen
+    rr(0, 0, cw, ch, 24); c.fillStyle = 'rgba(139,77,255,0.94)'; c.fill();
+    rr(28, 30, cw - 56, ch - 60, 14); c.fillStyle = '#ffffff'; c.fill();
     const top = 92, gap = 26;
     c.strokeStyle = '#3a3150'; c.lineWidth = 3;
     for (let i = 0; i < 5; i++) { c.beginPath(); c.moveTo(70, top + i * gap); c.lineTo(cw - 70, top + i * gap); c.stroke(); }
