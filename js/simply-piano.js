@@ -220,7 +220,32 @@ async function start() {
     const r = stage.getBoundingClientRect();
     scrollT = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height))) - 0.5;   // -0.5..0.5 as it crosses the screen
   }, { passive: true });
-  if (!calm) addEventListener('pointermove', (e) => { px = e.clientX / innerWidth - 0.5; py = e.clientY / innerHeight - 0.5; }, { passive: true });
+  // a mouse leans the scene a little; a phone does it by tilting
+  if (!calm) addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+    px = e.clientX / innerWidth - 0.5; py = e.clientY / innerHeight - 0.5;
+  }, { passive: true });
+  let tilt0 = null;
+  const onTilt = (e) => {
+    if (e.beta == null || e.gamma == null) return;
+    // read the tilt in the screen's own frame, so landscape works too
+    const a = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+    let lr = e.gamma, fb = e.beta;
+    if (a === 90) { lr = e.beta; fb = -e.gamma; } else if (a === -90 || a === 270) { lr = -e.beta; fb = e.gamma; }
+    if (!tilt0) tilt0 = { lr, fb };                       // the way the phone is held when the page opens is "level"
+    tilt0.lr += (lr - tilt0.lr) * 0.005; tilt0.fb += (fb - tilt0.fb) * 0.005;   // and slowly follows a new resting grip
+    px = Math.max(-0.5, Math.min(0.5, (lr - tilt0.lr) / 40));
+    py = Math.max(-0.5, Math.min(0.5, (fb - tilt0.fb) / 40));
+  };
+  if (!calm && 'DeviceOrientationEvent' in window) {
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      // iOS asks first: on the first tap on the keyboard
+      renderer.domElement.addEventListener('pointerdown', () => {
+        DeviceOrientationEvent.requestPermission().then((r) => { if (r === 'granted') addEventListener('deviceorientation', onTilt); }).catch(() => {});
+      }, { once: true });
+    } else addEventListener('deviceorientation', onTilt);
+  }
+  let lx = 0, ly = 0;   // the lean, eased
 
   /* ---------- run only while visible ---------- */
   let inView = true;
@@ -262,13 +287,16 @@ async function start() {
     // camera: a slow breath and the visitor's pointer
     const d = baseDist;
     const sway = calm ? 0 : Math.sin(t * 0.25) * 0.12;
-    cam.set(sway + px * 0.9, 2.35 + d * 0.32 - py * 0.4, d * 0.88);
+    lx += (px - lx) * (1 - Math.exp(-dt * 4)); ly += (py - ly) * (1 - Math.exp(-dt * 4));
+    cam.set(sway + lx * 0.9, 2.35 + d * 0.32 - ly * 0.4, d * 0.88);
     camera.position.lerp(cam, calm || !ready ? 1 : 0.06);
     camera.lookAt(look);
     // parallax: the keyboard floats and the notation bar, nearer the eye, travels further with scroll and pointer
     const s = calm ? 0 : scrollT;
     board.position.y = (calm ? 0 : Math.sin(t * 0.8) * 0.04) - s * 0.12;
-    panel.group.position.set(px * 0.3, 1.25 + s * 0.55 + (calm ? 0 : Math.sin(t * 0.9) * 0.03), -1.05 + 0.25);
+    board.rotation.set(ly * 0.08, lx * 0.14, 0);   // the keyboard turns slightly toward the lean
+    panel.group.position.set(lx * 0.5, 1.25 + s * 0.55 - ly * 0.16 + (calm ? 0 : Math.sin(t * 0.9) * 0.03), -1.05 + 0.25);
+    panel.group.rotation.set(-0.12 + ly * 0.1, lx * 0.22, 0);   // nearer the eye, the notation bar moves more
 
     renderer.render(scene, camera);
     if (!ready) { ready = true; stage.appendChild(renderer.domElement); stage.classList.add('live'); }
