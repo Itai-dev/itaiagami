@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,7 +15,7 @@
 <meta name="google-site-verification" content="GOOGLE_SITE_VERIFICATION" />
 -->
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-<meta name="theme-color" content="#e8e8e3" />
+<meta name="theme-color" content="#07070a" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Itai Agami | Creative Builder" />
 <meta property="og:description" content="Let’s build your idea. Creative direction, design and technology for brands, films, websites and spaces, from the first concept to the finished thing." />
@@ -32,9 +32,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="css/site.css" />
+<link rel="stylesheet" href="css/future.css" />
+<link rel="stylesheet" href="css/future-home.css" />
 <!-- Intro loader: first home visit per session only, skipped for reduced motion and crawlers.
      The class is set here so the overlay paints before the page; js/site.js plays it. -->
 <script>try{if(!sessionStorage.getItem('intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent)){document.documentElement.classList.add('intro-on')}}catch(e){}</script>
+<!-- Spatial gallery: decided before paint so the layout does not jump. js/future-home.js confirms it
+     once WebGL is running and removes it if not; the timer is the failsafe when the module never loads. -->
+<script>try{if('WebGL2RenderingContext' in window){var d=document.documentElement;d.classList.add('fh-gl');if(matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('fh-calm');setTimeout(function(){if(!document.querySelector('.fh-world.live'))d.classList.remove('fh-gl')},9000)}}catch(e){}</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -108,7 +113,7 @@
 }
 </script>
 </head>
-<body>
+<body class="fh">
 <div class="grain" aria-hidden="true"></div>
 <div class="intro-loader" id="intro" aria-hidden="true">
   <p class="intro-line"><span class="intro-typed"></span><span class="intro-caret"></span><span class="intro-end"><span class="intro-slot"></span><span class="intro-aside"><svg class="hand" viewBox="-26 -763 4488 1205" style="--ar:3.7246" aria-hidden="true"><path pathLength="1" d="M501 -684C466 -666 352 -613 293 -573C234 -533 185 -487 148 -444C111 -401 92 -363 72 -315C52 -267 34 -203 25 -154C16 -105 17 -61 19 -19C21 23 30 68 38 98C46 128 61 150 66 161"/><path pathLength="1" d="M690 -306C689 -313 694 -340 686 -350C678 -360 668 -369 645 -365C622 -361 584 -354 548 -328C512 -302 456 -234 431 -208C406 -182 409 -186 400 -170C391 -154 378 -127 375 -110C372 -93 377 -80 381 -66C385 -52 380 -33 400 -25C420 -17 465 -11 504 -16C543 -21 598 -39 633 -57C668 -75 694 -102 715 -123C736 -144 754 -173 762 -183"/><path pathLength="1" d="M762 -183C773 -200 797 -240 828 -287C859 -334 945 -446 947 -463C949 -480 858 -407 840 -391C822 -375 838 -371 840 -365C842 -359 818 -358 853 -356C888 -354 1037 -377 1051 -353C1065 -329 967 -256 938 -214C909 -172 883 -133 875 -101C867 -69 874 -34 891 -22C908 -10 946 -10 979 -28C1012 -46 1064 -106 1089 -132C1114 -158 1123 -174 1130 -183"/><path pathLength="1" d="M1228 -170C1242 -177 1285 -198 1310 -211C1335 -224 1362 -233 1379 -249C1396 -265 1410 -289 1414 -306C1418 -323 1413 -342 1401 -350C1389 -358 1371 -366 1342 -356C1313 -346 1252 -304 1225 -287C1198 -270 1194 -268 1178 -252C1162 -236 1141 -211 1127 -192C1113 -173 1102 -156 1096 -139C1090 -122 1087 -104 1090 -88C1093 -72 1095 -57 1112 -44C1129 -31 1157 -9 1194 -9C1231 -9 1302 -32 1332 -44C1362 -56 1358 -67 1376 -82C1394 -97 1422 -118 1439 -135C1456 -152 1471 -175 1477 -183"/><path pathLength="1" d="M2003 -183C1997 -174 1980 -149 1965 -132C1950 -115 1935 -96 1914 -79C1893 -62 1862 -42 1839 -32C1816 -22 1794 -14 1779 -19C1764 -24 1754 -42 1751 -63C1748 -84 1754 -107 1763 -142C1772 -177 1800 -257 1804 -274C1808 -291 1805 -264 1785 -243C1765 -222 1719 -176 1684 -145C1649 -114 1610 -78 1577 -57C1544 -36 1511 -18 1489 -19C1467 -20 1451 -44 1445 -66C1439 -88 1435 -122 1451 -154C1467 -186 1509 -232 1543 -261C1577 -290 1624 -315 1656 -331C1688 -347 1711 -352 1738 -356C1765 -360 1804 -358 1820 -356C1836 -354 1830 -345 1832 -343"/><path pathLength="1" d="M2002 -183C2010 -190 2039 -211 2053 -224C2067 -237 2073 -242 2088 -261C2103 -280 2122 -304 2144 -337C2166 -370 2199 -428 2217 -457C2235 -486 2251 -500 2251 -510C2251 -520 2252 -577 2217 -517C2182 -457 2074 -226 2043 -151C2012 -76 2026 -88 2028 -66C2030 -44 2036 -28 2053 -22C2070 -16 2103 -13 2132 -28C2161 -43 2199 -84 2226 -110C2253 -136 2281 -171 2292 -183M2088 -346 L2292 -356"/><path pathLength="1" d="M2292 -183C2304 -192 2347 -212 2362 -236C2377 -260 2397 -353 2384 -328C2371 -303 2299 -136 2286 -85C2273 -34 2290 -35 2305 -22C2320 -9 2353 2 2378 -6C2403 -14 2434 -48 2456 -69C2478 -90 2493 -110 2507 -129C2521 -148 2535 -174 2541 -183M2447 -476 L2418 -438"/><path pathLength="1" d="M2542 -183C2557 -198 2613 -252 2630 -274C2647 -296 2644 -302 2646 -312C2648 -322 2648 -330 2642 -337C2636 -344 2620 -353 2608 -356C2596 -359 2579 -356 2573 -356M2614 -334C2612 -307 2608 -212 2601 -170C2594 -128 2578 -112 2573 -85C2568 -58 2552 8 2573 -9C2594 -26 2662 -138 2699 -186C2736 -234 2765 -266 2797 -299C2829 -332 2861 -359 2891 -381C2921 -403 2954 -426 2976 -432C2998 -438 3013 -421 3020 -419"/><path pathLength="1" d="M2960 -170C2974 -177 3017 -198 3042 -211C3067 -224 3094 -233 3111 -249C3128 -265 3142 -289 3146 -306C3150 -323 3145 -342 3133 -350C3121 -358 3103 -366 3074 -356C3045 -346 2984 -304 2957 -287C2930 -270 2926 -268 2910 -252C2894 -236 2873 -211 2859 -192C2845 -173 2834 -156 2828 -139C2822 -122 2819 -104 2822 -88C2825 -72 2827 -57 2844 -44C2861 -31 2889 -9 2926 -9C2963 -9 3034 -32 3064 -44C3094 -56 3090 -67 3108 -82C3126 -97 3154 -118 3171 -135C3188 -152 3203 -175 3209 -183"/><path pathLength="1" d="M3215 -176C3234 -191 3287 -223 3331 -265C3375 -307 3436 -374 3479 -428C3522 -482 3560 -550 3586 -589C3612 -628 3628 -642 3634 -662C3640 -682 3635 -700 3621 -709C3607 -718 3575 -724 3552 -718C3529 -712 3510 -705 3483 -674C3456 -643 3422 -588 3388 -532C3354 -476 3310 -396 3281 -340C3252 -284 3227 -240 3212 -198C3197 -156 3189 -114 3190 -85C3191 -56 3202 -36 3218 -25C3234 -14 3260 -14 3284 -19C3308 -24 3335 -35 3360 -54C3385 -73 3417 -110 3435 -132C3453 -154 3464 -174 3470 -183"/><path pathLength="1" d="M3589 -312C3575 -299 3524 -254 3504 -233C3484 -212 3478 -203 3470 -186C3462 -169 3458 -149 3454 -132C3450 -115 3446 -99 3447 -85C3448 -71 3452 -56 3463 -47C3474 -38 3496 -32 3514 -32C3532 -32 3543 -27 3570 -47C3597 -67 3642 -113 3677 -151C3712 -189 3755 -246 3781 -277C3807 -308 3820 -325 3835 -334C3850 -343 3880 -364 3870 -331C3860 -298 3806 -210 3775 -139C3744 -68 3712 36 3684 98C3656 160 3634 189 3608 230C3582 271 3552 318 3529 346C3506 374 3500 389 3473 397C3446 405 3389 402 3366 394C3343 386 3332 370 3334 346C3336 322 3353 282 3378 252C3403 222 3444 198 3485 167C3526 136 3577 95 3624 66C3671 37 3719 22 3766 -9C3813 -40 3875 -94 3907 -123C3939 -152 3950 -173 3958 -183"/><path pathLength="1" d="M4361 -684C4370 -662 4408 -608 4417 -554C4426 -500 4426 -428 4414 -362C4402 -296 4375 -217 4345 -158C4315 -99 4271 -48 4235 -9C4199 30 4162 54 4128 76C4094 98 4062 109 4030 123C3998 137 3954 152 3939 158"/></svg></span></span></p>
@@ -144,94 +149,255 @@
 </nav>
 
 <main>
+
+  <!-- THE SPACE: the hero type sits in front, the work floats behind it.
+       Scrolling steps through the type into the gallery: the windows gather
+       into an arc around you, and scroll, drag, swipe or the arrow keys move
+       through them. js/future-home.js draws it (three.js via js/cx-kit.js).
+       Without WebGL or JS the list below is the gallery: a grid of glass cards. -->
+  <div class="fh-world" id="fhWorld">
+    <div class="fh-stage" id="fhStage" aria-hidden="true">
+      <div class="fh-poster"><i></i><i></i><i></i></div>
+      <div class="fh-tag" id="fhTag"><span class="fh-tag-n"></span><span class="fh-tag-t"></span></div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Introduction">
+      <div class="fh-hero-in wrap">
+        <p class="eyebrow fade"><span class="name">Creative Builder</span><span>Creative direction, design &amp; technology</span></p>
+        <h1><span class="reveal-line"><span>Let’s build</span></span> <span class="reveal-line"><span>your idea.</span></span></h1>
+        <p class="sub fade d2">Bring the idea, or just the problem. I take it from the first concept to the finished brand, film, website or space, with the team it needs.</p>
+        <div class="cta fade d3">
+          <a class="btn solid" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="home" target="_blank" rel="noopener">Book a call with Itai <span class="arw" aria-hidden="true">↗</span></a>
+          <a href="contact.html#brief" class="btn ghost">Send a brief <span class="arw" aria-hidden="true">→</span></a>
+          <p class="cta-note">A 30-minute call. No brief needed.</p>
+        </div>
+      </div>
+      <!-- CLIENTS STRIP: the foot of the hero -->
+      <div class="clients-strip" aria-label="Selected clients and institutions">
+      <p class="cs-label" aria-hidden="true">Selected clients</p>
+      <div class="cs-viewport"><div class="cs-track">
+        <a href="work/channel-13.html"><img src="/assets/logos/channel-13.webp" alt="Channel 13" width="25" height="34" style="--h:34px" decoding="async"></a><a href="work/partner-tv.html"><img src="/assets/logos/partner.webp" alt="Partner" width="89" height="24" style="--h:24px" decoding="async"></a><a href="work/sky-max.html"><img src="/assets/logos/max.webp" alt="MAX" width="69" height="21" style="--h:21px" decoding="async"></a><a href="work/museum-of-natural-history.html"><img src="/assets/logos/museum.webp" alt="Steinhardt Museum of Natural History" width="49" height="30" style="--h:30px" decoding="async"></a><a href="work/tower-of-david.html"><img src="/assets/logos/tower-of-david.webp" alt="Tower of David Jerusalem Museum" width="134" height="27" style="--h:27px" decoding="async"></a><a href="work/simply-vision-pro.html"><img src="/assets/logos/simply.webp" alt="Simply" width="77" height="29" style="--h:29px" decoding="async"></a><a href="work/amdocs-make-it-amazing.html"><img src="/assets/logos/amdocs.webp" alt="Amdocs" width="104" height="23" style="--h:23px" decoding="async"></a><a href="work/google-shopping-il.html"><img src="/assets/logos/google.webp" alt="Google" width="84" height="28" style="--h:28px" decoding="async"></a><a href="work/mako-12.html"><img src="/assets/logos/channel-12.webp" alt="Channel 12" width="38" height="30" style="--h:30px" decoding="async"></a><a href="work/national-library-of-israel.html"><img src="/assets/logos/national-library.webp" alt="National Library of Israel" width="129" height="26" style="--h:26px" decoding="async"></a><a href="work/natural-intelligence.html"><img src="/assets/logos/bestmoney.webp" alt="BestMoney (Natural Intelligence)" width="112" height="18" style="--h:18px" decoding="async"></a><a href="work/natural-intelligence.html"><img src="/assets/logos/top10.webp" alt="Top10.com (Natural Intelligence)" width="103" height="27" style="--h:27px" decoding="async"></a><a href="work/interactive-elections-kan-11.html"><img src="/assets/logos/kan-11.webp" alt="Kan 11" width="75" height="29" style="--h:29px" decoding="async"></a>
+        <a href="work/channel-13.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/channel-13.webp" alt="" width="25" height="34" style="--h:34px" decoding="async"></a><a href="work/partner-tv.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/partner.webp" alt="" width="89" height="24" style="--h:24px" decoding="async"></a><a href="work/sky-max.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/max.webp" alt="" width="69" height="21" style="--h:21px" decoding="async"></a><a href="work/museum-of-natural-history.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/museum.webp" alt="" width="49" height="30" style="--h:30px" decoding="async"></a><a href="work/tower-of-david.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/tower-of-david.webp" alt="" width="134" height="27" style="--h:27px" decoding="async"></a><a href="work/simply-vision-pro.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/simply.webp" alt="" width="77" height="29" style="--h:29px" decoding="async"></a><a href="work/amdocs-make-it-amazing.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/amdocs.webp" alt="" width="104" height="23" style="--h:23px" decoding="async"></a><a href="work/google-shopping-il.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/google.webp" alt="" width="84" height="28" style="--h:28px" decoding="async"></a><a href="work/mako-12.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/channel-12.webp" alt="" width="38" height="30" style="--h:30px" decoding="async"></a><a href="work/national-library-of-israel.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/national-library.webp" alt="" width="129" height="26" style="--h:26px" decoding="async"></a><a href="work/natural-intelligence.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/bestmoney.webp" alt="" width="112" height="18" style="--h:18px" decoding="async"></a><a href="work/natural-intelligence.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/top10.webp" alt="" width="103" height="27" style="--h:27px" decoding="async"></a><a href="work/interactive-elections-kan-11.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/kan-11.webp" alt="" width="75" height="29" style="--h:29px" decoding="async"></a>
+      </div></div>
+    </div>
+    </section>
+
+    <!-- SELECTED WORK: every case study, as windows in space. Ordered by how much
+         of the problem I owned: the four selected first, then the full index. -->
+    <section class="fh-gallery" id="work" aria-labelledby="fhWorkTitle">
+      <div class="fh-pin wrap">
+        <div class="fh-head">
+          <h2 id="fhWorkTitle">Selected work</h2>
+          <span class="count"><a href="work.html">Full index →</a></span>
+        </div>
+        <p class="fh-hint fx-label" aria-hidden="true">Drag, scroll or use the arrow keys</p>
+        <div class="fh-slot" id="fhSlot" aria-hidden="true"></div>
+
+        <div class="fh-cap" id="fhCap" aria-hidden="true">
+          <p class="fh-cap-n fx-label"><span class="fh-cap-i">01</span><span class="fh-cap-of">/ 18</span><span class="fh-cap-k"></span></p>
+          <p class="fh-cap-t"></p>
+          <p class="fh-cap-d"></p>
+          <p class="fh-cap-r"></p>
+        </div>
+        <div class="fh-ctrl" id="fhCtrl">
+          <button type="button" class="btn ghost fh-arrow" data-step="-1" aria-label="Previous project"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></button>
+          <button type="button" class="btn ghost fh-arrow" data-step="1" aria-label="Next project"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg></button>
+          <a class="btn solid fh-go" id="fhGo" href="work/museum-of-natural-history.html" tabindex="-1" aria-hidden="true">Open case study <span class="arw" aria-hidden="true">→</span></a>
+        </div>
+
+        <ol class="fh-list" id="fhList">
+      <li class="fh-item" style="--a:#0b8577;--b:#eff0e5" data-accent="#0b8577" data-bg="#eff0e5" data-tex="/assets/opt/294c2d137931.webp">
+        <a href="work/museum-of-natural-history.html">
+          <span class="fh-media"><img src="/assets/opt/4757c755e53d.webp" width="1600" height="900" loading="lazy" decoding="async" alt="Visitors at the Museum of Natural History reaching toward a large illuminated display of an illustrated habitat."></span>
+          <span class="fh-num">01</span>
+          <span class="fh-name">Museum of Natural History</span>
+          <span class="fh-meta"><span>Steinhardt Museum of Natural History</span><span>Culture</span></span>
+          <span class="fh-desc">Turning dense science into an experience visitors explore rather than read, installed and running in the museum.</span>
+          <span class="fh-role">Art direction and experience design; led the team from concept to installation</span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#2ef2d0;--b:#14072f" data-accent="#2ef2d0" data-bg="#14072f" data-tex="/assets/opt/127e28df8c39.webp">
+        <a href="work/simply-vision-pro.html">
+          <span class="fh-media"><img src="/assets/opt/15b0b9d98c42.webp" width="1600" height="899" loading="lazy" decoding="async" alt="Simply Piano on Apple Vision Pro: a keyboard in a spatial environment."></span>
+          <span class="fh-num">02</span>
+          <span class="fh-name">Simply Vision Pro</span>
+          <span class="fh-meta"><span>Simply (Simply Piano)</span><span>Technology</span></span>
+          <span class="fh-desc">Showing how it would feel to learn an instrument in spatial computing, before the platform to try it existed.</span>
+          <span class="fh-role">Launch visualization: creative direction and 3D</span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#021454;--b:#ff5a85" data-accent="#021454" data-bg="#ff5a85" data-tex="/assets/opt/9a637cf514a6.webp">
+        <a href="work/sky-max.html">
+          <span class="fh-media"><img src="/assets/opt/8cfebe82ae8c.webp" width="1600" height="900" loading="lazy" decoding="async" alt="A SkyMax frame: a hooded sweatshirt lifting off its rail in a clothing store as shoes and a hat float around it."></span>
+          <span class="fh-num">03</span>
+          <span class="fh-name">SkyMax</span>
+          <span class="fh-meta"><span>MAX</span><span>Campaign</span></span>
+          <span class="fh-desc">A credit card positioned as the one that makes travel happen, with a visual world built from concept art into a national commercial.</span>
+          <span class="fh-role">Art direction and concept art, through to 3D production</span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#c9a35a;--b:#0d0c0a" data-accent="#c9a35a" data-bg="#0d0c0a" data-tex="/assets/opt/30f6d21b1d54.webp">
+        <a href="work/national-library-of-israel.html">
+          <span class="fh-media"><img src="/assets/opt/e4e7d7622c15.webp" width="1280" height="854" loading="lazy" decoding="async" alt="A reading gallery at the National Library of Israel: archival documents in lit vitrines beneath a stone volume."></span>
+          <span class="fh-num">04</span>
+          <span class="fh-name">National Library of Israel</span>
+          <span class="fh-meta"><span>National Library of Israel</span><span>Culture</span></span>
+          <span class="fh-desc">Making a national archive personal: a country’s history told through the people who lived it.</span>
+          <span class="fh-role">Design and experience, with Shortcut Playground</span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#c9005f;--b:#eff0f3" data-accent="#c9005f" data-bg="#eff0f3" data-tex="/assets/opt/5cae1f47edc2.webp">
+        <a href="work/channel-13.html">
+          <span class="fh-media"><img src="/assets/opt/5cae1f47edc2.webp" width="800" height="450" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">05</span>
+          <span class="fh-name">Channel 13</span>
+          <span class="fh-meta"><span>Channel 13</span><span>Brand</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#7a2e12;--b:#ebb291" data-accent="#7a2e12" data-bg="#ebb291" data-tex="/assets/opt/d79fbcaa4aea.webp">
+        <a href="work/partner-tv.html">
+          <span class="fh-media"><img src="/assets/opt/d79fbcaa4aea.webp" width="800" height="489" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">06</span>
+          <span class="fh-name">Partner TV</span>
+          <span class="fh-meta"><span>Partner</span><span>Brand</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#d9ae57;--b:#0a1330" data-accent="#d9ae57" data-bg="#0a1330" data-tex="/assets/opt/74f8e7867f98.webp">
+        <a href="work/tower-of-david.html">
+          <span class="fh-media"><img src="/assets/opt/74f8e7867f98.webp" width="800" height="545" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">07</span>
+          <span class="fh-name">Tower of David</span>
+          <span class="fh-meta"><span>Tower of David Museum, Jerusalem</span><span>Culture</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#a9d0ff;--b:#040b2a" data-accent="#a9d0ff" data-bg="#040b2a" data-tex="/assets/opt/elections-thumb.webp">
+        <a href="work/interactive-elections-kan-11.html">
+          <span class="fh-media"><img src="/assets/opt/elections-thumb.webp" width="1036" height="583" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">08</span>
+          <span class="fh-name">Kan 11 Interactive Elections</span>
+          <span class="fh-meta"><span>Kan 11, Israeli Public Broadcasting Corporation</span><span>Technology</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#c8bcff;--b:#0b0716" data-accent="#c8bcff" data-bg="#0b0716" data-tex="/assets/opt/65b583e6f02a.webp">
+        <a href="work/mako-12.html">
+          <span class="fh-media"><img src="/assets/opt/65b583e6f02a.webp" width="800" height="450" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">09</span>
+          <span class="fh-name">Mako 12+</span>
+          <span class="fh-meta"><span>Channel 12 / Mako</span><span>Brand</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#ff5a2a;--b:#0b0b0c" data-accent="#ff5a2a" data-bg="#0b0b0c" data-tex="/assets/opt/ni-logo-thumb.webp">
+        <a href="work/natural-intelligence.html">
+          <span class="fh-media"><img src="/assets/opt/ni-logo-thumb.webp" width="800" height="450" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">10</span>
+          <span class="fh-name">Natural Intelligence</span>
+          <span class="fh-meta"><span>Natural Intelligence</span><span>Technology</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#ffc27a;--b:#07080d" data-accent="#ffc27a" data-bg="#07080d" data-tex="/assets/opt/02dfd7039566.webp">
+        <a href="work/taormina-sicily.html">
+          <span class="fh-media"><img src="/assets/opt/02dfd7039566.webp" width="800" height="450" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">11</span>
+          <span class="fh-name">Taormina Sicily</span>
+          <span class="fh-meta"><span>Taormina, Sicily</span><span>Culture</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#dcaa63;--b:#2b140e" data-accent="#dcaa63" data-bg="#2b140e" data-tex="/assets/opt/594dfc16e242.webp">
+        <a href="work/amdocs-make-it-amazing.html">
+          <span class="fh-media"><img src="/assets/opt/594dfc16e242.webp" width="800" height="301" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">12</span>
+          <span class="fh-name">Amdocs: Make It Amazing</span>
+          <span class="fh-meta"><span>Amdocs</span><span>Technology</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#1a73e8;--b:#f6f5f1" data-accent="#1a73e8" data-bg="#f6f5f1" data-tex="/assets/opt/09106874b6f2.webp">
+        <a href="work/google-shopping-il.html">
+          <span class="fh-media"><img src="/assets/opt/09106874b6f2.webp" width="800" height="450" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">13</span>
+          <span class="fh-name">Google Shopping IL</span>
+          <span class="fh-meta"><span>Google</span><span>Technology</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#ffd84a;--b:#0b0a2e" data-accent="#ffd84a" data-bg="#0b0a2e" data-tex="/assets/opt/fabef8cbf234.webp">
+        <a href="work/community-lights.html">
+          <span class="fh-media"><img src="/assets/opt/fabef8cbf234.webp" width="800" height="450" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">14</span>
+          <span class="fh-name">Community Lights</span>
+          <span class="fh-meta"><span>Ramat Gan / Electra Target</span><span>Culture</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#0a87b5;--b:#e9eaea" data-accent="#0a87b5" data-bg="#e9eaea" data-tex="/assets/opt/tenfacts-thumb.webp">
+        <a href="work/ten-facts-kan-11.html">
+          <span class="fh-media"><img src="/assets/opt/tenfacts-thumb.webp" width="1400" height="788" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">15</span>
+          <span class="fh-name">Kan 11: 10 Facts</span>
+          <span class="fh-meta"><span>Kan 11, Israeli Public Broadcasting Corporation</span><span>Culture</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#105250;--b:#f4f2ec" data-accent="#105250" data-bg="#f4f2ec" data-tex="/assets/opt/tidhar-thumb.webp">
+        <a href="work/tidhar.html">
+          <span class="fh-media"><img src="/assets/opt/tidhar-thumb.webp" width="1400" height="788" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">16</span>
+          <span class="fh-name">Tidhar</span>
+          <span class="fh-meta"><span>Tidhar</span><span>Brand</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#1d77a6;--b:#f8f6f1" data-accent="#1d77a6" data-bg="#f8f6f1" data-tex="/assets/opt/sodastream-thumb.webp">
+        <a href="work/sodastream.html">
+          <span class="fh-media"><img src="/assets/opt/sodastream-thumb.webp" width="1200" height="675" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">17</span>
+          <span class="fh-name">SodaStream</span>
+          <span class="fh-meta"><span>SodaStream</span><span>Brand</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      <li class="fh-item" style="--a:#1625d4;--b:#8ad4e4" data-accent="#1625d4" data-bg="#8ad4e4" data-tex="/assets/opt/riddle-thumb.webp">
+        <a href="work/riddle.html">
+          <span class="fh-media"><img src="/assets/opt/riddle-thumb.webp" width="800" height="450" loading="lazy" decoding="async" alt=""></span>
+          <span class="fh-num">18</span>
+          <span class="fh-name">Riddle</span>
+          <span class="fh-meta"><span>Riddle</span><span>Brand</span></span>
+          <span class="fh-open">Open case study <span class="arw" aria-hidden="true">→</span></span>
+        </a>
+      </li>
+        </ol>
+        <div class="see-all">
+          <a href="work.html" class="btn ghost">View all work <span class="arw" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
 <div class="wrap">
 
-  <!-- HERO -->
-  <section class="hero" aria-label="Introduction">
-    <p class="eyebrow fade"><span class="name">Creative Builder</span><span>Creative direction, design &amp; technology</span></p>
-    <h1><span class="reveal-line"><span>Let’s build</span></span> <span class="reveal-line"><span>your idea.</span></span></h1>
-    <p class="sub fade d2">Bring the idea, or just the problem. I take it from the first concept to the finished brand, film, website or space, with the team it needs.</p>
-    <div class="cta fade d3">
-      <a class="btn solid" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="home" target="_blank" rel="noopener">Book a call with Itai <span class="arw" aria-hidden="true">↗</span></a>
-      <a href="contact.html#brief" class="btn ghost">Send a brief <span class="arw" aria-hidden="true">→</span></a>
-      <p class="cta-note">A 30-minute call. No brief needed.</p>
-    </div>
-    <!-- FEATURED: one central piece of work, framed like an Awwwards Site of the Day -->
-    <figure class="feature fade d4">
+  <!-- FEATURED: Channel 13, on a screen that turns to face you -->
+  <section class="fh-feature obs" aria-label="Featured project">
+    <figure class="feature">
       <a class="feature-panel" href="work/channel-13.html" aria-label="Featured project: Channel 13 case study" data-mux="LQ00EDO2tkIv3CyLnni5j9Wc01Dj2ldqmMtPKR3BIntzY" data-loop="0-13">
-        <span class="fp-media"><img src="/assets/opt/77bb87005dfc.webp" width="1513" height="851" fetchpriority="high" decoding="async" alt="The Channel 13 mark: a white 1 and 3 in soft relief, the 3 built from magenta, yellow and turquoise blocks."></span>
+        <span class="fp-media"><img src="/assets/opt/77bb87005dfc.webp" width="1513" height="851" loading="lazy" decoding="async" alt="The Channel 13 mark: a white 1 and 3 in soft relief, the 3 built from magenta, yellow and turquoise blocks."></span>
       </a>
       <figcaption class="feature-cap">
         <span class="fc-l"><span class="fc-tag">Featured</span><a href="work/channel-13.html"><strong>Channel 13</strong></a><span class="fc-sep" aria-hidden="true">—</span><span class="fc-d">National broadcast rebrand, with Shortcut Playground</span></span>
-        <a class="fc-r" href="work/channel-13.html">View case study <span aria-hidden="true">→</span></a>
+        <a class="fc-r btn ghost" href="work/channel-13.html">View case study <span class="arw" aria-hidden="true">→</span></a>
       </figcaption>
     </figure>
-    <!-- CLIENTS STRIP: the foot of the hero -->
-    <div class="clients-strip" aria-label="Selected clients and institutions">
-      <p class="cs-label" aria-hidden="true">Selected clients</p>
-      <div class="cs-track">
-        <a href="work/channel-13.html"><img src="/assets/logos/channel-13.webp" alt="Channel 13" width="25" height="34" style="--h:34px" decoding="async"></a><a href="work/partner-tv.html"><img src="/assets/logos/partner.webp" alt="Partner" width="89" height="24" style="--h:24px" decoding="async"></a><a href="work/sky-max.html"><img src="/assets/logos/max.webp" alt="MAX" width="69" height="21" style="--h:21px" decoding="async"></a><a href="work/museum-of-natural-history.html"><img src="/assets/logos/museum.webp" alt="Steinhardt Museum of Natural History" width="49" height="30" style="--h:30px" decoding="async"></a><a href="work/tower-of-david.html"><img src="/assets/logos/tower-of-david.webp" alt="Tower of David Jerusalem Museum" width="134" height="27" style="--h:27px" decoding="async"></a><a href="work/simply-vision-pro.html"><img src="/assets/logos/simply.webp" alt="Simply" width="77" height="29" style="--h:29px" decoding="async"></a><a href="work/amdocs-make-it-amazing.html"><img src="/assets/logos/amdocs.webp" alt="Amdocs" width="104" height="23" style="--h:23px" decoding="async"></a><a href="work/google-shopping-il.html"><img src="/assets/logos/google.webp" alt="Google" width="84" height="28" style="--h:28px" decoding="async"></a><a href="work/mako-12.html"><img src="/assets/logos/channel-12.webp" alt="Channel 12" width="38" height="30" style="--h:30px" decoding="async"></a><a href="work/national-library-of-israel.html"><img src="/assets/logos/national-library.webp" alt="National Library of Israel" width="129" height="26" style="--h:26px" decoding="async"></a><a href="work/natural-intelligence.html"><img src="/assets/logos/bestmoney.webp" alt="BestMoney (Natural Intelligence)" width="112" height="18" style="--h:18px" decoding="async"></a><a href="work/natural-intelligence.html"><img src="/assets/logos/top10.webp" alt="Top10.com (Natural Intelligence)" width="103" height="27" style="--h:27px" decoding="async"></a><a href="work/interactive-elections-kan-11.html"><img src="/assets/logos/kan-11.webp" alt="Kan 11" width="75" height="29" style="--h:29px" decoding="async"></a>
-        <a href="work/channel-13.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/channel-13.webp" alt="" width="25" height="34" style="--h:34px" decoding="async"></a><a href="work/partner-tv.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/partner.webp" alt="" width="89" height="24" style="--h:24px" decoding="async"></a><a href="work/sky-max.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/max.webp" alt="" width="69" height="21" style="--h:21px" decoding="async"></a><a href="work/museum-of-natural-history.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/museum.webp" alt="" width="49" height="30" style="--h:30px" decoding="async"></a><a href="work/tower-of-david.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/tower-of-david.webp" alt="" width="134" height="27" style="--h:27px" decoding="async"></a><a href="work/simply-vision-pro.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/simply.webp" alt="" width="77" height="29" style="--h:29px" decoding="async"></a><a href="work/amdocs-make-it-amazing.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/amdocs.webp" alt="" width="104" height="23" style="--h:23px" decoding="async"></a><a href="work/google-shopping-il.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/google.webp" alt="" width="84" height="28" style="--h:28px" decoding="async"></a><a href="work/mako-12.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/channel-12.webp" alt="" width="38" height="30" style="--h:30px" decoding="async"></a><a href="work/national-library-of-israel.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/national-library.webp" alt="" width="129" height="26" style="--h:26px" decoding="async"></a><a href="work/natural-intelligence.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/bestmoney.webp" alt="" width="112" height="18" style="--h:18px" decoding="async"></a><a href="work/natural-intelligence.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/top10.webp" alt="" width="103" height="27" style="--h:27px" decoding="async"></a><a href="work/interactive-elections-kan-11.html" aria-hidden="true" tabindex="-1"><img src="/assets/logos/kan-11.webp" alt="" width="75" height="29" style="--h:29px" decoding="async"></a>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- SELECTED WORK — ordered by how much of the problem I owned, not by client fame -->
-  <section aria-label="Selected work">
-    <div class="sec-head">
-      <h2>Selected work</h2>
-      <span class="count"><a href="work.html">Full index →</a></span>
-    </div>
-    <div class="selected">
-      <article class="swork obs">
-        <a class="media" href="work/museum-of-natural-history.html" aria-label="Museum of Natural History case study"><span class="num">01 / 04</span><img src="/assets/opt/4757c755e53d.webp" loading="lazy" decoding="async" alt="Visitors at the Museum of Natural History reaching toward a large illuminated display of an illustrated habitat."></a>
-        <div class="info">
-          <div class="kmeta"><span>Steinhardt Museum of Natural History</span><span>Culture</span></div>
-          <h3><a href="work/museum-of-natural-history.html">Museum of Natural History</a></h3>
-          <p class="challenge">Turning dense science into an experience visitors explore rather than read, installed and running in the museum.</p>
-          <p class="role">Art direction and experience design; led the team from concept to installation</p>
-          <a class="open" href="work/museum-of-natural-history.html">Open case study <span class="arw" aria-hidden="true">→</span></a>
-        </div>
-      </article>
-
-      <article class="swork obs">
-        <a class="media" href="work/simply-vision-pro.html" aria-label="Simply Vision Pro case study"><span class="num">02 / 04</span><img src="/assets/opt/15b0b9d98c42.webp" loading="lazy" decoding="async" alt="Simply Piano on Apple Vision Pro: a keyboard in a spatial environment."></a>
-        <div class="info">
-          <div class="kmeta"><span>Simply (Simply Piano)</span><span>Technology</span></div>
-          <h3><a href="work/simply-vision-pro.html">Simply Vision Pro</a></h3>
-          <p class="challenge">Showing how it would feel to learn an instrument in spatial computing, before the platform to try it existed.</p>
-          <p class="role">Launch visualization: creative direction and 3D</p>
-          <a class="open" href="work/simply-vision-pro.html">Open case study <span class="arw" aria-hidden="true">→</span></a>
-        </div>
-      </article>
-
-      <article class="swork obs">
-        <a class="media" href="work/sky-max.html" aria-label="SkyMax case study"><span class="num">03 / 04</span><img src="/assets/opt/8cfebe82ae8c.webp" loading="lazy" decoding="async" alt="A SkyMax frame: a hooded sweatshirt lifting off its rail in a clothing store as shoes and a hat float around it."></a>
-        <div class="info">
-          <div class="kmeta"><span>MAX</span><span>Campaign</span></div>
-          <h3><a href="work/sky-max.html">SkyMax</a></h3>
-          <p class="challenge">A credit card positioned as the one that makes travel happen, with a visual world built from concept art into a national commercial.</p>
-          <p class="role">Art direction and concept art, through to 3D production</p>
-          <a class="open" href="work/sky-max.html">Open case study <span class="arw" aria-hidden="true">→</span></a>
-        </div>
-      </article>
-
-      <article class="swork obs">
-        <a class="media" href="work/national-library-of-israel.html" aria-label="National Library of Israel case study"><span class="num">04 / 04</span><img src="/assets/opt/e4e7d7622c15.webp" loading="lazy" decoding="async" alt="A reading gallery at the National Library of Israel: archival documents in lit vitrines beneath a stone volume."></a>
-        <div class="info">
-          <div class="kmeta"><span>National Library of Israel</span><span>Culture</span></div>
-          <h3><a href="work/national-library-of-israel.html">National Library of Israel</a></h3>
-          <p class="challenge">Making a national archive personal: a country’s history told through the people who lived it.</p>
-          <p class="role">Design and experience, with Shortcut Playground</p>
-          <a class="open" href="work/national-library-of-israel.html">Open case study <span class="arw" aria-hidden="true">→</span></a>
-        </div>
-      </article>
-
-    <div class="see-all">
-      <a href="work.html" class="btn ghost">View all work <span class="arw" aria-hidden="true">→</span></a>
-    </div>
-    </div>
   </section>
 
   <!-- WORKING TOGETHER: the proof a large-budget buyer needs, then the three ways in -->
@@ -255,12 +421,14 @@
   </section>
 
   <!-- CONTACT BAND -->
-  <section class="band obs" aria-label="Contact">
+  <section class="band obs fh-portal" aria-label="Contact">
+    <div class="fh-portal-in">
     <h2>Let’s build <em>something</em>.</h2>
-    <p style="max-width:52ch;margin-bottom:0;color:inherit;opacity:0.7;">Tell me what it is, who it is for and what is still open. A rough idea is enough to start.</p>
-    <div class="cta" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:28px">
+    <p class="band-lead">Tell me what it is, who it is for and what is still open. A rough idea is enough to start.</p>
+    <div class="cta">
       <a class="btn solid" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="home_band" target="_blank" rel="noopener">Book a call with Itai <span class="arw" aria-hidden="true">↗</span></a>
       <a href="contact.html#brief" class="btn ghost">Send a brief <span class="arw" aria-hidden="true">→</span></a>
+    </div>
     </div>
   </section>
 
@@ -284,5 +452,6 @@
 
 <script src="js/contact-config.js"></script>
 <script src="js/site.js"></script>
+<script type="module" src="js/future-home.js"></script>
 </body>
 </html>

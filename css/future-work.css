@@ -1,0 +1,185 @@
+/* =====================================================================
+   FUTURE / WORK: the index as a field of floating glass.
+   Loaded after css/future.css on work.html only (body.fx-work).
+   Each card carries its project's brand light, taken from the case
+   study's own tokens (css/cx-<slug>.css): --l1 / --l2 are the two
+   lights, --ink its deepest tone. js/future-work.js feeds the pointer
+   (--rx/--ry tilt, --mx/--my specular) on fine pointers only; without
+   it the cards are simply still glass.
+   ===================================================================== */
+
+/* ---------- brand lights (from css/cx-<slug>.css) ---------- */
+.fx-work .prow a{--l1:#a594ff;--l2:#22d3ee;--ink:#0c0c11}
+.fx-work a[href$="channel-13.html"]{--l1:#ff1380;--l2:#00f1c8;--ink:#00104a}
+.fx-work a[href$="museum-of-natural-history.html"]{--l1:#2fe0cf;--l2:#f1b9c8;--ink:#13302a}
+.fx-work a[href$="partner-tv.html"]{--l1:#ebb291;--l2:#c47e5d;--ink:#2b1209}
+.fx-work a[href$="sky-max.html"]{--l1:#ff5a85;--l2:#8fe8d6;--ink:#021454}
+.fx-work a[href$="simply-vision-pro.html"]{--l1:#8b4dff;--l2:#2ef2d0;--ink:#14072f}
+.fx-work a[href$="tower-of-david.html"]{--l1:#d9ae57;--l2:#a9dcff;--ink:#0a1330}
+.fx-work a[href$="interactive-elections-kan-11.html"]{--l1:#3d8bff;--l2:#ffa31a;--ink:#040b2a}
+.fx-work a[href$="mako-12.html"]{--l1:#ff4a3d;--l2:#6b5cff;--ink:#0b0716}
+.fx-work a[href$="natural-intelligence.html"]{--l1:#ff0c2c;--l2:#ff7a1a;--ink:#0b0b0c}
+.fx-work a[href$="taormina-sicily.html"]{--l1:#ff8a2a;--l2:#ffc27a;--ink:#07080d}
+.fx-work a[href$="national-library-of-israel.html"]{--l1:#c9a35a;--l2:#e2553b;--ink:#0d0c0a}
+.fx-work a[href$="amdocs-make-it-amazing.html"]{--l1:#dcaa63;--l2:#a9502e;--ink:#22100b}
+.fx-work a[href$="google-shopping-il.html"]{--l1:#1a73e8;--l2:#fbbc04;--ink:#202124}
+.fx-work a[href$="community-lights.html"]{--l1:#ff9a3c;--l2:#ff4fa8;--ink:#0b0a2e}
+.fx-work a[href$="ten-facts-kan-11.html"]{--l1:#4fd0f5;--l2:#5df2b3;--ink:#0b0b0b}
+.fx-work a[href$="tidhar.html"]{--l1:#43a96b;--l2:#f2b632;--ink:#14302e}
+.fx-work a[href$="sodastream.html"]{--l1:#3fa7d6;--l2:#e2b07a;--ink:#1c2226}
+.fx-work a[href$="riddle.html"]{--l1:#ffd900;--l2:#00c8ff;--ink:#001478}
+
+/* ---------- the ground: no grey stage, the aurora shows through ---------- */
+.fx-work main::before{display:none}
+
+/* ---------- opening: type in space ---------- */
+.fx-work .sec-head:has(h1){align-items:center;text-align:center;padding-top:clamp(40px,7vw,104px);margin-bottom:0;gap:clamp(14px,1.6vw,22px);position:relative}
+.fx-work .sec-head:has(h1)::after{content:"";position:absolute;z-index:-1;left:50%;top:58%;width:min(900px,100%);height:clamp(180px,22vw,320px);
+  transform:translate(-50%,-50%);pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,color-mix(in srgb,var(--mark) 22%,transparent),transparent 70%);filter:blur(10px)}
+.fx-work .sec-head h1{font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;text-transform:none;
+  font-size:clamp(4.5rem,15vw,13.5rem);letter-spacing:-.06em;line-height:.84;max-width:none;margin:0;padding-right:.04em;
+  text-shadow:0 30px 80px color-mix(in srgb,var(--bg) 70%,transparent)}
+.fx-work .sec-head .count{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem;letter-spacing:.08em!important;text-transform:uppercase;color:var(--dim);
+  display:inline-flex;align-items:center;gap:10px;padding:7px 14px;border-radius:var(--r-btn);background:var(--glass);border:1px solid var(--glass-edge);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.fx-work .sec-head .count::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--aurora);box-shadow:0 0 10px color-mix(in srgb,var(--mark) 70%,transparent)}
+.fx-work .work-intro{text-align:center;margin:clamp(22px,2.6vw,34px) auto 0!important;max-width:52ch;font-size:clamp(1rem,1.2vw,1.125rem);line-height:1.55;color:var(--dim);padding-bottom:clamp(36px,5vw,72px)!important}
+.fx-work .work-intro a{color:var(--fg);border-bottom:1px solid var(--line-strong);transition:border-color .2s}
+.fx-work .work-intro a:hover{border-color:var(--fg)}
+
+/* ---------- the control bar: one floating glass bar ----------
+   Sticks 12px under the site header (css/site.css: clamp(64px,4.2vw,84px), 60px up to 900px).
+   12px outside, 4px padding, 8px buttons inside: the same nesting as site.css .c-tabs. */
+.fx-work .index-controls{position:sticky;top:calc(clamp(64px,4.2vw,84px) + 12px);z-index:20;margin:0 auto clamp(28px,3.6vw,48px)!important;width:max-content;max-width:100%;
+  gap:4px;padding:4px;border-radius:var(--r-panel);flex-wrap:nowrap;
+  background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--shadow-float);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%)}
+.fx-work .filters{flex-wrap:nowrap;gap:2px;overflow-x:auto;scrollbar-width:none;min-width:0}
+.fx-work .filters::-webkit-scrollbar{display:none}
+.fx-work .filters button,.fx-work .views button{border:0!important;background:transparent;color:var(--dim);border-radius:var(--r-btn);white-space:nowrap;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;padding:9px 14px;min-height:36px}
+.fx-work .views{padding-left:4px;margin-left:2px;border-left:1px solid var(--glass-edge);gap:2px;flex:0 0 auto}
+.fx-work .views button{padding:9px 10px}
+.fx-work .filters button:hover,.fx-work .views button:hover{color:var(--fg);background:var(--glass-strong)!important}
+.fx-work .filters button[aria-pressed="true"],.fx-work .views button[aria-pressed="true"]{color:var(--bg)!important;background:var(--fg)!important}
+.fx-work :is(.filters,.views) button:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+@media(max-width:900px){.fx-work .index-controls{top:72px}}
+/* without JS there are no filters to drive: hide the inert bar */
+.fx-work .index-controls:has(.filters:empty){display:none}
+
+/* ---------- spatial cards (grid view) ---------- */
+.fx-work .index-head:has(+ .index-list.grid){display:none}
+.fx-work .index-list.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.2vw,32px);padding-bottom:56px}
+.fx-work .index-list.grid .prow{border:0}
+/* the middle column floats a little lower: a field, not a table */
+.fx-work .index-list.grid .prow:nth-child(3n+2 of .prow:not(.hidden)){translate:0 56px}
+
+.fx-work .index-list.grid .prow>a{
+  position:relative;isolation:isolate;display:flex;flex-direction:column;height:100%;
+  padding:10px 10px 20px;border-radius:var(--r-panel);color:var(--fg);
+  transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(0);
+  transition:transform .7s var(--ease-out,cubic-bezier(.23,1,.32,1)),opacity .4s ease;
+  will-change:transform}
+.fx-work .index-list.grid .prow>a.is-tilt{transition:transform .14s linear,opacity .4s ease}
+/* the pane: glass tinted by the brand's first light */
+.fx-work .index-list.grid .prow>a::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;
+  background:
+    radial-gradient(120% 70% at var(--mx,30%) var(--my,0%),color-mix(in srgb,#fff 10%,transparent),transparent 55%),
+    linear-gradient(160deg,color-mix(in srgb,var(--l1) 16%,transparent),color-mix(in srgb,var(--l2) 6%,transparent) 55%,transparent),
+    var(--glass);
+  border:1px solid var(--glass-edge);box-shadow:var(--shadow-float);
+  -webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%);
+  transition:border-color .3s ease}
+/* the light it casts on the space behind it */
+.fx-work .index-list.grid .prow>a::after{content:"";position:absolute;inset:-14% -10% -22%;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(45% 40% at 35% 45%,color-mix(in srgb,var(--l1) 34%,transparent),transparent 70%),
+    radial-gradient(40% 40% at 70% 70%,color-mix(in srgb,var(--l2) 24%,transparent),transparent 70%);
+  opacity:.6;transition:opacity .5s ease}
+.fx-work .index-list.grid .prow>a:hover::after,.fx-work .index-list.grid .prow>a:focus-visible::after{opacity:1}
+.fx-work .index-list.grid .prow>a:hover::before{border-color:color-mix(in srgb,var(--l1) 45%,var(--glass-edge))}
+
+.fx-work .index-list.grid .p-thumb{position:relative;aspect-ratio:16/11;border-radius:var(--r-media);margin:0 0 18px;overflow:hidden;
+  background:var(--ink);box-shadow:0 1px 0 0 rgba(255,255,255,.08) inset,0 18px 40px -24px color-mix(in srgb,var(--l1) 60%,#000)}
+.fx-work .index-list.grid .p-thumb img{width:100%;height:100%;object-fit:cover;transform:scale(1.08) translate(calc(var(--px,0) * -14px),calc(var(--py,0) * -10px));
+  transition:transform .9s var(--ease-out,cubic-bezier(.23,1,.32,1))}
+.fx-work .index-list.grid .prow>a.is-tilt .p-thumb img{transition:transform .2s linear}
+.fx-work .index-list.grid .prow>a:hover .p-thumb img{transform:scale(1.12) translate(calc(var(--px,0) * -14px),calc(var(--py,0) * -10px))}
+/* glass glint across the image */
+.fx-work .index-list.grid .p-thumb::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(125deg,rgba(255,255,255,.16),transparent 38%),radial-gradient(60% 50% at var(--mx,50%) var(--my,0%),rgba(255,255,255,.14),transparent 70%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+
+.fx-work .index-list.grid .p-name{order:2;display:block;padding:0 10px;font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;
+  font-size:clamp(1.3rem,1.75vw,1.7rem);letter-spacing:-.035em;line-height:1.05}
+.fx-work .index-list.grid .p-client{order:3;display:block;padding:6px 10px 0;font-size:.875rem;color:var(--dim);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fx-work .index-list.grid .p-metaline{order:4;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 10px 0;padding-top:14px;
+  border-top:1px solid var(--glass-edge);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.fx-work .index-list.grid .p-metaline span:first-child{display:inline-flex;align-items:center;gap:8px}
+.fx-work .index-list.grid .p-metaline span:first-child::before{content:"";width:8px;height:8px;border-radius:50%;
+  background:linear-gradient(135deg,var(--l1),var(--l2));box-shadow:0 0 12px color-mix(in srgb,var(--l1) 70%,transparent)}
+.fx-work .index-list.grid .p-thumb{order:1}
+
+/* focus: the rest of the field steps back */
+@media(hover:hover) and (pointer:fine){
+  .fx-work .index-list.grid:has(.prow>a:hover) .prow>a:not(:hover){opacity:.5}
+}
+.fx-work .index-list .prow>a:focus-visible{outline:2px solid var(--l1);outline-offset:4px}
+
+/* ---------- list view: one glass slab, rows lit in brand light ---------- */
+.fx-work .index-head{border-bottom:0!important;font-family:"IBM Plex Mono",ui-monospace,monospace;letter-spacing:.08em!important;padding-left:28px!important;padding-right:28px!important}
+.fx-work .index-list:not(.grid){padding:8px;border-radius:var(--r-panel);background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--shadow-float);
+  -webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%)}
+.fx-work .index-list:not(.grid) .prow{border-bottom:1px solid var(--line)}
+.fx-work .index-list:not(.grid) .prow:nth-last-child(1 of .prow:not(.hidden)){border-bottom:0}
+.fx-work .index-list:not(.grid) .prow>a{border-radius:var(--r-btn);transition:background .3s ease}
+.fx-work .index-list:not(.grid) .prow>a:hover{background:
+  radial-gradient(60% 140% at var(--mx,10%) 50%,color-mix(in srgb,var(--l1) 16%,transparent),transparent 70%),var(--glass-strong)!important}
+.fx-work .index-list:not(.grid) .p-name{display:inline-flex;align-items:center;gap:14px;font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;letter-spacing:-.035em}
+.fx-work .index-list:not(.grid) .p-name::before{content:"";flex:0 0 auto;width:10px;height:10px;border-radius:50%;
+  background:linear-gradient(135deg,var(--l1),var(--l2));box-shadow:0 0 14px color-mix(in srgb,var(--l1) 60%,transparent);transition:transform .3s var(--ease-out,ease)}
+.fx-work .index-list:not(.grid) .prow>a:hover .p-name::before{transform:scale(1.5)}
+.fx-work .index-list:not(.grid) :is(.p-idx,.p-cat,.p-metaline){font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+/* the hover preview becomes a floating pane */
+.fx-work .hoverimg{border-radius:var(--r-panel);padding:6px;background:var(--glass-strong);border:1px solid var(--glass-edge);box-shadow:var(--shadow-float);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.fx-work .hoverimg img{border-radius:var(--r-media)}
+
+/* ---------- light theme: paper glass, brand light kept softer ---------- */
+:root[data-theme="light"] .fx-work .index-list.grid .prow>a::after{opacity:.55}
+:root[data-theme="light"] .fx-work .index-list.grid .prow>a:hover::after{opacity:.95}
+:root[data-theme="light"] .fx-work .index-list.grid .prow>a::before{inset:0;opacity:1;z-index:-1;border-radius:inherit;
+  background:
+    radial-gradient(120% 70% at var(--mx,30%) var(--my,0%),rgba(255,255,255,.7),transparent 55%),
+    linear-gradient(160deg,color-mix(in srgb,var(--l1) 14%,transparent),color-mix(in srgb,var(--l2) 6%,transparent) 55%,transparent),
+    var(--glass)}
+:root[data-theme="light"] .fx-work .sec-head h1{text-shadow:0 30px 80px rgba(80,60,160,.12)}
+
+/* ---------- smaller screens ---------- */
+@media(max-width:1100px){
+  .fx-work .index-list.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fx-work .index-list.grid .prow:nth-child(3n+2 of .prow:not(.hidden)){translate:none}
+  .fx-work .index-list.grid .prow:nth-child(2n of .prow:not(.hidden)){translate:0 48px}
+}
+@media(max-width:640px){
+  .fx-work .index-list.grid{grid-template-columns:1fr;gap:16px;padding-bottom:0}
+  .fx-work .index-list.grid .prow:nth-child(n of .prow:not(.hidden)){translate:none}
+  .fx-work .index-list.grid .prow>a{padding:8px 8px 16px}
+  .fx-work .index-list.grid .prow>a::after{inset:-8% 0 -14%}
+  .fx-work .index-list.grid .p-thumb{margin-bottom:14px}
+  .fx-work .index-controls{width:100%;justify-content:space-between}
+  .fx-work .filters button{padding:9px 11px}
+  .fx-work .filters{-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+  .fx-work .index-list:not(.grid){padding:4px}
+}
+
+/* ---------- comfort ---------- */
+@media(prefers-reduced-motion:reduce){
+  .fx-work .index-list.grid .prow>a,.fx-work .index-list.grid .p-thumb img{transform:none!important;transition:none}
+}
+@media(prefers-reduced-transparency:reduce){
+  .fx-work .index-list.grid .prow>a::before,.fx-work .index-list:not(.grid),.fx-work .index-controls,.fx-work .hoverimg{
+    -webkit-backdrop-filter:none;backdrop-filter:none;background:var(--surface)}
+}

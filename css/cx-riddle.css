@@ -1,0 +1,135 @@
+/* ============================================================
+   Riddle: a case study in the brand's own toy box.
+   Sky-blue ground from the renders, the four primaries of the
+   identity (yellow, deep blue, red, cyan), white clouds, and
+   chunky block shadows, as if every panel were one of the cubes.
+   ============================================================ */
+body.cx.cx-riddle{
+  --rd-sky:#8ad4e4; --rd-sky-hi:#73c8de; --rd-sky-lo:#a9e5ee;
+  --rd-yellow:#ffd900; --rd-navy:#001ca4; --rd-blue:#1625d4; --rd-red:#ff0015; --rd-cyan:#00c8ff;
+  --rd-ink:#001478;
+  --cx-bg:var(--rd-sky); --cx-fg:var(--rd-ink); --cx-dim:rgba(0,20,120,.74); --cx-accent:var(--rd-blue);
+  --cx-line:rgba(0,20,120,.2); --cx-header:rgba(138,212,228,.72);
+  --cx-btn-bg:#222; --cx-btn-fg:#fff;
+  --panel:#00137a; --faint:#7ccbdd; --surface:#a9e5ee;
+}
+.rd .cx-eyebrow{display:flex;align-items:center;gap:10px;color:var(--rd-ink);font-weight:500}
+/* a tiny isometric cube before every label: the logo's rule, in miniature */
+.rd .cx-eyebrow::before{content:"";width:14px;height:16px;flex:none;
+  background:conic-gradient(from -60deg at 50% 50%,var(--rd-yellow) 0 120deg,var(--rd-blue) 0 240deg,var(--rd-red) 0);
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.rd .cx-body{color:var(--cx-dim)}
+.rd .cx-body strong{color:var(--rd-ink)}
+.rd-h{margin:0 0 clamp(20px,2.4vw,32px)}
+
+/* a tile that sits on the page like a block: a solid side instead of a soft shadow */
+.rd-tile{position:relative;border-radius:var(--r-media);overflow:hidden;background:#fff;
+  box-shadow:clamp(6px,.8vw,10px) clamp(6px,.8vw,10px) 0 var(--rd-ink)}
+.rd-tile img,.rd-tile video{display:block;width:100%;height:auto}
+.rd-tile--sky{background:var(--rd-sky-lo)}
+.rd-tile--navy{background:var(--rd-navy)}
+.rd figure{margin:0}
+.rd figcaption{margin-top:clamp(16px,1.6vw,22px);font-size:.9375rem;line-height:1.55;color:var(--cx-dim);max-width:48ch}
+
+body.cx-riddle main{padding-top:0}
+/* ---------- 1 · hero: the stack beside the shared copy block, like the key visual ---------- */
+.rd-hero{background:linear-gradient(180deg,var(--rd-sky-hi) 0%,var(--rd-sky) 55%,var(--rd-sky-lo) 100%)}
+.rd-stage .cx-poster{object-position:70% 60%;opacity:.9}
+.rd-stage .cx-canvas{cursor:default}
+.rd-hero-copy .cx-crumb,.rd-hero-copy .cx-crumb a{color:var(--rd-ink)}
+.rd-hero .cx-one{color:var(--rd-ink)}
+/* white block letters with a soft extruded side, as in the "Simply smart" renders */
+.rd-title{color:#fff;
+  text-shadow:0 1px 0 #d6eef4,0 2px 0 #c9e7ef,0 3px 0 #bde1ea,0 4px 0 #b0dae5,0 5px 0 #a3d3e0,0 6px 0 #96ccdb,0 7px 0 #8ac6d6,0 20px 30px rgba(0,40,100,.22)}
+.rd-hint{display:flex;align-items:center;gap:10px;margin:0;color:var(--rd-ink)}
+.rd-hint .btn{pointer-events:auto}
+.rd-hint-dot{width:8px;height:8px;border-radius:50%;background:var(--rd-red);animation:rd-pulse 1.6s ease-in-out infinite}
+@keyframes rd-pulse{50%{transform:scale(1.6);opacity:.5}}
+/* the compact site button: only height and padding change */
+body.cx .btn.cx-btn-sm{min-height:34px;padding:0 12px}
+@media(max-width:560px){.rd-hint-t{display:none}}
+
+/* ---------- 2 · the brief (shared skeleton); each fact keyed to a primary ---------- */
+.cx-brief .cx-statement{max-width:22ch}
+.cx-brief-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);margin-top:clamp(40px,6vw,80px);align-items:start}
+@media(max-width:820px){.cx-brief-grid{grid-template-columns:1fr}}
+.rd-cols{display:grid;gap:20px}
+.rd-spec dt{display:flex;align-items:center;gap:10px;color:var(--rd-ink)}
+.rd-spec dt::before{content:"";width:10px;height:10px;flex:none;border-radius:2px;background:var(--k,var(--rd-yellow))}
+.rd-spec div:nth-child(2){--k:var(--rd-red)}
+.rd-spec div:nth-child(3){--k:var(--rd-cyan)}
+.rd-spec div:nth-child(4){--k:var(--rd-navy)}
+.rd-note{margin:20px 0 0;font-size:.875rem;color:var(--cx-dim)}
+
+/* ---------- 4 · the idea: a full band of the deep blue ---------- */
+.rd-idea{position:relative;background:var(--rd-navy);color:#fff;padding:clamp(80px,10vw,150px) 0;overflow:hidden}
+/* the four primaries along the top edge, like the stacked faces of a cube */
+.rd-idea::before{content:"";position:absolute;inset:0 0 auto 0;height:12px;
+  background:linear-gradient(90deg,var(--rd-yellow) 0 25%,var(--rd-red) 0 50%,var(--rd-cyan) 0 75%,var(--rd-blue) 0)}
+.rd-idea .cx-eyebrow{color:#fff}
+.rd-idea-t{font-size:clamp(2.6rem,7vw,6.6rem);line-height:.94;max-width:14ch}
+.rd-idea-t span{color:var(--rd-yellow)}
+.rd-idea-foot{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);margin-top:clamp(40px,5vw,72px);align-items:end}
+.rd-idea .cx-body{color:rgba(255,255,255,.8)}
+.rd-promise{margin:0;font-size:clamp(1.25rem,2vw,1.75rem);line-height:1.3;letter-spacing:-.015em}
+.rd-promise strong{display:inline-block;color:var(--rd-ink);background:var(--rd-yellow);padding:.05em .35em;border-radius:8px;font-weight:700;transform:rotate(-2deg)}
+@media(max-width:820px){.rd-idea-foot{grid-template-columns:1fr}}
+
+/* ---------- 5 · identity ---------- */
+.rd-identity{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:center;padding:clamp(90px,11vw,170px) 0 clamp(70px,9vw,130px)}
+.rd-tile--white video{aspect-ratio:16/9;object-fit:cover}
+@media(max-width:860px){.rd-identity{grid-template-columns:1fr}}
+
+/* ---------- 6 · visual language: the pattern edge to edge, the face on a card ---------- */
+.rd-type{padding-bottom:clamp(80px,10vw,150px)}
+.rd-pattern{height:clamp(220px,32vw,440px);overflow:hidden;border-block:clamp(6px,.8vw,10px) solid var(--rd-ink)}
+.rd-pattern img{width:100%;height:100%;object-fit:cover;display:block}
+.rd-type-in{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr);gap:clamp(32px,5vw,80px);align-items:start}
+.rd-type-copy{padding-top:clamp(48px,6vw,96px)}
+.rd-type-copy .cx-lead{margin-bottom:20px}
+.rd-specimen{margin-top:calc(-1 * clamp(80px,10vw,150px)) !important;position:relative;z-index:1}
+@media(max-width:860px){.rd-type-in{grid-template-columns:1fr}.rd-specimen{margin-top:0 !important}.rd-type-copy{padding-top:clamp(40px,8vw,64px)}}
+
+/* ---------- 7 · the cast ---------- */
+.rd-cast{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(20px,2.4vw,36px);padding:0 0 clamp(90px,11vw,160px);align-items:start}
+.rd-cast-copy{grid-column:1 / span 5;position:sticky;top:calc(var(--header-h,72px) + 32px)}
+.rd-cast-a{grid-column:6 / span 7}
+.rd-cast-b{grid-column:8 / span 5;margin-top:clamp(12px,2vw,24px) !important}
+.rd-cast-a img{aspect-ratio:900/766;object-fit:cover}
+@media(max-width:860px){.rd-cast-copy,.rd-cast-a,.rd-cast-b{grid-column:1 / -1;position:static}.rd-cast-b{width:78%;justify-self:end}}
+
+/* ---------- 8 · posters you can play: on bus-shelter red ---------- */
+.rd-scan{background:var(--rd-red);color:#fff;padding:clamp(80px,10vw,150px) 0}
+.rd-scan .cx-eyebrow{color:#fff}
+.rd-scan .cx-body{color:rgba(255,255,255,.88)}
+.rd-scan-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:clamp(40px,5vw,72px)}
+.rd-scan-head .cx-eyebrow{grid-column:1 / -1;margin-bottom:0}
+.rd-scan-t{font-size:clamp(3.6rem,12vw,11rem);line-height:.84;letter-spacing:-.055em}
+.rd-scan-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);grid-template-rows:auto auto;gap:clamp(20px,2.6vw,40px) clamp(20px,2.6vw,40px)}
+.rd-shelter{grid-row:1 / span 2}
+.rd-scan .rd-tile{box-shadow:clamp(6px,.8vw,10px) clamp(6px,.8vw,10px) 0 #7a000a}
+.rd-scan figcaption{color:rgba(255,255,255,.85)}
+.rd-scan .rd-tile video{aspect-ratio:1;object-fit:cover;background:#eee}
+@media(max-width:820px){.rd-scan-head,.rd-scan-grid{grid-template-columns:1fr}.rd-shelter{grid-row:auto}}
+
+/* ---------- 9 · stationery: the cards, live ---------- */
+.rd-print{padding:clamp(90px,11vw,160px) 0 clamp(40px,5vw,80px)}
+.rd-cards{position:relative;height:clamp(380px,62vh,640px);margin:clamp(8px,2vw,24px) 0 clamp(40px,5vw,72px);
+  background:radial-gradient(60% 60% at 50% 45%,rgba(255,255,255,.35),transparent 70%)}
+.rd-cards .cx-poster{object-fit:contain;opacity:.95}
+.rd-cards-hint{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);margin:0;font-size:.8125rem;color:var(--cx-dim);white-space:nowrap;pointer-events:none}
+.rd-print-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,48px)}
+@media(max-width:720px){.rd-print-grid{grid-template-columns:1fr}}
+
+/* ---------- 10 · digital home ---------- */
+.rd-home{padding:clamp(60px,8vw,120px) 0 clamp(40px,6vw,80px);text-align:center;display:flex;flex-direction:column;align-items:center}
+.rd-home-t{font-size:clamp(1.6rem,3.2vw,2.75rem);line-height:1.12;max-width:30ch}
+
+/* ---------- the ending, on the sky ---------- */
+.rd ~ footer.site,.cx-riddle footer.site{--ft-fg:#fff}
+.cx-riddle .cx-close .btn.ghost{border-color:rgba(0,20,120,.35)}
+
+@media(prefers-reduced-motion:reduce){
+  .rd-hint-dot{animation:none}
+}
+.rd-stage:not(.live) ~ .rd-hint{display:none}

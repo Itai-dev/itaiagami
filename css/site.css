@@ -2021,7 +2021,7 @@ main{padding-top:clamp(64px,4.2vw,84px)}
 .feature-panel:active .fp-media{transform:scale(.995);transition-duration:.1s}
 .feature-cap{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s2);margin-top:var(--s2);font-size:var(--t-second);line-height:1.4}
 .feature-cap .fc-l{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;min-width:0}
-.feature-cap .fc-tag{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:9999px;background:var(--surface);border:1px solid var(--line);font-size:var(--t-label);font-weight:500;align-self:center}
+.feature-cap .fc-tag{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:var(--t-label);font-weight:500;align-self:center}
 .feature-cap strong{font-weight:600}
 .feature-cap .fc-sep,.feature-cap .fc-d{color:var(--dim)}
 .feature-cap .fc-r{white-space:nowrap;font-weight:500}

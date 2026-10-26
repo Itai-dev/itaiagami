@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,6 +21,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="../css/site.css" />
+<link rel="stylesheet" href="../css/cx.css" />
+<link rel="stylesheet" href="../css/cx-amdocs-make-it-amazing.css" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/+esm" crossorigin />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -49,39 +52,96 @@
 }
 </script>
 </head>
-<body data-chrome="sub">
+<body data-chrome="sub" class="cx cx-amdocs-make-it-amazing">
 <div class="grain" aria-hidden="true"></div>
 <header class="site" id="siteHeader"><div class="hwrap"><a href="../index.html" class="brand" aria-label="Itai Agami, home">Itai&nbsp;Agami</a><nav class="primary" aria-label="Primary"><a href="../work.html" class="active">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button></nav><a class="btn solid nav-cta" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a><button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button></div></header>
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile"><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button><span>Tel Aviv, IL · Worldwide</span></div></nav>
-<main>
-  <div class="cwrap">
-    <div class="c-open">
-      <p class="crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>12 / 18</span></p>
-      <h1>Amdocs: Make It Amazing</h1>
-      <p class="oneline">A music-led film at the center of a global tech company’s rebrand - and the early concept work behind it.</p>
+<main class="cx-main am">
+  <!-- 1 · the machine, live and playable -->
+  <section class="cx-hero am-hero" aria-labelledby="am-title">
+    <div class="am-hall" aria-hidden="true"></div>
+    <div class="cx-stage am-stage" id="amStage">
+      <img class="cx-poster" src="/assets/opt/e004c9888258.webp" alt="" fetchpriority="high">
     </div>
-    <p class="c-contrib"><span class="l">My contribution</span>Contributed to early concept development, translating the director’s vision into visual concepts for the film.</p>
-    <div class="c-film c-film--lead"><div class="frame dark" data-mux="gcZB8xsrU2d01hntcxhoOCCBe01nLIPLlKWNQCoT4O7d8" style="aspect-ratio:480/181" data-loop="5-13" data-title="Amdocs: Make It Amazing film"><button type="button" class="c-play contain" aria-label="Play film: Amdocs: Make It Amazing"><img src="/assets/opt/317245433f10.webp" alt="" loading="eager" fetchpriority="high"><span class="pb" aria-hidden="true"><svg viewBox="0 0 14 16" aria-hidden="true"><path d="M1.5 1.5l11 6.5-11 6.5z"/></svg></span></button><noscript><iframe src="https://player.mux.com/gcZB8xsrU2d01hntcxhoOCCBe01nLIPLlKWNQCoT4O7d8" title="Amdocs: Make It Amazing film" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></noscript></div><p class="note">The “Make It Amazing” film, directed by Roy Raz and produced by Rabel Films, set to a track by Noga Erez &amp; RUSSO and released as the centerpiece of the Amdocs rebrand.</p></div>
-    <div class="c-meta">
-      <div class="m"><div class="l">Client</div><div class="v">Amdocs</div></div>
-      <div class="m"><div class="l">Role</div><div class="v">Early concept development</div></div>
-      <div class="m"><div class="l">Disciplines</div><div class="v"><span class="pill">Concept Development</span><span class="pill">Brand Film</span></div></div>
-      <div class="m"><div class="l">Collaborators</div><div class="v">Roy Raz (director), Shortcut Playground, Rabel Films, McCann, Noga Erez &amp; RUSSO</div></div>
+    <div class="cx-hero-copy am-hero-copy">
+      <p class="cx-crumb"><a href="../work.html">Work</a> <span aria-hidden="true">/</span> <span>Amdocs</span> <span aria-hidden="true">·</span> <span>12 / 18</span></p>
+      <p class="cx-eyebrow">Concept Development · Brand Film</p>
+      <h1 id="am-title" class="cx-title am-title"><span class="am-t1">Amdocs:</span> Make It Amazing</h1>
+      <p class="cx-one am-one">A music-led film at the center of a global tech company’s rebrand - and the early concept work behind it.</p>
     </div>
-    <div class="c-story">
-      <div class="c-sec"><h2 class="st">The challenge</h2><div class="sb">Give Amdocs’ ‘Make It Amazing’ rebrand a centerpiece: a story about innovation that a technology audience would actually want to watch.</div></div>
-      <div class="c-sec"><h2 class="st">The film</h2><div class="sb">Directed by Roy Raz, the film uses a pinball machine as its narrative device: the complex, rewarding path of innovation - navigating challenges, finding solutions, achieving breakthroughs - told through play.</div></div>
-      <div class="c-sec"><h2 class="st">The visual world</h2><div class="sb">Pinball-machine aesthetics meet a precise, nostalgic visual language in a music clip featuring Noga Erez at the center of the campaign.</div></div>
-      <div class="c-sec"><h2 class="st">The outcome</h2><div class="sb small">The film launched as the centerpiece of the rebrand, with Noga Erez fronting the campaign.</div></div>
-      <div class="c-sec"><h2 class="st">Role &amp; contribution</h2><div class="sb small">I contributed to the early concept-development stage, translating the director’s vision into visual concepts for the film. The film was directed by Roy Raz and produced by Rabel Films, with Shortcut Playground as creative agency and McCann as advertising agency.</div></div>
+    <p class="cx-hint am-hint" id="amHint" aria-hidden="true"><span class="am-kbd">←</span><span class="am-kbd">→</span> <span class="am-hint-t">Play the flippers</span><span class="am-hint-touch">Tap left or right to flip</span></p>
+  </section>
+
+  <!-- 2 · the brief, and what was mine -->
+  <section class="cx-section cx-wrap am-brief" aria-labelledby="am-brief-t">
+    <p class="cx-eyebrow">The challenge</p>
+    <h2 class="cx-statement am-statement" id="am-brief-t">Give Amdocs’ ‘Make It Amazing’ rebrand a centerpiece: a story about innovation that a technology audience would actually want to watch.</h2>
+    <div class="am-brief-grid">
+      <p class="cx-body"><strong>My contribution.</strong> Contributed to early concept development, translating the director’s vision into visual concepts for the film.</p>
+      <dl class="cx-spec">
+        <div><dt>Client</dt><dd>Amdocs</dd></div>
+        <div><dt>Role</dt><dd>Early concept development</dd></div>
+        <div><dt>Disciplines</dt><dd>Concept Development · Brand Film</dd></div>
+        <div><dt>Collaborators</dt><dd>Roy Raz (director), Shortcut Playground, Rabel Films, McCann, Noga Erez &amp; RUSSO</dd></div>
+      </dl>
     </div>
-    <h2 class="c-gal-title">See the highlights<br>of this project.</h2>
-    <div class="c-gallery">
-      <figure><div class="fm"><img src="/assets/opt/db9be1df2afb.webp" loading="lazy" alt="A concept drawing: a gold pinball leaving light trails as it drops away from a dome bumper."></div><figcaption>An early concept visual from the development stage, exploring how the pinball world could look on screen.</figcaption></figure>
-      <figure><div class="fm"><img src="/assets/opt/5f095cad3165.webp" loading="lazy" alt="A chrome ball crossing a teal pinball playfield between lit bumpers and rails."></div><figcaption>Innovation told as a pinball run: obstacles, ricochets and the occasional clean shot.</figcaption></figure>
-      <figure><div class="fm"><img src="/assets/opt/e004c9888258.webp" loading="lazy" alt="The full pinball table seen from above, in copper and dark teal."></div><figcaption>In the film, one machine holds the whole story.</figcaption></figure>
+  </section>
+
+  <!-- 3 · the film, on an ultra-wide cinema screen -->
+  <section class="am-cinema" aria-label="The film">
+    <p class="cx-eyebrow cx-wrap am-cin-l">The film</p>
+    <div class="am-marquee" aria-hidden="true"><span>Now showing</span></div>
+    <div class="am-screen cx-turn">
+      <div class="c-film cx-film am-film"><div class="frame dark" data-mux="gcZB8xsrU2d01hntcxhoOCCBe01nLIPLlKWNQCoT4O7d8" style="aspect-ratio:480/181" data-loop="5-13" data-title="Amdocs: Make It Amazing film"><button type="button" class="c-play contain" aria-label="Play film: Amdocs: Make It Amazing"><img src="/assets/opt/317245433f10.webp" alt="" loading="eager" fetchpriority="high"><span class="pb" aria-hidden="true"><svg viewBox="0 0 14 16" aria-hidden="true"><path d="M1.5 1.5l11 6.5-11 6.5z"/></svg></span></button><noscript><iframe src="https://player.mux.com/gcZB8xsrU2d01hntcxhoOCCBe01nLIPLlKWNQCoT4O7d8" title="Amdocs: Make It Amazing film" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></noscript></div></div>
     </div>
-    <div class="c-credits"><h3>Credits</h3><p>Creative Agency: Shortcut Playground<br>Director: Roy Raz<br>Production: Rabel Films<br>Advertising Agency: McCann<br>Music: Noga Erez &amp; RUSSO</p></div>
+    <p class="am-cap cx-wrap">The “Make It Amazing” film, directed by Roy Raz and produced by Rabel Films, set to a track by Noga Erez &amp; RUSSO and released as the centerpiece of the Amdocs rebrand.</p>
+  </section>
+
+  <!-- 5 · the film and its world, as two backboxes -->
+  <section class="am-boxes cx-wrap" aria-labelledby="am-play-t">
+    <p class="cx-eyebrow am-boxes-l">The idea</p>
+    <h2 id="am-play-t" class="am-play-t">Innovation,<br>told through play.</h2>
+    <div class="am-box-row">
+      <article class="am-box cx-turn">
+        <p class="am-box-l">The film</p>
+        <p class="am-box-t">Directed by Roy Raz, the film uses a pinball machine as its narrative device: the complex, rewarding path of innovation - navigating challenges, finding solutions, achieving breakthroughs - told through play.</p>
+      </article>
+      <article class="am-box am-box--b cx-turn">
+        <p class="am-box-l">The visual world</p>
+        <p class="am-box-t">Pinball-machine aesthetics meet a precise, nostalgic visual language in a music clip featuring Noga Erez at the center of the campaign.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 6 · the concept work and the machine -->
+  <section class="am-gal cx-wrap" aria-labelledby="am-gal-t">
+    <p class="cx-eyebrow am-gal-l">The concept work</p>
+    <h2 id="am-gal-t" class="am-gal-t">One machine holds the whole story.</h2>
+    <figure class="am-fig am-fig--concept cx-turn"><div class="am-fm"><img src="/assets/opt/db9be1df2afb.webp" loading="lazy" alt="A concept drawing: a gold pinball leaving light trails as it drops away from a dome bumper."></div><figcaption>An early concept visual from the development stage, exploring how the pinball world could look on screen.</figcaption></figure>
+    <figure class="am-fig am-fig--ball cx-turn"><div class="am-fm"><img src="/assets/opt/5f095cad3165.webp" loading="lazy" alt="A chrome ball crossing a teal pinball playfield between lit bumpers and rails."></div><figcaption>Innovation told as a pinball run: obstacles, ricochets and the occasional clean shot.</figcaption></figure>
+    <figure class="am-fig am-fig--table cx-turn"><div class="am-fm"><img src="/assets/opt/e004c9888258.webp" loading="lazy" alt="The full pinball table seen from above, in copper and dark teal."></div><figcaption>In the film, one machine holds the whole story.</figcaption></figure>
+  </section>
+
+  <!-- 7 · outcome and role -->
+  <section class="am-out cx-wrap">
+    <p class="cx-eyebrow">The outcome</p>
+    <p class="cx-statement am-statement">The film launched as the centerpiece of the rebrand, with Noga Erez fronting the campaign.</p>
+    <p class="cx-body am-role"><strong>Role &amp; contribution.</strong> I contributed to the early concept-development stage, translating the director’s vision into visual concepts for the film. The film was directed by Roy Raz and produced by Rabel Films, with Shortcut Playground as creative agency and McCann as advertising agency.</p>
+  </section>
+
+  <!-- 8 · credits, set like a billing block -->
+  <section class="am-billing cx-wrap" aria-labelledby="am-credits-t">
+    <h2 id="am-credits-t" class="cx-eyebrow am-billing-h">Credits</h2>
+    <dl class="am-bill">
+      <div><dt>Creative Agency</dt><dd>Shortcut Playground</dd></div>
+      <div><dt>Director</dt><dd>Roy Raz</dd></div>
+      <div><dt>Production</dt><dd>Rabel Films</dd></div>
+      <div><dt>Advertising Agency</dt><dd>McCann</dd></div>
+      <div><dt>Music</dt><dd>Noga Erez &amp; RUSSO</dd></div>
+    </dl>
+  </section>
+
+  <div class="cwrap cx-close">
     <div class="c-cta">
       <h2 class="t">Let’s build something like this.</h2>
       <p class="d">Tell me what it is, who it is for and what is still open. A rough idea is enough to start.</p>
@@ -96,5 +156,6 @@
 
 <script src="../js/contact-config.js"></script>
 <script src="../js/site.js"></script>
+<script type="module" src="../js/cx-amdocs-make-it-amazing.js"></script>
 </body>
 </html>

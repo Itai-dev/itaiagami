@@ -1,0 +1,87 @@
+/* ============================================================
+   Taormina Sicily: the case as a night-time programme.
+   Ink-dark sky, warm projector amber, marble white. The type is the
+   site's own; the brand lives in the night, the light and the scene.
+   Loaded only on this page.
+   ============================================================ */
+body.cx.cx-taormina-sicily{
+  --ta-night:#07080d; --ta-sky:#0d1020; --ta-amber:#ff8a2a; --ta-gold:#ffc27a; --ta-marble:#efe9df; --ta-leaf:#7fd16b;
+  --cx-bg:var(--ta-night); --cx-fg:var(--ta-marble); --cx-dim:rgba(239,233,223,.64); --cx-accent:var(--ta-gold);
+  --cx-line:rgba(255,194,122,.2); --cx-header:rgba(7,8,13,.55);
+  --cx-btn-bg:#fff; --cx-btn-fg:#111;
+  --panel:#050508; --surface:#12131c; --faint:#16171f;
+}
+
+/* ---------- 1 · hero ---------- */
+.ta-hero{background:radial-gradient(70% 50% at 50% 30%,#1a1a33,transparent 70%),linear-gradient(180deg,#0b0d1c,#07080d 75%)}
+.ta-stage .cx-poster{object-position:50% 30%;opacity:.85}
+.ta-stage::after{content:"";position:absolute;inset:auto 0 0 0;height:40%;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(7,8,13,.85) 60%,var(--ta-night))}
+.ta-stage .cx-canvas{cursor:crosshair}
+.ta-title{color:var(--ta-marble)}
+.ta-title em{font-style:normal;color:var(--ta-gold)}
+
+/* the cue list: four scenes, like a show controller */
+.ta-cues{position:absolute;z-index:2;left:var(--gutter,clamp(16px,4vw,56px));top:calc(var(--header-h,72px) + 28px);display:flex;flex-direction:column;gap:6px;opacity:0;transition:opacity .8s ease .5s}
+.ta-stage.live ~ .ta-cues{opacity:1}
+.ta-cues[hidden]{display:none}
+/* scene controls are the site's .btn; .ta-sm is the compact size (34px, 0 12px) */
+.cx-taormina-sicily .btn.ta-sm{min-height:34px;padding:0 12px}
+body.cx.cx-taormina-sicily .btn[aria-pressed="true"],body.cx.cx-taormina-sicily .btn[aria-pressed="true"]:hover{background:var(--cx-btn-bg);color:var(--cx-btn-fg);border-color:var(--cx-btn-bg)}
+.ta-cues .btn{justify-content:flex-start;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.ta-cues .btn span{min-width:2.2em;font-family:"IBM Plex Mono",monospace;font-weight:500;color:var(--ta-gold)}
+.ta-cues .btn[aria-pressed="true"] span{color:inherit}
+.ta-cues .btn:focus-visible{outline:2px solid var(--ta-gold);outline-offset:2px}
+@media(max-width:820px){
+  .ta-cues{left:0;right:0;top:auto;bottom:calc(100% - min(57svh,480px));flex-direction:row;justify-content:center;flex-wrap:wrap;padding:0 12px}
+  .ta-cues .btn span{min-width:0}
+  .ta-hint{display:none}
+}
+
+/* ---------- 2 · the brief ---------- */
+.ta-brief .ta-statement{max-width:24ch}
+.ta-brief-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(28px,6vw,96px);margin-top:clamp(36px,5vw,64px);align-items:start}
+@media(max-width:820px){.ta-brief-grid{grid-template-columns:1fr}}
+
+/* ---------- full-bleed plates ---------- */
+.ta-wide{position:relative;margin:clamp(64px,9vw,140px) 0 0;width:100%}
+.ta-wide--scan{margin-top:0}
+.ta-wide img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;max-height:92svh}
+.ta-wide figcaption,.ta-plate figcaption{margin:18px auto 0;width:min(1280px,100% - 2*var(--gutter,clamp(16px,4vw,56px)));display:flex;gap:18px;align-items:baseline;color:var(--cx-dim);font-size:.9375rem;line-height:1.55}
+.ta-lbl{flex:none;font:500 .75rem/1.4 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--ta-gold);min-width:9.5rem}
+.ta-wide--scan img{mask-image:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent);-webkit-mask-image:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent)}
+@media(max-width:700px){.ta-wide figcaption,.ta-plate figcaption{flex-direction:column;gap:8px}}
+
+/* ---------- 4 · three acts between pillars ---------- */
+.ta .ta-acts{position:relative;width:min(1100px,100% - 2*var(--gutter,clamp(16px,4vw,56px)));margin:0 auto;padding:clamp(100px,13vw,200px) clamp(0px,6vw,90px)}
+.ta-acts::before,.ta-acts::after{content:"";position:absolute;top:clamp(60px,8vw,120px);bottom:clamp(60px,8vw,120px);width:10px;border-left:1px solid var(--cx-line);border-right:1px solid var(--cx-line)}
+.ta-acts::before{left:0}.ta-acts::after{right:0}
+.ta-act{text-align:center;padding:clamp(28px,4vw,56px) 0}
+.ta-act + .ta-act{border-top:1px solid var(--cx-line)}
+.ta-num{margin:0 0 14px;font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;letter-spacing:-.04em;font-size:clamp(2.4rem,4vw,3.6rem);line-height:1;color:var(--ta-amber);text-shadow:0 0 30px rgba(255,138,42,.45)}
+.ta-act-t{font-weight:400;margin:0 0 22px}
+.ta-verse{margin:0 auto;max-width:34ch;text-wrap:balance}
+@media(max-width:700px){.ta-acts::before,.ta-acts::after{display:none}}
+
+/* ---------- 5 · the sequence ---------- */
+.ta .ta-seq{padding:0 0 clamp(40px,6vw,90px)}
+.ta-seq-l{text-align:center}
+.ta-seq-t{margin:0 auto;width:min(1280px,100% - 2*var(--gutter,clamp(16px,4vw,56px)));text-align:center;font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(2.6rem,7vw,6.5rem);line-height:.95;letter-spacing:-.05em;text-wrap:balance}
+.ta-seq-t em{font-style:normal;color:var(--ta-gold)}
+.ta-pair{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(20px,3vw,48px);align-items:start;width:min(1280px,100% - 2*var(--gutter,clamp(16px,4vw,56px)));margin:clamp(64px,9vw,140px) auto 0}
+.ta-plate{margin:0}
+.ta-plate--b{margin-top:clamp(60px,10vw,180px)}
+.ta-plate img{display:block;width:100%;height:auto;border-radius:8px}
+.ta-plate--a img{aspect-ratio:1185/616;object-fit:cover}
+.ta-plate--b img{aspect-ratio:1200/675;object-fit:cover}
+.ta-plate figcaption{width:auto;margin:16px 0 0}
+@media(max-width:820px){.ta-pair{grid-template-columns:1fr}.ta-plate--b{margin-top:0}}
+
+/* ---------- 6 · the end ---------- */
+.ta .ta-end{text-align:center;width:min(980px,100% - 2*var(--gutter,clamp(16px,4vw,56px)));margin:0 auto;padding:clamp(80px,11vw,170px) 0 clamp(80px,10vw,150px)}
+.ta-end h2.cx-eyebrow{font-weight:400}
+.ta-end .cx-statement{margin:0 auto;max-width:22ch}
+.ta-credits{display:inline-block;margin-top:clamp(48px,6vw,80px);padding:28px 40px;border:1px solid var(--cx-line);border-radius:12px}
+.ta-credits h3{font-weight:400;margin:0 0 12px}
+.ta-credits p{margin:0;font-size:1.0625rem;line-height:1.7}
+
+@media(prefers-reduced-motion:reduce){.ta-cues{transition:none}}

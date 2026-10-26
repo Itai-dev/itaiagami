@@ -1,0 +1,94 @@
+/* ============================================================
+   Kan 11: 10 Facts — the case told as ten numbered facts along the
+   series' own cyan line. Light paper-grain ground, cyan and black,
+   a mint and a red for colour blocks, heavy type on black strips.
+   Loaded only on this page.
+   ============================================================ */
+body.cx.cx-ten-facts-kan-11{
+  --tf-paper:#e9eaea; --tf-card:#f5f5f3; --tf-cyan:#4fd0f5; --tf-mint:#5df2b3; --tf-red:#e2403f; --tf-ink:#0b0b0b; --tf-grey:#d4d6d7;
+  --cx-bg:var(--tf-paper); --cx-fg:var(--tf-ink); --cx-dim:rgba(11,11,11,.66); --cx-accent:#0a87b5;
+  --cx-line:rgba(11,11,11,.14); --cx-header:rgba(233,234,234,.72);
+  --cx-btn-bg:#222; --cx-btn-fg:#fff;
+  --panel:#0b0b0b; --surface:#fff; --faint:#dcdddd;
+}
+.tf{position:relative}
+
+/* ---------- the run: a sticky scene with the story scrolling over it ---------- */
+.tf .tf-run{display:block;min-height:0;padding:0;justify-content:initial}
+.tf-run::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.tf-sticky{position:sticky;top:0;height:100svh;z-index:0}
+.tf .tf-open{margin-top:-100svh}
+.tf-stage{background:radial-gradient(60% 60% at 70% 40%,#f3f4f4,transparent 70%)}
+.tf-stage .cx-poster{opacity:.9}
+.tf-stage .cx-canvas{cursor:default}
+.tf-open,.tf-episode,.tf-facts{position:relative;z-index:1}
+
+/* ---------- opening ---------- */
+/* the shared copy block, bottom-left of the first screen */
+.tf-open{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:calc(var(--header-h,72px) + 40px);pointer-events:none}
+/* the client name rides above the title */
+.tf-kan{display:block;font-size:.42em;letter-spacing:-.03em;line-height:1;margin-bottom:.12em;color:var(--cx-accent)}
+.tf-logo{display:inline-flex;align-items:center;gap:.18em}
+.tf-ten{display:inline-grid;place-items:center;min-width:1.25em;height:1.25em;padding:0 .08em;border:.11em solid var(--tf-cyan);font-size:.9em;letter-spacing:-.06em;line-height:1;background:rgba(245,245,243,.6)}
+/* a paper wash under the copy block; it scrolls away with the opening, the line stays clear after */
+.tf-open::before{content:"";position:absolute;left:0;right:0;bottom:0;height:62%;pointer-events:none;background:linear-gradient(0deg,rgba(233,234,234,.94),rgba(233,234,234,.7) 45%,transparent)}
+.tf-open .cx-one{color:rgba(11,11,11,.72);max-width:34ch}
+.tf-hint{display:flex;align-items:center;gap:10px;color:var(--tf-ink)}
+.tf-ring{width:4px;height:16px;background:var(--tf-cyan)}
+
+/* ---------- the episode: a black card, like the series' own opener; the run ends on it ---------- */
+.tf-episode{width:min(1280px,100% - 2*var(--gutter,clamp(16px,4vw,56px)));margin:0 auto;padding:0 0 clamp(60px,12vh,140px)}
+.tf-black{position:relative;background:var(--tf-ink);color:#fff;padding:clamp(14px,2vw,26px);border-radius:12px;box-shadow:14px 14px 0 var(--tf-cyan)}
+.tf-strip{display:inline-block;margin:0 0 14px;padding:7px 10px;border-radius:8px;background:var(--tf-cyan);color:var(--tf-ink)}
+.tf-film .frame{border-radius:8px!important;overflow:hidden}
+.tf-note{margin:14px 0 0;color:rgba(255,255,255,.7);font-size:.9375rem;line-height:1.6;max-width:62ch}
+@media(max-width:900px){.tf-black{box-shadow:8px 8px 0 var(--tf-cyan)}}
+
+/* ---------- the ten facts ---------- */
+.tf-facts{list-style:none;margin:0;padding:0 0 10svh}
+.tf-fact{min-height:105svh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 var(--gutter,clamp(16px,4vw,56px)) 0 max(var(--gutter,56px),8vw);pointer-events:none;scroll-margin-top:0}
+.tf-fact:nth-child(even){align-items:flex-end;padding:0 max(var(--gutter,56px),8vw) 0 var(--gutter,clamp(16px,4vw,56px))}
+.tf-fact > *{pointer-events:auto}
+/* the fact's number: a squared marker with the series' cyan tick */
+.tf-n{position:relative;display:grid;place-items:center;width:38px;height:38px;margin:0 0 30px;border-radius:8px;background:var(--tf-grey);font:700 1.0625rem/1 "Inter Tight",Inter,sans-serif}
+.tf-n::after{content:"";position:absolute;top:calc(100% + 6px);left:50%;width:4px;height:16px;background:var(--tf-cyan);transform:translateX(-50%)}
+.tf-card{width:min(500px,42vw);background:var(--tf-card);padding:clamp(22px,2.6vw,36px);border-radius:12px;overflow:hidden;box-shadow:0 24px 50px -30px rgba(0,0,0,.45);position:relative}
+.tf-card::before{content:"";position:absolute;left:0;top:0;width:100%;height:6px;background:var(--tf-cyan)}
+.tf-h{margin:0 0 18px;font-family:"Inter Tight",Inter,system-ui,sans-serif;font-weight:700;font-size:clamp(1.75rem,2.8vw,2.75rem);line-height:1;letter-spacing:-.035em;text-wrap:balance}
+.tf-k{display:table;margin:0 0 16px;padding:6px 10px;border-radius:8px;background:var(--tf-ink);color:#fff;font:500 .75rem/1 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase}
+.tf-card > p:not([class]){margin:0;font-size:clamp(1rem,1.2vw,1.125rem);line-height:1.6;color:rgba(11,11,11,.74)}
+
+.tf-fig figure{margin:0;width:min(640px,50vw)}
+.tf-cut{background:#fff;padding:8px;border-radius:12px;box-shadow:0 30px 60px -30px rgba(0,0,0,.5);transform:rotate(-1.4deg);transition:transform 1s cubic-bezier(.2,.7,.1,1)}
+.tf-fact:nth-child(even) .tf-cut{transform:rotate(1.2deg)}
+.tf-fig:hover .tf-cut{transform:none}
+.tf-cut img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px}
+.tf-fig figcaption{margin-top:18px;max-width:46ch;background:var(--tf-card);padding:16px 18px;border-radius:12px;font-size:.9375rem;line-height:1.55;color:rgba(11,11,11,.75);box-shadow:0 18px 40px -28px rgba(0,0,0,.4)}
+.tf-bar{display:table;margin:0 0 10px;padding:7px 12px;border-radius:8px;background:var(--tf-ink);color:#fff;font:700 1.125rem/1 "Inter Tight",Inter,sans-serif;letter-spacing:-.01em}
+.tf-fact:nth-child(3n) .tf-bar{background:var(--tf-cyan);color:var(--tf-ink)}
+
+/* fact 1 is the brief: the shared statement, body and spec on a wide card */
+.tf-card.tf-brief-card{width:min(860px,64vw)}
+.tf-brief-card .cx-statement{max-width:16ch}
+.tf-brief-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(24px,3.4vw,48px);margin-top:clamp(24px,3vw,40px);align-items:start}
+
+@media(max-width:820px){
+  .tf-card.tf-brief-card{width:100%}
+  .tf-brief-grid{grid-template-columns:1fr}
+  .tf-fact,.tf-fact:nth-child(even){min-height:100svh;justify-content:flex-end;align-items:stretch;padding:0 var(--gutter,16px) 10svh}
+  .tf-n{align-self:flex-start}
+  .tf-card,.tf-fig figure{width:100%}
+}
+
+/* ---------- index of dots (wide screens) ---------- */
+.tf-index{position:fixed;z-index:5;left:clamp(14px,1.8vw,28px);top:50%;transform:translate(-8px,-50%);display:flex;flex-direction:column;gap:6px;opacity:0;pointer-events:none;transition:opacity .4s,transform .4s}
+.tf-index.on{opacity:1;transform:translate(0,-50%);pointer-events:auto}
+.tf-index a{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--tf-grey);color:var(--tf-ink);font:700 .6875rem/1 "Inter Tight",Inter,sans-serif;transition:background .3s,color .3s,transform .3s}
+.tf-index a:hover{background:var(--tf-cyan)}
+.tf-index a.at{background:var(--tf-ink);color:#fff;transform:scale(1.12)}
+.tf-index a:focus-visible{outline:2px solid var(--tf-ink);outline-offset:2px}
+@media(max-width:820px){.tf-index{display:none}}
+
+.cx-ten-facts-kan-11 .cx-close{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.tf-cut,.tf-index{transition:none}}

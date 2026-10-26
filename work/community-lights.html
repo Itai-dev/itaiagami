@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,6 +21,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="../css/site.css" />
+<link rel="stylesheet" href="../css/cx.css" />
+<link rel="stylesheet" href="../css/cx-community-lights.css" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/+esm" crossorigin />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -49,40 +52,80 @@
 }
 </script>
 </head>
-<body data-chrome="sub">
+<body data-chrome="sub" class="cx cx-community-lights">
 <div class="grain" aria-hidden="true"></div>
 <header class="site" id="siteHeader"><div class="hwrap"><a href="../index.html" class="brand" aria-label="Itai Agami, home">Itai&nbsp;Agami</a><nav class="primary" aria-label="Primary"><a href="../work.html" class="active">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button></nav><a class="btn solid nav-cta" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a><button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button></div></header>
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile"><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button><span>Tel Aviv, IL · Worldwide</span></div></nav>
-<main>
-  <div class="cwrap">
-    <div class="c-open">
-      <p class="crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>14 / 18</span></p>
-      <h1>Community Lights</h1>
-      <p class="oneline">A public interactive installation turning a tradition into a collaborative experience.</p>
+<main class="cx-main cl">
+  <!-- 1 · the square at night: nine panels of light, waiting for drawings -->
+  <section class="cx-hero cl-hero" aria-labelledby="cl-title">
+    <div class="cx-stage cl-stage" id="clStage">
+      <img class="cx-poster" src="/assets/opt/9f1ad0b7dfd2.webp" alt="" fetchpriority="high">
     </div>
-    <div class="c-hero"><img src="/assets/opt/9f1ad0b7dfd2.webp" alt="The Community Lights installation at night: a bank of tall illuminated panels in a Ramat Gan square, with people gathered around it." loading="eager" fetchpriority="high"></div>
-    <div class="c-meta">
-      <div class="m"><div class="l">Client</div><div class="v">Ramat Gan / Electra Target</div></div>
-      <div class="m"><div class="l">Role</div><div class="v">Art Direction</div></div>
-      <div class="m"><div class="l">Disciplines</div><div class="v"><span class="pill">Art Direction</span><span class="pill">Interactive Installation</span></div></div>
-      <div class="m"><div class="l">Collaborators</div><div class="v">Electra Target, Shortcut Playground</div></div>
+    <div class="cx-hero-copy cl-hero-copy">
+      <p class="cx-crumb"><a href="../work.html">Work</a> <span aria-hidden="true">/</span> <span>Community Lights</span> <span aria-hidden="true">·</span> <span>14 / 18</span></p>
+      <p class="cx-eyebrow">Art Direction · Interactive Installation</p>
+      <h1 class="cx-title cl-title" id="cl-title">Community <span>Lights</span></h1>
+      <p class="cx-one">A public interactive installation turning a tradition into a collaborative experience.</p>
     </div>
-    <div class="c-story">
-      <div class="c-sec"><h2 class="st">The challenge</h2><div class="sb">Create a public interactive installation to engage and inspire the people of Ramat Gan on Hanukkah.</div></div>
-      <div class="c-sec"><h2 class="st">The idea</h2><div class="sb">Bright color, playful animation and intuitive layouts built for usability, creativity and fun in public space.</div></div>
-      <div class="c-sec"><h2 class="st">The system</h2><div class="sb">Custom brushes, visual effects and animated stickers for the public to use in their own original ways.</div></div>
-      <div class="c-sec"><h2 class="st">The outcome</h2><div class="sb small">The installation stood in public space in Ramat Gan, open for anyone to create with.</div></div>
-      <div class="c-sec"><h2 class="st">Role &amp; contribution</h2><div class="sb small">I art-directed the installation: its visual language, animation style and the toolkit of brushes and stickers the public created with.</div></div>
+    <div class="cl-tools" id="clTools" role="toolbar" aria-label="Draw on the candles" hidden>
+      <div class="cl-row" role="group" aria-label="Tool">
+        <button type="button" class="btn ghost cl-tool" data-tool="brush" aria-pressed="true" title="Brush"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20c3 0 5-1.5 5-4 0-1.4-1-2.4-2.3-2.4C5.3 13.6 4 15 4 17v3zM9.5 13.5l9-9a1.8 1.8 0 012.5 2.5l-9 9"/></svg><span class="sr-only">Brush</span></button>
+        <button type="button" class="btn ghost cl-tool" data-tool="sparkle" aria-pressed="false" title="Sparkles"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg><span class="sr-only">Sparkles</span></button>
+        <button type="button" class="btn ghost cl-tool" data-tool="sticker" aria-pressed="false" title="Stickers"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10A4.2 4.2 0 0112 7.6a4.2 4.2 0 017.5 2.9c0 5.4-7.5 10-7.5 10z"/></svg><span class="sr-only">Stickers</span></button>
+      </div>
+      <div class="cl-row cl-colours" role="group" aria-label="Colour"></div>
+      <button type="button" class="btn ghost cl-sm cl-clear" id="clClear">Clear</button>
     </div>
-    <h2 class="c-gal-title">See the highlights<br>of this project.</h2>
-    <div class="c-gallery">
-      <figure><div class="fm"><img src="/assets/opt/1e1be1e2ccf1.webp" loading="lazy" alt="Two visitors drawing on an outdoor touchscreen, tall illuminated panels glowing behind them."></div><figcaption>The screen is the brush; the installation itself is the canvas.</figcaption></figure>
-      <figure><div class="fm"><img src="/assets/opt/7ba772d40edb.webp" loading="lazy" alt="Two people at the console as the panels behind them fill with white and orange marks."></div><figcaption>Whatever a visitor draws appears at full height, in public, within seconds.</figcaption></figure>
-      <figure class="half"><div class="fm"><img src="/assets/opt/b1b91494d1e0.webp" loading="lazy" alt="A passer-by photographing the lit installation on a phone."></div><figcaption>The piece is designed to be photographed. That is how public work travels beyond the square it stands in.</figcaption></figure>
-      <figure class="half"><div class="fm"><img src="/assets/opt/4d39005800b5.webp" loading="lazy" alt="Two children at the touchscreen, one reaching for the sticker palette."></div><figcaption>Custom brushes and stickers keep the toolkit usable by a child with no instructions.</figcaption></figure>
-      <figure><div class="fm"><img src="/assets/opt/c787258f2ecb.webp" loading="lazy" alt="A child drawing at the console while the panels behind show a wash of painted colour."></div><figcaption>No two evenings look alike; the identity is the system, not any single image.</figcaption></figure>
+    <p class="cx-hint cl-hint" id="clHint" aria-hidden="true">Draw on a candle to light it</p>
+  </section>
+
+  <!-- 2 · the brief, said once -->
+  <section class="cx-section cx-wrap cl-brief" aria-labelledby="cl-ch-t">
+    <h2 class="cx-eyebrow" id="cl-ch-t">The challenge</h2>
+    <p class="cx-statement cl-big">Create a public interactive installation to engage and inspire the people of Ramat Gan on <em>Hanukkah.</em></p>
+    <div class="cl-brief-grid">
+      <p class="cx-body"><strong>Role &amp; contribution.</strong> I art-directed the installation: its visual language, animation style and the toolkit of brushes and stickers the public created with.</p>
+      <dl class="cx-spec">
+        <div><dt>Client</dt><dd>Ramat Gan / Electra Target</dd></div>
+        <div><dt>Role</dt><dd>Art Direction</dd></div>
+        <div><dt>Disciplines</dt><dd>Art Direction · Interactive Installation</dd></div>
+        <div><dt>Collaborators</dt><dd>Electra Target, Shortcut Playground</dd></div>
+      </dl>
     </div>
-    <div class="c-credits"><h3>Credits</h3><p>Project Management: Electra Target<br>Creative Agency: Shortcut Playground</p></div>
+  </section>
+
+  <!-- 3 · the story as a row of candles -->
+  <section class="cl-story cx-wrap" aria-label="The idea, the system and the outcome">
+    <p class="cx-eyebrow">The installation</p>
+    <div class="cl-candles">
+    <article class="cl-candle" style="--a:#ff4fa8;--b:#7b2bd6"><span class="cl-flame" aria-hidden="true"></span><div class="cl-wax"><h2>The idea</h2><p>Bright color, playful animation and intuitive layouts built for usability, creativity and fun in public space.</p></div></article>
+    <article class="cl-candle cl-candle--tall" style="--a:#39d6ff;--b:#1f3fd0"><span class="cl-flame" aria-hidden="true"></span><div class="cl-wax"><h2>The system</h2><p>Custom brushes, visual effects and animated stickers for the public to use in their own original ways.</p></div></article>
+    <article class="cl-candle" style="--a:#ffd84a;--b:#ff7a2f"><span class="cl-flame" aria-hidden="true"></span><div class="cl-wax"><h2>The outcome</h2><p>The installation stood in public space in Ramat Gan, open for anyone to create with.</p></div></article>
+    </div>
+  </section>
+
+  <!-- 4 · the evenings: a wall of photographs -->
+  <section class="cl-wall cx-wrap" aria-labelledby="cl-wall-t">
+    <p class="cx-eyebrow">The evenings</p>
+    <h2 class="cl-wall-t" id="cl-wall-t">The screen is the brush.<br><span>The installation is the canvas.</span></h2>
+    <div class="cl-grid">
+      <figure class="cl-ph cl-ph--hero"><img src="/assets/opt/9f1ad0b7dfd2.webp" loading="lazy" alt="The Community Lights installation at night: a bank of tall illuminated panels in a Ramat Gan square, with people gathered around it."><figcaption>Tall panels of light in a Ramat Gan square, and the people gathered around them.</figcaption></figure>
+      <figure class="cl-ph cl-ph--a"><img src="/assets/opt/1e1be1e2ccf1.webp" loading="lazy" alt="Two visitors drawing on an outdoor touchscreen, tall illuminated panels glowing behind them."><figcaption>The screen is the brush; the installation itself is the canvas.</figcaption></figure>
+      <figure class="cl-ph cl-ph--b"><img src="/assets/opt/7ba772d40edb.webp" loading="lazy" alt="Two people at the console as the panels behind them fill with white and orange marks."><figcaption>Whatever a visitor draws appears at full height, in public, within seconds.</figcaption></figure>
+      <figure class="cl-ph cl-ph--c"><img src="/assets/opt/4d39005800b5.webp" loading="lazy" alt="Two children at the touchscreen, one reaching for the sticker palette."><figcaption>Custom brushes and stickers keep the toolkit usable by a child with no instructions.</figcaption></figure>
+      <figure class="cl-ph cl-ph--d"><img src="/assets/opt/c787258f2ecb.webp" loading="lazy" alt="A child drawing at the console while the panels behind show a wash of painted colour."><figcaption>No two evenings look alike; the identity is the system, not any single image.</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 5 · made to be photographed -->
+  <section class="cl-phone-sec cx-wrap" aria-label="Made to be photographed">
+    <p class="cx-eyebrow">Made to be photographed</p>
+    <figure class="cl-phone"><div class="cl-shot"><img src="/assets/opt/b1b91494d1e0.webp" loading="lazy" alt="A passer-by photographing the lit installation on a phone."></div><figcaption><p class="cx-statement cl-big--s">The piece is designed to be photographed.</p><p class="cx-body">That is how public work travels beyond the square it stands in.</p></figcaption></figure>
+    <div class="cl-credits"><h3 class="cx-eyebrow">Credits</h3><p>Project Management: Electra Target<br>Creative Agency: Shortcut Playground</p></div>
+  </section>
+
+  <div class="cwrap cx-close">
     <div class="c-cta">
       <h2 class="t">Let’s build something like this.</h2>
       <p class="d">Tell me what it is, who it is for and what is still open. A rough idea is enough to start.</p>
@@ -97,5 +140,6 @@
 
 <script src="../js/contact-config.js"></script>
 <script src="../js/site.js"></script>
+<script type="module" src="../js/cx-community-lights.js"></script>
 </body>
 </html>

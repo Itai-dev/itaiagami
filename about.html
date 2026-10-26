@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +7,7 @@
 <meta name="description" content="Itai Agami is a Creative Builder in Tel Aviv: a creative director, art director and designer who takes ideas from concept to the finished thing." />
 <link rel="canonical" href="https://itaiagami.com/about.html" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-<meta name="theme-color" content="#e8e8e3" />
+<meta name="theme-color" content="#07070a" />
 <meta property="og:type" content="profile" />
 <meta property="og:title" content="About Itai Agami | Creative Builder &amp; Creative Director, Tel Aviv" />
 <meta property="og:description" content="Itai Agami is a Creative Builder in Tel Aviv: a creative director, art director and designer who takes ideas from concept to the finished thing." />
@@ -23,6 +23,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="css/site.css" />
+<link rel="stylesheet" href="css/future.css" />
+<link rel="stylesheet" href="css/future-pages.css" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -63,7 +65,7 @@
 }
 </script>
 </head>
-<body>
+<body class="fp fp-about">
 <div class="grain" aria-hidden="true"></div>
 
 <header class="site" id="siteHeader">
@@ -94,95 +96,153 @@
   </div>
 </nav>
 
-<main>
+<main class="ab">
 <div class="wrap">
 
-  <!-- ABOUT -->
-  <section aria-label="About">
-    <div class="sec-head"><h1>About</h1><span class="count">Brand / Culture / Technology</span></div>
-    <div class="about-grid">
-      <div class="lead">
-        <p>I’m Itai, a Creative Builder based in Tel Aviv, working with brands, studios and teams internationally. I move between concept, creative direction, visual design, branding, motion, interaction and technology, and I don’t stop at the idea or at how it looks. I take it as far as the finished thing.</p>
-        <p>I came up through art direction and creative direction, at Shortcut Playground, Elements and in-house at Natural Intelligence: broadcast identities, national campaigns, museum exhibitions, and launches for technology companies. Depending on the project, I lead the creative or join an established team.</p>
-        <p>I’m often most useful early, while the idea is still open and someone has to decide what it should be. Then I stay to build it: an identity, a film, an exhibition, an interface, something people can see, use or walk through.</p>
-        <p>AI is part of how I work now. I use it to explore visual directions, prototype, tell stories and build digital experiences, which lets me take more of an idea from sketch to finished thing on my own. It widens what I can build. The ideas, the taste and the final call are still mine.</p>
-        <p>With clients, I work directly with the people making the decisions (founders, CMOs, heads of brand, product leaders, curators) and alongside their teams. Studios and agencies bring me in to develop concepts, art-direct or join the team. When a project needs more hands, I bring in designers, developers, animators, illustrators, 3D artists or film crews, and direct them.</p>
-      </div>
-      <div class="about-side">
-        <div class="blk">
-          <h4>Works across</h4>
-          <ul>
-            <li><a href="services/brand-strategy-identity-systems.html">Brand strategy and identity systems</a></li>
-            <li><a href="services/creative-direction-product-launches.html">Creative direction and product launches</a></li>
-            <li><a href="services/interactive-immersive-experiences.html">Interactive and immersive experiences</a></li>
-            <li><a href="services/fractional-creative-direction.html">Fractional creative direction</a></li>
-            <li>Art direction and visual storytelling</li>
-            <li>Web, digital and interactive design</li>
-            <li>Motion, film, 3D and emerging media</li>
-            <li><a href="notes/ai-at-the-start-of-creative-work.html">AI-powered creative strategy, design and prototyping</a></li>
-          </ul>
-        </div>
-        <div class="blk">
-          <h4>Experience</h4>
-          <ul>
-            <li>Independent - Creative Builder, 2026 - Present</li>
-            <li>Natural Intelligence - Creative Art Director, Jan 2025 - Jun 2026</li>
-            <li>Elements - Creative Director, Nov 2023 - Mar 2024</li>
-            <li>Shortcut Playground - Art Director, Feb 2021 - Sep 2023</li>
-            <li>Shenkar College of Engineering, Design and Art - Media Design, 2018 - 2020, graduated with honors</li>
-            <li><a href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">Download CV (PDF) →</a></li>
-          </ul>
-        </div>
-        <div class="blk">
-          <h4>Selected sectors</h4>
-          <ul>
-            <li>Technology &amp; product</li>
-            <li>Media &amp; broadcast</li>
-            <li>Museums &amp; cultural institutions</li>
-            <li>Commerce &amp; consumer brands</li>
-          </ul>
-        </div>
-        <div class="blk">
-          <h4>Based</h4>
-          <ul><li>Tel Aviv, IL, working worldwide</li></ul>
-        </div>
-        <div class="blk">
-          <h4>Engagements</h4>
-          <ul><li>Full launches scoped per project; the Sprint that starts them begins at <span data-floor>₪30,000</span></li><li><a href="services.html">How I work with clients →</a></li></ul>
+  <!-- ABOUT: a portrait in space, then the story in panels -->
+  <section class="ab-hero" aria-labelledby="ab-title">
+    <div class="ab-intro">
+      <span class="fx-label ab-kicker">Brand / Culture / Technology</span>
+      <h1 id="ab-title" class="fx-display">About</h1>
+      <p class="ab-lead">I’m Itai, a Creative Builder based in Tel Aviv, working with brands, studios and teams internationally. I move between concept, creative direction, visual design, branding, motion, interaction and technology, and I don’t stop at the idea or at how it looks. I take it as far as the finished thing.</p>
+    </div>
+
+    <div class="ab-portrait" data-fp-face>
+      <div class="ab-stack">
+        <div class="ab-ghost ab-ghost-2" aria-hidden="true"></div>
+        <div class="ab-ghost ab-ghost-1" aria-hidden="true"></div>
+        <div class="ab-card fx-glass fp-lit">
+          <div class="ab-lens" aria-hidden="true">
+            <span class="ab-ring r1"></span><span class="ab-ring r2"></span><span class="ab-ring r3"></span>
+            <span class="ab-mono">IA</span>
+          </div>
+          <div class="ab-id">
+            <p class="ab-name">Itai Agami</p>
+            <p class="ab-role">Creative Builder</p>
+            <p class="fx-label ab-where">Tel Aviv, IL · Worldwide</p>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- THE STORY: four panels at different depths -->
+  <section class="ab-story" aria-label="Story">
+    <div class="ab-panel fx-glass fp-lit fp-rise" style="--d:1"><span class="fx-label ab-n" aria-hidden="true">01</span>
+      <p>I came up through art direction and creative direction, at Shortcut Playground, Elements and in-house at Natural Intelligence: broadcast identities, national campaigns, museum exhibitions, and launches for technology companies. Depending on the project, I lead the creative or join an established team.</p>
+    </div>
+    <div class="ab-panel fx-glass fp-lit fp-rise" style="--d:2"><span class="fx-label ab-n" aria-hidden="true">02</span>
+      <p>I’m often most useful early, while the idea is still open and someone has to decide what it should be. Then I stay to build it: an identity, a film, an exhibition, an interface, something people can see, use or walk through.</p>
+    </div>
+    <div class="ab-panel fx-glass fp-lit fp-rise" style="--d:3"><span class="fx-label ab-n" aria-hidden="true">03</span>
+      <p>AI is part of how I work now. I use it to explore visual directions, prototype, tell stories and build digital experiences, which lets me take more of an idea from sketch to finished thing on my own. It widens what I can build. The ideas, the taste and the final call are still mine.</p>
+    </div>
+    <div class="ab-panel fx-glass fp-lit fp-rise" style="--d:4"><span class="fx-label ab-n" aria-hidden="true">04</span>
+      <p>With clients, I work directly with the people making the decisions (founders, CMOs, heads of brand, product leaders, curators) and alongside their teams. Studios and agencies bring me in to develop concepts, art-direct or join the team. When a project needs more hands, I bring in designers, developers, animators, illustrators, 3D artists or film crews, and direct them.</p>
+    </div>
+  </section>
+
+  <!-- THE FACTS: a spec sheet of glass -->
+  <section class="ab-facts" aria-label="Facts">
+    <div class="ab-blk ab-blk-works fx-glass fp-lit fp-rise">
+      <h2 class="fx-label">Works across</h2>
+      <ul>
+        <li><a href="services/brand-strategy-identity-systems.html">Brand strategy and identity systems</a></li>
+        <li><a href="services/creative-direction-product-launches.html">Creative direction and product launches</a></li>
+        <li><a href="services/interactive-immersive-experiences.html">Interactive and immersive experiences</a></li>
+        <li><a href="services/fractional-creative-direction.html">Fractional creative direction</a></li>
+        <li>Art direction and visual storytelling</li>
+        <li>Web, digital and interactive design</li>
+        <li>Motion, film, 3D and emerging media</li>
+        <li><a href="notes/ai-at-the-start-of-creative-work.html">AI-powered creative strategy, design and prototyping</a></li>
+      </ul>
+    </div>
+    <div class="ab-blk ab-blk-exp fx-glass fp-lit fp-rise">
+      <h2 class="fx-label">Experience</h2>
+      <ol class="ab-line">
+        <li><span class="ab-org">Independent - Creative Builder</span>, <span class="ab-when">2026 - Present</span></li>
+        <li><span class="ab-org">Natural Intelligence - Creative Art Director</span>, <span class="ab-when">Jan 2025 - Jun 2026</span></li>
+        <li><span class="ab-org">Elements - Creative Director</span>, <span class="ab-when">Nov 2023 - Mar 2024</span></li>
+        <li><span class="ab-org">Shortcut Playground - Art Director</span>, <span class="ab-when">Feb 2021 - Sep 2023</span></li>
+        <li><span class="ab-org">Shenkar College of Engineering, Design and Art - Media Design</span>, <span class="ab-when">2018 - 2020, graduated with honors</span></li>
+      </ol>
+      <a class="ab-cv" href="/assets/docs/Itai_Agami_CV.pdf" target="_blank" rel="noopener">Download CV (PDF) →</a>
+    </div>
+    <div class="ab-col">
+      <div class="ab-blk fx-glass fp-lit fp-rise">
+        <h2 class="fx-label">Selected sectors</h2>
+        <ul class="ab-tags">
+          <li>Technology &amp; product</li>
+          <li>Media &amp; broadcast</li>
+          <li>Museums &amp; cultural institutions</li>
+          <li>Commerce &amp; consumer brands</li>
+        </ul>
+      </div>
+      <div class="ab-blk fx-glass fp-lit fp-rise">
+        <h2 class="fx-label">Based</h2>
+        <ul><li>Tel Aviv, IL, working worldwide</li></ul>
+      </div>
+      <div class="ab-blk fx-glass fp-lit fp-rise">
+        <h2 class="fx-label">Engagements</h2>
+        <ul><li>Full launches scoped per project; the Sprint that starts them begins at <span data-floor>₪30,000</span></li><li><a href="services.html">How I work with clients →</a></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENTS: a constellation; each point opens its case study -->
+  <section class="ab-clients" aria-labelledby="ab-clients-h">
+    <div class="ab-sechead fp-rise">
+      <h2 id="ab-clients-h" class="fx-display">Selected clients</h2>
+    </div>
+    <div class="ab-field" data-fp-field>
+      <canvas class="ab-sky" aria-hidden="true"></canvas>
+      <ul class="ab-nodes">
+        <li style="--x:7%;--y:34%;--z:.75"><a href="work/channel-13.html"><img src="/assets/logos/channel-13.webp" alt="Channel 13" width="25" height="34" style="--h:34px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:20%;--y:12%;--z:.35"><a href="work/partner-tv.html"><img src="/assets/logos/partner.webp" alt="Partner" width="89" height="24" style="--h:24px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:21%;--y:66%;--z:.95"><a href="work/sky-max.html"><img src="/assets/logos/max.webp" alt="MAX" width="69" height="21" style="--h:21px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:34%;--y:38%;--z:.55"><a href="work/museum-of-natural-history.html"><img src="/assets/logos/museum.webp" alt="Steinhardt Museum of Natural History" width="49" height="30" style="--h:30px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:38%;--y:88%;--z:.4"><a href="work/tower-of-david.html"><img src="/assets/logos/tower-of-david.webp" alt="Tower of David Jerusalem Museum" width="134" height="27" style="--h:27px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:44%;--y:10%;--z:.8"><a href="work/simply-vision-pro.html"><img src="/assets/logos/simply.webp" alt="Simply" width="77" height="29" style="--h:29px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:52%;--y:56%;--z:1"><a href="work/amdocs-make-it-amazing.html"><img src="/assets/logos/amdocs.webp" alt="Amdocs" width="104" height="23" style="--h:23px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:63%;--y:22%;--z:.5"><a href="work/google-shopping-il.html"><img src="/assets/logos/google.webp" alt="Google" width="84" height="28" style="--h:28px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:65%;--y:84%;--z:.7"><a href="work/mako-12.html"><img src="/assets/logos/channel-12.webp" alt="Channel 12" width="38" height="30" style="--h:30px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:76%;--y:48%;--z:.85"><a href="work/national-library-of-israel.html"><img src="/assets/logos/national-library.webp" alt="National Library of Israel" width="129" height="26" style="--h:26px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:84%;--y:14%;--z:.45"><a href="work/natural-intelligence.html"><img src="/assets/logos/bestmoney.webp" alt="BestMoney (Natural Intelligence)" width="112" height="18" style="--h:18px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:90%;--y:74%;--z:.6"><a href="work/natural-intelligence.html"><img src="/assets/logos/top10.webp" alt="Top10.com (Natural Intelligence)" width="103" height="27" style="--h:27px" loading="lazy" decoding="async"></a></li>
+        <li style="--x:94%;--y:42%;--z:.3"><a href="work/interactive-elections-kan-11.html"><img src="/assets/logos/kan-11.webp" alt="Kan 11" width="75" height="29" style="--h:29px" loading="lazy" decoding="async"></a></li>
+      </ul>
     </div>
   </section>
 
   <!-- GOOD FIT -->
-  <section class="obs" aria-label="Good fit">
-    <div class="sec-head"><h2>Good fit</h2><span class="count">Organizational moments</span></div>
-    <div class="fit-grid">
-      <p class="fit-lead">The work matters most at a handful of moments: the ones where a decision about the central idea changes what everything downstream becomes.</p>
-      <div class="fit-side">
-        <p>If one of these describes where you are, the conversation is usually worth having.</p>
-      </div>
+  <section class="ab-fit" aria-labelledby="ab-fit-h">
+    <div class="ab-sechead fp-rise">
+      <span class="fx-label">Organizational moments</span>
+      <h2 id="ab-fit-h" class="fx-display">Good fit</h2>
     </div>
-    <div class="caps" style="margin-top:clamp(28px,4vw,44px)">
-      <div class="cap"><div class="n">01</div><h3>Building or rebuilding a brand</h3><p>A new company, a repositioning, or an identity that no longer matches what the organization has become.</p></div>
-      <div class="cap"><div class="n">02</div><h3>Launching something new</h3><p>A product, platform or category with one window of attention and no story for it yet.</p></div>
-      <div class="cap"><div class="n">03</div><h3>Explaining something complex</h3><p>Technology, science or a service that is genuinely hard to describe, where the value comes from a clear decision about the idea.</p></div>
-      <div class="cap"><div class="n">04</div><h3>Building an experience people enter</h3><p>An exhibition, installation or spatial experience, where content, space and technology have to be resolved together.</p></div>
-      <div class="cap"><div class="n">05</div><h3>A team without creative leadership</h3><p>A capable team that would benefit from one person owning the idea and holding a single standard.</p></div>
-      <div class="cap"><div class="n">06</div><h3>Several teams pulling apart</h3><p>Brand, product and growth each producing their own version of the company, and nothing holding them to one language.</p></div>
+    <div class="ab-fit-intro fp-rise">
+      <p class="ab-fit-lead">The work matters most at a handful of moments: the ones where a decision about the central idea changes what everything downstream becomes.</p>
+      <p class="ab-fit-side">If one of these describes where you are, the conversation is usually worth having.</p>
+    </div>
+    <div class="ab-caps">
+      <div class="ab-cap fx-glass fp-lit fp-rise"><div class="fx-label">01</div><h3>Building or rebuilding a brand</h3><p>A new company, a repositioning, or an identity that no longer matches what the organization has become.</p></div>
+      <div class="ab-cap fx-glass fp-lit fp-rise"><div class="fx-label">02</div><h3>Launching something new</h3><p>A product, platform or category with one window of attention and no story for it yet.</p></div>
+      <div class="ab-cap fx-glass fp-lit fp-rise"><div class="fx-label">03</div><h3>Explaining something complex</h3><p>Technology, science or a service that is genuinely hard to describe, where the value comes from a clear decision about the idea.</p></div>
+      <div class="ab-cap fx-glass fp-lit fp-rise"><div class="fx-label">04</div><h3>Building an experience people enter</h3><p>An exhibition, installation or spatial experience, where content, space and technology have to be resolved together.</p></div>
+      <div class="ab-cap fx-glass fp-lit fp-rise"><div class="fx-label">05</div><h3>A team without creative leadership</h3><p>A capable team that would benefit from one person owning the idea and holding a single standard.</p></div>
+      <div class="ab-cap fx-glass fp-lit fp-rise"><div class="fx-label">06</div><h3>Several teams pulling apart</h3><p>Brand, product and growth each producing their own version of the company, and nothing holding them to one language.</p></div>
     </div>
   </section>
 
   <!-- CONTACT HAND-OFF -->
-  <section class="band obs" aria-label="Contact">
-    <h2>Let’s build <em>something</em>.</h2>
-    <div class="cta" style="display:flex;gap:14px;flex-wrap:wrap">
+  <section class="fp-cta fx-glass fp-lit fp-rise" aria-label="Contact">
+    <h2 class="fx-display">Let’s build <em>something</em>.</h2>
+    <div class="cta">
       <a class="btn solid" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="about" target="_blank" rel="noopener">Book a call with Itai <span class="arw" aria-hidden="true">↗</span></a>
       <a href="contact.html#brief" class="btn ghost">Send a brief <span class="arw" aria-hidden="true">→</span></a>
       <a href="work.html" class="btn ghost">Browse all work</a>
     </div>
   </section>
-
 
 </div>
 </main>
@@ -204,5 +264,6 @@
 
 <script src="js/contact-config.js"></script>
 <script src="js/site.js"></script>
+<script src="js/future-pages.js"></script>
 </body>
 </html>

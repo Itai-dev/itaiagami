@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,6 +21,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="../css/site.css" />
+<link rel="stylesheet" href="../css/cx.css" />
+<link rel="stylesheet" href="../css/cx-taormina-sicily.css" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/+esm" crossorigin />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -49,40 +52,102 @@
 }
 </script>
 </head>
-<body data-chrome="sub">
+<body data-chrome="sub" class="cx cx-taormina-sicily">
 <div class="grain" aria-hidden="true"></div>
 <header class="site" id="siteHeader"><div class="hwrap"><a href="../index.html" class="brand" aria-label="Itai Agami, home">Itai&nbsp;Agami</a><nav class="primary" aria-label="Primary"><a href="../work.html" class="active">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><button id="themeToggle" class="toggle" aria-label="Toggle light or dark theme" title="Toggle theme"><span aria-hidden="true">◐</span></button></nav><a class="btn solid nav-cta" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="header" target="_blank" rel="noopener">Book a call <span class="arw" aria-hidden="true">↗</span></a><button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button></div></header>
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile"><a href="../work.html">Work</a><a href="../services.html">Services</a><a href="../notes.html">Notes</a><a href="../about.html">About</a><a href="../contact.html">Contact</a><div class="mm-foot"><button id="themeToggleM" class="toggle" style="align-self:flex-start" aria-label="Toggle theme"><span aria-hidden="true">◐</span> <span class="tlm">Light</span></button><span>Tel Aviv, IL · Worldwide</span></div></nav>
-<main>
-  <div class="cwrap">
-    <div class="c-open">
-      <p class="crumb"><a href="../work.html">← Index</a> <span aria-hidden="true">·</span> <span>10 / 18</span></p>
-      <h1>Taormina Sicily</h1>
-      <p class="oneline">Projecting Greek mythology onto a Sicilian landmark using 3D scanning and real-time video mapping.</p>
+<main class="cx-main ta">
+  <!-- 1 · night: a façade, mapped -->
+  <section class="cx-hero ta-hero" aria-labelledby="ta-title">
+    <div class="cx-stage ta-stage" id="taStage">
+      <img class="cx-poster" src="/assets/opt/bbbd653668c7.webp" alt="" fetchpriority="high">
     </div>
-    <div class="c-hero"><img src="/assets/opt/bbbd653668c7.webp" alt="Taormina at night: flowering vines and marble figures projected across the ancient theatre." loading="eager" fetchpriority="high"></div>
-    <div class="c-meta">
-      <div class="m"><div class="l">Client</div><div class="v">Taormina, Sicily</div></div>
-      <div class="m"><div class="l">Role</div><div class="v">Art Direction, 3D Art</div></div>
-      <div class="m"><div class="l">Disciplines</div><div class="v"><span class="pill">Art Direction</span><span class="pill">3D</span><span class="pill">Video Mapping</span></div></div>
-      <div class="m"><div class="l">Collaborators</div><div class="v">Yoav Cohen, Shortcut Playground</div></div>
+    <div class="ta-cues" id="taCues" role="group" aria-label="Projection scenes" hidden>
+      <button type="button" class="btn ghost ta-sm" data-mode="0" aria-pressed="true"><span>I</span>The scan</button>
+      <button type="button" class="btn ghost ta-sm" data-mode="1" aria-pressed="false"><span>II</span>The garden</button>
+      <button type="button" class="btn ghost ta-sm" data-mode="2" aria-pressed="false"><span>III</span>The gods</button>
+      <button type="button" class="btn ghost ta-sm" data-mode="3" aria-pressed="false"><span>IV</span>Molten</button>
     </div>
-    <div class="c-story">
-      <div class="c-sec"><h2 class="st">The challenge</h2><div class="sb">Transform Taormina’s architecture into a platform for immersive storytelling using new technology, without losing the character of the place.</div></div>
-      <div class="c-sec"><h2 class="st">The idea</h2><div class="sb">Drawing on classical Greek aesthetics and mythology, designs were built with precision to fit the exact contour of the architecture.</div></div>
-      <div class="c-sec"><h2 class="st">The system</h2><div class="sb">A 3D-scanned model of Taormina drove the video mapping; generative AI and visual effects created the environments and marble gods projected onto the structure.</div></div>
-      <div class="c-sec"><h2 class="st">The outcome</h2><div class="sb small">The projection ran at architectural scale on Taormina itself, mapped to the building’s exact contours.</div></div>
-      <div class="c-sec"><h2 class="st">Role &amp; contribution</h2><div class="sb small">I art-directed the projection and created its 3D content, from the scanned model of the architecture to the environments and marble gods mapped onto it.</div></div>
+    <div class="cx-hero-copy ta-hero-copy">
+      <p class="cx-crumb"><a href="../work.html">Work</a> <span aria-hidden="true">/</span> <span>Taormina</span> <span aria-hidden="true">·</span> <span>10 / 18</span></p>
+      <p class="cx-eyebrow">Art Direction · 3D · Video Mapping</p>
+      <h1 class="cx-title ta-title" id="ta-title">Taormina <em>Sicily</em></h1>
+      <p class="cx-one">Projecting Greek mythology onto a Sicilian landmark using 3D scanning and real-time video mapping.</p>
     </div>
-    <h2 class="c-gal-title">See the highlights<br>of this project.</h2>
-    <div class="c-gallery">
-      <figure><div class="fm"><img src="/assets/opt/629a9b014570.webp" loading="lazy" alt="The 3D scan of the Taormina ruins projected back onto themselves as glowing orange outlines against the night sky."></div><figcaption>The scan becomes the first image: the building drawing its own plan in light.</figcaption></figure>
-      <figure><div class="fm"><img src="/assets/opt/cfede6c39e69.webp" loading="lazy" alt="The ruins overgrown with projected vines and blossom, a marble figure standing among them beneath two glowing spheres."></div><figcaption>Every leaf sits on a real surface; nothing is projected into empty air.</figcaption></figure>
-      <figure class="half"><div class="fm"><img src="/assets/opt/b85d29612bdc.webp" loading="lazy" alt="The brick structure lit warm while one side dissolves into drifting particles of light."></div><figcaption>Mapping to the exact contour lets the architecture appear to come apart without anything touching it.</figcaption></figure>
-      <figure class="half"><div class="fm"><img src="/assets/opt/b1cd695ffa8d.webp" loading="lazy" alt="A costumed figure standing beside the white marble god modelled for the projection, on black."></div><figcaption>The gods were built in 3D from live reference, then scaled up to the building.</figcaption></figure>
-      <figure><div class="fm"><img src="/assets/opt/f3126a951bfa.webp" loading="lazy" alt="The ruins with molten orange light running through their cracks and a marble figure emerging at the centre."></div><figcaption>Classical subject matter projected at architectural scale onto the place it came from.</figcaption></figure>
+    <p class="cx-hint ta-hint" id="taHint" aria-hidden="true">Choose a scene · paint light with your pointer</p>
+  </section>
+
+  <!-- 2 · the brief -->
+  <section class="cx-section cx-wrap ta-brief" aria-labelledby="ta-brief-t">
+    <p class="cx-eyebrow">The challenge</p>
+    <h2 class="cx-statement ta-statement" id="ta-brief-t">Transform Taormina’s architecture into a platform for immersive storytelling using new technology, without losing the character of the place.</h2>
+    <div class="ta-brief-grid">
+      <p class="cx-body"><strong>Role &amp; contribution.</strong> I art-directed the projection and created its 3D content, from the scanned model of the architecture to the environments and marble gods mapped onto it.</p>
+      <dl class="cx-spec">
+        <div><dt>Client</dt><dd>Taormina, Sicily</dd></div>
+        <div><dt>Role</dt><dd>Art Direction, 3D Art</dd></div>
+        <div><dt>Disciplines</dt><dd>Art Direction · 3D · Video Mapping</dd></div>
+        <div><dt>Collaborators</dt><dd>Yoav Cohen, Shortcut Playground</dd></div>
+      </dl>
     </div>
-    <div class="c-credits"><h3>Credits</h3><p>Director: Yoav Cohen<br>Creative Agency: Shortcut Playground</p></div>
+  </section>
+
+  <!-- 3 · the scan, full width -->
+  <figure class="ta-wide ta-wide--scan">
+    <img src="/assets/opt/629a9b014570.webp" loading="lazy" alt="The 3D scan of the Taormina ruins projected back onto themselves as glowing orange outlines against the night sky.">
+    <figcaption><span class="ta-lbl">The scan</span>The scan becomes the first image: the building drawing its own plan in light.</figcaption>
+  </figure>
+
+  <!-- 4 · the play, in three acts -->
+  <section class="ta-acts" aria-label="The story">
+    <article class="ta-act">
+      <p class="ta-num" aria-hidden="true">I</p>
+      <h2 class="cx-eyebrow ta-act-t">The idea</h2>
+      <p class="cx-lead ta-verse">Drawing on classical Greek aesthetics and mythology, designs were built with precision to fit the exact contour of the architecture.</p>
+    </article>
+    <article class="ta-act">
+      <p class="ta-num" aria-hidden="true">II</p>
+      <h2 class="cx-eyebrow ta-act-t">The system</h2>
+      <p class="cx-lead ta-verse">A 3D-scanned model of Taormina drove the video mapping; generative AI and visual effects created the environments and marble gods projected onto the structure.</p>
+    </article>
+  </section>
+
+  <!-- 5 · the projection, scene by scene -->
+  <section class="ta-seq" aria-label="The projection">
+    <p class="cx-eyebrow ta-seq-l">The projection</p>
+    <h2 class="ta-seq-t">Nothing is projected<br><em>into empty air.</em></h2>
+    <figure class="ta-wide">
+      <img src="/assets/opt/cfede6c39e69.webp" loading="lazy" alt="The ruins overgrown with projected vines and blossom, a marble figure standing among them beneath two glowing spheres.">
+      <figcaption><span class="ta-lbl">The garden</span>Every leaf sits on a real surface; nothing is projected into empty air.</figcaption>
+    </figure>
+    <div class="ta-pair">
+      <figure class="ta-plate ta-plate--a">
+        <img src="/assets/opt/b85d29612bdc.webp" loading="lazy" alt="The brick structure lit warm while one side dissolves into drifting particles of light.">
+        <figcaption><span class="ta-lbl">The dissolve</span>Mapping to the exact contour lets the architecture appear to come apart without anything touching it.</figcaption>
+      </figure>
+      <figure class="ta-plate ta-plate--b">
+        <img src="/assets/opt/b1cd695ffa8d.webp" loading="lazy" alt="A costumed figure standing beside the white marble god modelled for the projection, on black.">
+        <figcaption><span class="ta-lbl">The gods</span>The gods were built in 3D from live reference, then scaled up to the building.</figcaption>
+      </figure>
+    </div>
+    <figure class="ta-wide">
+      <img src="/assets/opt/f3126a951bfa.webp" loading="lazy" alt="The ruins with molten orange light running through their cracks and a marble figure emerging at the centre.">
+      <figcaption><span class="ta-lbl">Molten</span>Classical subject matter projected at architectural scale onto the place it came from.</figcaption>
+    </figure>
+    <figure class="ta-wide">
+      <img src="/assets/opt/bbbd653668c7.webp" loading="lazy" alt="Taormina at night: flowering vines and marble figures projected across the ancient theatre.">
+      <figcaption><span class="ta-lbl">At night</span>Flowering vines and marble figures across the ancient theatre.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 6 · the outcome and the credits, as a programme -->
+  <section class="ta-end" aria-labelledby="ta-out-t">
+    <h2 class="cx-eyebrow" id="ta-out-t">The outcome</h2>
+    <p class="cx-statement ta-statement">The projection ran at architectural scale on Taormina itself, mapped to the building’s exact contours.</p>
+    <div class="ta-credits"><h3 class="cx-eyebrow">Credits</h3><p>Director: Yoav Cohen<br>Creative Agency: Shortcut Playground</p></div>
+  </section>
+
+  <div class="cwrap cx-close">
     <div class="c-cta">
       <h2 class="t">Let’s build something like this.</h2>
       <p class="d">Tell me what it is, who it is for and what is still open. A rough idea is enough to start.</p>
@@ -97,5 +162,6 @@
 
 <script src="../js/contact-config.js"></script>
 <script src="../js/site.js"></script>
+<script type="module" src="../js/cx-taormina-sicily.js"></script>
 </body>
 </html>
