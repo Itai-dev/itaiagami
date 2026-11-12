@@ -727,41 +727,10 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   })();
 })();
 
-/* ---------- hero reveal (home) ----------
-   Waits for the intro loader when one is playing. */
-(function(){
-  const h=document.querySelector('.hero'); if(!h)return;
-  let held=document.documentElement.classList.contains('intro-on');
-  const go=()=>{ if(!held)h.classList.add('revealed'); };
-  addEventListener('intro:done',()=>{held=false;go();});
-  setTimeout(()=>{held=false;go();},14000);
-  requestAnimationFrame(()=>requestAnimationFrame(go));
-  addEventListener('load',go);
-  setTimeout(go,120);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)go();});
-})();
-
-/* ---------- scroll reveals ----------
-   Reveals start just before a block enters the screen, so content is already
-   arriving as it scrolls in rather than waiting on an empty space. */
-(function(){
-  const els=[...document.querySelectorAll('.obs')]; if(!els.length)return;
-  function check(){
-    els.forEach(el=>{
-      if(el.classList.contains('in'))return;
-      const r=el.getBoundingClientRect();
-      if(r.top<innerHeight*1.1&&r.bottom>0)el.classList.add('in');
-    });
-  }
-  const io=new IntersectionObserver(es=>{
-    es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
-  },{threshold:0,rootMargin:'0px 0px 10% 0px'});
-  els.forEach(el=>io.observe(el));
-  check();
-  addEventListener('scroll',check,{passive:true});
-  addEventListener('load',check);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
-})();
+/* Reveals, the hero opening and smooth scrolling live in js/motion.js (GSAP,
+   ScrollTrigger, Lenis). Nothing here hides content, so the page is complete
+   without that file. The intro loader above still announces itself with
+   'intro:done', which js/motion.js waits for. */
 
 /* ---------- selected work: fetch images once the page has loaded ----------
    They stay loading="lazy" so the first paint is not slowed, but as soon as the
@@ -1242,89 +1211,6 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   });
 })();
 
-/* ---------- motion layer ----------
-   One-time reveals only: headings rise word by word, media wipes open,
-   lists and cards stagger in. Nothing loops, nothing gates input, and the
-   whole layer is skipped for reduced-motion users. Content is never hidden
-   without JS: the hidden states only exist on classes added here. */
-(function(){
-  if(!('IntersectionObserver' in window))return;
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const root=document.documentElement; root.classList.add('mo');
-
-  // split a heading's text into masked words, keeping inline markup (em, a, strong)
-  let n=0;
-  function split(node){
-    [...node.childNodes].forEach(c=>{
-      if(c.nodeType===3){
-        const parts=c.textContent.split(/(\s+)/); if(parts.every(p=>!p.trim()))return;
-        const f=document.createDocumentFragment();
-        parts.forEach(p=>{
-          if(!p)return;
-          if(!p.trim()){f.appendChild(document.createTextNode(p));return;}
-          const w=document.createElement('span');w.className='w';
-          const i=document.createElement('span');i.textContent=p;i.style.setProperty('--i',n++);
-          w.appendChild(i);f.appendChild(w);
-        });
-        c.replaceWith(f);
-      }else if(c.nodeType===1&&c.tagName!=='BR')split(c);
-    });
-  }
-  /* only page-opening titles rise in; section titles and body copy are simply there */
-  const heads=document.querySelectorAll('.sec-head h1,.c-open h1,.svc-open h1,.article h1');
-  heads.forEach(h=>{n=0;split(h);h.classList.add('split');});
-
-  // stagger indexes for groups
-  const idx=(sel)=>document.querySelectorAll(sel).forEach(g=>[...g.children].forEach((c,i)=>c.style.setProperty('--i',i)));
-  idx('.c-meta');idx('.caps');idx('.index-list');idx('.svc-cases');idx('.c-sites');idx('.notes-list');
-  document.querySelectorAll('.c-gallery figure,.svc-cases,.c-sites,.index-list,.c-meta,.notes-list,.a-video').forEach(el=>el.classList.add('rv'));
-
-  const io=new IntersectionObserver(es=>es.forEach(e=>{
-    if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}
-  }),{threshold:0.01});
-  const els=[...document.querySelectorAll('.split,.rv')];
-  els.forEach(el=>io.observe(el));
-  // backstop for fast flings and anchor jumps: anything at or above the
-  // viewport's bottom edge is revealed, so nothing is ever left hidden
-  let ticking=false;
-  const sweep=()=>{ticking=false;
-    els.forEach(el=>{if(!el.classList.contains('in-view')&&el.getBoundingClientRect().top<innerHeight){el.classList.add('in-view');io.unobserve(el);}});
-  };
-  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(sweep);}},{passive:true});
-  addEventListener('load',sweep);
-})();
-
-/* ---------- scrubbed statement ----------
-   [data-scrub] paragraphs light up word by word as they cross the viewport.
-   Plain text only; skipped entirely for reduced motion. */
-(function(){
-  const els=[...document.querySelectorAll('[data-scrub]')];
-  if(!els.length||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const words=[];
-  els.forEach(el=>{
-    const parts=el.textContent.trim().split(/\s+/);
-    el.setAttribute('aria-label',el.textContent.trim());
-    el.innerHTML=parts.map(w=>'<span class="sw" aria-hidden="true">'+w.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</span>').join(' ');
-    el.classList.add('scrubbing');
-    words.push([...el.querySelectorAll('.sw')]);
-  });
-  let ticking=false;
-  function paint(){
-    ticking=false;
-    const vh=innerHeight;
-    els.forEach((el,i)=>{
-      const r=el.getBoundingClientRect();
-      /* 0 when the block's top reaches 85% of the viewport, 1 when its bottom reaches 45% */
-      const p=Math.min(1,Math.max(0,(vh*.85-r.top)/((vh*.85-vh*.45)+r.height)));
-      const lit=Math.round(p*words[i].length);
-      words[i].forEach((w,j)=>w.classList.toggle('lit',j<lit));
-    });
-  }
-  addEventListener('scroll',()=>{ if(!ticking){ticking=true;requestAnimationFrame(paint);} },{passive:true});
-  addEventListener('resize',paint);
-  paint();
-})();
-
 /* "View" cursor: a small label that follows the pointer over work images
    (home selection, service-page cases, next-project links). Fine pointers
    only; it never replaces the system cursor and is purely decorative. */
@@ -1388,7 +1274,7 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   a.addEventListener('click',e=>{
     e.preventDefault();
     const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({top:0,behavior:calm?'auto':'smooth'});
+    if(window.siteScroll&&!calm)window.siteScroll.scrollTo(0,{duration:1.1}); else window.scrollTo({top:0,behavior:calm?'auto':'smooth'});
     const first=document.querySelector('header.site a, header.site button');
     if(first) first.focus({preventScroll:true});
   });
