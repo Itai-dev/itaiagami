@@ -30,7 +30,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter+Tight:ital,wght@0,600;0,700;1,600;1,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Archivo:wdth,wght@62..125,400..800&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" />
 <link rel="stylesheet" href="css/site.css" />
 <!-- Intro loader: first home visit per session only, skipped for reduced motion and crawlers.
      The class is set here so the overlay paints before the page; js/site.js plays it. -->
@@ -148,22 +148,31 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Introduction">
-    <p class="eyebrow fade"><span class="name">Creative Builder</span><span>Creative direction, design &amp; technology</span></p>
-    <h1><span class="reveal-line"><span>Let’s build</span></span> <span class="reveal-line"><span>your idea.</span></span></h1>
-    <p class="sub fade d2">Bring the idea, or just the problem. I take it from the first concept to the finished brand, film, website or space, with the team it needs.</p>
-    <div class="cta fade d3">
+    <p class="eyebrow"><span class="name">Creative Builder</span><span>Creative direction, design &amp; technology</span><span class="where">Tel Aviv · Worldwide</span></p>
+    <h1><span class="l">Let’s build</span> <span class="l">your idea<span class="dot">.</span></span></h1>
+    <p class="sub">Bring the idea, or just the problem. I take it from the first concept to the finished brand, film, website or space, with the team it needs.</p>
+    <div class="cta">
       <a class="btn solid" href="https://cal.com/itai-agami-cxjtiv/30min" data-booking="home" target="_blank" rel="noopener">Book a call with Itai <span class="arw" aria-hidden="true">↗</span></a>
       <a href="contact.html#brief" class="btn ghost">Send a brief <span class="arw" aria-hidden="true">→</span></a>
       <p class="cta-note">A 30-minute call. No brief needed.</p>
     </div>
-    <!-- FEATURED: one central piece of work, framed like an Awwwards Site of the Day -->
-    <figure class="feature fade d4">
-      <a class="feature-panel" href="work/channel-13.html" aria-label="Featured project: Channel 13 case study" data-mux="LQ00EDO2tkIv3CyLnni5j9Wc01Dj2ldqmMtPKR3BIntzY" data-loop="0-13">
+    <!-- THE PLATE: five projects on one plate. Each arrives as a line drawing and
+         develops into the finished image (js/hero-plate.js, WebGL). The first still is
+         the static frame: it is all there is without JavaScript, WebGL or motion.
+         The index is plain links; hovering or focusing one previews it on the plate. -->
+    <figure class="feature" data-plate>
+      <a class="feature-panel" href="work/channel-13.html" aria-label="Featured project: Channel 13 case study">
         <span class="fp-media"><img src="/assets/opt/77bb87005dfc.webp" width="1513" height="851" fetchpriority="high" decoding="async" alt="The Channel 13 mark: a white 1 and 3 in soft relief, the 3 built from magenta, yellow and turquoise blocks."></span>
       </a>
       <figcaption class="feature-cap">
-        <span class="fc-l"><span class="fc-tag">Featured</span><a href="work/channel-13.html"><strong>Channel 13</strong></a><span class="fc-sep" aria-hidden="true">—</span><span class="fc-d">National broadcast rebrand, with Shortcut Playground</span></span>
-        <a class="fc-r" href="work/channel-13.html">View case study <span aria-hidden="true">→</span></a>
+        <ol class="fp-index" aria-label="Featured projects">
+          <li><a href="work/channel-13.html" aria-current="true" title="Channel 13" data-src="/assets/opt/77bb87005dfc.webp" data-desc="National broadcast rebrand, with Shortcut Playground" data-alt="The Channel 13 mark: a white 1 and 3 in soft relief, the 3 built from magenta, yellow and turquoise blocks."><span class="fi-n" aria-hidden="true">01</span><span class="fi-t vh">Channel 13</span></a></li>
+          <li><a href="work/museum-of-natural-history.html" title="Museum of Natural History" data-src="/assets/opt/4757c755e53d.webp" data-desc="Art direction and experience design, concept to installation" data-alt="Visitors at the Museum of Natural History reaching toward a large illuminated display of an illustrated habitat."><span class="fi-n" aria-hidden="true">02</span><span class="fi-t vh">Museum of Natural History</span></a></li>
+          <li><a href="work/simply-vision-pro.html" title="Simply Vision Pro" data-src="/assets/opt/15b0b9d98c42.webp" data-desc="Launch visualization: creative direction and 3D" data-alt="Simply Piano on Apple Vision Pro: a keyboard in a spatial environment."><span class="fi-n" aria-hidden="true">03</span><span class="fi-t vh">Simply Vision Pro</span></a></li>
+          <li><a href="work/sky-max.html" title="SkyMax" data-src="/assets/opt/8cfebe82ae8c.webp" data-desc="Art direction and concept art, through to 3D production" data-alt="A SkyMax frame: a hooded sweatshirt lifting off its rail in a clothing store as shoes and a hat float around it."><span class="fi-n" aria-hidden="true">04</span><span class="fi-t vh">SkyMax</span></a></li>
+          <li><a href="work/national-library-of-israel.html" title="National Library of Israel" data-src="/assets/opt/e4e7d7622c15.webp" data-desc="Design and experience, with Shortcut Playground" data-alt="A reading gallery at the National Library of Israel: archival documents in lit vitrines beneath a stone volume."><span class="fi-n" aria-hidden="true">05</span><span class="fi-t vh">National Library of Israel</span></a></li>
+        </ol>
+        <p class="fp-now"><strong class="fc-t">Channel 13</strong><span class="fc-d">National broadcast rebrand, with Shortcut Playground</span><a class="fc-r" href="work/channel-13.html">View case study <span aria-hidden="true">→</span></a></p>
       </figcaption>
     </figure>
     <!-- CLIENTS STRIP: the foot of the hero -->
@@ -238,7 +247,7 @@
   <section class="obs fit" aria-label="Working together">
     <div class="sec-head"><h2>For launches with a lot riding on them</h2><span class="count"><a href="services.html">All services →</a></span></div>
     <div class="fit-grid">
-      <p class="fit-lead">Brand launches, national campaigns and experiences people walk into. Built for teams where one idea has to carry a serious budget and land everywhere at once.</p>
+      <p class="fit-lead" data-lit>Brand launches, national campaigns and experiences people walk into. Built for teams where one idea has to carry a serious budget and land everywhere at once.</p>
       <div class="fit-side">
         <p><strong>Proven at scale.</strong> A national broadcast rebrand, commercials aired nationally, installed museum exhibitions, and work for Amdocs, Google and Partner.</p>
         <p><strong>One senior owner.</strong> You work with me from the first idea to the last deliverable. No account layers, no handoffs.</p>
@@ -284,5 +293,10 @@
 
 <script src="js/contact-config.js"></script>
 <script src="js/site.js"></script>
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/vendor/lenis.min.js"></script>
+<script src="js/motion.js"></script>
+<script type="module" src="js/hero-plate.js"></script>
 </body>
 </html>

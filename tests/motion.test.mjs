@@ -10,6 +10,8 @@ import { ROOT } from './helpers/load.mjs';
 
 const css = fs.readFileSync(path.join(ROOT, 'css/site.css'), 'utf8');
 const js = fs.readFileSync(path.join(ROOT, 'js/site.js'), 'utf8');
+const motion = fs.readFileSync(path.join(ROOT, 'js/motion.js'), 'utf8');
+const plate = fs.readFileSync(path.join(ROOT, 'js/hero-plate.js'), 'utf8');
 const rule = sel => { const i = css.indexOf(sel + '{'); assert.ok(i >= 0, sel); return css.slice(i, css.indexOf('}', i)); };
 
 test('house curve is a strong ease-out; UI hover speed stays under 300ms', () => {
@@ -74,7 +76,61 @@ test('intro loader: home only, once per session, skipped for reduced motion, nev
   assert.match(css, /html\.intro-on \.intro-loader\{[\s\S]*?animation:intro-failsafe \.01s 15s forwards/);
   assert.match(css, /html\.intro-on \.intro-loader\.out\{transform:translateY\(-100%\)\}/, 'exits with transform');
   assert.match(js, /dog=setTimeout\(finish,4000\)/, 'watchdog exits a stalled intro');
-  assert.match(js, /addEventListener\('intro:done'/, 'hero reveal waits for the intro');
+  assert.match(motion, /addEventListener\('intro:done',play/, 'hero opening waits for the intro');
   for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html') && f !== 'index.html'))
     assert.doesNotMatch(fs.readFileSync(path.join(ROOT, f), 'utf8'), /intro-on/, f + ' has no intro');
+});
+
+/* ---- design system v5: GSAP + ScrollTrigger + Lenis, and the WebGL plate ---- */
+const pages = ['', 'work', 'services', 'notes'].flatMap(d => fs.readdirSync(path.join(ROOT, d)).filter(f => f.endsWith('.html')).map(f => path.join(d, f)))
+  .filter(f => fs.readFileSync(path.join(ROOT, f), 'utf8').includes('js/site.js"'));
+
+test('one smooth-scroll engine: Lenis, created once, driven by the GSAP ticker', () => {
+  assert.equal((motion.match(/new window\.Lenis\(/g) || []).length, 1);
+  assert.match(motion, /lenis\.on\('scroll',ScrollTrigger\.update\)/);
+  assert.match(motion, /gsap\.ticker\.add\(tick\)/);
+  assert.match(motion, /autoRaf:false/);
+  for (const f of pages) {
+    const html = fs.readFileSync(path.join(ROOT, f), 'utf8');
+    assert.equal((html.match(/vendor\/lenis\.min\.js/g) || []).length, 1, f);
+    assert.doesNotMatch(html, /locomotive/i, f);
+    assert.ok(html.indexOf('vendor/gsap.min.js') < html.indexOf('js/motion.js"'), f + ': gsap loads before motion.js');
+  }
+  assert.ok(!fs.readdirSync(path.join(ROOT, 'js/vendor')).some(f => /locomotive/i.test(f)));
+});
+
+test('reduced motion: no smooth scroll, no timelines, no canvas; final states only', () => {
+  assert.match(motion, /if\(reduce\|\|!gsap\|\|!ScrollTrigger\) return;/);
+  assert.ok(motion.indexOf('if(reduce||') < motion.indexOf('new window.Lenis('));
+  assert.match(plate, /if \(reduce \|\| !gsap\) return;/);
+  assert.ok(plate.indexOf('if (reduce || !gsap) return;') < plate.indexOf("import('./vendor/three.module.min.js')"));
+});
+
+test('no content is hidden in css: every from-state is set by js/motion.js', () => {
+  const v5 = css.slice(css.indexOf('DESIGN SYSTEM v5'));
+  assert.match(v5, /\.obs,\.obs\.in,\.fade,[\s\S]*?opacity:1;transform:none;clip-path:none;transition:none\}/);
+  assert.doesNotMatch(v5, /opacity:0(?![.\d])(?![^}]*\}\s*\.feature-panel canvas\.on)/, 'only the canvas starts transparent');
+  assert.doesNotMatch(js, /classList\.add\('(revealed|mo)'\)/, 'the old reveal systems are gone');
+});
+
+test('split text keeps an unsplit name and never splits links', () => {
+  assert.match(motion, /el\.querySelector\('a,button,input'\)\)return \[\]/);
+  assert.match(motion, /box\.setAttribute\('aria-hidden','true'\)/);
+  assert.match(motion, /name\.className='vh'; name\.textContent=label/);
+});
+
+test('cleanup: triggers, ticker, Lenis and WebGL resources are released', () => {
+  assert.match(motion, /ScrollTrigger\.getAll\(\)\.forEach\(function\(t\)\{t\.kill\(\);\}\)/);
+  assert.match(motion, /gsap\.ticker\.remove\(tick\)/);
+  assert.match(motion, /lenis\.destroy\(\)/);
+  for (const r of [/geometry\.dispose\(\)/, /material\.dispose\(\)/, /renderer\.dispose\(\)/, /t\.dispose\(\)/, /io\.disconnect\(\)/, /ro\.disconnect\(\)/, /cancelAnimationFrame\(raf\)/]) assert.match(plate, r);
+  assert.match(plate, /webglcontextlost/); assert.match(plate, /webglcontextrestored/);
+});
+
+test('the plate: capped pixel ratio, renders on demand, static first frame in the markup', () => {
+  assert.match(plate, /Math\.min\(devicePixelRatio \|\| 1, 1\.75\)/);
+  assert.doesNotMatch(plate, /setAnimationLoop/);
+  const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  assert.match(home, /<figure class="feature" data-plate>[\s\S]*?<span class="fp-media"><img src="\/assets\/opt\/77bb87005dfc\.webp"[^>]* alt="[^"]+">/);
+  assert.equal((home.match(/<li><a href="work\/[a-z0-9-]+\.html"[^>]* data-src=/g) || []).length, 5, 'the index is five real links');
 });
