@@ -1,5 +1,5 @@
 /* Homepage interactions: hero card parallax, scroll-driven big names,
-   cursor-following work previews and the section dots. Everything is
+   and cursor-following work previews. Everything is
    decoration over working links, so failing here leaves a usable page. */
 (function(){
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -55,14 +55,13 @@
       vx = nx - fx; fx = nx; fy = ny;
       float.style.setProperty('--fx', (fx + 24) + 'px');
       float.style.setProperty('--fy', (fy - float.offsetHeight / 2) + 'px');
-      float.style.setProperty('--fr', still ? '0deg' : Math.max(-12, Math.min(12, vx * .6)).toFixed(2) + 'deg');
+      float.style.setProperty('--fr', still ? '0deg' : Math.max(-6, Math.min(6, vx * .35)).toFixed(2) + 'deg');
       raf = (on || Math.abs(x - fx) > .5) ? requestAnimationFrame(tick) : 0;
     };
     addEventListener('pointermove', e => { x = e.clientX; y = e.clientY; if (on && !raf) raf = requestAnimationFrame(tick); }, { passive: true });
     rows.forEach(a => {
       a.addEventListener('pointerenter', e => {
         if (float.getAttribute('src') !== a.dataset.img) float.src = a.dataset.img;
-        float.style.setProperty('--fc', a.style.getPropertyValue('--c'));
         if (!on) { fx = x = e.clientX; fy = y = e.clientY; }
         on = true; float.classList.add('on');
         if (!raf) raf = requestAnimationFrame(tick);
@@ -74,23 +73,4 @@
     addEventListener('load', () => idle(() => rows.forEach(a => { const i = new Image(); i.src = a.dataset.img; })), { once: true });
   }
 
-  /* ---------- section dots ---------- */
-  const dots = document.querySelector('.dots');
-  const secs = [...document.querySelectorAll('[data-dot]')];
-  if (dots && secs.length) {
-    const links = secs.map(s => {
-      const a = document.createElement('a');
-      a.href = '#' + s.id; a.textContent = s.dataset.dot;
-      dots.appendChild(a); return a;
-    });
-    const warm = document.querySelector('.warm');
-    const update = () => {
-      let i = 0;
-      secs.forEach((s, k) => { if (s.getBoundingClientRect().top < innerHeight * .45) i = k; });
-      links.forEach((a, k) => a.classList.toggle('on', k === i));
-      if (warm) { const r = warm.getBoundingClientRect(); dots.classList.toggle('on-warm', r.top < innerHeight / 2 && r.bottom > innerHeight / 2); }
-    };
-    addEventListener('scroll', update, { passive: true });
-    update();
-  }
 })();
