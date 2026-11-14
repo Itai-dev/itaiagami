@@ -66,6 +66,16 @@ test('work-index preview moves with `translate`, not left/top', () => {
   assert.match(js, /if\(s!==side\)/, '--hx only written when the side changes');
 });
 
+test('work index: GSAP Flip on work.html only, skipped for reduced motion, CSS reveals muted while it runs', () => {
+  const work = fs.readFileSync(path.join(ROOT, 'work.html'), 'utf8');
+  assert.match(work, /<script src="js\/vendor\/gsap\/gsap\.min\.js"><\/script>\s*<script src="js\/vendor\/gsap\/Flip\.min\.js"><\/script>\s*<script src="js\/site\.js">/);
+  for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html') && f !== 'work.html'))
+    assert.doesNotMatch(fs.readFileSync(path.join(ROOT, f), 'utf8'), /vendor\/gsap/, f + ' does not load GSAP');
+  assert.match(js, /const canFlip=!!\(window\.gsap&&window\.Flip\)&&!matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches;/);
+  assert.match(js, /if\(!canFlip\)\{change\(\);return;\}/, 'falls back to an instant change');
+  assert.match(css, /\.index-list\.flipping>\*\{transition:none!important\}/);
+});
+
 test('intro loader: home only, once per session, skipped for reduced motion, never traps the page', () => {
   const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   assert.match(home, /sessionStorage\.getItem\('intro'\)&&!matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches/);
