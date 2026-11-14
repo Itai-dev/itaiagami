@@ -2075,3 +2075,14 @@ footer.site .to-top:hover .tt-i{background:#fff;border-color:#fff;color:var(--pa
 footer.site .base{align-items:center}
 @media(max-width:600px){footer.site .base{align-items:flex-start}footer.site .to-top{margin-top:8px}}
 @media(prefers-reduced-motion:reduce){footer.site .to-top .tt-i{transition:none}footer.site .to-top:hover .tt-i{transform:none}}
+
+/* =====================================================================
+   Warm layer: cream paper, warm ink and an italic serif wordmark on
+   every page, matching the playful homepage (css/home.css).
+   ===================================================================== */
+:root[data-theme="light"]{
+  --bg:#f3ede2; --stage:#ebe3d4; --surface:#fffaf1; --hover:#fffaf1;
+  --fg:#2a1712; --dim:rgba(42,23,18,.62); --faint:#ece4d6;
+  --line:rgba(42,23,18,.1); --line-strong:rgba(42,23,18,.2);
+}
+.brand{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;font-size:1.5rem;letter-spacing:-.01em;line-height:1}
