@@ -66,15 +66,17 @@ test('work-index preview moves with `translate`, not left/top', () => {
   assert.match(js, /if\(s!==side\)/, '--hx only written when the side changes');
 });
 
-test('intro loader: home only, once per session, skipped for reduced motion, never traps the page', () => {
-  const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.match(home, /sessionStorage\.getItem\('intro'\)&&!matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches/);
-  assert.match(home, /<div class="intro-loader" id="intro" aria-hidden="true">/);
-  assert.match(rule('.intro-loader'), /display:none/, 'hidden unless the head script opts in');
-  assert.match(css, /html\.intro-on \.intro-loader\{[\s\S]*?animation:intro-failsafe \.01s 15s forwards/);
-  assert.match(css, /html\.intro-on \.intro-loader\.out\{transform:translateY\(-100%\)\}/, 'exits with transform');
-  assert.match(js, /dog=setTimeout\(finish,4000\)/, 'watchdog exits a stalled intro');
-  assert.match(js, /addEventListener\('intro:done'/, 'hero reveal waits for the intro');
-  for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html') && f !== 'index.html'))
-    assert.doesNotMatch(fs.readFileSync(path.join(ROOT, f), 'utf8'), /intro-on/, f + ' has no intro');
+test('work index: GSAP Flip, skipped for reduced motion, CSS reveals muted while it runs', () => {
+  const work = fs.readFileSync(path.join(ROOT, 'work.html'), 'utf8');
+  assert.match(work, /<script src="js\/vendor\/gsap\/gsap\.min\.js"><\/script>\s*<script src="js\/vendor\/gsap\/Flip\.min\.js"><\/script>\s*<script src="js\/site\.js">/);
+  for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html') && !['work.html', 'index.html'].includes(f)))
+    assert.doesNotMatch(fs.readFileSync(path.join(ROOT, f), 'utf8'), /vendor\/gsap/, f + ' does not load GSAP');
+  assert.match(js, /const canFlip=!!\(window\.gsap&&window\.Flip\)&&!matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches;/);
+  assert.match(js, /if\(!canFlip\)\{change\(\);return;\}/, 'falls back to an instant change');
+  assert.match(css, /\.index-list\.flipping>\*\{transition:none!important\}/);
+});
+
+test('the intro loader is retired: no page opts into it', () => {
+  for (const f of fs.readdirSync(ROOT).filter(f => f.endsWith('.html')))
+    assert.doesNotMatch(fs.readFileSync(path.join(ROOT, f), 'utf8'), /intro-on|id="intro"/, f + ' has no intro');
 });

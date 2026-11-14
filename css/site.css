@@ -219,6 +219,7 @@ display:flex;align-items:center;justify-content:center;
 .index-list{list-style:none}
 .prow{border-bottom:1px solid var(--line)}
 .prow.hidden{display:none}
+.index-list.flipping>*{transition:none!important}
 .prow>a{display:block}
 .index-list:not(.grid) .prow>a{display:grid;grid-template-columns:52px 1fr auto;gap:24px;align-items:center;padding:22px 16px;border-radius:var(--r-media);transition:background var(--dur-fast)}
 .index-list:not(.grid) .prow>a:hover{background:var(--faint)}

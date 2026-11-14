@@ -1020,9 +1020,30 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
   FILTERS.forEach(f=>{
     const b=document.createElement('button');b.textContent=f;b.dataset.f=f;
     b.setAttribute('aria-pressed',String(f===activeFilter));
-    b.addEventListener('click',()=>setFilter(f));
     filtersEl.appendChild(b);
   });
+  /* GSAP Flip (loaded on work.html only): rows glide to their new places on a
+     filter or view change. Skipped for reduced motion or if GSAP is missing;
+     the change itself is always applied synchronously first. */
+  const canFlip=!!(window.gsap&&window.Flip)&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(canFlip)gsap.registerPlugin(Flip);
+  let flipTl=null;
+  function flip(change){
+    if(!canFlip){change();return;}
+    if(flipTl)flipTl.progress(1).kill();
+    const rows=indexList.querySelectorAll('.prow');
+    const state=Flip.getState(rows,{props:'opacity'});
+    change();
+    indexList.classList.add('flipping');   /* mute the CSS reveal transitions while GSAP drives transforms */
+    flipTl=Flip.from(state,{
+      duration:.6,ease:'expo.out',absolute:true,prune:true,
+      stagger:{each:.025,from:'start'},
+      onEnter:els=>gsap.fromTo(els,{opacity:0,y:14},{opacity:1,y:0,duration:.45,ease:'expo.out',delay:.1,clearProps:'opacity,transform'}),
+      onLeave:els=>gsap.to(els,{opacity:0,duration:.2,ease:'power1.out'}),
+      onComplete:()=>{indexList.classList.remove('flipping');flipTl=null;},
+      onInterrupt:()=>indexList.classList.remove('flipping')
+    });
+  }
   function setFilter(f){
     activeFilter=f; try{localStorage.setItem('filter',f)}catch(e){}
     filtersEl.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.f===f)));
@@ -1045,7 +1066,8 @@ if(_hdr){addEventListener('scroll',()=>{_hdr.classList.toggle('scrolled',scrollY
     viewsEl.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===v)));
     hideHover();
   }
-  viewsEl.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+  viewsEl.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.view;if(v!==activeView)flip(()=>setView(v));}));
+  filtersEl.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const f=b.dataset.f;if(f!==activeFilter)flip(()=>setFilter(f));}));
   setView(activeView); setFilter(activeFilter);
 
   /* hover preview (vertical view, pointer devices) */
