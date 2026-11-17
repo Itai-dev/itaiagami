@@ -246,7 +246,28 @@
     img.loading = 'lazy'; img.decoding = 'async'; img.alt = m.alt || m.title || '';
     img.src = px(m, width);
     box.appendChild(img);
-    if(m.kind === 'video'){
+    if(m.kind === 'video' && m.loop && !still){
+      /* a clip among the images: silent, looping, only while it is on screen */
+      const mount = () => {
+        if(!box.isConnected || box.querySelector('mux-video')) return;
+        const v = document.createElement('mux-video');
+        v.className = 'clip'; v.setAttribute('aria-hidden', 'true'); v.tabIndex = -1;
+        v.muted = true; v.loop = true; v.playsInline = true;
+        ['muted', 'loop', 'playsinline', 'autoplay'].forEach(k => v.setAttribute(k, ''));
+        v.setAttribute('playback-id', m.mux); v.setAttribute('max-resolution', '1080p');
+        v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+        box.appendChild(v);
+        const q = v.play && v.play(); if(q && q.catch) q.catch(() => {});
+      };
+      new IntersectionObserver((es, io) => es.forEach(e => {
+        const v = box.querySelector('mux-video');
+        if(!box.isConnected){ io.disconnect(); return; }
+        if(e.isIntersecting){
+          if(v){ const q = v.play && v.play(); if(q && q.catch) q.catch(() => {}); }
+          else (muxLib || (muxLib = import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs'))).then(mount, () => {});
+        } else if(v && v.pause) v.pause();
+      }), { rootMargin: '200px' }).observe(box);
+    } else if(m.kind === 'video'){
       const p = el('button', 'play');
       p.type = 'button';
       p.setAttribute('aria-label', 'Play' + (m.title ? ' ' + m.title : ' film'));

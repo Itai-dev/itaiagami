@@ -104,7 +104,11 @@ function shape(data){
     };
     const addProject = (p, title) => {
       add(video(p.film), { title });
-      for(const g of p.gallery || []) add(g._type === 'galleryVideo' ? video(g.video) : image(g.image), { half: !!g.half, alt: g.alt || '', title: g.caption || '' });
+      for(const g of p.gallery || []){
+        /* a clip placed among the images plays silently on a loop */
+        if(g._type === 'galleryVideo') add(video(g.video), { half: !!g.half, title: g.caption || '', loop: true });
+        else add(image(g.image), { half: !!g.half, alt: g.alt || '', title: g.caption || '' });
+      }
       add(image(p.image), { title });
       for(const r of p.moreImages || []) add(image(r), { title });
       for(const v of p.moreVideos || []) add(video(v), { title });
@@ -137,7 +141,7 @@ function shape(data){
       line: lead.oneliner || lead.text || (group && group.text) || '',
       sectors, thumb, hero, sections,
       /* the case's own film, played silently on its tile while it is in focus */
-      film: (body.find(m => m.kind === 'video' && !m.title) || {}).mux || '',
+      film: (body.find(m => m.kind === 'video' && !m.title && !m.loop) || {}).mux || '',
       credits: lead.credits || [],
       siteUrl: (members.find(p => p.siteUrl) || {}).siteUrl || '',
       media: body,

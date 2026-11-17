@@ -12,6 +12,7 @@ export const galleryVideo = defineType({
       type: 'mux.video',
       validation: (rule) => rule.required(),
     }),
+    defineField({name: 'caption', type: 'string', description: 'Shown under the clip.'}),
     defineField({name: 'half', title: 'Half width', type: 'boolean', initialValue: false}),
   ],
   preview: {
