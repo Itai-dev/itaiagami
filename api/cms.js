@@ -58,7 +58,7 @@ const QUERY = `{
     "thumbnail": thumbnail.asset._ref, "hero": hero.asset._ref, "image": image.asset._ref,
     "moreImages": moreImages[].asset._ref,
     "film": film${VIDEO}, "moreVideos": moreVideos[]${VIDEO},
-    "gallery": gallery[]{_type, half, alt, "image": image.asset._ref, "video": video${VIDEO}}
+    "gallery": gallery[]{_type, half, alt, caption, "image": image.asset._ref, "video": video${VIDEO}}
   },
   "settings": *[_id == "settings"][0]{about, offerLine, offer, bookingUrl, email, linkedin, "cv": cv.asset->url}
 }`;
@@ -104,7 +104,7 @@ function shape(data){
     };
     const addProject = (p, title) => {
       add(video(p.film), { title });
-      for(const g of p.gallery || []) add(g._type === 'galleryVideo' ? video(g.video) : image(g.image), { half: !!g.half, alt: g.alt || '' });
+      for(const g of p.gallery || []) add(g._type === 'galleryVideo' ? video(g.video) : image(g.image), { half: !!g.half, alt: g.alt || '', title: g.caption || '' });
       add(image(p.image), { title });
       for(const r of p.moreImages || []) add(image(r), { title });
       for(const v of p.moreVideos || []) add(video(v), { title });

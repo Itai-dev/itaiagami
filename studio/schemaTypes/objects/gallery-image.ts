@@ -17,6 +17,11 @@ export const galleryImage = defineType({
       type: 'string',
       description: 'What the image shows, for screen readers and search.',
     }),
+    defineField({
+      name: 'caption',
+      type: 'string',
+      description: 'Shown under the image. Use it to say what an image is when it is not a photo of the real thing, e.g. "Visualisation".',
+    }),
     defineField({name: 'half', title: 'Half width', type: 'boolean', initialValue: false}),
   ],
   preview: {select: {media: 'image', title: 'alt'}},
