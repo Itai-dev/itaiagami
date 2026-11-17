@@ -23,6 +23,13 @@ export const galleryImage = defineType({
       description: 'Shown under the image. Use it to say what an image is when it is not a photo of the real thing, e.g. "Visualisation".',
     }),
     defineField({name: 'half', title: 'Half width', type: 'boolean', initialValue: false}),
+    defineField({
+      name: 'quarter',
+      title: 'Quarter width',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Four to a row (two on a phone). For walls of upright pieces such as social ads.',
+    }),
   ],
   preview: {select: {media: 'image', title: 'alt'}},
 })

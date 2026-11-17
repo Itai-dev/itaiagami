@@ -162,6 +162,14 @@ export const project = defineType({
     }),
     defineField({name: 'order', type: 'number', group: 'card', description: 'Lower comes first.'}),
     defineField({
+      name: 'hidden',
+      title: 'Hide from the site',
+      type: 'boolean',
+      group: 'card',
+      initialValue: false,
+      description: 'Keeps the project here but takes it off the site.',
+    }),
+    defineField({
       name: 'slug',
       type: 'slug',
       group: 'card',

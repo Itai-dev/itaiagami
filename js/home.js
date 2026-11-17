@@ -235,13 +235,13 @@
 
   /* ---------- the case study ---------- */
   function figure(m){
-    const f = el('figure', 'm' + (m.half ? ' half' : ''));
+    const f = el('figure', 'm' + (m.quarter ? ' quarter' : m.half ? ' half' : ''));
     const box = el('div', 'box');
     box.style.aspectRatio = m.w + ' / ' + m.h;
     /* an upright film or image keeps to the height of the screen, centred */
     const tall = m.h > m.w;
-    if(tall){ f.classList.add('tall'); box.style.setProperty('--r', (m.w / m.h).toFixed(4)); }
-    const width = (tall ? Math.min(M.vw, M.vh * .86 * m.w / m.h) : M.small || !m.half ? M.vw : M.vw / 2) * DPR;
+    if(tall && !m.quarter){ f.classList.add('tall'); box.style.setProperty('--r', (m.w / m.h).toFixed(4)); }
+    const width = (m.quarter ? (M.small ? M.vw / 2 : M.vw / 4) : tall ? Math.min(M.vw, M.vh * .86 * m.w / m.h) : M.small || !m.half ? M.vw : M.vw / 2) * DPR;
     const img = new Image();
     img.loading = 'lazy'; img.decoding = 'async'; img.alt = m.alt || m.title || '';
     img.src = px(m, width);

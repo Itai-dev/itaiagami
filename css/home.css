@@ -134,9 +134,10 @@ body.open .bar-bottom > *,body.info-open .bar-bottom > *{pointer-events:none}
 .case-text h3{margin-bottom:12px}
 .case-text p{max-width:42ch}
 
-.case-media{display:grid; grid-template-columns:1fr 1fr; gap:var(--gap)}
+.case-media{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--gap)}
 .m{grid-column:1 / -1; position:relative}
-.m.half{grid-column:auto}
+.m.half{grid-column:span 2}
+.m.quarter{grid-column:span 1; align-self:center}
 .m .box{position:relative; overflow:hidden; background:var(--tile)}
 .m img,.m iframe{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border:0}
 .m.tall .box{width:min(100%, calc(86vh * var(--r))); margin:0 auto}
@@ -193,12 +194,27 @@ body.open .bar-bottom > *,body.info-open .bar-bottom > *{pointer-events:none}
   .c-line{margin:28px 0 36px; font-size:15px}
   .case-text{padding-bottom:64px}
   .case-text > div{grid-template-columns:1fr; gap:32px}
-  .case-media{grid-template-columns:1fr}
+  .case-media{grid-template-columns:1fr 1fr}
+  .m.half{grid-column:1 / -1}
   .case-credits h3{margin-bottom:12px}
   .case-end{padding-top:80px}
 
   .info{display:block; padding-top:96px}
   .info-text{font-size:15px}
+}
+
+/* touch screens: a fingertip-sized target around every small label, and
+   room for the phone's own bars */
+@media (pointer:coarse){
+  .bar a,.bar button{padding:12px 0; margin:-12px 0}
+  .filters button,.links a,.links button{padding:12px 4px; margin:-12px -4px}
+  .case-end a,.case-end button,.info-links a,.c-meta a{padding:12px 0; margin:-12px 0}
+  .bar-bottom{padding-bottom:calc(var(--m) + env(safe-area-inset-bottom, 0px))}
+  .bar-top{padding-top:calc(var(--m) + env(safe-area-inset-top, 0px))}
+}
+@media (max-width:760px){
+  body{font-size:11px}
+  .case,.info{padding-bottom:env(safe-area-inset-bottom, 0px)}
 }
 
 @media (prefers-reduced-motion:reduce){

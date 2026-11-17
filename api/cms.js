@@ -50,7 +50,7 @@ const SECTOR_FALLBACK = {
 
 const VIDEO = '{"mux": asset->playbackId, "aspect": asset->data.aspect_ratio}';
 const QUERY = `{
-  "projects": *[_type == "project" && !(_id in path("drafts.**"))]{
+  "projects": *[_type == "project" && !(_id in path("drafts.**")) && hidden != true]{
     _id, name, "slug": slug.current, order, groupOrder, sectors,
     client, role, disciplines, oneliner, text, siteUrl,
     challenge, idea, system, outcome, targets, contribution, credits,
@@ -58,7 +58,7 @@ const QUERY = `{
     "thumbnail": thumbnail.asset._ref, "hero": hero.asset._ref, "image": image.asset._ref,
     "moreImages": moreImages[].asset._ref,
     "film": film${VIDEO}, "moreVideos": moreVideos[]${VIDEO},
-    "gallery": gallery[]{_type, half, alt, caption, "image": image.asset._ref, "video": video${VIDEO}}
+    "gallery": gallery[]{_type, half, quarter, alt, caption, "image": image.asset._ref, "video": video${VIDEO}}
   },
   "settings": *[_id == "settings"][0]{about, offerLine, offer, bookingUrl, email, linkedin, "cv": cv.asset->url}
 }`;
@@ -106,8 +106,8 @@ function shape(data){
       add(video(p.film), { title });
       for(const g of p.gallery || []){
         /* a clip placed among the images plays silently on a loop */
-        if(g._type === 'galleryVideo') add(video(g.video), { half: !!g.half, title: g.caption || '', loop: true });
-        else add(image(g.image), { half: !!g.half, alt: g.alt || '', title: g.caption || '' });
+        if(g._type === 'galleryVideo') add(video(g.video), { half: !!g.half, quarter: !!g.quarter, title: g.caption || '', loop: true });
+        else add(image(g.image), { half: !!g.half, quarter: !!g.quarter, alt: g.alt || '', title: g.caption || '' });
       }
       add(image(p.image), { title });
       for(const r of p.moreImages || []) add(image(r), { title });
