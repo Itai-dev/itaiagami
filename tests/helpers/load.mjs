@@ -30,3 +30,13 @@ export async function call(handler, { method = 'GET', query = {}, body, headers 
   await handler({ method, query, body, headers }, res);
   return res;
 }
+
+/* The home page and its Markdown are read from Sanity. Tests answer that one
+   request from a saved sample, so they never need the network. */
+export function stubCms(){
+  const real = globalThis.fetch;
+  const sample = fs.readFileSync(path.join(ROOT, 'tests', 'helpers', 'cms-fixture.json'), 'utf8');
+  globalThis.fetch = (url, opts) => /\.sanity\.io\//.test(String(url && url.url || url))
+    ? Promise.resolve(new Response('{"result":' + sample + '}', { headers: { 'content-type': 'application/json' } }))
+    : real(url, opts);
+}
