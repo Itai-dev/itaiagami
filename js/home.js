@@ -300,6 +300,11 @@
   function fill(c){
     const i = all.indexOf(c);
     const hero = el('div', 'case-hero');
+    /* a case with a film opens on the film itself, playing silently, in
+       place of the cover image; it then leaves the list below */
+    const film = !still && c.film ? c.media.find(m => m.mux === c.film) || null : null;
+    hero.film = film;
+    if(film && film.h > film.w){ hero.classList.add('upright'); hero.style.setProperty('--r', (film.w / film.h).toFixed(4)); }
     const body = el('div', 'case-body');
 
     const head = el('div', 'case-head');
@@ -325,9 +330,9 @@
       text.appendChild(cols);
       body.appendChild(text);
     }
-    if(c.media.length){
+    if(c.media.some(m => m !== film)){
       const media = el('div', 'case-media');
-      c.media.forEach(m => media.appendChild(figure(m)));
+      c.media.filter(m => m !== film).forEach(m => media.appendChild(figure(m)));
       body.appendChild(media);
     }
     if(c.credits.length){
@@ -354,6 +359,46 @@
   const rect = r => ({ left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px' });
   const fly = (node, from, toRect, ms) => node.animate([rect(from), rect(toRect)], { duration: ms, easing: EASE, fill: 'both' });
 
+  /* where the cover sits in its box: all of it, or an upright film's own shape, centred */
+  function heroRect(hero){
+    const r = hero.getBoundingClientRect();
+    if(!hero.classList.contains('upright')) return r;
+    const w = Math.min(r.width, r.height * hero.film.w / hero.film.h);
+    return { left: r.left + (r.width - w) / 2, top: r.top, width: w, height: r.height };
+  }
+  function heroFilm(hero, media){
+    const film = hero.film;
+    if(!film) return;
+    (muxLib || (muxLib = import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs'))).then(() => {
+      if(!media.isConnected || media.parentNode !== hero) return;
+      const v = document.createElement('mux-video');
+      v.className = 'clip'; v.setAttribute('aria-hidden', 'true'); v.tabIndex = -1;
+      v.muted = true; v.loop = true; v.playsInline = true;
+      ['muted', 'loop', 'playsinline', 'autoplay'].forEach(k => v.setAttribute(k, ''));
+      v.setAttribute('playback-id', film.mux); v.setAttribute('max-resolution', '1080p');
+      v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+      media.appendChild(v);
+      const q = v.play && v.play(); if(q && q.catch) q.catch(() => {});
+      new IntersectionObserver((es, io) => es.forEach(e => {
+        if(!v.isConnected){ io.disconnect(); return; }
+        if(e.isIntersecting){ const q = v.play && v.play(); if(q && q.catch) q.catch(() => {}); } else if(v.pause) v.pause();
+      })).observe(hero);
+      /* the same film with its sound and controls */
+      const b = el('button', 'sound', '(Sound on)'); b.type = 'button';
+      b.addEventListener('click', () => {
+        const fr = el('iframe');
+        fr.src = 'https://player.mux.com/' + encodeURIComponent(film.mux) + '?autoplay=true&accent-color=%23111111';
+        fr.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
+        fr.allowFullscreen = true; fr.title = 'Film';
+        hero.classList.add('playing');
+        hero.style.setProperty('--film', film.w + ' / ' + film.h);
+        media.replaceChildren(fr);
+        b.remove();
+      });
+      hero.appendChild(b);
+    }, () => {});
+  }
+
   function showCase(c, flip){
     /* the strip waits on this case, so closing lands back on its tile */
     if(!list.includes(c)) setFilter('', true);
@@ -367,7 +412,7 @@
 
     if(flip && !calm){
       busy = true;
-      const from = c.el.getBoundingClientRect(), dest = hero.getBoundingClientRect();
+      const from = c.el.getBoundingClientRect(), dest = heroRect(hero);
       media.classList.add('ghost');
       document.body.appendChild(media);
       c.el.style.visibility = 'hidden';
@@ -377,10 +422,12 @@
         media.classList.remove('ghost');
         an.cancel();
         busy = false;
+        heroFilm(hero, media);
       }).catch(() => { busy = false; });
     } else {
       hero.appendChild(media);
       c.el.style.visibility = 'hidden';
+      heroFilm(hero, media);
     }
     requestAnimationFrame(() => caseEl.classList.add('in'));
   }
@@ -392,7 +439,9 @@
     back.hidden = true;
     document.title = TITLE;
     const done = () => { c.el.style.visibility = ''; };
-    if(flip && !calm && media && caseEl.scrollTop < 120){
+    const heroEl = $('.case-hero', caseEl), playing = heroEl && heroEl.classList.contains('playing');
+    if(heroEl) heroEl.querySelectorAll('mux-video, .sound').forEach(n => n.remove());
+    if(flip && !calm && media && !playing && caseEl.scrollTop < 120){
       busy = true;
       const from = media.getBoundingClientRect(), dest = c.el.getBoundingClientRect();
       media.classList.add('ghost');
