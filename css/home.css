@@ -116,6 +116,14 @@ body.open .bar-bottom > *,body.info-open .bar-bottom > *{pointer-events:none}
 .hero-media .full{opacity:0; transition:opacity .45s var(--out)}
 .hero-media .full.on{opacity:1}
 .hero-media.ghost{position:fixed; z-index:30; margin:0; will-change:left,top,width,height}
+.hero-media .clip{position:absolute; inset:0; width:100%; height:100%; opacity:0; transition:opacity .5s var(--out); --media-object-fit:cover}
+.hero-media .clip.on{opacity:1}
+.hero-media iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+/* with sound on, the box takes the film's shape so nothing is cropped */
+.case-hero.playing{height:auto; aspect-ratio:var(--film); max-height:86vh; margin:0 auto}
+.case-hero.playing .hero-media{width:100%; aspect-ratio:auto}
+.sound{position:absolute; left:14px; bottom:14px; z-index:2; padding:10px 14px; color:#fff; background:rgba(17,17,17,.55); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); transition:background .25s var(--out)}
+.sound:hover{background:#111}
 
 .case-body{opacity:0; transform:translateY(24px); transition:opacity .3s var(--out), transform .3s var(--out)}
 .case.in .case-body{opacity:1; transform:none; transition:opacity .7s var(--out) .35s, transform .9s var(--out) .35s}
