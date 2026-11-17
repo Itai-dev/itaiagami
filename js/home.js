@@ -315,11 +315,13 @@
     /* a case with a film opens on the film itself, playing silently, in
        place of the cover image; it then leaves the list below */
     const own = !still && c.film ? c.media.find(m => m.mux === c.film) || null : null;
-    /* only a 16:9 film fits the cover; any other shape keeps the cover image
-       and plays silently in its place in the list below */
-    const wide = own && Math.abs(own.w / own.h - 16 / 9) < .06;
-    const film = wide ? own : null;
+    /* only a landscape film fits the cover, 16:9 up to cinema-wide; any other
+       shape keeps the cover image and plays silently in the list below */
+    const shape = own ? own.w / own.h : 0;
+    const film = shape > 16 / 9 - .06 && shape < 3 ? own : null;
     hero.film = film;
+    /* a cinema-wide film gives the cover its own shape where the box is tall */
+    if(film && shape > 2){ hero.classList.add('cine'); hero.style.setProperty('--film', film.w + ' / ' + film.h); }
     const body = el('div', 'case-body');
 
     const head = el('div', 'case-head');
