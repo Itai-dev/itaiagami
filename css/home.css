@@ -75,6 +75,8 @@ img{display:block}
 .tile.in{opacity:1}
 .tile img,.hero-media img{width:100%; height:100%; object-fit:cover; pointer-events:none}
 .stage.dragging .tile{cursor:grabbing}
+.tile .reel{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; opacity:0; transition:opacity .4s var(--out); --media-object-fit:cover}
+.tile .reel.on{opacity:1}
 
 /* what the tile in focus says */
 .cap{

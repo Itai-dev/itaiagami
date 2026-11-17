@@ -90,9 +90,40 @@
     const d = target - pos;
     pos = calm || Math.abs(d) < .0008 ? target : pos + d * .13;
     layout();
+    roll();
     if(pos !== target) raf = requestAnimationFrame(tick);
   }
   const move = () => { if(!raf) raf = requestAnimationFrame(tick); };
+
+  /* ---------- the film on the tile in focus ----------
+     When the strip comes to rest on a case that has a film, it plays on the
+     tile from its first frame: silent, looping, over the still. It stops as
+     soon as the strip moves on or the case opens. Skipped for reduced motion
+     and data saver. Mux's <mux-video> streams it, fetched the first time a
+     film is needed. */
+  const still = calm || (navigator.connection && navigator.connection.saveData);
+  let muxLib = null, rolling = null, reel = null;
+  function roll(){
+    const c = !view && !drag && pos === target ? list[Math.round(pos)] : null;
+    const want = c && c.film && !still ? c : null;
+    if(want === rolling) return;
+    if(reel){ const old = reel; old.classList.remove('on'); if(old.pause) old.pause(); setTimeout(() => old.remove(), 300); reel = null; }
+    rolling = want;
+    if(!want) return;
+    const start = () => {
+      if(rolling !== want) return;
+      const v = document.createElement('mux-video');
+      v.className = 'reel'; v.setAttribute('aria-hidden', 'true'); v.tabIndex = -1;
+      v.muted = true; v.loop = true; v.playsInline = true;
+      ['muted', 'loop', 'playsinline', 'autoplay'].forEach(k => v.setAttribute(k, ''));
+      v.setAttribute('playback-id', want.film); v.setAttribute('max-resolution', '720p');
+      v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+      want.el.appendChild(v);
+      reel = v;
+      const p = v.play && v.play(); if(p && p.catch) p.catch(() => {});
+    };
+    (muxLib || (muxLib = import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs'))).then(start, () => {});
+  }
   const to = t => { target = clamp(t, 0, list.length - 1); move(); };
   const snap = () => to(Math.round(target));
 
@@ -134,6 +165,7 @@
       pos = target = 0;
       layout();
       strip.classList.remove('out');
+      roll();
     };
     if(id === filter && list.length) return;
     const u = new URL(location.href);
@@ -177,6 +209,7 @@
     if(!drag || e.pointerId !== drag.id) return;
     if(dragged){ stage.classList.remove('dragging'); to(Math.round(target + clamp(drag.v * 160, -1.5, 1.5))); }
     drag = null;
+    roll();
   };
   stage.addEventListener('pointerup', drop);
   stage.addEventListener('pointercancel', drop);
@@ -382,6 +415,7 @@
     if(want === view) return;
     const was = view;
     view = want;
+    roll();
     if(was === 'info') hideInfo();
     else if(was && want && want !== 'info'){
       /* case to case: swap in place */
@@ -423,6 +457,7 @@
     if(s.linkedin) li.href = s.linkedin; else li.hidden = true;
     setFilter(new URLSearchParams(location.search).get('s') || '', true);
     sync(false);
+    roll();
   }).catch(e => {
     if(e) console.error(e);
     const n = el('p', 'note', 'The work could not be loaded. ');

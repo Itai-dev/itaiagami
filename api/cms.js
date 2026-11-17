@@ -136,6 +136,8 @@ function shape(data){
       disciplines: lead.disciplines || '',
       line: lead.oneliner || lead.text || (group && group.text) || '',
       sectors, thumb, hero, sections,
+      /* the case's own film, played silently on its tile while it is in focus */
+      film: (body.find(m => m.kind === 'video' && !m.title) || {}).mux || '',
       credits: lead.credits || [],
       siteUrl: (members.find(p => p.siteUrl) || {}).siteUrl || '',
       media: body,
