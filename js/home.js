@@ -234,7 +234,7 @@
   addEventListener('resize', () => { measure(); layout(); });
 
   /* ---------- the case study ---------- */
-  function figure(m){
+  function figure(m, auto){
     const f = el('figure', 'm' + (m.quarter ? ' quarter' : m.half ? ' half' : ''));
     const box = el('div', 'box');
     box.style.aspectRatio = m.w + ' / ' + m.h;
@@ -246,7 +246,7 @@
     img.loading = 'lazy'; img.decoding = 'async'; img.alt = m.alt || m.title || '';
     img.src = px(m, width);
     box.appendChild(img);
-    if(m.kind === 'video' && m.loop && !still){
+    if(m.kind === 'video' && (m.loop || auto) && !still){
       /* a clip among the images: silent, looping, only while it is on screen */
       const mount = () => {
         if(!box.isConnected || box.querySelector('mux-video')) return;
@@ -267,6 +267,18 @@
           else (muxLib || (muxLib = import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs'))).then(mount, () => {});
         } else if(v && v.pause) v.pause();
       }), { rootMargin: '200px' }).observe(box);
+      if(auto){
+        /* the project's own film: the same thing with its sound and controls */
+        const b = el('button', 'sound', '(Sound on)'); b.type = 'button';
+        b.addEventListener('click', () => {
+          const fr = el('iframe');
+          fr.src = 'https://player.mux.com/' + encodeURIComponent(m.mux) + '?autoplay=true&accent-color=%23111111';
+          fr.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
+          fr.allowFullscreen = true; fr.title = m.title || 'Film';
+          box.replaceChildren(fr);
+        });
+        box.appendChild(b);
+      }
     } else if(m.kind === 'video'){
       const p = el('button', 'play');
       p.type = 'button';
@@ -302,9 +314,12 @@
     const hero = el('div', 'case-hero');
     /* a case with a film opens on the film itself, playing silently, in
        place of the cover image; it then leaves the list below */
-    const film = !still && c.film ? c.media.find(m => m.mux === c.film) || null : null;
+    const own = !still && c.film ? c.media.find(m => m.mux === c.film) || null : null;
+    /* only a 16:9 film fits the cover; any other shape keeps the cover image
+       and plays silently in its place in the list below */
+    const wide = own && Math.abs(own.w / own.h - 16 / 9) < .06;
+    const film = wide ? own : null;
     hero.film = film;
-    if(film && film.h > film.w){ hero.classList.add('upright'); hero.style.setProperty('--r', (film.w / film.h).toFixed(4)); }
     const body = el('div', 'case-body');
 
     const head = el('div', 'case-head');
@@ -332,7 +347,7 @@
     }
     if(c.media.some(m => m !== film)){
       const media = el('div', 'case-media');
-      c.media.filter(m => m !== film).forEach(m => media.appendChild(figure(m)));
+      c.media.filter(m => m !== film).forEach(m => media.appendChild(figure(m, m === own)));
       body.appendChild(media);
     }
     if(c.credits.length){
@@ -359,14 +374,7 @@
   const rect = r => ({ left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px' });
   const fly = (node, from, toRect, ms) => node.animate([rect(from), rect(toRect)], { duration: ms, easing: EASE, fill: 'both' });
 
-  /* where the cover sits in its box: all of it, or an upright film's own shape, centred */
-  function heroRect(hero){
-    const r = hero.getBoundingClientRect();
-    if(!hero.classList.contains('upright')) return r;
-    const w = Math.min(r.width, r.height * hero.film.w / hero.film.h);
-    return { left: r.left + (r.width - w) / 2, top: r.top, width: w, height: r.height };
-  }
-  function heroFilm(hero, media){
+    function heroFilm(hero, media){
     const film = hero.film;
     if(!film) return;
     (muxLib || (muxLib = import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs'))).then(() => {
@@ -412,7 +420,7 @@
 
     if(flip && !calm){
       busy = true;
-      const from = c.el.getBoundingClientRect(), dest = heroRect(hero);
+      const from = c.el.getBoundingClientRect(), dest = hero.getBoundingClientRect();
       media.classList.add('ghost');
       document.body.appendChild(media);
       c.el.style.visibility = 'hidden';

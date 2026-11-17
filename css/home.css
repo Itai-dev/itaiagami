@@ -119,14 +119,11 @@ body.open .bar-bottom > *,body.info-open .bar-bottom > *{pointer-events:none}
 .hero-media .clip{position:absolute; inset:0; width:100%; height:100%; opacity:0; transition:opacity .5s var(--out); --media-object-fit:cover}
 .hero-media .clip.on{opacity:1}
 .hero-media iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
-/* an upright film keeps its own shape, centred, instead of being cropped wide */
-.case-hero.upright .hero-media:not(.ghost){width:auto; max-width:100%; aspect-ratio:var(--r); margin:0 auto}
 /* with sound on, the box takes the film's shape so nothing is cropped */
 .case-hero.playing{height:auto; aspect-ratio:var(--film); max-height:86vh; margin:0 auto}
 .case-hero.playing .hero-media{width:100%; aspect-ratio:auto}
 .sound{position:absolute; left:14px; bottom:14px; z-index:2; padding:10px 14px; color:#fff; background:rgba(17,17,17,.55); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); transition:background .25s var(--out)}
 .sound:hover{background:#111}
-.case-hero.upright .sound{left:50%; translate:-50% 0}
 
 .case-body{opacity:0; transform:translateY(24px); transition:opacity .3s var(--out), transform .3s var(--out)}
 .case.in .case-body{opacity:1; transform:none; transition:opacity .7s var(--out) .35s, transform .9s var(--out) .35s}
@@ -200,7 +197,6 @@ body.open .bar-bottom > *,body.info-open .bar-bottom > *{pointer-events:none}
   .links{gap:18px}
 
   .case-hero{height:auto; aspect-ratio:4 / 3; min-height:0}
-  .case-hero.upright{aspect-ratio:auto; height:76vh}
   .case-head,.case-text,.case-credits{display:block}
   .case-head{padding-bottom:56px}
   .c-line{margin:28px 0 36px; font-size:15px}
