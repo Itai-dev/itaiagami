@@ -139,6 +139,8 @@ body.open .bar-bottom > *,body.info-open .bar-bottom > *{pointer-events:none}
 .m.half{grid-column:auto}
 .m .box{position:relative; overflow:hidden; background:var(--tile)}
 .m img,.m iframe{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border:0}
+.m.tall .box{width:min(100%, calc(86vh * var(--r))); margin:0 auto}
+.m.tall figcaption{text-align:center}
 .m figcaption{padding:8px 0 14px}
 .m .play{
   position:absolute; inset:0; width:100%; height:100%;
