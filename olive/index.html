@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Olive | Galilee Residences</title>
+<meta name="description" content="Olive, Galilee Residences. A concept for a residential launch: brand, film and website by Itai Agami." />
+<!-- A concept project: kept out of search so it is never mistaken for a development on sale. -->
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#26281f" />
+<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&amp;family=Jost:wght@300;400&amp;display=swap" />
+<style>
+:root{
+  --olive:#26281f; --deep:#1b1c16; --cream:#efe9dc; --stone:#d8cfbd; --leaf:#8a8f6a; --clay:#b98a5e;
+  --serif:"Cormorant Garamond",Georgia,serif; --sans:"Jost",system-ui,sans-serif;
+  --m:clamp(20px,4vw,64px); --ease:cubic-bezier(.2,.7,.2,1);
+  --img:https://cdn.sanity.io/images/c8rr77b1/production/;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--olive);color:var(--cream);font:300 17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;width:100%;height:100%;object-fit:cover}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,p,figure{margin:0}
+.label{font:400 11px/1 var(--sans);letter-spacing:.42em;text-transform:uppercase}
+.serif{font-family:var(--serif);font-weight:300}
+.it{font-style:italic}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:22px var(--m);mix-blend-mode:difference;color:#fff}
+.nav .word{font:400 20px/1 var(--serif);letter-spacing:.5em;margin-right:-.5em}
+.nav nav{display:flex;gap:34px}
+.nav nav a{opacity:.85}
+.nav nav a:hover{opacity:1}
+
+/* hero */
+.hero{position:relative;height:100svh;min-height:620px;display:grid;place-items:center;text-align:center;overflow:hidden}
+.hero img{position:absolute;inset:0;object-position:50% 38%;animation:drift 24s var(--ease) both}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(27,28,22,.35),rgba(27,28,22,.08) 40%,rgba(27,28,22,.7))}
+.hero-in{position:relative;z-index:1;padding:0 var(--m)}
+.sprig{width:44px;height:78px;margin:0 auto 26px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.hero h1{font:300 clamp(64px,13vw,190px)/.9 var(--serif);letter-spacing:.34em;margin-right:-.34em}
+.rule{width:64px;height:1px;background:currentColor;margin:34px auto 22px;opacity:.8}
+.hero .line{font:italic 300 clamp(22px,2.6vw,34px)/1.2 var(--serif);margin-top:38px}
+.scroll{position:absolute;z-index:1;bottom:28px;left:50%;translate:-50% 0}
+@keyframes drift{from{scale:1.08}to{scale:1}}
+
+.btn{display:inline-block;margin-top:30px;padding:15px 44px;border:1px solid currentColor;border-radius:999px;font:400 15px/1 var(--sans);letter-spacing:.04em;background:none;color:inherit;cursor:pointer;transition:background .4s var(--ease),color .4s var(--ease)}
+.btn:hover{background:var(--cream);color:var(--olive)}
+
+/* statement */
+.statement{padding:clamp(110px,16vw,240px) var(--m);text-align:center}
+.statement p{font:300 clamp(30px,4.6vw,68px)/1.14 var(--serif);max-width:20ch;margin:0 auto}
+.statement .label{display:block;margin-bottom:44px;color:var(--leaf)}
+
+/* place */
+.place{display:grid;grid-template-columns:1.1fr .9fr;min-height:100svh;background:var(--deep)}
+.place figure{min-height:70svh}
+.place .txt{display:flex;flex-direction:column;justify-content:center;padding:var(--m) clamp(28px,7vw,120px)}
+.place h2,.res h2,.rituals h2,.film h2,.reg h2{font:300 clamp(40px,5.4vw,84px)/1 var(--serif);margin:26px 0 30px}
+.place p{max-width:36ch;opacity:.82}
+.place .label,.res .label,.rituals .label,.film .label,.reg .label{color:var(--leaf)}
+
+/* residences */
+.res{background:var(--cream);color:var(--olive);padding:clamp(90px,12vw,180px) var(--m)}
+.res .label{color:#7c8160}
+.res-head{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;margin-bottom:clamp(40px,6vw,90px)}
+.res-head p{max-width:34ch;opacity:.8}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,32px)}
+.card figure{aspect-ratio:3/4;overflow:hidden}
+.card img{transition:scale 1.4s var(--ease)}
+.card:hover img{scale:1.05}
+.card h3{font:300 30px/1.1 var(--serif);margin:22px 0 6px}
+.card p{font-size:15px;opacity:.75}
+.card:nth-child(2){margin-top:clamp(30px,6vw,96px)}
+
+/* rituals */
+.rituals{padding:clamp(90px,12vw,180px) 0 clamp(90px,12vw,180px) var(--m);overflow:hidden}
+.rituals h2 em{color:var(--stone)}
+.row{display:flex;gap:clamp(12px,1.6vw,24px);overflow-x:auto;scroll-snap-type:x mandatory;padding-right:var(--m);scrollbar-width:none;margin-top:clamp(40px,6vw,80px)}
+.row::-webkit-scrollbar{display:none}
+.row figure{flex:0 0 clamp(240px,27vw,440px);aspect-ratio:9/14;scroll-snap-align:start;position:relative;overflow:hidden}
+.row figcaption{position:absolute;left:22px;bottom:20px;font:italic 300 26px/1 var(--serif);text-shadow:0 1px 18px rgba(0,0,0,.5)}
+
+/* film */
+.film{background:var(--deep);padding:clamp(90px,12vw,180px) var(--m);display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(30px,6vw,110px);align-items:center}
+.film .frame{width:min(360px,70vw);aspect-ratio:9/16;background:#000;overflow:hidden;border-radius:6px;box-shadow:0 40px 90px rgba(0,0,0,.5)}
+.film iframe{width:100%;height:100%;border:0;display:block}
+.film .txt p{max-width:30ch;opacity:.82}
+.film .side{font:italic 300 clamp(24px,2.6vw,38px)/1.25 var(--serif);color:var(--stone);max-width:14ch}
+
+/* register */
+.reg{position:relative;padding:clamp(110px,15vw,220px) var(--m);text-align:center;overflow:hidden}
+.reg > img{position:absolute;inset:0;opacity:.3}
+.reg-in{position:relative;max-width:560px;margin:0 auto}
+.reg form{display:grid;gap:14px;margin-top:44px;text-align:left}
+.reg input{width:100%;padding:16px 2px;background:none;border:0;border-bottom:1px solid rgba(239,233,220,.45);color:var(--cream);font:300 17px/1.2 var(--sans);outline:none;border-radius:0}
+.reg input::placeholder{color:rgba(239,233,220,.6)}
+.reg input:focus{border-color:var(--cream)}
+.reg .btn{justify-self:center}
+.reg .done{font:italic 300 28px/1.3 var(--serif);margin-top:44px}
+
+footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:30px var(--m);background:var(--deep);font-size:13px;opacity:.75}
+footer a{border-bottom:1px solid currentColor}
+
+.reveal{opacity:0;translate:0 26px;transition:opacity 1.1s var(--ease),translate 1.3s var(--ease)}
+.reveal.on{opacity:1;translate:0 0}
+
+@media (max-width:820px){
+  .nav nav{display:none}
+  .place{grid-template-columns:1fr}
+  .place .txt{padding:70px var(--m) 90px}
+  .cards{grid-template-columns:1fr}
+  .card:nth-child(2){margin-top:0}
+  .film{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .film .side{display:none}
+  .film .txt p{margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero img{animation:none}
+  .reveal{opacity:1;translate:none;transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="word" href="#top">OLIVE</a>
+  <nav class="label"><a href="#place">The place</a><a href="#residences">Residences</a><a href="#film">Film</a><a href="#register">Register</a></nav>
+</header>
+
+<section class="hero" id="top">
+  <img src="https://cdn.sanity.io/images/c8rr77b1/production/8c33cd35f3caca489582053c75eb73a6d6ea71bc-1400x2502.jpg?w=2000&amp;auto=format&amp;q=80" alt="An old olive tree above the Sea of Galilee at sunrise" />
+  <div class="hero-in">
+    <svg class="sprig" viewBox="0 0 44 78" aria-hidden="true"><path d="M22 10v66"/><path d="M22 28C10 26 3 16 2 3c12 2 19 11 20 25Z"/><path d="M22 44c1-13 8-20 20-22-1 13-8 21-20 22Z"/><path d="M22 58C11 57 4 49 2 38c11 1 18 8 20 20Z"/><circle cx="33" cy="63" r="5"/></svg>
+    <h1>OLIVE</h1>
+    <div class="rule"></div>
+    <p class="label">Galilee Residences</p>
+    <p class="line">Meet Olive.</p>
+    <a class="btn" href="#register">Register for early access</a>
+  </div>
+  <span class="label scroll" aria-hidden="true">Scroll</span>
+</section>
+
+<section class="statement">
+  <span class="label reveal">A slower address</span>
+  <p class="reveal">Stone, glass and old olive trees, on a hillside that looks down to the <span class="it">Sea of Galilee.</span></p>
+</section>
+
+<section class="place" id="place">
+  <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/f55da68932293b995acbdc49506ae18c59ffae28-1400x2508.jpg?w=1600&amp;auto=format&amp;q=80" alt="The residences among the olive groves at dusk, the lake beyond" /></figure>
+  <div class="txt">
+    <span class="label reveal">The place</span>
+    <h2 class="reveal">Between the grove <span class="it">and the water.</span></h2>
+    <p class="reveal">The homes sit low among the trees, each with its own pool and its own line of sight to the lake. At night the hillside is a handful of warm windows and the lights of the far shore.</p>
+  </div>
+</section>
+
+<section class="res" id="residences">
+  <div class="res-head">
+    <div><span class="label reveal">The residences</span><h2 class="reveal">Built from <span class="it">what is here.</span></h2></div>
+    <p class="reveal">Local limestone, raw concrete and full-height glass. Rooms open to the terrace, and the old trees were kept where they stood.</p>
+  </div>
+  <div class="cards">
+    <article class="card reveal"><figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/338fdd3b178f2c5826f353f3369df32efb84fa34-1400x2502.jpg?w=1000&amp;auto=format&amp;q=80" alt="A stone and glass villa with an olive tree at its entrance" /></figure><h3>The house</h3><p>Stone walls, a concrete roof, a tree at the door.</p></article>
+    <article class="card reveal"><figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/159e30ab0315b7c31934159d11f601f48f1cd564-1400x2502.jpg?w=1000&amp;auto=format&amp;q=80" alt="A bedroom with linen curtains and leaf shadows on a limestone wall" /></figure><h3>The rooms</h3><p>Linen, limestone and the shadow of leaves.</p></article>
+    <article class="card reveal"><figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/45a08395ec9ff98b1b19a50d5bc0d70df7f55171-1400x2502.jpg?w=1000&amp;auto=format&amp;q=80" alt="A private pool lined with olive trees" /></figure><h3>The water</h3><p>A private pool, held between the trees.</p></article>
+  </div>
+</section>
+
+<section class="rituals">
+  <span class="label reveal">Days at Olive</span>
+  <h2 class="reveal">Quiet rituals, <em class="it">long evenings.</em></h2>
+  <div class="row">
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/3160cbc08bd2aac35762b7a8528c9da324bc1e3b-1400x2502.jpg?w=900&amp;auto=format&amp;q=80" alt="A woman walks across a stone terrace with her coffee" /><figcaption>Morning</figcaption></figure>
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/c163a00bfc6560a45b13975a8f2e819a83862593-1400x2502.jpg?w=900&amp;auto=format&amp;q=80" alt="A woman floats in a pool, seen from above" /><figcaption>Noon</figcaption></figure>
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/c221d59596b8477dc2f66a0af908b51f82cef7f0-1400x2502.jpg?w=900&amp;auto=format&amp;q=80" alt="Olive oil poured over bread and tomatoes at a table of friends" /><figcaption>The table</figcaption></figure>
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/6997633eb40aa6d76dd47f8d66f39adcfce483b6-1400x2502.jpg?w=900&amp;auto=format&amp;q=80" alt="A stone bathtub filling, the grove outside" /><figcaption>The bath</figcaption></figure>
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/d62fb55d95a9a59c60d0ddf2b8851f89b9481c72-1400x2502.jpg?w=900&amp;auto=format&amp;q=80" alt="A couple dance barefoot at sunset" /><figcaption>Evening</figcaption></figure>
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/fa869325984033a427f80872d4fe234359e6507c-1400x2502.jpg?w=900&amp;auto=format&amp;q=80" alt="A hand moves through olive leaves" /><figcaption>The grove</figcaption></figure>
+  </div>
+</section>
+
+<section class="film" id="film">
+  <div class="txt">
+    <span class="label reveal">The film</span>
+    <h2 class="reveal">Thirty seconds <span class="it">of Olive.</span></h2>
+    <p class="reveal">The launch film, made for the phone it will be watched on. Sound on.</p>
+  </div>
+  <div class="frame reveal"><iframe loading="lazy" src="https://player.mux.com/AV00ygeqXJknpaVSRsSLxa42HTTcABjY6RhLnP5dZN9k?accent-color=%23efe9dc" title="Olive, Galilee Residences: launch film" allow="fullscreen; picture-in-picture; encrypted-media" allowfullscreen></iframe></div>
+  <p class="side reveal">Quiet rituals, long evenings, and a lake that changes by the hour.</p>
+</section>
+
+<section class="reg" id="register">
+  <img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/458a0bfde1c2042678d40b31bdae41df1cda55af-1400x2502.jpg?w=1800&amp;auto=format&amp;q=70" alt="" />
+  <div class="reg-in">
+    <span class="label">Early access</span>
+    <h2>Be first <span class="it">to see it.</span></h2>
+    <p>Leave your details and we will be in touch before the residences are released.</p>
+    <form id="form">
+      <input name="name" placeholder="Full name" autocomplete="name" required />
+      <input name="phone" type="tel" placeholder="Phone" autocomplete="tel" required />
+      <input name="email" type="email" placeholder="Email" autocomplete="email" />
+      <button class="btn" type="submit">Register</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <span>Olive, Galilee Residences. A concept project: the form above is a demonstration and sends nothing.</span>
+  <span>Brand, film and website by <a href="/">Itai Agami</a></span>
+</footer>
+
+<script>
+/* reveal on scroll */
+(() => {
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(e => e.classList.add('on')); return; }
+  const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  els.forEach(e => io.observe(e));
+})();
+/* the form is a demonstration: nothing is sent or stored */
+document.getElementById('form').addEventListener('submit', e => {
+  e.preventDefault();
+  const p = document.createElement('p');
+  p.className = 'done';
+  p.textContent = 'Thank you. This is a concept, so nothing was sent.';
+  e.target.replaceWith(p);
+});
+</script>
+</body>
+</html>
