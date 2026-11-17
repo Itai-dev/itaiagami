@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>East 7 | Jaffa Residences</title>
+<meta name="description" content="East 7, Jaffa Residences. Old stone, new light. A concept for a residential launch: brand, film and website by Itai Agami." />
+<!-- A concept project: kept out of search so it is never mistaken for a development on sale. -->
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#fdf3e7" />
+<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Jost:wght@300;400;500&amp;display=swap" />
+<style>
+:root{
+  --cream:#fdf3e7; --paper:#f4e7d5; --ink:#4a3728; --deep:#2e2118; --stone:#c9ae86; --bloom:#a8326b; --sea:#5f8ba0;
+  --e-bg:var(--cream);
+  --serif:"Cormorant Garamond",Georgia,serif; --sans:"Jost",system-ui,sans-serif;
+  --m:clamp(20px,4vw,64px); --ease:cubic-bezier(.2,.7,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font:300 17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;width:100%;height:100%;object-fit:cover}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,p,figure{margin:0}
+.label{font:500 11px/1.2 var(--sans);letter-spacing:.34em;text-transform:uppercase}
+.it{font-style:italic;font-weight:400}
+
+/* the mark */
+.mark{display:inline-flex;align-items:center;gap:.9em;font:500 10px/1.25 var(--sans);letter-spacing:.3em;text-transform:uppercase;text-align:center}
+.mark .emblem{width:5.4em;height:5.4em;flex:none}
+.mark span:first-child{text-align:right}.mark span:last-child{text-align:left}
+.word{font:500 clamp(56px,10vw,150px)/.9 var(--serif);letter-spacing:.2em;margin-right:-.2em;font-variant-numeric:lining-nums}
+.sub{font:600 clamp(13px,1.5vw,21px)/1 var(--serif);letter-spacing:.34em;margin-right:-.34em;text-transform:uppercase}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:20px var(--m);mix-blend-mode:difference;color:#fff}
+.nav .w{font:500 20px/1 var(--serif);letter-spacing:.3em;font-variant-numeric:lining-nums}
+.nav nav{display:flex;gap:34px}
+.nav nav a{opacity:.85}.nav nav a:hover{opacity:1}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:100svh}
+.hero figure{position:relative;overflow:hidden;min-height:60svh}
+.hero figure img{position:absolute;inset:0;animation:drift 22s var(--ease) both}
+.hero-in{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px var(--m) 80px;gap:26px}
+.hero .line{font:italic 400 clamp(20px,2.2vw,30px)/1.2 var(--serif)}
+@keyframes drift{from{scale:1.08}to{scale:1}}
+
+.btn{display:inline-block;padding:16px 46px;border:1px solid var(--ink);border-radius:999px;font:500 12px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;background:var(--ink);color:var(--cream);cursor:pointer;transition:background .4s var(--ease),color .4s var(--ease)}
+.btn:hover{background:none;color:var(--ink)}
+
+/* statement */
+.statement{padding:clamp(110px,15vw,220px) var(--m);text-align:center;background:var(--paper)}
+.statement p{font:400 clamp(30px,4.6vw,66px)/1.14 var(--serif);max-width:19ch;margin:0 auto}
+.statement .label{display:block;margin-bottom:40px;color:var(--bloom)}
+
+/* place */
+.place{display:grid;grid-template-columns:.9fr 1.1fr;min-height:100svh;background:var(--deep);color:var(--cream)}
+.place figure{min-height:70svh;order:2}
+.place .txt{display:flex;flex-direction:column;justify-content:center;padding:var(--m) clamp(28px,7vw,120px)}
+h2{font:400 clamp(40px,5.2vw,80px)/1 var(--serif);margin:24px 0 28px}
+.place p{max-width:36ch;opacity:.85}
+.place .label{color:var(--stone)}
+.facts{display:grid;grid-template-columns:repeat(3,auto);gap:10px 44px;justify-content:start;margin-top:44px}
+.facts b{display:block;font:400 34px/1 var(--serif);font-variant-numeric:lining-nums}
+.facts span{font-size:13px;opacity:.7}
+
+/* residences */
+.res{padding:clamp(90px,12vw,180px) var(--m)}
+.res .label,.days .label,.film .label,.reg .label{color:var(--bloom)}
+.res-head{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;margin-bottom:clamp(40px,6vw,90px)}
+.res-head p{max-width:34ch;opacity:.85}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,32px)}
+.card figure{aspect-ratio:3/4;overflow:hidden;border-radius:999px 999px 0 0}
+.card img{transition:scale 1.4s var(--ease)}
+.card:hover img{scale:1.05}
+.card h3{font:400 30px/1.1 var(--serif);margin:22px 0 6px}
+.card p{font-size:15px;opacity:.8}
+.card:nth-child(2){margin-top:clamp(30px,6vw,96px)}
+
+/* days */
+.days{background:var(--paper);padding:clamp(90px,12vw,180px) 0 clamp(90px,12vw,180px) var(--m);overflow:hidden}
+.row{display:flex;gap:clamp(12px,1.6vw,24px);overflow-x:auto;scroll-snap-type:x mandatory;padding-right:var(--m);scrollbar-width:none;margin-top:clamp(40px,6vw,80px)}
+.row::-webkit-scrollbar{display:none}
+.row figure{flex:0 0 clamp(240px,27vw,440px);aspect-ratio:9/14;scroll-snap-align:start;position:relative;overflow:hidden;color:#fff}
+.row figcaption{position:absolute;left:22px;bottom:20px;font:italic 400 26px/1 var(--serif);text-shadow:0 1px 18px rgba(0,0,0,.6)}
+
+/* film */
+.film{background:var(--deep);color:var(--cream);padding:clamp(90px,12vw,180px) var(--m);display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(30px,6vw,110px);align-items:center}
+.film .label{color:var(--stone)}
+.film .frame{width:min(360px,70vw);aspect-ratio:9/16;background:#000;overflow:hidden;border-radius:6px;box-shadow:0 40px 90px rgba(0,0,0,.5)}
+.film iframe{width:100%;height:100%;border:0;display:block}
+.film .txt p{max-width:30ch;opacity:.85}
+.film .side{font:italic 400 clamp(24px,2.6vw,38px)/1.25 var(--serif);color:var(--stone);max-width:14ch}
+
+/* register */
+.reg{padding:clamp(100px,14vw,200px) var(--m);text-align:center}
+.reg-in{max-width:560px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+.reg .mark{margin-bottom:30px}
+.reg form{display:grid;gap:14px;margin:40px 0 0;text-align:left;width:100%}
+.reg input{width:100%;padding:16px 2px;background:none;border:0;border-bottom:1px solid rgba(74,55,40,.4);color:var(--ink);font:300 17px/1.2 var(--sans);outline:none;border-radius:0}
+.reg input::placeholder{color:rgba(74,55,40,.6)}
+.reg input:focus{border-color:var(--ink)}
+.reg .btn{justify-self:center;margin-top:16px}
+.reg .or{margin-top:26px;font:italic 400 20px/1 var(--serif)}
+.reg .or button{font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid currentColor;padding:0;cursor:pointer}
+.reg .done{font:italic 400 28px/1.3 var(--serif);margin-top:40px}
+
+footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:30px var(--m);background:var(--deep);color:var(--cream);font-size:13px}
+footer span{opacity:.75}
+footer a{border-bottom:1px solid currentColor}
+
+.reveal{opacity:0;translate:0 26px;transition:opacity 1.1s var(--ease),translate 1.3s var(--ease)}
+.reveal.on{opacity:1;translate:0 0}
+
+@media (max-width:820px){
+  .nav nav{display:none}
+  .btn{padding:16px 28px;letter-spacing:.22em;font-size:11px;white-space:nowrap}
+  .hero{grid-template-columns:1fr}
+  .hero figure{order:2;min-height:80svh}
+  .hero-in{min-height:88svh}
+  .place{grid-template-columns:1fr}
+  .place figure{order:0}
+  .place .txt{padding:70px var(--m) 90px}
+  .facts{gap:10px 28px}
+  .cards{grid-template-columns:1fr}
+  .card:nth-child(2){margin-top:0}
+  .film{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .film .side{display:none}
+  .film .txt p{margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero figure img{animation:none}
+  .reveal{opacity:1;translate:none;transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="w" href="#top">EAST 7</a>
+  <nav class="label"><a href="#place">Jaffa</a><a href="#residences">Residences</a><a href="#film">Film</a><a href="#register">Register</a></nav>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-in">
+    <div class="mark"><span>Old<br />Stone</span><svg viewBox="0 0 200 200" class="emblem" aria-hidden="true"><defs><clipPath id="e7c"><circle cx="100" cy="100" r="92"/></clipPath></defs><g clip-path="url(#e7c)" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M0 8H200"/><path d="M20 8V26"/><path d="M44 8V26"/><path d="M74 8V26"/><path d="M110 8V26"/><path d="M134 8V26"/><path d="M158 8V26"/><path d="M194 8V26"/><path d="M218 8V26"/><path d="M0 26H200"/><path d="M34 26V44"/><path d="M70 26V44"/><path d="M94 26V44"/><path d="M130 26V44"/><path d="M154 26V44"/><path d="M178 26V44"/><path d="M202 26V44"/><path d="M0 44H200"/><path d="M20 44V62"/><path d="M50 44V62"/><path d="M74 44V62"/><path d="M98 44V62"/><path d="M122 44V62"/><path d="M158 44V62"/><path d="M188 44V62"/><path d="M212 44V62"/><path d="M0 62H200"/><path d="M40 62V80"/><path d="M64 62V80"/><path d="M88 62V80"/><path d="M124 62V80"/><path d="M160 62V80"/><path d="M196 62V80"/><path d="M220 62V80"/><path d="M0 80H200"/><path d="M26 80V98"/><path d="M62 80V98"/><path d="M92 80V98"/><path d="M116 80V98"/><path d="M140 80V98"/><path d="M164 80V98"/><path d="M200 80V98"/><path d="M0 98H200"/><path d="M28 98V116"/><path d="M58 98V116"/><path d="M88 98V116"/><path d="M112 98V116"/><path d="M148 98V116"/><path d="M172 98V116"/><path d="M208 98V116"/><path d="M0 116H200"/><path d="M20 116V134"/><path d="M56 116V134"/><path d="M92 116V134"/><path d="M116 116V134"/><path d="M140 116V134"/><path d="M176 116V134"/><path d="M212 116V134"/><path d="M0 134H200"/><path d="M40 134V152"/><path d="M64 134V152"/><path d="M94 134V152"/><path d="M118 134V152"/><path d="M154 134V152"/><path d="M190 134V152"/><path d="M214 134V152"/><path d="M0 152H200"/><path d="M26 152V170"/><path d="M50 152V170"/><path d="M86 152V170"/><path d="M110 152V170"/><path d="M140 152V170"/><path d="M176 152V170"/><path d="M212 152V170"/><path d="M0 170H200"/><path d="M34 170V188"/><path d="M64 170V188"/><path d="M94 170V188"/><path d="M130 170V188"/><path d="M160 170V188"/><path d="M190 170V188"/><path d="M220 170V188"/><path d="M0 188H200"/><path d="M14 188V206"/><path d="M38 188V206"/><path d="M74 188V206"/><path d="M98 188V206"/><path d="M122 188V206"/><path d="M158 188V206"/><path d="M188 188V206"/><path d="M224 188V206"/></g><g clip-path="url(#e7c)" stroke="currentColor" stroke-linejoin="round"><path d="M40 166V86a22 22 0 0 1 40 -12a22 22 0 0 1 40 0a22 22 0 0 1 40 12V166Z" fill="var(--e-bg,#fdf3e7)" stroke-width="3"/><path d="M45 162V84a15 15 0 0 1 30 0V162Z" fill="currentColor" stroke-width="2"/><path d="M60 70V162M45 96H75M45 118H75M45 140H75" stroke="var(--e-bg,#fdf3e7)" stroke-width="2.4" fill="none"/><path d="M85 162V84a15 15 0 0 1 30 0V162Z" fill="currentColor" stroke-width="2"/><path d="M100 70V162M85 96H115M85 118H115M85 140H115" stroke="var(--e-bg,#fdf3e7)" stroke-width="2.4" fill="none"/><path d="M125 162V84a15 15 0 0 1 30 0V162Z" fill="currentColor" stroke-width="2"/><path d="M140 70V162M125 96H155M125 118H155M125 140H155" stroke="var(--e-bg,#fdf3e7)" stroke-width="2.4" fill="none"/><path d="M34 166H166V176H34Z" fill="var(--e-bg,#fdf3e7)" stroke-width="3"/></g><circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="5"/></svg><span>New<br />Light</span></div>
+    <h1 class="word">EAST 7</h1>
+    <p class="sub">Jaffa Residences</p>
+    <p class="line">Something new is rising in Jaffa.</p>
+    <a class="btn" href="#register">Register for early access</a>
+  </div>
+  <figure><img src="https://cdn.sanity.io/images/c8rr77b1/production/bc5aa4774ff38d6f394454eb85fede65aad6c451-2160x3840.jpg?w=1600&amp;auto=format&amp;q=80" alt="A woman with her coffee at an arched window, the rooftops of Jaffa and the sea beyond" /></figure>
+</section>
+
+<section class="statement">
+  <span class="label reveal">Old stone, new light</span>
+  <p class="reveal">Seven floors of glass and light, rising from a stone house that has stood in Jaffa <span class="it">for a hundred years.</span></p>
+</section>
+
+<section class="place" id="place">
+  <div class="txt">
+    <span class="label reveal">The place</span>
+    <h2 class="reveal">A hidden gem, <span class="it">a lane from the sea.</span></h2>
+    <p class="reveal">Bougainvillea over the wall, laundry across the alley, a cat asleep on the sill. East 7 sits inside the old city, not beside it, and the port is a short walk downhill.</p>
+    <div class="facts reveal"><div><b>7</b><span>floors</span></div><div><b>24</b><span>residences</span></div><div><b>1</b><span>restored stone house</span></div></div>
+  </div>
+  <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/b4bec64ae5769bc5036a8c0b769402e76f5932f1-2160x3840.jpg?w=1600&amp;auto=format&amp;q=80" alt="A stone alley in Jaffa with bougainvillea and a cat on a windowsill" /></figure>
+</section>
+
+<section class="res" id="residences">
+  <div class="res-head">
+    <div><span class="label reveal">The residences</span><h2 class="reveal">Arches kept, <span class="it">windows opened.</span></h2></div>
+    <p class="reveal">Vaulted ceilings and bare limestone below, full-height glass above. Every home faces the light, and most of them face the sea.</p>
+  </div>
+  <div class="cards">
+    <article class="card reveal"><figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/490bab8464df70e4fcf63f1b36806599c1799f80-2160x3840.jpg?w=1000&amp;auto=format&amp;q=80" alt="A vaulted stone lobby with brass mailboxes and an olive tree" /></figure><h3>The entrance</h3><p>A vaulted hall, brass mailboxes, an olive tree at the door.</p></article>
+    <article class="card reveal"><figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/7a5dd2299d79ff21fd13b7bbcc4827ab37fb8807-2160x3840.jpg?w=1000&amp;auto=format&amp;q=80" alt="A bedroom under a white vaulted ceiling, the window open to the city" /></figure><h3>The rooms</h3><p>Mornings filled with light, under a ceiling of arches.</p></article>
+    <article class="card reveal"><figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/c66ae7a343ee721b52d289972679ed1da81f2172-2160x3840.jpg?w=1000&amp;auto=format&amp;q=80" alt="A marble kitchen island by an arched window" /></figure><h3>The kitchen</h3><p>Marble, oak and space to gather.</p></article>
+  </div>
+</section>
+
+<section class="days">
+  <span class="label reveal">Days at East 7</span>
+  <h2 class="reveal">A new way <span class="it">to live in the old city.</span></h2>
+  <div class="row">
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/bc5aa4774ff38d6f394454eb85fede65aad6c451-2160x3840.jpg?w=900&amp;auto=format&amp;q=80" alt="Morning coffee at the open window" /><figcaption>The sea at your window</figcaption></figure>
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/b4bec64ae5769bc5036a8c0b769402e76f5932f1-2160x3840.jpg?w=900&amp;auto=format&amp;q=80" alt="The alley below" /><figcaption>The lane</figcaption></figure>
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/5c9d83011c795fdafa6937465f122b0eec860948-2160x3840.jpg?w=900&amp;auto=format&amp;q=80" alt="Friends share a table on the roof at sunset" /><figcaption>The roof</figcaption></figure>
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/ca44349a033271e56f279a87268fda7260392c2f-2160x3840.jpg?w=900&amp;auto=format&amp;q=80" alt="Jaffa and the Tel Aviv coast at dusk from above" /><figcaption>The city</figcaption></figure>
+    <figure><img loading="lazy" src="https://cdn.sanity.io/images/c8rr77b1/production/c7e3e0711380c38bea104854b4cb916441598b75-2160x3840.jpg?w=900&amp;auto=format&amp;q=80" alt="East 7 rising above its restored stone base" /><figcaption>The address</figcaption></figure>
+  </div>
+</section>
+
+<section class="film" id="film">
+  <div class="txt">
+    <span class="label reveal">The film</span>
+    <h2 class="reveal">Twenty-four seconds <span class="it">of East 7.</span></h2>
+    <p class="reveal">The launch film, made for the phone it will be watched on.</p>
+  </div>
+  <div class="frame reveal"><iframe loading="lazy" src="https://player.mux.com/4lmNCwpoBwV01M2S024m7P6Y7NbupshovqtmhwWqyAvNk?accent-color=%23c9ae86" title="East 7, Jaffa Residences: launch film" allow="fullscreen; picture-in-picture; encrypted-media" allowfullscreen></iframe></div>
+  <p class="side reveal">Made for the people you love.</p>
+</section>
+
+<section class="reg" id="register">
+  <div class="reg-in">
+    <div class="mark"><span>Old<br />Stone</span><svg viewBox="0 0 200 200" class="emblem" aria-hidden="true"><defs><clipPath id="e7c"><circle cx="100" cy="100" r="92"/></clipPath></defs><g clip-path="url(#e7c)" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M0 8H200"/><path d="M20 8V26"/><path d="M44 8V26"/><path d="M74 8V26"/><path d="M110 8V26"/><path d="M134 8V26"/><path d="M158 8V26"/><path d="M194 8V26"/><path d="M218 8V26"/><path d="M0 26H200"/><path d="M34 26V44"/><path d="M70 26V44"/><path d="M94 26V44"/><path d="M130 26V44"/><path d="M154 26V44"/><path d="M178 26V44"/><path d="M202 26V44"/><path d="M0 44H200"/><path d="M20 44V62"/><path d="M50 44V62"/><path d="M74 44V62"/><path d="M98 44V62"/><path d="M122 44V62"/><path d="M158 44V62"/><path d="M188 44V62"/><path d="M212 44V62"/><path d="M0 62H200"/><path d="M40 62V80"/><path d="M64 62V80"/><path d="M88 62V80"/><path d="M124 62V80"/><path d="M160 62V80"/><path d="M196 62V80"/><path d="M220 62V80"/><path d="M0 80H200"/><path d="M26 80V98"/><path d="M62 80V98"/><path d="M92 80V98"/><path d="M116 80V98"/><path d="M140 80V98"/><path d="M164 80V98"/><path d="M200 80V98"/><path d="M0 98H200"/><path d="M28 98V116"/><path d="M58 98V116"/><path d="M88 98V116"/><path d="M112 98V116"/><path d="M148 98V116"/><path d="M172 98V116"/><path d="M208 98V116"/><path d="M0 116H200"/><path d="M20 116V134"/><path d="M56 116V134"/><path d="M92 116V134"/><path d="M116 116V134"/><path d="M140 116V134"/><path d="M176 116V134"/><path d="M212 116V134"/><path d="M0 134H200"/><path d="M40 134V152"/><path d="M64 134V152"/><path d="M94 134V152"/><path d="M118 134V152"/><path d="M154 134V152"/><path d="M190 134V152"/><path d="M214 134V152"/><path d="M0 152H200"/><path d="M26 152V170"/><path d="M50 152V170"/><path d="M86 152V170"/><path d="M110 152V170"/><path d="M140 152V170"/><path d="M176 152V170"/><path d="M212 152V170"/><path d="M0 170H200"/><path d="M34 170V188"/><path d="M64 170V188"/><path d="M94 170V188"/><path d="M130 170V188"/><path d="M160 170V188"/><path d="M190 170V188"/><path d="M220 170V188"/><path d="M0 188H200"/><path d="M14 188V206"/><path d="M38 188V206"/><path d="M74 188V206"/><path d="M98 188V206"/><path d="M122 188V206"/><path d="M158 188V206"/><path d="M188 188V206"/><path d="M224 188V206"/></g><g clip-path="url(#e7c)" stroke="currentColor" stroke-linejoin="round"><path d="M40 166V86a22 22 0 0 1 40 -12a22 22 0 0 1 40 0a22 22 0 0 1 40 12V166Z" fill="var(--e-bg,#fdf3e7)" stroke-width="3"/><path d="M45 162V84a15 15 0 0 1 30 0V162Z" fill="currentColor" stroke-width="2"/><path d="M60 70V162M45 96H75M45 118H75M45 140H75" stroke="var(--e-bg,#fdf3e7)" stroke-width="2.4" fill="none"/><path d="M85 162V84a15 15 0 0 1 30 0V162Z" fill="currentColor" stroke-width="2"/><path d="M100 70V162M85 96H115M85 118H115M85 140H115" stroke="var(--e-bg,#fdf3e7)" stroke-width="2.4" fill="none"/><path d="M125 162V84a15 15 0 0 1 30 0V162Z" fill="currentColor" stroke-width="2"/><path d="M140 70V162M125 96H155M125 118H155M125 140H155" stroke="var(--e-bg,#fdf3e7)" stroke-width="2.4" fill="none"/><path d="M34 166H166V176H34Z" fill="var(--e-bg,#fdf3e7)" stroke-width="3"/></g><circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="5"/></svg><span>New<br />Light</span></div>
+    <span class="label">Early access</span>
+    <h2>Be first <span class="it">through the door.</span></h2>
+    <p>Leave your details and we will be in touch before the residences are released.</p>
+    <form id="form">
+      <input name="name" placeholder="Full name" autocomplete="name" required />
+      <input name="phone" type="tel" placeholder="Phone" autocomplete="tel" required />
+      <button class="btn" type="submit">Register</button>
+    </form>
+    <p class="or" id="or">or <button type="button" id="wa">message us on WhatsApp</button></p>
+  </div>
+</section>
+
+<footer>
+  <span>East 7, Jaffa Residences. A concept project: the form and the WhatsApp link are a demonstration and send nothing. Images made with AI tools.</span>
+  <span>Brand, film and website by <a href="/">Itai Agami</a></span>
+</footer>
+
+<script>
+/* reveal on scroll */
+(() => {
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(e => e.classList.add('on')); return; }
+  const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  els.forEach(e => io.observe(e));
+})();
+/* the form and the WhatsApp link are a demonstration: nothing is sent or stored */
+(() => {
+  const form = document.getElementById('form'), or = document.getElementById('or');
+  const done = () => {
+    const p = document.createElement('p');
+    p.className = 'done';
+    p.textContent = 'Thank you. This is a concept, so nothing was sent.';
+    form.replaceWith(p); or.remove();
+  };
+  form.addEventListener('submit', e => { e.preventDefault(); done(); });
+  document.getElementById('wa').addEventListener('click', done);
+})();
+</script>
+</body>
+</html>

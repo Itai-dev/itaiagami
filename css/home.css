@@ -85,7 +85,7 @@ img{display:block}
   pointer-events:none; will-change:transform,opacity;
 }
 .cap-n{display:block; margin-bottom:22px}
-.cap-name{margin-bottom:.7em}
+.cap-name{margin-bottom:.7em; font-weight:800}
 .cap-line{opacity:.999}
 
 .note{position:fixed; inset:0; display:grid; place-items:center; text-align:center; padding:var(--m)}
