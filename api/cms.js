@@ -53,7 +53,7 @@ const QUERY = `{
   "projects": *[_type == "project" && !(_id in path("drafts.**"))]{
     _id, name, "slug": slug.current, order, groupOrder, sectors,
     client, role, disciplines, oneliner, text, siteUrl,
-    challenge, idea, system, outcome, contribution, credits,
+    challenge, idea, system, outcome, targets, contribution, credits,
     "group": group->{_id, name, text},
     "thumbnail": thumbnail.asset._ref, "hero": hero.asset._ref, "image": image.asset._ref,
     "moreImages": moreImages[].asset._ref,
@@ -122,7 +122,7 @@ function shape(data){
     /* the hero is not repeated right under itself */
     const body = media.filter(m => !(hero && m.kind === 'image' && m.src === hero.src));
 
-    const sections = [['Challenge', lead.challenge], ['Idea', lead.idea], ['System', lead.system], ['Outcome', lead.outcome], ['My part', lead.contribution]]
+    const sections = [['Challenge', lead.challenge], ['Idea', lead.idea], ['System', lead.system], ['Outcome', lead.outcome], ['Targets', lead.targets], ['My part', lead.contribution]]
       .filter(s => s[1]).map(s => ({ label: s[0], text: s[1] }));
 
     const ids = new Set(SECTORS.map(s => s.id));

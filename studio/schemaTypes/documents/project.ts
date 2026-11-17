@@ -175,6 +175,13 @@ export const project = defineType({
     defineField({name: 'oneliner', title: 'One-liner', type: 'string', group: 'more', validation: (rule) => rule.max(160).warning()}),
     defineField({name: 'idea', type: 'text', rows: 3, group: 'more'}),
     defineField({name: 'outcome', type: 'text', rows: 3, group: 'more'}),
+    defineField({
+      name: 'targets',
+      type: 'text',
+      rows: 3,
+      group: 'more',
+      description: 'For concept work: what the launch would aim for. Shown under "Targets", never as results. Leave empty on real projects and use Outcome.',
+    }),
     defineField({name: 'challenge', type: 'text', rows: 3, group: 'more'}),
     defineField({name: 'system', type: 'text', rows: 3, group: 'more'}),
     defineField({name: 'contribution', type: 'text', rows: 3, group: 'more'}),
