@@ -197,6 +197,7 @@ body.open .bar-bottom > *,body.info-open .bar-bottom > *{pointer-events:none}
   .links{gap:18px}
 
   .case-hero{height:auto; aspect-ratio:4 / 3; min-height:0}
+  .case-hero.cine{aspect-ratio:var(--film)}
   .case-head,.case-text,.case-credits{display:block}
   .case-head{padding-bottom:56px}
   .c-line{margin:28px 0 36px; font-size:15px}
