@@ -2,7 +2,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT, require, call } from './helpers/load.mjs';
+import { ROOT, require, call, stubCms } from './helpers/load.mjs';
+
+stubCms();
 
 const handler = require('./api/markdown.js');
 const { htmlToMarkdown } = require('./api/_lib/html-to-markdown.js');
@@ -12,9 +14,10 @@ test('homepage as Markdown: 200, text/markdown, Vary: Accept, real content', asy
   assert.equal(r.statusCode, 200);
   assert.match(r.headers['content-type'], /^text\/markdown; charset=utf-8$/);
   assert.equal(r.headers.vary, 'Accept');
-  assert.match(r.body, /^# Itai Agami \| Creative Builder/);
-  assert.match(r.body, /\n## Let’s build your idea\.\n/);
-  assert.match(r.body, /\[Channel 13\]\(https:\/\/itaiagami\.com\/work\/channel-13\.html\)/);
+  assert.match(r.body, /^# Itai Agami\n/);
+  assert.match(r.body, /\n## Work\n/);
+  assert.match(r.body, /\[Channel 13\]\(https:\/\/itaiagami\.com\/#channel-13\)/);
+  assert.match(r.body, /- Services: Broadcast\n/);
   assert.doesNotMatch(r.body, /<(?!https:)[a-z][^>]*>/i, 'no HTML tags left');
 });
 

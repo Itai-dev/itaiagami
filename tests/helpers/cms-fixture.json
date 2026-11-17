@@ -1,0 +1,390 @@
+{
+ "projects": [
+  {
+   "_id": "045531a6-5af2-4455-9354-cb5947ed5352",
+   "challenge": "Give a national channel one identity strong enough to carry news, prime-time and promotion without breaking character.",
+   "client": "Channel 13",
+   "contribution": "I was part of the Shortcut Playground team throughout the rebrand, contributing from brand strategy through design and execution. The logo, identity, brand book, channel kit and on-air motion are the output of that team.",
+   "credits": [
+    "Creative Agency: Shortcut Playground"
+   ],
+   "disciplines": "Brand Strategy / Identity / Broadcast",
+   "film": null,
+   "gallery": [
+    {
+     "_type": "galleryImage",
+     "alt": null,
+     "half": false,
+     "image": "image-fb4636518b9246877b2bee7147e8ae3b381d04f3-1600x899-webp",
+     "video": null
+    },
+    {
+     "_type": "galleryImage",
+     "alt": null,
+     "half": false,
+     "image": "image-494332e7f4d8d3c46f9a4e0feb49d00e5753f054-1600x900-webp",
+     "video": null
+    },
+    {
+     "_type": "galleryImage",
+     "alt": null,
+     "half": true,
+     "image": "image-c415089325fcc86b47e7a17f98baeb9cad4f7e2c-1080x1080-webp",
+     "video": null
+    },
+    {
+     "_type": "galleryImage",
+     "alt": null,
+     "half": true,
+     "image": "image-300bc28b4eda91b0f3a4eadd54bf929af30cabfd-1080x1080-webp",
+     "video": null
+    },
+    {
+     "_type": "galleryImage",
+     "alt": null,
+     "half": false,
+     "image": "image-bb031cc4c7aea3c38223ef65073674b69530c995-1600x900-webp",
+     "video": null
+    }
+   ],
+   "group": {
+    "_id": "group-channel-13",
+    "name": "Channel 13",
+    "text": null
+   },
+   "groupOrder": 2,
+   "hero": "image-6535dbd58ab7adec28d1baca05878f697b77e529-1513x851-webp",
+   "idea": "A bold logo for a bold brand: basic shapes and a confident, pastel-led palette form a flexible visual identity.",
+   "image": "image-c415089325fcc86b47e7a17f98baeb9cad4f7e2c-1080x1080-webp",
+   "moreImages": null,
+   "moreVideos": null,
+   "name": "Channel 13",
+   "oneliner": "An identity bold enough to hold together everything a national network broadcasts.",
+   "order": 1,
+   "outcome": "Rolled out as a complete national broadcast system: logo, brand book and channel kit covering news graphics, promotion and continuity, built so the network’s own teams could keep applying it long after the design work ended.",
+   "role": "Brand strategy and broadcast identity",
+   "sectors": null,
+   "siteUrl": null,
+   "slug": "channel-13",
+   "system": "A full brand book and channel kit: logo usage, color, typography and on-air functionality — to keep the identity consistent everywhere it appears.",
+   "text": null,
+   "thumbnail": null
+  },
+  {
+   "_id": "4c42658c-783b-465a-a894-e07d5cd538a9",
+   "challenge": "Most of a developer’s work disappears into the finished building. The planning, the light studies, the green space and the density decisions are all invisible by the time anyone walks through a completed apartment.",
+   "client": "Tidhar",
+   "contribution": "",
+   "credits": [],
+   "disciplines": "Art Direction / Motion / Architectural Visualisation",
+   "film": {
+    "aspect": "16:9",
+    "mux": "IT4eMT3SbGgTK2m9Z5F9Zen8xLcHqGD00p1yjXSFl6QE"
+   },
+   "gallery": [
+    {
+     "_type": "galleryImage",
+     "alt": null,
+     "half": false,
+     "image": "image-ebcf4ff6db1f6c4861b27ab0a2018ee0d145be99-1400x788-webp",
+     "video": null
+    },
+    {
+     "_type": "galleryImage",
+     "alt": null,
+     "half": false,
+     "image": "image-c1eb092e2a0285514e02df4c8501b6f4b9f7a3aa-1400x788-webp",
+     "video": null
+    }
+   ],
+   "group": null,
+   "groupOrder": null,
+   "hero": "image-babcfb1930e093d1074c5b5a658ac561ad9cbe94-1400x788-webp",
+   "idea": "Draw the reasoning back on. Keep the aerial photography and interior CGI real, then overlay the language of the drawing board (dashed setbacks, sun angles, flow arrows, measured spans and highlighted volumes) so the audience sees the decisions and not only the result.",
+   "image": null,
+   "moreImages": null,
+   "moreVideos": null,
+   "name": "Tidhar",
+   "oneliner": "Making the thinking behind a development visible: architecture with its reasoning drawn back on top.",
+   "order": 16,
+   "outcome": "Produced as a brand film for Tidhar, moving from the masterplan to tower elevations to annotated interiors in one visual language.",
+   "role": "Art Direction, Design",
+   "sectors": null,
+   "siteUrl": null,
+   "slug": "tidhar",
+   "system": "A short film moving between scales: an aerial masterplan with the park read as a single green figure, tower elevations with units and circulation called out, and interiors annotated for light, orientation and materials.",
+   "text": null,
+   "thumbnail": null
+  },
+  {
+   "_id": "6181b494-a62f-4223-a907-799fdb4c3298",
+   "challenge": null,
+   "client": null,
+   "contribution": null,
+   "credits": null,
+   "disciplines": null,
+   "film": {
+    "aspect": "16:9",
+    "mux": "LQ00EDO2tkIv3CyLnni5j9Wc01Dj2ldqmMtPKR3BIntzY"
+   },
+   "gallery": null,
+   "group": {
+    "_id": "group-channel-13",
+    "name": "Channel 13",
+    "text": null
+   },
+   "groupOrder": 1,
+   "hero": null,
+   "idea": null,
+   "image": null,
+   "moreImages": null,
+   "moreVideos": null,
+   "name": "Channel 13",
+   "oneliner": null,
+   "order": null,
+   "outcome": null,
+   "role": null,
+   "sectors": null,
+   "siteUrl": null,
+   "slug": null,
+   "system": null,
+   "text": null,
+   "thumbnail": null
+  },
+  {
+   "_id": "a13c3bbd-70f1-4de7-9dce-8c185bfcc71f",
+   "challenge": "Design a channel-ID system for Partner TV spanning series, kids and movies, each with its own energy but one clear identity.",
+   "client": "Partner",
+   "contribution": "I art-directed the channel IDs: the concept, color language and motion direction across all three channels.",
+   "credits": [
+    "Studio Adam Fineberg"
+   ],
+   "disciplines": "Art Direction / Identity / Broadcast",
+   "film": null,
+   "gallery": [
+    {
+     "_type": "galleryImage",
+     "alt": null,
+     "half": false,
+     "image": "image-41ba482c2a0fac63d1dd38cd01cbcd7e07609719-1600x900-webp",
+     "video": null
+    },
+    {
+     "_type": "galleryImage",
+     "alt": null,
+     "half": false,
+     "image": "image-78873da368672b077b266fc780cbded2ec03d963-1400x788-webp",
+     "video": null
+    },
+    {
+     "_type": "galleryImage",
+     "alt": null,
+     "half": false,
+     "image": "image-1acb073d4c193a5939c31a44d318949a04bc15c9-1600x895-webp",
+     "video": null
+    }
+   ],
+   "group": {
+    "_id": "group-partner",
+    "name": "Partner",
+    "text": null
+   },
+   "groupOrder": 1,
+   "hero": "image-d843042819a6fb9f21fe19d67c4b220200887e6f-1600x978-webp",
+   "idea": "Vibrant color reflecting the channel’s diverse content, with fluid animation adding movement and excitement.",
+   "image": null,
+   "moreImages": null,
+   "moreVideos": null,
+   "name": "Partner TV",
+   "oneliner": "A channel-ID system for Partner TV across series, kids and movies.",
+   "order": 3,
+   "outcome": "Went on air as one ID system across Partner TV’s three channels (series, kids and movies), each with its own energy inside a single identity, carried from concept sketches through palette, animation and visual effects.",
+   "role": "Art Direction",
+   "sectors": null,
+   "siteUrl": null,
+   "slug": "partner-tv",
+   "system": "From concept sketches through palette, animation and visual-effects exploration into a working on-air language.",
+   "text": null,
+   "thumbnail": "image-d43cf07e2a5009a7c9feea246a23165ede6b5f02-800x516-webp"
+  },
+  {
+   "_id": "a2ccee01-8038-4920-8289-caf8f2f42df8",
+   "challenge": null,
+   "client": null,
+   "contribution": null,
+   "credits": null,
+   "disciplines": null,
+   "film": {
+    "aspect": "16:9",
+    "mux": "UdN3OK01M1Ezyrnz02Q009c6zRTfn7rtuCDRII7gpH2LFk"
+   },
+   "gallery": null,
+   "group": {
+    "_id": "group-partner",
+    "name": "Partner",
+    "text": null
+   },
+   "groupOrder": 3,
+   "hero": null,
+   "idea": null,
+   "image": null,
+   "moreImages": null,
+   "moreVideos": null,
+   "name": "Partner Kids",
+   "oneliner": null,
+   "order": null,
+   "outcome": null,
+   "role": null,
+   "sectors": null,
+   "siteUrl": null,
+   "slug": "Partner-Kids",
+   "system": null,
+   "text": null,
+   "thumbnail": null
+  },
+  {
+   "_id": "b08f46c5-4b74-4f9f-8c5b-a07d491abbc5",
+   "challenge": null,
+   "client": null,
+   "contribution": null,
+   "credits": null,
+   "disciplines": null,
+   "film": {
+    "aspect": "16:9",
+    "mux": "qtzqGQDF401dYvQLosKM7xr6Jcpd6yS2u7mGvCiBmErM"
+   },
+   "gallery": null,
+   "group": {
+    "_id": "group-partner",
+    "name": "Partner",
+    "text": null
+   },
+   "groupOrder": 5,
+   "hero": null,
+   "idea": null,
+   "image": null,
+   "moreImages": null,
+   "moreVideos": null,
+   "name": "Hatuname",
+   "oneliner": null,
+   "order": null,
+   "outcome": null,
+   "role": null,
+   "sectors": null,
+   "siteUrl": null,
+   "slug": null,
+   "system": null,
+   "text": null,
+   "thumbnail": null
+  },
+  {
+   "_id": "b14224e3-c977-4527-8b33-aeecac7817cd",
+   "challenge": null,
+   "client": null,
+   "contribution": null,
+   "credits": null,
+   "disciplines": null,
+   "film": null,
+   "gallery": null,
+   "group": {
+    "_id": "group-channel-13",
+    "name": "Channel 13",
+    "text": null
+   },
+   "groupOrder": 4,
+   "hero": null,
+   "idea": null,
+   "image": "image-fb4636518b9246877b2bee7147e8ae3b381d04f3-1600x899-webp",
+   "moreImages": null,
+   "moreVideos": null,
+   "name": "Channel 13 logo grid",
+   "oneliner": null,
+   "order": null,
+   "outcome": null,
+   "role": null,
+   "sectors": null,
+   "siteUrl": null,
+   "slug": "channel-13-logo-grid",
+   "system": null,
+   "text": null,
+   "thumbnail": null
+  },
+  {
+   "_id": "b667eee1-b54b-4917-ad44-7beb02720185",
+   "challenge": null,
+   "client": null,
+   "contribution": null,
+   "credits": null,
+   "disciplines": null,
+   "film": {
+    "aspect": "16:9",
+    "mux": "PzxNlUg9sFLvi3Rc016y7TRWuhvKCYCDk01WhAQndt00sE"
+   },
+   "gallery": null,
+   "group": {
+    "_id": "group-partner",
+    "name": "Partner",
+    "text": null
+   },
+   "groupOrder": 4,
+   "hero": null,
+   "idea": null,
+   "image": null,
+   "moreImages": null,
+   "moreVideos": null,
+   "name": "Partner Series",
+   "oneliner": null,
+   "order": null,
+   "outcome": null,
+   "role": null,
+   "sectors": null,
+   "siteUrl": null,
+   "slug": null,
+   "system": null,
+   "text": null,
+   "thumbnail": null
+  },
+  {
+   "_id": "de0b6a8a-c541-4c25-84a1-72042df74f1c",
+   "challenge": null,
+   "client": null,
+   "contribution": null,
+   "credits": null,
+   "disciplines": null,
+   "film": {
+    "aspect": "16:9",
+    "mux": "cqMCKMJFwGVX0202pQQ5QjFdKWalw5LtzjyEo97GslV1Y"
+   },
+   "gallery": null,
+   "group": {
+    "_id": "group-channel-13",
+    "name": "Channel 13",
+    "text": null
+   },
+   "groupOrder": 3,
+   "hero": null,
+   "idea": null,
+   "image": null,
+   "moreImages": null,
+   "moreVideos": null,
+   "name": "Channel 13 rebrand launch",
+   "oneliner": null,
+   "order": null,
+   "outcome": null,
+   "role": null,
+   "sectors": null,
+   "siteUrl": null,
+   "slug": "channel-13-rebrand-launch",
+   "system": null,
+   "text": null,
+   "thumbnail": null
+  }
+ ],
+ "settings": {
+  "about": [
+   "itai agami. independent creative director, tel aviv."
+  ],
+  "email": "hello@example.com",
+  "linkedin": "https://www.linkedin.com/in/example/"
+ }
+}

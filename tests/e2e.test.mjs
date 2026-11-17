@@ -3,6 +3,9 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from './helpers/local-vercel.mjs';
+import { stubCms } from './helpers/load.mjs';
+
+stubCms();
 
 let server, base;
 before(async () => {

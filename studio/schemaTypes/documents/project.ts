@@ -143,6 +143,23 @@ export const project = defineType({
       options: {list: ['Brand', 'Culture', 'Technology'], layout: 'radio', direction: 'horizontal'},
       description: 'Drives the brand / culture / tech filters. Without one it only shows under "all".',
     }),
+    defineField({
+      name: 'sectors',
+      title: 'Services',
+      type: 'array',
+      group: 'card',
+      of: [defineArrayMember({type: 'string'})],
+      options: {
+        list: [
+          {title: 'Real Estate', value: 'real-estate'},
+          {title: 'Broadcast', value: 'broadcast'},
+          {title: 'Tech', value: 'tech'},
+          {title: 'Exhibitions & Interactive', value: 'exhibitions-interactive'},
+        ],
+        layout: 'grid',
+      },
+      description: 'The filters at the top of the site. Tick every one the project belongs to; in a group, ticking it on one project is enough. Without any it only shows under "all".',
+    }),
     defineField({name: 'order', type: 'number', group: 'card', description: 'Lower comes first.'}),
     defineField({
       name: 'slug',
