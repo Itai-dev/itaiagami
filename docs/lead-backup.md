@@ -139,3 +139,39 @@ curl -s -X POST https://itaiagami.com/api/enquiry -H 'Content-Type: application/
 ```
 
 This should return `400 {"ok":false,"error":"Please add your name."}`.
+
+## The real-estate questionnaire (`/nadlan`)
+
+`nadlan/index.html` → `POST /api/lead` → **Sanity** (Leads in the Studio), **your inbox**,
+and the sheet if `LEAD_WEBHOOK_URL` is set. Hebrew, right to left, no site navigation;
+reached from ads. The visitor sees the thank-you document only if at least one of the
+three took the lead.
+
+- **Sanity:** set `SANITY_WRITE_TOKEN` in Vercel (Production) to a token from
+  sanity.io/manage → project c8rr77b1 → API → Tokens → Add API token, permission
+  **Editor**. Redeploy. Each lead is a `lead` document with an id starting `leads.`:
+  in a public dataset such ids are only readable with a token, so the site's public
+  API never serves them (checked: an unauthenticated query returns `omitted: permission`).
+- **Studio:** the `Leads` list (newest first) needs the Studio redeployed once:
+  `cd studio && npm run deploy`. Everything the visitor sent is read-only; `Status`
+  (New, Contacted, Meeting booked, Won, Not a fit) and `Your notes` are yours.
+
+- **Config:** `SCHEDULER_URL` and `WHATSAPP_NUMBER` in `js/nadlan-config.js`. An empty
+  `SCHEDULER_URL` shows "we will get back to you within a business day" in place of the
+  calendar. An empty `WHATSAPP_NUMBER` hides every WhatsApp button.
+- **Questions and the brief** are in the same file and are read by the server too, so
+  an option changed there is accepted by `/api/lead` without a second edit.
+- **Env vars:** `SANITY_WRITE_TOKEN` (new), plus `RESEND_API_KEY`, `LEAD_WEBHOOK_URL`,
+  `LEAD_WEBHOOK_SECRET`, `ENQUIRY_TO` and `ENQUIRY_FROM`.
+- **The sheet:** with the script above unchanged, a questionnaire lead still lands as a
+  row: company in `org`, project type in `type`, start date in `timeline`, and the phone
+  plus the whole brief in `project`. To get each answer in its own column, add these to
+  `COLUMNS` in the Apps Script and redeploy it:
+  `'company','phone','city','project_type','units','stage','has','start','missing','brief','fbclid','gclid','user_agent','consent'`.
+- **Spam:** honeypot, server-side validation of every field, and the enquiry rate limit
+  (5 accepted leads per IP per 10 minutes, shared with the contact form).
+- **Events:** `quiz_start`, `quiz_step_1` … `quiz_step_6`, `quiz_submit`,
+  `meeting_booked`, `whatsapp_click`. Sent to Vercel Web Analytics, pushed to
+  `dataLayer`, and sent to GA4 only for a visitor who already accepted analytics on the
+  main site. There is no Meta Pixel on the site.
+- **Test without sending:** add `"dry_run": true` to the JSON body.

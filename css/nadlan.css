@@ -1,0 +1,195 @@
+/* ============================================================
+   /nadlan — the questionnaire. The site's page and ink, a Hebrew face
+   for the words and the site's mono for labels and numbers. Right to
+   left, built for a phone first.
+   ============================================================ */
+:root{
+  --bg:#f3f2ed; --paper:#faf9f5; --ink:#111; --tile:#e3e2dc; --line:rgba(17,17,17,.16); --soft:rgba(17,17,17,.5);
+  --m:16px; --out:cubic-bezier(.2,.7,.2,1);
+  --he:"IBM Plex Sans Hebrew",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --dock:calc(84px + env(safe-area-inset-bottom, 0px));
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg); -webkit-text-size-adjust:100%}
+body{
+  margin:0; min-height:100svh; display:flex; flex-direction:column;
+  background:var(--bg); color:var(--ink);
+  font:400 17px/1.5 var(--he); -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,p,dl,dd,ul{margin:0; padding:0}
+a{color:inherit}
+button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer; -webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
+h1:focus,h2:focus{outline:none}
+[hidden]{display:none!important}
+.mono{font:600 10.5px/1.3 var(--mono); letter-spacing:.06em; text-transform:uppercase; direction:ltr; unicode-bidi:isolate}
+
+.top{padding:calc(var(--m) + env(safe-area-inset-top, 0px)) var(--m) 0}
+.mark{font:600 10.5px/1.4 var(--mono); letter-spacing:.02em; text-transform:uppercase; text-decoration:none; display:inline-block; padding:8px 0}
+
+.wrap{flex:1; display:flex; flex-direction:column; align-items:center; padding:14px var(--m) 24px}
+.panel{width:100%; max-width:520px}
+
+/* ---------- the head of every question: a ruler and the brief filling in ---------- */
+.qhead{width:100%; max-width:520px; display:grid; gap:14px; margin-bottom:26px}
+.progress{display:grid; gap:10px}
+.track{height:2px; background:var(--tile); overflow:hidden}
+.fill{height:100%; width:0; background:var(--ink); transition:width .45s var(--out)}
+.rmeta{display:flex; justify-content:space-between; align-items:baseline}
+.rmeta .step{font:500 13px/1 var(--he)}
+.rmeta .mono{color:var(--soft)}
+
+.mini{border:1px solid var(--line); background:var(--paper); padding:10px 12px; display:grid; grid-template-columns:1fr auto; grid-template-areas:"h h" "s n"; gap:8px 12px; align-items:center}
+.mini-head{grid-area:h; display:flex; justify-content:space-between; align-items:baseline; font:600 13px/1 var(--he)}
+.mini-head .mono{color:var(--soft)}
+.slots{grid-area:s; display:flex; gap:6px}
+.slot{width:34px; height:34px; border:1px dashed var(--line); display:grid; place-items:center; transition:background .25s var(--out), border-color .25s var(--out), color .25s var(--out); color:var(--soft)}
+.slot .ico{width:20px; height:20px; stroke-width:2.2}
+.slot.full{background:var(--ink); border-color:var(--ink); border-style:solid; color:var(--bg)}
+.mini-sub{grid-area:n; font:500 12px/1.2 var(--he); color:var(--soft)}
+
+/* ---------- icons: drawn with one thin line ---------- */
+.ico{width:44px; height:44px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; flex:none}
+.ico.big{width:64px; height:64px; stroke-width:1.4}
+.q-ico{margin-bottom:-4px}
+
+/* ---------- a screen ---------- */
+.screen{display:flex; flex-direction:column; gap:18px}
+h1{font:700 clamp(30px,8vw,44px)/1.08 var(--he); letter-spacing:-.015em}
+h2{font:600 clamp(24px,6.6vw,32px)/1.18 var(--he); letter-spacing:-.01em}
+.sub{font-size:17px; color:var(--soft)}
+.hint{font:500 13px/1 var(--he); color:var(--soft); margin-top:-8px}
+
+.btn{
+  min-height:56px; width:100%; padding:14px 22px;
+  background:var(--ink); color:var(--bg);
+  font:600 17px/1.2 var(--he);
+  position:relative; overflow:hidden;
+  transition:opacity .2s var(--out), transform .15s var(--out);
+}
+.btn:disabled{opacity:.25; cursor:default}
+.btn:not(:disabled):active{transform:scale(.99)}
+@media (hover:hover){ .btn:not(:disabled):hover{opacity:.86} }
+.btn.busy{opacity:.7}
+.btn.busy::after{content:""; position:absolute; inset-block-end:0; inset-inline-start:0; height:2px; width:40%; background:var(--bg); animation:busy 1s linear infinite}
+@keyframes busy{from{transform:translateX(100%)} to{transform:translateX(-260%)}}
+
+.opts{display:grid; gap:8px}
+.opt{
+  min-height:58px; width:100%; padding:12px 14px; text-align:start;
+  border:1px solid var(--line); background:var(--paper);
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px;
+  transition:background .16s var(--out), color .16s var(--out), border-color .16s var(--out);
+}
+.opt .k{width:36px; height:36px; display:grid; place-items:center; border:1px solid var(--line); color:var(--ink); font-size:10px; transition:inherit}
+.opt .k .ico{width:26px; height:26px; stroke-width:1.9}
+.opt .t{font:500 17px/1.3 var(--he)}
+.opt .tick{width:18px; height:18px; border:1px solid currentColor; border-radius:50%; opacity:.35; position:relative}
+[role="group"] .opt .tick{border-radius:0}
+.opt.on{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.opt.on .k{border-color:rgba(243,242,237,.3); color:var(--bg)}
+.opt.on .tick{opacity:1; background:var(--bg)}
+.opt.on .tick::after{content:""; position:absolute; inset:4px; background:var(--ink)}
+[role="group"] .opt.on .tick::after{inset:auto; left:5px; top:2px; width:5px; height:9px; background:none; border:solid var(--ink); border-width:0 2px 2px 0; transform:rotate(45deg)}
+@media (hover:hover){ .opt:not(.on):hover{border-color:var(--ink)} }
+
+/* ---------- the action bar: fixed at the foot of a phone screen ---------- */
+.dock{display:flex; align-items:center; gap:14px; margin-top:26px}
+.dock .btn{flex:1}
+.back{min-height:48px; padding:0 4px; font:500 15px/1 var(--he); color:var(--soft); flex:none}
+.back:hover{color:var(--ink)}
+.dock-note{font:500 12px/1.2 var(--he); color:var(--soft); flex:none; margin-inline-start:auto}
+.dock .btn ~ .dock-note{display:none}
+@media (max-width:699px){
+  body.docked .wrap{padding-bottom:calc(var(--dock) + 24px)}
+  .dock{
+    position:fixed; inset-inline:0; bottom:0; z-index:20; margin:0;
+    padding:12px var(--m) calc(12px + env(safe-area-inset-bottom, 0px));
+    background:rgba(243,242,237,.92); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);
+  }
+}
+
+/* ---------- the opening card ---------- */
+.doc{
+  position:relative; background:var(--paper); border:1px solid var(--line);
+  box-shadow:0 1px 0 rgba(17,17,17,.04), 0 24px 60px -30px rgba(17,17,17,.35);
+  padding:18px 18px 16px; display:flex; flex-direction:column; gap:16px;
+}
+.doc::before{content:""; position:absolute; inset:6px; border:1px solid var(--line); pointer-events:none}
+.doc-top,.doc-bottom{display:flex; justify-content:space-between; align-items:center; gap:10px; position:relative}
+.doc-top .mono,.doc-bottom .mono{color:var(--soft); white-space:nowrap}
+.opening{min-height:min(62svh,520px); justify-content:space-between}
+.opening .ico{margin-top:8px}
+.opening h1 .line{display:block; overflow:hidden; padding-bottom:.06em}
+.opening h1 .line > span{display:block}
+.intro .go{margin-top:6px}
+
+/* ---------- the contact step ---------- */
+.form{display:flex; flex-direction:column; gap:14px}
+.field{display:flex; flex-direction:column; gap:4px}
+.lab{font:600 10.5px/1.3 var(--he); letter-spacing:.02em; color:var(--soft)}
+.lab i{font-style:normal; opacity:.7}
+.field input{
+  width:100%; min-height:50px; padding:10px 2px;
+  border:0; border-bottom:1px solid var(--line); border-radius:0; background:transparent; color:var(--ink);
+  font:500 18px/1.2 var(--he);                       /* 16px and up, so iOS does not zoom */
+  -webkit-appearance:none; appearance:none; transition:border-color .2s var(--out);
+}
+.field input[dir="ltr"]{text-align:right}
+.field input:focus{outline:none; border-bottom:2px solid var(--ink)}
+.field.bad input{border-bottom-color:#b3261e}
+.err{font-size:13px; color:#b3261e}
+.err:empty{display:none}
+.hp{position:absolute; inset-inline-start:-9999px; width:1px; height:1px; overflow:hidden}
+.consent{display:flex; align-items:flex-start; gap:12px; min-height:48px; padding:8px 0; font-size:15px; cursor:pointer}
+.consent input{flex:none; width:24px; height:24px; margin:0; accent-color:var(--ink)}
+.msg{font-size:15px; color:#b3261e}
+.msg:empty{display:none}
+
+/* ---------- the finish: a thank-you document ---------- */
+.thanks{padding:20px 18px 18px; gap:14px; overflow:hidden}
+.thanks h1{font-size:clamp(30px,8vw,40px)}
+.thanks dl{display:grid; gap:0; border-top:1px solid var(--line)}
+.thanks .row{display:grid; grid-template-columns:minmax(0,40%) 1fr; gap:12px; padding:9px 0; border-bottom:1px solid var(--line)}
+.thanks dt{font:500 13px/1.35 var(--he); color:var(--soft)}
+.thanks dd{font:500 15px/1.35 var(--he)}
+.thanks h2{font:600 16px/1.2 var(--he); padding-top:4px}
+.thanks ul{list-style:none; display:grid; gap:7px}
+.thanks li{position:relative; padding-inline-start:20px; font-size:15px}
+.thanks li::before{content:"+"; position:absolute; inset-inline-start:0; font-weight:600}
+.thanks .doc-bottom{min-height:72px; padding-top:10px; border-top:1px solid var(--line); margin-top:4px}
+.sig{font:italic 600 20px/1 var(--he)}
+.stamp{
+  position:absolute; bottom:8px; inset-inline-end:calc(50% - 44px); width:88px; height:88px; border-radius:50%;
+  border:2px solid #b3261e; color:#b3261e; display:grid; place-content:center; text-align:center; gap:2px;
+  transform:rotate(-10deg); mix-blend-mode:multiply; pointer-events:none;
+  box-shadow:inset 0 0 0 4px var(--paper), inset 0 0 0 5px #b3261e;
+}
+.stamp b{font:700 22px/1 var(--he)}
+.stamp .mono{font-size:8.5px; letter-spacing:.12em}
+.cta{display:grid; gap:12px; margin-top:6px}
+.confirm{padding:16px; background:var(--tile); font-weight:500}
+.cal{min-height:560px; margin:0 calc(var(--m) * -1)}
+.cal iframe{display:block; width:100%; min-height:680px; border:0}
+.alt{text-align:center}
+
+/* ---------- WhatsApp: small, always there ---------- */
+.foot{width:100%; max-width:520px; margin-top:18px; text-align:center; min-height:48px}
+.wa{display:inline-flex; align-items:center; min-height:48px; padding:0 6px; font:500 15px/1 var(--he); text-underline-offset:4px}
+.msg .wa{min-height:0; padding:0; color:inherit}
+
+.legal{padding:0 var(--m) calc(var(--m) + env(safe-area-inset-bottom, 0px)); text-align:center; font:600 10.5px/1.4 var(--mono); letter-spacing:.02em; text-transform:uppercase}
+.legal a{display:inline-block; padding:10px; opacity:.45; text-decoration:none}
+
+@media (min-width:700px){
+  .wrap{padding-top:36px}
+  .cal{margin:0}
+  .doc{padding:26px 26px 22px}
+  .stamp{bottom:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important; animation:none!important}
+}

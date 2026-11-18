@@ -22,7 +22,7 @@ export const config = {
   matcher: '/((?!assets/|css/|js/|favicon\\.svg|.*\\.(?:png|jpe?g|webp|gif|svg|mp4|pdf|css|js|mjs|ico|woff2?)$).*)'
 };
 
-const API = new Set(['/api/enquiry', '/api/geo', '/api/stats', '/api/projects', '/api/services', '/api/markdown', '/api/not-found']);
+const API = new Set(['/api/enquiry', '/api/lead', '/api/geo', '/api/cms', '/api/stats', '/api/projects', '/api/services', '/api/markdown', '/api/not-found']);
 /* endpoints published under /api/v1 (the private and internal ones are not) */
 const PUBLIC = new Set(['/enquiry', '/geo', '/projects', '/services']);
 

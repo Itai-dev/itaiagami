@@ -15,6 +15,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { htmlToMarkdown } = require('./_lib/html-to-markdown.js');
+const cms = require('./cms.js');
 
 const SITE = 'https://itaiagami.com';
 const ROOT = path.join(__dirname, '..');
@@ -41,6 +42,34 @@ function resolvePage(urlPath){
   return null;
 }
 
+/* The home page is drawn in the browser from the CMS, so its Markdown is
+   written from the same data: who, the services, and every case. */
+function homeMarkdown(data){
+  const s = data.settings || {};
+  const label = id => (data.sectors.find(x => x.id === id) || {}).label;
+  const out = ['# Itai Agami', ''];
+  for(const line of s.about || []) out.push(line, '');
+  const offer = [s.offerLine, ...(s.offer || [])].filter(Boolean).join(' ');
+  if(offer) out.push(offer, '');
+  if(data.sectors.length) out.push('Services: ' + data.sectors.map(x => x.label).join(', ') + '.', '');
+  out.push('## Work', '');
+  for(const c of data.cases){
+    out.push('### [' + c.name + '](' + SITE + '/#' + c.slug + ')', '');
+    if(c.line) out.push(c.line, '');
+    const facts = [['Client', c.client !== c.name && c.client], ['Role', c.role], ['Disciplines', c.disciplines],
+      ['Services', c.sectors.map(label).filter(Boolean).join(', ')]].filter(f => f[1]);
+    for(const f of facts) out.push('- ' + f[0] + ': ' + f[1]);
+    if(facts.length) out.push('');
+    for(const t of c.sections) out.push('**' + t.label + '.** ' + t.text, '');
+  }
+  out.push('## Contact', '');
+  if(s.email) out.push('- Email: ' + s.email);
+  if(s.linkedin) out.push('- [LinkedIn](' + s.linkedin + ')');
+  if(s.bookingUrl) out.push('- [Book a call](' + s.bookingUrl + ')');
+  out.push('');
+  return out.join('\n');
+}
+
 function notFoundMarkdown(urlPath){
   const shown = String(urlPath || '').slice(0, 200).replace(/[`<>]/g, '');
   return [
@@ -59,7 +88,7 @@ function notFoundMarkdown(urlPath){
   ].join('\n');
 }
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   const urlPath = String((req.query && req.query.path) || '/');
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.setHeader('Vary', 'Accept');
@@ -77,11 +106,18 @@ module.exports = (req, res) => {
   }
 
   const pageUrl = SITE + '/' + (page.rel === 'index.html' ? '' : page.rel);
-  const md = htmlToMarkdown(fs.readFileSync(page.file, 'utf8'), pageUrl);
-  res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400');
+  let md = null;
+  if(page.rel === 'index.html'){
+    try{ md = homeMarkdown(await cms.load()); }catch{}
+  }
+  if(md === null) md = htmlToMarkdown(fs.readFileSync(page.file, 'utf8'), pageUrl);
+  res.setHeader('Cache-Control', page.rel === 'index.html'
+    ? 'public, max-age=0, s-maxage=60, stale-while-revalidate=600'
+    : 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400');
   res.setHeader('Link', '<' + pageUrl + '>; rel="canonical"');
   return res.status(200).end(req.method === 'HEAD' ? undefined : md);
 };
 
 module.exports.resolvePage = resolvePage;
+module.exports.homeMarkdown = homeMarkdown;
 module.exports.notFoundMarkdown = notFoundMarkdown;
