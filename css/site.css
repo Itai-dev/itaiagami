@@ -2075,3 +2075,11 @@ footer.site .to-top:hover .tt-i{background:#fff;border-color:#fff;color:var(--pa
 footer.site .base{align-items:center}
 @media(max-width:600px){footer.site .base{align-items:flex-start}footer.site .to-top{margin-top:8px}}
 @media(prefers-reduced-motion:reduce){footer.site .to-top .tt-i{transition:none}footer.site .to-top:hover .tt-i{transform:none}}
+
+/* ---------- Hebrew editions: <main dir="rtl" class="he"> ----------
+   The chrome stays English and left-to-right; only the page body flips. */
+main.he,main.he :is(h1,h2,h3,p,li,a,span,div,summary,strong,em){font-family:"Heebo","Inter",system-ui,sans-serif!important;letter-spacing:0!important}
+main.he :is(.svc-open h1,.band h2){font-weight:800;letter-spacing:-.02em!important;line-height:1.08}
+main.he .svc-sec .sb ul li{padding-left:0;padding-right:20px}
+main.he .svc-sec .sb ul li::before{left:auto;right:0}
+main.he .cap-list{padding:0}

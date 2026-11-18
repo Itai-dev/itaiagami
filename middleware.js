@@ -12,6 +12,11 @@
       and any /api path that is not an endpoint goes to /api/not-found
       so it answers with a JSON error instead of the HTML 404 page.
 
+   3. Language. A page with a Hebrew edition sends a visitor in Israel
+      (Vercel's geo-IP country header) to it with a 302, unless they chose
+      a language with ?lang=. One direction only: the Hebrew URL always
+      answers in Hebrew, so it can be shared and indexed as such.
+
    No dependencies: a rewrite is just the x-middleware-rewrite header
    (what @vercel/functions' rewrite() sets), and returning nothing lets
    the request continue untouched.
@@ -89,9 +94,25 @@ export function route(method, url, accept){
   return null;
 }
 
+/* English page → its Hebrew edition */
+const HEBREW = { '/services/real-estate.html': '/services/nadlan.html' };
+
+/** The Hebrew URL to redirect to, or null. */
+export function localise(method, url, country, accept){
+  if(method !== 'GET' && method !== 'HEAD') return null;
+  const he = HEBREW[url.pathname];
+  if(!he || String(country || '').toUpperCase() !== 'IL') return null;
+  if(url.searchParams.has('lang') || prefersMarkdown(accept)) return null;
+  return new URL(he, url);
+}
+
 function decodeURIComponentSafe(s){ try{ return decodeURIComponent(s); }catch{ return s; } }
 
 export default function middleware(request){
-  const to = route(request.method, new URL(request.url), request.headers.get('accept'));
+  const url = new URL(request.url), accept = request.headers.get('accept');
+  const he = localise(request.method, url, request.headers.get('x-vercel-ip-country'), accept);
+  /* differs per visitor: never cached or shared */
+  if(he) return new Response(null, { status: 302, headers: { Location: he.toString(), 'Cache-Control': 'private, no-store', Vary: 'x-vercel-ip-country' } });
+  const to = route(request.method, url, accept);
   if(to) return rewrite(to);
 }

@@ -50,3 +50,19 @@ test('the default export rewrites with x-middleware-rewrite, or passes through',
   assert.equal(r.headers.get('x-middleware-rewrite'), 'https://itaiagami.com/api/markdown?path=%2F');
   assert.equal(mw.default(new Request('https://itaiagami.com/', { headers: { accept: 'text/html' } })), undefined);
 });
+
+test('visitors in Israel are sent to the Hebrew edition, unless they chose a language', () => {
+  const en = '/services/real-estate.html';
+  assert.equal(mw.localise('GET', u(en), 'IL', 'text/html').pathname, '/services/nadlan.html');
+  assert.equal(mw.localise('GET', u(en), 'il', null).pathname, '/services/nadlan.html');
+  assert.equal(mw.localise('GET', u(en), 'US', 'text/html'), null);
+  assert.equal(mw.localise('GET', u(en), '', 'text/html'), null);
+  assert.equal(mw.localise('GET', u(en + '?lang=en'), 'IL', 'text/html'), null);
+  assert.equal(mw.localise('GET', u(en), 'IL', 'text/markdown'), null);
+  assert.equal(mw.localise('POST', u(en), 'IL', 'text/html'), null);
+  assert.equal(mw.localise('GET', u('/services/nadlan.html'), 'US', 'text/html'), null);
+  assert.equal(mw.localise('GET', u('/services.html'), 'IL', 'text/html'), null);
+  const r = mw.default(new Request(u(en), { headers: { 'x-vercel-ip-country': 'IL' } }));
+  assert.equal(r.status, 302);
+  assert.equal(r.headers.get('location'), 'https://itaiagami.com/services/nadlan.html');
+});
