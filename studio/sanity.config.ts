@@ -6,6 +6,8 @@ import {schemaTypes} from './schemaTypes'
 import {structure} from './structure'
 
 const SINGLETONS = new Set(['settings'])
+// leads arrive from the site (api/lead.js); they are never created by hand
+const NO_CREATE = new Set(['settings', 'lead'])
 
 export default defineConfig({
   name: 'default',
@@ -22,7 +24,7 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
     // singletons can't be created from the "new document" menu
-    templates: (templates) => templates.filter(({schemaType}) => !SINGLETONS.has(schemaType)),
+    templates: (templates) => templates.filter(({schemaType}) => !NO_CREATE.has(schemaType)),
   },
   document: {
     actions: (actions, {schemaType}) =>

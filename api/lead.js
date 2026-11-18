@@ -1,17 +1,19 @@
 /* ============================================================
-   POST /api/lead — the /nadlan questionnaire → backup store → email
+   POST /api/lead — the /nadlan questionnaire → Sanity → email (→ sheet)
 
-   The same route a contact enquiry takes (api/enquiry.js), for the
-   questionnaire's own fields:
-     1. backup copy  — POSTed to LEAD_WEBHOOK_URL (the Google Sheet,
-                       docs/lead-backup.md), if set
+   Every valid lead goes to:
+     1. Sanity      — a "lead" document, listed under Leads in the Studio.
+                      Needs SANITY_WRITE_TOKEN. The document id starts
+                      "leads." so the public dataset never serves it.
      2. notification — emailed to ENQUIRY_TO through Resend, with the brief
-   The visitor is told "received" only if step 1 OR step 2 succeeded.
+     3. backup copy  — the Google Sheet (LEAD_WEBHOOK_URL), if it is set
+   The visitor is told "received" only if at least one of them succeeded.
 
    The brief is rebuilt here from the answers (js/nadlan-config.js), so
    what is stored never depends on what the browser claims it showed.
 
-   Env vars: the ones api/enquiry.js already uses — RESEND_API_KEY,
+   Env vars: SANITY_WRITE_TOKEN (a Sanity API token with Editor rights),
+   plus the ones api/enquiry.js already uses — RESEND_API_KEY,
    LEAD_WEBHOOK_URL, LEAD_WEBHOOK_SECRET, ENQUIRY_TO, ENQUIRY_FROM.
    ============================================================ */
 
@@ -110,17 +112,18 @@ const handler = async (req, res) => {
     user_agent:   clean(req.headers && req.headers['user-agent'], 300)
   };
 
-  const stored  = await storeLead(lead);
-  const emailed = await notify(lead, brief);
+  lead.ref = clean(body.ref, 20).replace(/[^\w-]/g, '');
+  const [saved, emailed, stored] = await Promise.all([saveToSanity(lead), notify(lead, brief), storeLead(lead)]);
 
-  if(!stored && !emailed){
+  if(!saved && !emailed && !stored){
     /* nothing holds this lead: keep it in the runtime logs as a last resort */
     console.error('lead: NOT DELIVERED — lead follows', JSON.stringify(lead));
     return sendError(res, 502, 'delivery_failed', 'לא הצלחנו לשלוח כרגע. נסו שוב.', 'Retry in a few minutes.', { fallback: true });
   }
   RL.record(POLICY, ip);
   RL.setHeaders(res, RL.status(POLICY, ip));
-  if(!emailed) console.error('lead: email failed but the lead is stored in the backup sheet', lead.timestamp);
+  if(!saved && process.env.SANITY_WRITE_TOKEN) console.error('lead: Sanity save failed', lead.timestamp);
+  if(!emailed) console.error('lead: email failed', lead.timestamp);
   if(!stored && process.env.LEAD_WEBHOOK_URL) console.error('lead: backup store failed but email was sent', lead.timestamp);
 
   return res.status(200).json({ ok: true });
@@ -134,6 +137,46 @@ function withTimeout(url, opts, ms){
   const ctl = new AbortController();
   const t = setTimeout(() => ctl.abort(), ms);
   return fetch(url, Object.assign({}, opts, { signal: ctl.signal })).finally(() => clearTimeout(t));
+}
+
+/* The lead as a Sanity document. The id is in the "leads." path: in a
+   public dataset a document whose id has a dot is only readable with a
+   token, so these never reach the public API the site reads from. */
+const SANITY_MUTATE = 'https://c8rr77b1.api.sanity.io/v2024-01-01/data/mutate/production';
+async function saveToSanity(l){
+  const token = process.env.SANITY_WRITE_TOKEN;
+  if(!token){ console.error('lead: SANITY_WRITE_TOKEN is not set'); return false; }
+  const doc = {
+    _id: 'leads.' + require('node:crypto').randomUUID(),
+    _type: 'lead',
+    status: 'new',
+    receivedAt: l.timestamp,
+    source: 'nadlan',
+    ref: l.ref,
+    name: l.name, company: l.company, phone: l.phone, email: l.email, city: l.city,
+    projectType: l.project_type, units: l.units, stage: l.stage,
+    has: l.has ? l.has.split(', ') : [], start: l.start,
+    missing: l.missing ? l.missing.split(' | ') : [],
+    brief: l.brief,
+    consent: true,
+    attribution: {
+      utmSource: l.utm_source, utmMedium: l.utm_medium, utmCampaign: l.utm_campaign,
+      utmContent: l.utm_content, utmTerm: l.utm_term, fbclid: l.fbclid, gclid: l.gclid,
+      referrer: l.referrer, landingPage: l.landing_page, userAgent: l.user_agent
+    }
+  };
+  try{
+    const r = await withTimeout(SANITY_MUTATE, {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mutations: [{ create: doc }] })
+    }, 6000);
+    if(r.ok) return true;
+    console.error('lead: Sanity responded', r.status, (await r.text().catch(() => '')).slice(0, 200));
+  }catch(err){
+    console.error('lead: Sanity save failed', err && err.message);
+  }
+  return false;
 }
 
 /* The sheet's script (docs/lead-backup.md) writes the columns it knows.
@@ -197,7 +240,7 @@ async function notify(l, brief){
       method: 'POST',
       headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
       body: JSON.stringify(Object.assign({ from: FROM, to: [TO],
-        subject: 'ליד נדל"ן - ' + l.company + ' - ' + l.project_type, text, html },
+        subject: 'ליד נדל"ן - ' + l.company + ' - ' + l.project_type + (l.ref ? ' - ' + l.ref : ''), text, html },
         l.email ? { reply_to: l.email } : {}))
     }, 7000);
     if(!r.ok){ console.error('lead: resend responded', r.status, await r.text().catch(() => '')); return false; }
