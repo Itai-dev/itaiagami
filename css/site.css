@@ -2075,3 +2075,70 @@ footer.site .to-top:hover .tt-i{background:#fff;border-color:#fff;color:var(--pa
 footer.site .base{align-items:center}
 @media(max-width:600px){footer.site .base{align-items:flex-start}footer.site .to-top{margin-top:8px}}
 @media(prefers-reduced-motion:reduce){footer.site .to-top .tt-i{transition:none}footer.site .to-top:hover .tt-i{transform:none}}
+
+/* =====================================================================
+   Studio paper (final layer): stone paper, ink and one burnt-orange accent.
+   Titles in Instrument Serif, set in sentence case with italic accents;
+   small labels in IBM Plex Mono. Shared by the homepage (css/home.css)
+   and every inner page.
+   ===================================================================== */
+:root{
+  --display:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --mark:#d9541e;
+  --ink-band:#1a1b18; --ink-fg:#ece9e0; --ink-dim:rgba(236,233,224,.62);
+  --bg:#121311; --fg:#e9e7df; --dim:rgba(233,231,223,.6); --surface:#1b1c19; --stage:#1b1c19; --panel:#0c0d0b;
+  --line:rgba(233,231,223,.1); --line-strong:rgba(233,231,223,.24);
+}
+:root[data-theme="light"]{
+  --bg:#ebe9e2; --stage:#e3e0d7; --surface:#f4f3ee; --hover:#f4f3ee; --panel:#1a1b18;
+  --fg:#1a1b18; --dim:rgba(26,27,24,.6); --faint:#e1ded5;
+  --line:rgba(26,27,24,.1); --line-strong:rgba(26,27,24,.24);
+}
+::selection{background:var(--mark);color:#fff}
+
+/* wordmark */
+.brand{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;font-size:1.55rem;letter-spacing:-.01em;line-height:1}
+
+/* titles: editorial serif, no shouting */
+.hero h1,.c-open h1,.svc-open h1,.band h2,.c-cta .t,.c-page h1,.sec-head h1,.article-head h1,.pov h2{
+  font-family:var(--display);font-weight:400;text-transform:none;letter-spacing:-.025em;line-height:.95}
+.sec-head h2,.swork .info h3,.cap h3,.mobile-menu a{font-family:var(--display);font-weight:400;letter-spacing:-.015em}
+.sec-head h2{font-size:clamp(2rem,3.6vw,3.2rem);line-height:1}
+.cap h3{font-size:1.75rem;line-height:1.05}
+.hero h1 em,.band h2 em,.c-cta .t em,.pov h2 em,.c-open h1 em,.sec-head h1 em{font-style:italic;font-weight:400;color:var(--mark)}
+
+/* small labels in mono */
+.eyebrow,.c-open .crumb,.svc-open .crumb,.cs-label,.index-head,.cap .n,.c-meta .m .l,.c-sec .st,.c-next .l,.c-service .l,
+.c-credits h3,.sec-head .count,.swork .info .kmeta,footer.site .grid .col h4{
+  font-family:var(--mono)!important;font-size:.7rem!important;letter-spacing:.07em!important;text-transform:uppercase!important}
+
+/* buttons: ink pills; the arrow chip takes the accent on hover */
+.btn{border-radius:9999px}
+.btn.solid{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+:root:not([data-theme="light"]) .btn.solid{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn.solid:hover,:root:not([data-theme="light"]) .btn.solid:hover{background:var(--mark);border-color:var(--mark);color:#fff;opacity:1}
+.btn.ghost:hover{border-color:var(--mark);color:var(--mark)}
+
+/* links and active nav */
+nav.primary a::after{background:var(--mark)}
+nav.primary a.active{color:var(--fg)}
+
+/* surfaces and imagery */
+.cap{background:transparent;border:1px solid var(--line-strong)}
+.cap:hover{border-color:var(--mark)}
+
+/* footer: the same ink as the homepage band */
+footer.site{background:var(--ink-band);--ft-fg:var(--ink-fg);--ft-dim:var(--ink-dim);--ft-line:rgba(236,233,224,.14)}
+footer.site .grid .col a{font-family:var(--display);font-size:1.35rem;line-height:1.25}
+footer.site .grid .col a:hover{color:var(--mark);opacity:1}
+footer.site .to-top:hover .tt-i{background:var(--mark);border-color:var(--mark);color:#fff}
+
+/* remaining titles: articles, contact, service list */
+.article h1,.c-intro h1,.contact h2{font-family:var(--display);font-weight:400;letter-spacing:-.025em;line-height:1}
+.article h1{font-size:clamp(2.6rem,5.4vw,4.6rem)}
+.article-body h2{font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,2.6vw,2.3rem);letter-spacing:-.015em;line-height:1.1}
+.article-body blockquote{border-left-color:var(--mark);font-family:var(--display);font-style:italic;font-weight:400;font-size:1.6rem;line-height:1.3}
+.c-intro h1 em,.contact h2 em,.article h1 em{font-style:italic;font-weight:400;color:var(--mark)}
+.svc-list .t{font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,2.4vw,2.2rem);letter-spacing:-.015em}
+.svc-list a:hover .t{font-style:italic;color:var(--mark)}
+.svc-list .n,.svc-list .go{font-family:var(--mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase}
