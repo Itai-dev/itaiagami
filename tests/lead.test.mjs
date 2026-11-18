@@ -137,3 +137,32 @@ test('/nadlan: the page is Hebrew, right to left, standalone, and holds no secre
   assert.ok(!/RESEND|WEBHOOK|SECRET|process\.env/.test(client));
   for(const ev of ['quiz_start', "'quiz_step_'", 'quiz_submit', 'meeting_booked', 'whatsapp_click']) assert.ok(client.includes(ev), ev);
 });
+
+test('/api/lead: saves the lead to Sanity under a private "leads." id', async () => {
+  const saved = [process.env.RESEND_API_KEY, process.env.LEAD_WEBHOOK_URL, process.env.SANITY_WRITE_TOKEN, global.fetch];
+  delete process.env.RESEND_API_KEY; delete process.env.LEAD_WEBHOOK_URL;
+  process.env.SANITY_WRITE_TOKEN = 'test-token';
+  const seen = [];
+  global.fetch = async (url, opts) => { seen.push([String(url), opts]); return { ok: true, status: 200, text: async () => '{}' }; };
+  const errLog = console.error; console.error = () => {};
+  try{
+    const r = await post(Object.assign(good(), { ref: '261118-1234', utm_source: 'instagram' }), '198.51.100.90');
+    assert.equal(r.statusCode, 200);
+    assert.equal(seen.length, 1);
+    assert.match(seen[0][0], /^https:\/\/c8rr77b1\.api\.sanity\.io\/.+\/data\/mutate\/production$/);
+    assert.equal(seen[0][1].headers.Authorization, 'Bearer test-token');
+    const doc = JSON.parse(seen[0][1].body).mutations[0].create;
+    assert.match(doc._id, /^leads\./);                       /* a path id: never served by the public API */
+    assert.equal(doc._type, 'lead');
+    assert.equal(doc.status, 'new');
+    assert.equal(doc.ref, '261118-1234');
+    assert.equal(doc.phone, '0521234567');
+    assert.deepEqual(doc.has, ['הדמיות', 'סרט']);
+    assert.equal(doc.missing.length, 3);
+    assert.equal(doc.attribution.utmSource, 'instagram');
+  }finally{
+    console.error = errLog; global.fetch = saved[3];
+    for(const [k, v] of [['RESEND_API_KEY', saved[0]], ['LEAD_WEBHOOK_URL', saved[1]], ['SANITY_WRITE_TOKEN', saved[2]]])
+      if(v !== undefined) process.env[k] = v; else delete process.env[k];
+  }
+});
