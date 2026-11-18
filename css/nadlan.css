@@ -90,12 +90,13 @@ h2{font:600 clamp(24px,6.6vw,32px)/1.18 var(--he); letter-spacing:-.01em}
   display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px;
   transition:background .16s var(--out), color .16s var(--out), border-color .16s var(--out);
 }
-.opt .k{width:24px; height:24px; display:grid; place-items:center; border:1px solid var(--line); color:var(--soft); font-size:10px; transition:inherit}
+.opt .k{width:36px; height:36px; display:grid; place-items:center; border:1px solid var(--line); color:var(--ink); font-size:10px; transition:inherit}
+.opt .k .ico{width:26px; height:26px; stroke-width:1.9}
 .opt .t{font:500 17px/1.3 var(--he)}
 .opt .tick{width:18px; height:18px; border:1px solid currentColor; border-radius:50%; opacity:.35; position:relative}
 [role="group"] .opt .tick{border-radius:0}
 .opt.on{background:var(--ink); color:var(--bg); border-color:var(--ink)}
-.opt.on .k{border-color:rgba(243,242,237,.35); color:var(--bg)}
+.opt.on .k{border-color:rgba(243,242,237,.3); color:var(--bg)}
 .opt.on .tick{opacity:1; background:var(--bg)}
 .opt.on .tick::after{content:""; position:absolute; inset:4px; background:var(--ink)}
 [role="group"] .opt.on .tick::after{inset:auto; left:5px; top:2px; width:5px; height:9px; background:none; border:solid var(--ink); border-width:0 2px 2px 0; transform:rotate(45deg)}

@@ -49,6 +49,40 @@
   }
   const STEP_ICON = STEPS.map(s => s.id).concat('contact');
 
+  /* and one for every answer, in the order the options are listed */
+  Object.assign(ICONS, {
+    boutique: ['M8 42h32', 'M14 42V16h20v26', 'M14 16l10-8 10 8', 'M19 22h3', 'M26 22h3', 'M19 29h3', 'M26 29h3', 'M22 42v-6h4v6'],
+    tower:    ['M8 42h32', 'M17 42V4h14v38', 'M21 10h2', 'M25 10h2', 'M21 16h2', 'M25 16h2', 'M21 22h2', 'M25 22h2', 'M21 28h2', 'M25 28h2', 'M22 42v-5h4v5'],
+    renewal:  ['M6 42h36', 'M9 42V26h12v16', 'M27 42V10h12v32', 'M13 31h4', 'M31 16h4', 'M31 23h4', 'M31 30h4', 'M12 18c2-6 8-9 13-7', 'M22 8l3 3-3 3'],
+    villa:    ['M6 42h36', 'M10 42V24', 'M38 42V24', 'M6 26L24 10l18 16', 'M20 42v-9h8v9', 'M31 30h4'],
+    other:    ['M24 14v20', 'M14 24h20'],
+    u1:       ['M8 40h32', 'M12 40v-8h6v8'],
+    u2:       ['M8 40h32', 'M12 40v-8h6v8', 'M21 40V26h6v14'],
+    u3:       ['M8 40h32', 'M12 40v-8h6v8', 'M21 40V26h6v14', 'M30 40V18h6v22'],
+    u4:       ['M8 40h32', 'M12 40v-8h6v8', 'M21 40V26h6v14', 'M30 40V18h6v22', 'M33 18V9'],
+    permitNo: ['M13 6h17l8 8v28H13z', 'M30 6v8h8', 'M18 22h15', 'M18 28h10', 'M28 38l9-9 3 3-9 9h-3z'],
+    permit:   ['M13 6h17l8 8v28H13z', 'M30 6v8h8', 'M18 20h15', 'M18 26h10', 'M25 34a5 5 0 1 0 10 0a5 5 0 1 0 -10 0', 'M28 34l1.5 1.5 3-3'],
+    selling:  ['M8 20v8h6l14 8V12l-14 8z', 'M14 28l3 10h4l-2-10', 'M34 18c2 2 2 10 0 12', 'M38 15c4 4 4 14 0 18'],
+    building: ['M10 42V7', 'M6 42h9', 'M10 7h26', 'M30 7v8', 'M22 42V20h16v22', 'M26 26h3', 'M33 26h1', 'M26 32h3', 'M33 32h1', 'M18 42h24'],
+    brand:    ['M8 22V8h14l18 18-14 14z', 'M14 14a2 2 0 1 0 0.1 0'],
+    render:   ['M6 10h36v28H6z', 'M6 32l11-11 9 9 5-5 11 11', 'M30 18a3 3 0 1 0 0.1 0'],
+    web:      ['M6 9h36v30H6z', 'M6 16h36', 'M10 12.5h1', 'M14 12.5h1', 'M12 22h14', 'M12 27h24', 'M12 32h18'],
+    film:     ['M6 12h36v24H6z', 'M21 19v10l8-5z'],
+    campaign: ['M8 38l10-10 7 6 15-16', 'M32 18h8v8'],
+    nothing:  ['M10 24a14 14 0 1 0 28 0a14 14 0 1 0 -28 0', 'M14 34l20-20'],
+    now:      ['M27 4L11 27h12l-3 17 17-24H25z'],
+    m13:      ['M8 24a16 16 0 1 0 32 0a16 16 0 1 0 -32 0', 'M24 14v10l6 4'],
+    m36:      ['M8 24a16 16 0 1 0 32 0a16 16 0 1 0 -32 0', 'M24 14v10l-7 7'],
+    unknown:  ['M17 17a7 7 0 1 1 9 6.7c-1.5.6-2 1.5-2 3.3v2', 'M24 36v1']
+  });
+  const OPTION_ICONS = {
+    type: ['boutique', 'tower', 'renewal', 'villa', 'other'],
+    units: ['u1', 'u2', 'u3', 'u4'],
+    stage: ['permitNo', 'permit', 'selling', 'building'],
+    has: ['brand', 'render', 'web', 'film', 'campaign', 'nothing'],
+    timeline: ['now', 'm13', 'm36', 'unknown']
+  };
+
   /* ---------- state: memory first, sessionStorage so a refresh keeps it ---------- */
   let state = { step: 0, answers: {}, contact: {}, done: false, attr: null, no: '' };
   try{
@@ -252,7 +286,9 @@
     };
     step.options.forEach((o, i) => {
       const b = el('button', 'opt'); b.type = 'button'; b.dataset.v = o;
-      b.append(el('span', 'k mono', String.fromCharCode(65 + i)), el('span', 't', N.show(o)), el('span', 'tick'));
+      const oi = (OPTION_ICONS[step.id] || [])[i];
+      const k = el('span', 'k'); k.appendChild(oi ? icon(oi) : el('span', 'mono', String.fromCharCode(65 + i)));
+      b.append(k, el('span', 't', N.show(o)), el('span', 'tick'));
       if(!step.multi) b.setAttribute('role', 'radio');
       b.addEventListener('click', () => {
         if(step.multi){
@@ -281,7 +317,10 @@
     paint();
     show(s);
     draw(ico, 120, 480);
-    list.querySelectorAll('.opt').forEach((b, i) => anim(b, [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 300, delay: 120 + i * 40 }));
+    list.querySelectorAll('.opt').forEach((b, i) => {
+      anim(b, [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 300, delay: 120 + i * 40 });
+      const k = b.querySelector('.k .ico'); if(k) draw(k, 200 + i * 50, 380);
+    });
   }
 
   /* ---------- 6 — contact details ---------- */
