@@ -1,0 +1,122 @@
+/* ============================================================
+   /nadlan — the questionnaire. The site's page and ink, set in a
+   Hebrew face, right to left. Built for a phone first.
+   ============================================================ */
+:root{
+  --bg:#f3f2ed; --ink:#111; --tile:#e3e2dc; --line:rgba(17,17,17,.2);
+  --m:16px; --out:cubic-bezier(.2,.7,.2,1);
+  --he:"IBM Plex Sans Hebrew",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg); -webkit-text-size-adjust:100%}
+body{
+  margin:0; min-height:100svh; display:flex; flex-direction:column;
+  background:var(--bg); color:var(--ink);
+  font:400 17px/1.5 var(--he); -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,p,dl,dd,ul{margin:0; padding:0}
+a{color:inherit}
+button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer; -webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
+h1:focus,h2:focus{outline:none}
+[hidden]{display:none!important}
+
+.top{padding:calc(var(--m) + env(safe-area-inset-top, 0px)) var(--m) 0}
+.mark{font:600 10.5px/1.4 var(--mono); letter-spacing:.02em; text-transform:uppercase; text-decoration:none; display:inline-block; padding:8px 0}
+
+.wrap{flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px var(--m) 28px}
+.panel{width:100%; max-width:520px}
+
+/* progress */
+.bar{margin-bottom:28px}
+.track{height:3px; background:var(--tile); overflow:hidden}
+.fill{height:100%; width:0; background:var(--ink); transition:width .35s var(--out)}
+.label{margin-top:10px; font:500 13px/1 var(--he); opacity:.55}
+
+/* a screen */
+.screen{display:flex; flex-direction:column; gap:20px}
+h1{font:600 clamp(28px,7.4vw,40px)/1.15 var(--he); letter-spacing:-.01em}
+h2{font:600 clamp(23px,6.2vw,30px)/1.2 var(--he)}
+.sub{font-size:18px; opacity:.7}
+.hint{font-size:14px; opacity:.55; margin-top:-10px}
+
+.btn{
+  min-height:56px; width:100%; padding:14px 22px;
+  background:var(--ink); color:var(--bg);
+  font:600 17px/1.2 var(--he);
+  transition:opacity .2s var(--out);
+}
+.btn:disabled{opacity:.3; cursor:default}
+.btn:not(:disabled):hover{opacity:.82}
+
+.opts{display:grid; gap:10px}
+.opt{
+  min-height:56px; width:100%; padding:14px 18px; text-align:start;
+  border:1px solid var(--line); background:transparent;
+  font:500 17px/1.3 var(--he);
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  transition:background .15s var(--out), color .15s var(--out), border-color .15s var(--out);
+}
+.opt::after{content:""; flex:none; width:16px; height:16px; border:1px solid currentColor; border-radius:50%; opacity:.45}
+[role="group"] .opt::after{border-radius:0}
+.opt.on{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.opt.on::after{background:var(--bg); opacity:1; box-shadow:inset 0 0 0 3px var(--ink)}
+@media (hover:hover){ .opt:not(.on):hover{border-color:var(--ink)} }
+
+.nav{display:flex; flex-direction:column; gap:6px; margin-top:4px}
+.back{min-height:48px; align-self:flex-start; padding:0 2px; font:500 15px/1 var(--he); opacity:.6}
+.back:hover{opacity:1}
+
+/* the contact step */
+.form{display:flex; flex-direction:column; gap:16px}
+.field{display:flex; flex-direction:column; gap:6px}
+.lab{font:500 14px/1.2 var(--he)}
+.lab i{font-style:normal; opacity:.5}
+.field input{
+  width:100%; min-height:52px; padding:12px 14px;
+  border:1px solid var(--line); border-radius:0; background:transparent; color:var(--ink);
+  font:400 17px/1.2 var(--he);                       /* 16px and up, so iOS does not zoom */
+  -webkit-appearance:none; appearance:none;
+}
+.field input[dir="ltr"]{text-align:right}
+.field input:focus{outline:none; border-color:var(--ink); box-shadow:0 0 0 1px var(--ink)}
+.field.bad input{border-color:#b3261e}
+.err{font-size:13px; color:#b3261e; min-height:0}
+.err:empty{display:none}
+.hp{position:absolute; inset-inline-start:-9999px; width:1px; height:1px; overflow:hidden}
+.consent{display:flex; align-items:flex-start; gap:12px; min-height:48px; padding:6px 0; font-size:15px; cursor:pointer}
+.consent input{flex:none; width:24px; height:24px; margin:0; accent-color:var(--ink)}
+.msg{font-size:15px; color:#b3261e}
+.msg:empty{display:none}
+
+/* the result */
+.card{border:1px solid var(--line); padding:20px 18px; display:flex; flex-direction:column; gap:16px}
+.card dl{display:grid; gap:12px}
+.card dt{font:500 13px/1.2 var(--he); opacity:.55; margin-bottom:2px}
+.card dd{font:500 17px/1.35 var(--he)}
+.card h2{font-size:18px; padding-top:16px; border-top:1px solid var(--line)}
+.card ul{list-style:none; display:grid; gap:8px}
+.card li{position:relative; padding-inline-start:20px}
+.card li::before{content:"+"; position:absolute; inset-inline-start:0; font-weight:600}
+.confirm{padding:18px; background:var(--tile); font-weight:500}
+.cal{min-height:560px; margin:0 calc(var(--m) * -1)}
+.cal iframe{display:block; width:100%; min-height:680px; border:0}
+.alt{text-align:center}
+
+/* WhatsApp: small, always there */
+.foot{width:100%; max-width:520px; margin-top:22px; text-align:center; min-height:48px}
+.wa{display:inline-flex; align-items:center; min-height:48px; padding:0 6px; font:500 15px/1 var(--he); text-underline-offset:4px}
+.msg .wa{min-height:0; padding:0; color:inherit}
+
+.legal{padding:0 var(--m) calc(var(--m) + env(safe-area-inset-bottom, 0px)); text-align:center; font:600 10.5px/1.4 var(--mono); letter-spacing:.02em; text-transform:uppercase}
+.legal a{display:inline-block; padding:10px; opacity:.45; text-decoration:none}
+
+@media (min-width:700px){
+  .wrap{padding-top:40px}
+  .cal{margin:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important}
+}
