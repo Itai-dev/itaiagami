@@ -103,6 +103,31 @@
      film is needed. */
   const still = calm || (navigator.connection && navigator.connection.saveData);
   let muxLib = null, rolling = null, reel = null;
+  const loadMux = () => muxLib || (muxLib = import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs'));
+  /* A film that plays silently with no controls, and can take its sound and
+     controls later without stopping: the same player keeps going. */
+  function film(id){
+    const v = document.createElement('mux-player');
+    v.className = 'clip'; v.setAttribute('aria-hidden', 'true'); v.tabIndex = -1;
+    v.muted = true; v.loop = true; v.playsInline = true;
+    v.setAttribute('autoplay', 'muted'); ['muted', 'loop', 'playsinline', 'nohotkeys'].forEach(k => v.setAttribute(k, ''));
+    v.setAttribute('playback-id', id); v.setAttribute('max-resolution', '1080p');
+    v.setAttribute('accent-color', '#111111'); v.setAttribute('primary-color', '#ffffff'); v.setAttribute('secondary-color', 'transparent');
+    v.style.setProperty('--controls', 'none');
+    v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+    return v;
+  }
+  const play = v => { const q = v && v.play && v.play(); if(q && q.catch) q.catch(() => {}); };
+  /* turn the sound on where the film already is: no reload, no jump */
+  function soundOn(v){
+    v.style.removeProperty('--controls');
+    v.style.setProperty('--media-object-fit', 'contain');
+    v.removeAttribute('aria-hidden'); v.removeAttribute('nohotkeys'); v.tabIndex = 0;
+    v.loop = false; v.removeAttribute('loop');
+    v.muted = false; v.removeAttribute('muted');
+    v.classList.add('on', 'live');
+    play(v);
+  }
   function roll(){
     const c = !view && !drag && pos === target ? list[Math.round(pos)] : null;
     const want = c && c.film && !still ? c : null;
@@ -248,34 +273,37 @@
     box.appendChild(img);
     if(m.kind === 'video' && (m.loop || auto) && !still){
       /* a clip among the images: silent, looping, only while it is on screen */
+      const sel = '.clip';
       const mount = () => {
-        if(!box.isConnected || box.querySelector('mux-video')) return;
-        const v = document.createElement('mux-video');
-        v.className = 'clip'; v.setAttribute('aria-hidden', 'true'); v.tabIndex = -1;
-        v.muted = true; v.loop = true; v.playsInline = true;
-        ['muted', 'loop', 'playsinline', 'autoplay'].forEach(k => v.setAttribute(k, ''));
-        v.setAttribute('playback-id', m.mux); v.setAttribute('max-resolution', '1080p');
-        v.addEventListener('playing', () => v.classList.add('on'), { once: true });
-        box.appendChild(v);
-        const q = v.play && v.play(); if(q && q.catch) q.catch(() => {});
+        if(!box.isConnected || box.querySelector(sel)) return;
+        let v;
+        if(auto) v = film(m.mux);
+        else {
+          v = document.createElement('mux-video');
+          v.className = 'clip'; v.setAttribute('aria-hidden', 'true'); v.tabIndex = -1;
+          v.muted = true; v.loop = true; v.playsInline = true;
+          ['muted', 'loop', 'playsinline', 'autoplay'].forEach(k => v.setAttribute(k, ''));
+          v.setAttribute('playback-id', m.mux); v.setAttribute('max-resolution', '1080p');
+          v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+        }
+        box.insertBefore(v, box.querySelector('.sound'));
+        play(v);
       };
       new IntersectionObserver((es, io) => es.forEach(e => {
-        const v = box.querySelector('mux-video');
+        const v = box.querySelector(sel);
         if(!box.isConnected){ io.disconnect(); return; }
+        if(v && v.classList.contains('live')) return; /* with sound on, the viewer is in charge */
         if(e.isIntersecting){
-          if(v){ const q = v.play && v.play(); if(q && q.catch) q.catch(() => {}); }
-          else (muxLib || (muxLib = import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs'))).then(mount, () => {});
+          if(v) play(v);
+          else loadMux().then(mount, () => {});
         } else if(v && v.pause) v.pause();
       }), { rootMargin: '200px' }).observe(box);
       if(auto){
-        /* the project's own film: the same thing with its sound and controls */
+        /* the project's own film: the sound comes on in place, and it keeps playing */
         const b = el('button', 'sound', '(Sound on)'); b.type = 'button';
         b.addEventListener('click', () => {
-          const fr = el('iframe');
-          fr.src = 'https://player.mux.com/' + encodeURIComponent(m.mux) + '?autoplay=true&accent-color=%23111111';
-          fr.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
-          fr.allowFullscreen = true; fr.title = m.title || 'Film';
-          box.replaceChildren(fr);
+          const go = () => { mount(); const v = box.querySelector(sel); if(v){ soundOn(v); b.remove(); } };
+          loadMux().then(go, () => {});
         });
         box.appendChild(b);
       }
@@ -377,32 +405,24 @@
   const fly = (node, from, toRect, ms) => node.animate([rect(from), rect(toRect)], { duration: ms, easing: EASE, fill: 'both' });
 
     function heroFilm(hero, media){
-    const film = hero.film;
-    if(!film) return;
-    (muxLib || (muxLib = import('https://cdn.jsdelivr.net/npm/@mux/mux-player@3.14.0/dist/mux-player.mjs'))).then(() => {
+    const f = hero.film;
+    if(!f) return;
+    loadMux().then(() => {
       if(!media.isConnected || media.parentNode !== hero) return;
-      const v = document.createElement('mux-video');
-      v.className = 'clip'; v.setAttribute('aria-hidden', 'true'); v.tabIndex = -1;
-      v.muted = true; v.loop = true; v.playsInline = true;
-      ['muted', 'loop', 'playsinline', 'autoplay'].forEach(k => v.setAttribute(k, ''));
-      v.setAttribute('playback-id', film.mux); v.setAttribute('max-resolution', '1080p');
-      v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+      const v = film(f.mux);
       media.appendChild(v);
-      const q = v.play && v.play(); if(q && q.catch) q.catch(() => {});
+      play(v);
       new IntersectionObserver((es, io) => es.forEach(e => {
         if(!v.isConnected){ io.disconnect(); return; }
-        if(e.isIntersecting){ const q = v.play && v.play(); if(q && q.catch) q.catch(() => {}); } else if(v.pause) v.pause();
+        if(v.classList.contains('live')) return;
+        if(e.isIntersecting) play(v); else if(v.pause) v.pause();
       })).observe(hero);
-      /* the same film with its sound and controls */
+      /* the sound comes on in the same player, where it already is */
       const b = el('button', 'sound', '(Sound on)'); b.type = 'button';
       b.addEventListener('click', () => {
-        const fr = el('iframe');
-        fr.src = 'https://player.mux.com/' + encodeURIComponent(film.mux) + '?autoplay=true&accent-color=%23111111';
-        fr.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
-        fr.allowFullscreen = true; fr.title = 'Film';
         hero.classList.add('playing');
-        hero.style.setProperty('--film', film.w + ' / ' + film.h);
-        media.replaceChildren(fr);
+        hero.style.setProperty('--film', f.w + ' / ' + f.h);
+        soundOn(v);
         b.remove();
       });
       hero.appendChild(b);
@@ -450,7 +470,7 @@
     document.title = TITLE;
     const done = () => { c.el.style.visibility = ''; };
     const heroEl = $('.case-hero', caseEl), playing = heroEl && heroEl.classList.contains('playing');
-    if(heroEl) heroEl.querySelectorAll('mux-video, .sound').forEach(n => n.remove());
+    if(heroEl) heroEl.querySelectorAll('mux-video, mux-player, .sound').forEach(n => n.remove());
     if(flip && !calm && media && !playing && caseEl.scrollTop < 120){
       busy = true;
       const from = media.getBoundingClientRect(), dest = c.el.getBoundingClientRect();
