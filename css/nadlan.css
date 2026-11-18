@@ -34,17 +34,10 @@ h1:focus,h2:focus{outline:none}
 
 /* ---------- the head of every question: a ruler and the brief filling in ---------- */
 .qhead{width:100%; max-width:520px; display:grid; gap:14px; margin-bottom:26px}
-.ruler{display:grid; gap:6px}
-.nums{display:grid; grid-template-columns:repeat(6,1fr)}
-.nums span{font:600 10px/1 var(--mono); letter-spacing:.04em; color:var(--soft); transition:color .3s var(--out)}
-.nums span.now{color:var(--ink)}
-.scale{display:grid; grid-template-columns:repeat(6,1fr); height:12px; align-items:end}
-.seg{display:flex; justify-content:space-between; align-items:flex-end; height:100%; padding-inline-end:6%}
-.seg i{display:block; width:1px; height:5px; background:var(--soft); opacity:.6; transition:background .3s var(--out), opacity .3s var(--out), height .3s var(--out)}
-.seg i.major{height:12px}
-.seg.done i,.seg.now i{background:var(--ink); opacity:1}
-.seg.now i.major{width:2px}
-.rmeta{display:flex; justify-content:space-between; align-items:baseline; padding-top:4px}
+.progress{display:grid; gap:10px}
+.track{height:2px; background:var(--tile); overflow:hidden}
+.fill{height:100%; width:0; background:var(--ink); transition:width .45s var(--out)}
+.rmeta{display:flex; justify-content:space-between; align-items:baseline}
 .rmeta .step{font:500 13px/1 var(--he)}
 .rmeta .mono{color:var(--soft)}
 

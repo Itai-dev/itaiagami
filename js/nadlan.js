@@ -149,20 +149,15 @@
   const stage = $('#stage'), dock = $('#dock'), foot = $('#foot');
   let dir = 1;
 
-  /* the ruler: six steps, each a long tick and four short ones, numbered */
-  const ruler = el('div', 'ruler'); ruler.setAttribute('role', 'progressbar');
+  /* progress: one thin line and the step in words */
+  const ruler = el('div', 'progress'); ruler.setAttribute('role', 'progressbar');
   ruler.setAttribute('aria-valuemin', '1'); ruler.setAttribute('aria-valuemax', String(TOTAL));
-  const scale = el('div', 'scale'), nums = el('div', 'nums'), meta = el('div', 'rmeta');
-  for(let i = 1; i <= TOTAL; i++){
-    const seg = el('div', 'seg'); seg.dataset.n = i;
-    for(let t = 0; t < 5; t++) seg.appendChild(el('i', t ? '' : 'major'));
-    scale.appendChild(seg);
-    nums.appendChild(el('span', '', String(i).padStart(2, '0')));
-  }
+  const bar = el('div', 'track'), fill = el('div', 'fill'); bar.appendChild(fill);
+  const meta = el('div', 'rmeta');
   const stepLabel = el('span', 'step'), stepNo = el('span', 'mono');
   stepLabel.id = 'steplabel'; ruler.setAttribute('aria-labelledby', 'steplabel');
   meta.append(stepLabel, stepNo);
-  ruler.append(nums, scale, meta);
+  ruler.append(bar, meta);
 
   /* the brief, filling in as you answer: one slot per question */
   const mini = el('div', 'mini');
@@ -180,8 +175,7 @@
     stepLabel.textContent = 'שלב ' + n + ' מתוך ' + TOTAL;
     stepNo.textContent = String(n).padStart(2, '0') + ' / ' + String(TOTAL).padStart(2, '0');
     ruler.setAttribute('aria-valuenow', String(n));
-    scale.querySelectorAll('.seg').forEach(s => { const k = +s.dataset.n; s.classList.toggle('done', k < n); s.classList.toggle('now', k === n); });
-    nums.querySelectorAll('span').forEach((s, i) => s.classList.toggle('now', i + 1 === n));
+    fill.style.width = (n / TOTAL * 100) + '%';
     slots.querySelectorAll('.slot').forEach(s => {
       const v = state.answers[s.dataset.id], full = Array.isArray(v) ? v.length > 0 : !!v;
       if(full && !s.classList.contains('full')){ s.classList.add('full'); anim(s, [{ transform: 'scale(.7)' }, { transform: 'scale(1.08)' }, { transform: 'none' }], { duration: 320 }); }
