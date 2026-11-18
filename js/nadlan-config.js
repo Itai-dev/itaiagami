@@ -14,7 +14,7 @@
 
     /* International format, digits only, e.g. '972521234567'.
        Leave '' to show no WhatsApp button anywhere. */
-    WHATSAPP_NUMBER: ''
+    WHATSAPP_NUMBER: '972525523688'
   };
 
   /* The steps, in order. `id` is the field name sent to the server. */
