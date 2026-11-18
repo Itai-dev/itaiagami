@@ -21,7 +21,7 @@ html{background:var(--bg)}
 body{
   overflow:hidden;
   background:var(--bg); color:var(--ink);
-  font:600 10.5px/1.4 "JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  font:600 10.5px/1.4 "JetBrains Mono","IBM Plex Sans Hebrew",ui-monospace,"SF Mono",Menlo,monospace;
   letter-spacing:.02em; text-transform:uppercase;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
   -webkit-text-size-adjust:100%;
@@ -179,6 +179,14 @@ body.open .bar-bottom > *,body.info-open .bar-bottom > *{pointer-events:none}
 .info-links{grid-column:4 / span 7; display:flex; flex-wrap:wrap; gap:22px; padding-top:40px}
 .info-links a:hover{opacity:.5}
 
+/* ---------- Hebrew ----------
+   The page reads right to left; the strip itself keeps moving the same way.
+   Latin stays in the mono, Hebrew falls to IBM Plex Sans Hebrew, a touch larger. */
+html[lang="he"] body{font-size:12px; letter-spacing:0}
+html[lang="he"] .stage{direction:ltr}
+html[lang="he"] .cap{direction:rtl; text-align:right}
+html[lang="he"] .c-line,html[lang="he"] .info-text{letter-spacing:0; line-height:1.3}
+
 /* ---------- small screens ---------- */
 @media (max-width:760px){
   :root{--gap:6px}
@@ -229,3 +237,4 @@ body.open .bar-bottom > *,body.info-open .bar-bottom > *{pointer-events:none}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.01ms!important; transition-delay:0s!important}
 }
+#count{direction:ltr; unicode-bidi:isolate}

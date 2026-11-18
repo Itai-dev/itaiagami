@@ -21,6 +21,7 @@ export const project = defineType({
     {name: 'main', title: 'Project', default: true},
     {name: 'card', title: 'Card'},
     {name: 'more', title: 'More'},
+    {name: 'hebrew', title: 'עברית'},
   ],
   fields: [
     defineField({
@@ -195,6 +196,19 @@ export const project = defineType({
     defineField({name: 'contribution', type: 'text', rows: 3, group: 'more'}),
     defineField({name: 'disciplines', type: 'string', group: 'more'}),
     defineField({name: 'credits', type: 'array', group: 'more', of: [defineArrayMember({type: 'string'})]}),
+    // Hebrew: shown to visitors in Israel. Empty fields fall back to the English.
+    defineField({name: 'nameHe', title: 'שם', type: 'string', group: 'hebrew'}),
+    defineField({name: 'clientHe', title: 'לקוח', type: 'string', group: 'hebrew'}),
+    defineField({name: 'roleHe', title: 'תפקיד', type: 'string', group: 'hebrew'}),
+    defineField({name: 'disciplinesHe', title: 'תחומים', type: 'string', group: 'hebrew'}),
+    defineField({name: 'onelinerHe', title: 'שורה אחת', type: 'text', rows: 2, group: 'hebrew', description: 'Without it, the whole case shows in English.'}),
+    defineField({name: 'challengeHe', title: 'האתגר', type: 'text', rows: 3, group: 'hebrew'}),
+    defineField({name: 'ideaHe', title: 'הרעיון', type: 'text', rows: 3, group: 'hebrew'}),
+    defineField({name: 'systemHe', title: 'המערכת', type: 'text', rows: 3, group: 'hebrew'}),
+    defineField({name: 'outcomeHe', title: 'התוצאה', type: 'text', rows: 3, group: 'hebrew'}),
+    defineField({name: 'targetsHe', title: 'יעדים', type: 'text', rows: 3, group: 'hebrew'}),
+    defineField({name: 'contributionHe', title: 'החלק שלי', type: 'text', rows: 3, group: 'hebrew'}),
+    defineField({name: 'creditsHe', title: 'קרדיטים', type: 'array', group: 'hebrew', of: [defineArrayMember({type: 'string'})]}),
     defineField({name: 'hero', title: 'Hero image', type: 'image', group: 'more', options: {hotspot: true}}),
     defineField({
       name: 'gallery',
