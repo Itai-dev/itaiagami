@@ -22,10 +22,10 @@ const API = 'https://' + PROJECT + '.apicdn.sanity.io/v2024-01-01/data/query/' +
 
 /* The filters, in the order they show. A project's `sectors` field holds ids. */
 const SECTORS = [
-  { id: 'real-estate', label: 'Real Estate' },
-  { id: 'broadcast', label: 'Broadcast' },
-  { id: 'tech', label: 'Tech' },
-  { id: 'exhibitions-interactive', label: 'Exhibitions & Interactive' }
+  { id: 'real-estate', label: 'Real Estate', labelHe: 'נדל"ן' },
+  { id: 'broadcast', label: 'Broadcast', labelHe: 'שידור' },
+  { id: 'tech', label: 'Tech', labelHe: 'טכנולוגיה' },
+  { id: 'exhibitions-interactive', label: 'Exhibitions & Interactive', labelHe: 'תערוכות ואינטראקטיב' }
 ];
 
 /* Until `sectors` is filled in the Studio, cases fall back to this (by case
@@ -54,13 +54,14 @@ const QUERY = `{
     _id, name, "slug": slug.current, order, groupOrder, sectors,
     client, role, disciplines, oneliner, text, siteUrl,
     challenge, idea, system, outcome, targets, contribution, credits,
+    nameHe, clientHe, roleHe, disciplinesHe, onelinerHe, challengeHe, ideaHe, systemHe, outcomeHe, targetsHe, contributionHe, creditsHe,
     "group": group->{_id, name, text},
     "thumbnail": thumbnail.asset._ref, "hero": hero.asset._ref, "image": image.asset._ref,
     "moreImages": moreImages[].asset._ref,
     "film": film${VIDEO}, "moreVideos": moreVideos[]${VIDEO},
-    "gallery": gallery[]{_type, half, quarter, alt, caption, "image": image.asset._ref, "video": video${VIDEO}}
+    "gallery": gallery[]{_type, half, quarter, alt, caption, captionHe, "image": image.asset._ref, "video": video${VIDEO}}
   },
-  "settings": *[_id == "settings"][0]{about, offerLine, offer, bookingUrl, email, linkedin, "cv": cv.asset->url}
+  "settings": *[_id == "settings"][0]{about, aboutHe, offerLine, offer, bookingUrl, email, linkedin, "cv": cv.asset->url}
 }`;
 
 /* image-<id>-<w>x<h>-<ext>  →  a CDN url the page sizes with ?w= */
@@ -102,19 +103,22 @@ function shape(data){
       seen.add(id);
       media.push(Object.assign({ kind: item.mux ? 'video' : 'image' }, item, extra));
     };
-    const addProject = (p, title) => {
-      add(video(p.film), { title });
+    /* every title also comes in Hebrew, where the CMS has one */
+    const addProject = (p, title, titleHe) => {
+      const t = { title, titleHe: title ? titleHe || '' : '' };
+      add(video(p.film), t);
       for(const g of p.gallery || []){
+        const c = { title: g.caption || '', titleHe: g.caption ? g.captionHe || '' : '' };
         /* a clip placed among the images plays silently on a loop */
-        if(g._type === 'galleryVideo') add(video(g.video), { half: !!g.half, quarter: !!g.quarter, title: g.caption || '', loop: true });
-        else add(image(g.image), { half: !!g.half, quarter: !!g.quarter, alt: g.alt || '', title: g.caption || '' });
+        if(g._type === 'galleryVideo') add(video(g.video), Object.assign({ half: !!g.half, quarter: !!g.quarter, loop: true }, c));
+        else add(image(g.image), Object.assign({ half: !!g.half, quarter: !!g.quarter, alt: g.alt || '' }, c));
       }
-      add(image(p.image), { title });
-      for(const r of p.moreImages || []) add(image(r), { title });
-      for(const v of p.moreVideos || []) add(video(v), { title });
+      add(image(p.image), t);
+      for(const r of p.moreImages || []) add(image(r), t);
+      for(const v of p.moreVideos || []) add(video(v), t);
     };
-    addProject(lead, '');
-    for(const p of members) if(p !== lead) addProject(p, p.name === name ? '' : p.name);
+    addProject(lead, '', '');
+    for(const p of members) if(p !== lead) addProject(p, p.name === name ? '' : p.name, p.nameHe);
 
     const firstVideo = media.find(m => m.kind === 'video');
     const firstImage = media.find(m => m.kind === 'image');
@@ -128,6 +132,15 @@ function shape(data){
 
     const sections = [['Challenge', lead.challenge], ['Idea', lead.idea], ['System', lead.system], ['Outcome', lead.outcome], ['Targets', lead.targets], ['My part', lead.contribution]]
       .filter(s => s[1]).map(s => ({ label: s[0], text: s[1] }));
+    /* the same case in Hebrew, where it has been translated */
+    const sectionsHe = [['האתגר', lead.challengeHe], ['הרעיון', lead.ideaHe], ['המערכת', lead.systemHe], ['התוצאה', lead.outcomeHe], ['יעדים', lead.targetsHe], ['החלק שלי', lead.contributionHe]]
+      .filter(s => s[1]).map(s => ({ label: s[0], text: s[1] }));
+    const he = lead.onelinerHe ? {
+      name: (written || !group ? lead.nameHe : null) || lead.nameHe || name,
+      client: lead.clientHe || '', role: lead.roleHe || '', disciplines: lead.disciplinesHe || '',
+      line: lead.onelinerHe, sections: sectionsHe,
+      credits: (lead.creditsHe && lead.creditsHe.length) || !(lead.credits && lead.credits.length) ? (lead.creditsHe || []) : lead.credits
+    } : null;
 
     const ids = new Set(SECTORS.map(s => s.id));
     const own = members.flatMap(p => p.sectors || []).filter(s => ids.has(s));
@@ -143,6 +156,7 @@ function shape(data){
       /* the case's own film, played silently on its tile while it is in focus */
       film: (body.find(m => m.kind === 'video' && !m.title && !m.loop) || {}).mux || '',
       credits: lead.credits || [],
+      he,
       siteUrl: (members.find(p => p.siteUrl) || {}).siteUrl || '',
       media: body,
       order: Math.min(...members.map(p => rank(p.order, 999)))

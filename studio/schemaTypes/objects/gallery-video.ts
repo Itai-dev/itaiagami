@@ -13,6 +13,7 @@ export const galleryVideo = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({name: 'caption', type: 'string', description: 'Shown under the clip.'}),
+    defineField({name: 'captionHe', title: 'Caption (Hebrew)', type: 'string'}),
     defineField({name: 'half', title: 'Half width', type: 'boolean', initialValue: false}),
     defineField({
       name: 'quarter',

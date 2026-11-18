@@ -45,3 +45,21 @@ test('the home page ships no project content of its own', () => {
   assert.match(html, /<script src="js\/home\.js" defer><\/script>/);
   assert.doesNotMatch(html.slice(html.indexOf('<body>')), /Channel 13|Tidhar/);
 });
+
+test('shape(): a case carries its Hebrew alongside the English', () => {
+  const { shape } = require('./api/cms.js');
+  const d = shape({ projects: [{
+    _id: 'p1', name: 'Tower of David', slug: 'tower-of-david', oneliner: 'English line', challenge: 'English challenge',
+    nameHe: 'מגדל דוד', onelinerHe: 'שורה בעברית', challengeHe: 'האתגר בעברית', creditsHe: ['במאי: יואב כהן'],
+    hero: 'image-aaa-1600x900-jpg',
+    gallery: [{ _type: 'galleryImage', image: 'image-bbb-1600x900-jpg', caption: 'Mockup', captionHe: 'הדמיה' }]
+  }] });
+  const c = d.cases[0];
+  assert.equal(c.name, 'Tower of David');
+  assert.equal(c.he.name, 'מגדל דוד');
+  assert.equal(c.he.line, 'שורה בעברית');
+  assert.deepEqual(c.he.sections, [{ label: 'האתגר', text: 'האתגר בעברית' }]);
+  assert.deepEqual(c.he.credits, ['במאי: יואב כהן']);
+  assert.equal(c.media[0].titleHe, 'הדמיה');
+  assert.ok(d.sectors.every(s => s.labelHe));
+});

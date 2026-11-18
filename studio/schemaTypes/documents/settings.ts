@@ -12,6 +12,7 @@ export const settings = defineType({
       of: [defineArrayMember({type: 'string'})],
       description: 'The first line opens "let\'s talk", e.g. "itai agami. creative director, tel aviv."',
     }),
+    defineField({name: 'aboutHe', title: 'About text (Hebrew)', type: 'array', of: [defineArrayMember({type: 'string'})]}),
     defineField({
       name: 'offerLine',
       title: 'Offer, in one line',

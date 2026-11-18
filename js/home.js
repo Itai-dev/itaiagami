@@ -22,6 +22,60 @@
   let depth = 0;            /* history entries this page pushed */
   let busy = false;
 
+  /* ---------- language ----------
+     Hebrew for visitors in Israel, English for everyone else. ?lang=he or
+     ?lang=en picks one by hand and is remembered on this browser; the
+     language link in the footer does the same. */
+  const STR = {
+    en: { back: '(Back)', all: 'All', sound: '(Sound on)', play: '(Play)', film: 'Film', client: 'Client', role: 'Role',
+      disciplines: 'Disciplines', live: 'Live', visit: 'Visit site ↗', credits: '(Credits)', next: 'Next: ', arrow: ' →',
+      book: 'Book a call', cv: 'CV ↗', failed: 'The work could not be loaded. ', retry: '(Try again)', me: 'Itai Agami',
+      tagline: 'Creative Director, Tel Aviv', info: 'Info', email: 'Email', other: 'עברית', otherLang: 'he' },
+    he: { back: '(חזרה)', all: 'הכול', sound: '(עם סאונד)', play: '(הפעלה)', film: 'סרט', client: 'לקוח', role: 'תפקיד',
+      disciplines: 'תחומים', live: 'באוויר', visit: 'לאתר ↗', credits: '(קרדיטים)', next: 'הבא: ', arrow: ' ←',
+      book: 'לתיאום שיחה', cv: 'קורות חיים ↗', failed: 'לא הצלחנו לטעון את העבודות. ', retry: '(לנסות שוב)', me: 'איתי אגמי',
+      tagline: 'קריאייטיב דיירקטור, תל אביב', info: 'מידע', email: 'אימייל', other: 'English', otherLang: 'en' }
+  };
+  let lang = 'en';
+  const t = k => STR[lang][k];
+  function chooseLang(){
+    const asked = new URLSearchParams(location.search).get('lang');
+    if(asked === 'he' || asked === 'en'){ try{ localStorage.setItem('ia-lang', asked); }catch(e){} return Promise.resolve(asked); }
+    let kept = null; try{ kept = localStorage.getItem('ia-lang'); }catch(e){}
+    if(kept === 'he' || kept === 'en') return Promise.resolve(kept);
+    const guess = /^he\b/i.test(navigator.language || '') ? 'he' : 'en';
+    const ctl = new AbortController(); setTimeout(() => ctl.abort(), 1500);
+    return fetch('/api/geo', { signal: ctl.signal }).then(r => r.json()).then(g => g.country ? (g.country === 'IL' ? 'he' : 'en') : guess, () => guess);
+  }
+  /* put the Hebrew in place of the English, wherever there is some */
+  function localise(d){
+    if(lang !== 'he') return;
+    for(const c of d.cases){
+      if(c.he){
+        c.name = c.he.name || c.name; c.line = c.he.line || c.line;
+        c.client = c.he.client || c.client; c.role = c.he.role || c.role; c.disciplines = c.he.disciplines || c.disciplines;
+        if(c.he.sections && c.he.sections.length) c.sections = c.he.sections;
+        c.credits = c.he.credits || c.credits;
+      }
+      for(const m of c.media) if(m.titleHe) m.title = m.titleHe;
+    }
+    for(const s of d.sectors || []) if(s.labelHe) s.label = s.labelHe;
+    if(d.settings && d.settings.aboutHe && d.settings.aboutHe.length) d.settings.about = d.settings.aboutHe;
+  }
+  function applyLang(){
+    const root = document.documentElement;
+    root.lang = lang; root.dir = lang === 'he' ? 'rtl' : 'ltr';
+    back.textContent = t('back');
+    $('.bar-bottom .role').textContent = t('tagline');
+    $('#info-btn').textContent = t('info');
+    $('#mail').textContent = t('email');
+    let sw = $('#lang');
+    if(!sw){ sw = el('a'); sw.id = 'lang'; $('.links').appendChild(sw); }
+    sw.textContent = t('other'); sw.lang = t('otherLang');
+    const u = new URL(location.href); u.searchParams.set('lang', t('otherLang')); u.hash = location.hash;
+    sw.href = u.pathname + u.search + u.hash;
+  }
+
   /* ---------- images ---------- */
   /* a Sanity image or a Mux film frame, at the width asked for */
   const px = (o, w) => o.mux
@@ -176,7 +230,7 @@
       b.addEventListener('click', () => { if(view) home(false); setFilter(id); });
       filtersEl.appendChild(b);
     };
-    mk('', 'All');
+    mk('', t('all'));
     data.sectors.forEach(s => mk(s.id, s.label));
   }
 
@@ -300,7 +354,7 @@
       }), { rootMargin: '200px' }).observe(box);
       if(auto){
         /* the project's own film: the sound comes on in place, and it keeps playing */
-        const b = el('button', 'sound', '(Sound on)'); b.type = 'button';
+        const b = el('button', 'sound', t('sound')); b.type = 'button';
         b.addEventListener('click', () => {
           const go = () => { mount(); const v = box.querySelector(sel); if(v){ soundOn(v); b.remove(); } };
           loadMux().then(go, () => {});
@@ -311,13 +365,13 @@
       const p = el('button', 'play');
       p.type = 'button';
       p.setAttribute('aria-label', 'Play' + (m.title ? ' ' + m.title : ' film'));
-      p.appendChild(el('span', '', '(Play)'));
+      p.appendChild(el('span', '', t('play')));
       p.addEventListener('click', () => {
         const fr = el('iframe');
         fr.src = 'https://player.mux.com/' + encodeURIComponent(m.mux) + '?autoplay=true&accent-color=%23111111';
         fr.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
         fr.allowFullscreen = true;
-        fr.title = m.title || 'Film';
+        fr.title = m.title || t('film');
         box.replaceChildren(fr);
       });
       box.appendChild(p);
@@ -358,13 +412,13 @@
     head.append(id, el('p', 'c-line', c.line));
     const meta = el('dl', 'c-meta');
     const row = (k, v) => { if(!v) return; const r = el('div'); r.append(el('dt', '', k), typeof v === 'string' ? el('dd', '', v) : v); meta.appendChild(r); };
-    row('Client', c.client !== c.name && c.client);
-    row('Role', c.role);
-    row('Disciplines', c.disciplines);
+    row(t('client'), c.client !== c.name && c.client);
+    row(t('role'), c.role);
+    row(t('disciplines'), c.disciplines);
     if(c.siteUrl){
-      const dd = el('dd'), a = el('a', '', 'Visit site ↗');
+      const dd = el('dd'), a = el('a', '', t('visit'));
       a.href = c.siteUrl; a.target = '_blank'; a.rel = 'noopener';
-      dd.appendChild(a); row('Live', dd);
+      dd.appendChild(a); row(t('live'), dd);
     }
     head.appendChild(meta);
     body.appendChild(head);
@@ -383,21 +437,21 @@
     if(c.credits.length){
       const cr = el('div', 'case-credits'), ul = el('ul');
       c.credits.forEach(t => ul.appendChild(el('li', '', t)));
-      cr.append(el('h3', '', '(Credits)'), ul);
+      cr.append(el('h3', '', t('credits')), ul);
       body.appendChild(cr);
     }
     const end = el('div', 'case-end');
-    const b = el('button', '', '(Back)'); b.type = 'button';
+    const b = el('button', '', t('back')); b.type = 'button';
     b.addEventListener('click', () => home(true));
     const next = all[(i + 1) % all.length];
-    const a = el('a', '', 'Next: ' + next.name + ' →'); a.href = '#' + next.slug;
+    const a = el('a', '', t('next') + next.name + t('arrow')); a.href = '#' + next.slug;
     a.addEventListener('click', e => { e.preventDefault(); go('#' + next.slug, true); });
     end.append(b, a);
     body.appendChild(end);
 
     caseEl.replaceChildren(hero, body);
     caseEl.scrollTop = 0;
-    document.title = c.name + ' | Itai Agami';
+    document.title = c.name + ' | ' + t('me');
     return hero;
   }
 
@@ -418,7 +472,7 @@
         if(e.isIntersecting) play(v); else if(v.pause) v.pause();
       })).observe(hero);
       /* the sound comes on in the same player, where it already is */
-      const b = el('button', 'sound', '(Sound on)'); b.type = 'button';
+      const b = el('button', 'sound', t('sound')); b.type = 'button';
       b.addEventListener('click', () => {
         hero.classList.add('playing');
         hero.style.setProperty('--film', f.w + ' / ' + f.h);
@@ -493,10 +547,10 @@
     [...(s.about || []), [s.offerLine, ...(s.offer || [])].filter(Boolean).join(' ')].filter(Boolean).forEach(t => text.appendChild(el('p', '', t)));
     const links = el('div', 'info-links');
     const link = (label, href, ext) => { if(!href) return; const a = el('a', '', label); a.href = href; if(ext){ a.target = '_blank'; a.rel = 'noopener'; } links.appendChild(a); };
-    link('Book a call', s.bookingUrl, true);
+    link(t('book'), s.bookingUrl, true);
     link(s.email, s.email && 'mailto:' + s.email);
     link('LinkedIn ↗', s.linkedin, true);
-    link('CV ↗', s.cv, true);
+    link(t('cv'), s.cv, true);
     infoEl.replaceChildren(text, links);
     infoEl.hidden = false;
     document.body.classList.add('info-open');
@@ -550,7 +604,10 @@
   $('#info-btn').addEventListener('click', () => go('#info'));
 
   /* ---------- start ---------- */
-  fetch('/api/cms').then(r => { if(!r.ok) throw 0; return r.json(); }).then(d => {
+  Promise.all([fetch('/api/cms').then(r => { if(!r.ok) throw 0; return r.json(); }), chooseLang()]).then(([d, l]) => {
+    lang = l;
+    applyLang();
+    localise(d);
     data = d;
     if(!d.cases || !d.cases.length) throw 0;
     build();
@@ -563,8 +620,8 @@
     roll();
   }).catch(e => {
     if(e) console.error(e);
-    const n = el('p', 'note', 'The work could not be loaded. ');
-    const b = el('button', '', '(Try again)'); b.type = 'button';
+    const n = el('p', 'note', t('failed'));
+    const b = el('button', '', t('retry')); b.type = 'button';
     b.addEventListener('click', () => location.reload());
     n.appendChild(b);
     document.body.appendChild(n);
